@@ -1,0 +1,43 @@
+﻿Build started 2/19/2015 8:14:58 AM.
+     1>Project "C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\emptyExample.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\VC\bin\CL.exe /c /I..\..\..\libs\openFrameworks /I..\..\..\libs\openFrameworks\graphics /I..\..\..\libs\openFrameworks\app /I..\..\..\libs\openFrameworks\sound /I..\..\..\libs\openFrameworks\utils /I..\..\..\libs\openFrameworks\communication /I..\..\..\libs\openFrameworks\video /I..\..\..\libs\openFrameworks\types /I..\..\..\libs\openFrameworks\math /I..\..\..\libs\openFrameworks\3d /I..\..\..\libs\openFrameworks\gl /I..\..\..\libs\openFrameworks\events /I..\..\..\libs\glut\include /I..\..\..\libs\rtAudio\include /I..\..\..\libs\quicktime\include /I..\..\..\libs\freetype\include /I..\..\..\libs\freetype\include\freetype2 /I..\..\..\libs\freeImage\include /I..\..\..\libs\fmodex\include /I..\..\..\libs\videoInput\include /I..\..\..\libs\glew\include\ /I..\..\..\libs\glu\include /I..\..\..\libs\tess2\include /I..\..\..\libs\cairo\include\cairo /I..\..\..\libs\poco\include /I..\..\..\libs\glfw\include /I..\..\..\libs\openssl\include /I..\..\..\addons /Isrc /I..\..\..\addons\ofxOsc\libs\oscpack\src /I..\..\..\addons\ofxOsc\src /I..\..\..\addons\ofxOsc\libs\oscpack\src\osc /I..\..\..\addons\ofxOsc\libs\oscpack\src\ip /Zi /nologo /W3 /WX- /O2 /Oy- /D WIN32 /D NDEBUG /D _CONSOLE /D POCO_STATIC /D CAIRO_WIN32_STATIC_BUILD /D DISABLE_SOME_FLOATING_POINT /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"obj\Release\\" /Fd"obj\Release\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt "..\..\..\..\..\Downloads\openFrameworks-VS2013\openFrameworks-VS2013\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp"
+         UdpSocketWin.cpp
+       Link:
+         C:\Program Files (x86)\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"bin\uiExploration5_remote.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:..\..\..\libs\glut\lib\vs /LIBPATH:..\..\..\libs\glfw\lib\vs /LIBPATH:..\..\..\libs\rtAudio\lib\vs /LIBPATH:..\..\..\libs\FreeImage\lib\vs /LIBPATH:..\..\..\libs\freetype\lib\vs /LIBPATH:..\..\..\libs\quicktime\lib\vs /LIBPATH:..\..\..\libs\fmodex\lib\vs /LIBPATH:..\..\..\libs\videoInput\lib\vs /LIBPATH:..\..\..\libs\cairo\lib\vs /LIBPATH:..\..\..\libs\glew\lib\vs /LIBPATH:..\..\..\libs\glu\lib\vs /LIBPATH:..\..\..\libs\openssl\lib\vs /LIBPATH:..\..\..\libs\Poco\lib\vs /LIBPATH:..\..\..\libs\tess2\lib\vs "cairo-static.lib" "pixman-1.lib" msimg32.lib OpenGL32.lib GLu32.lib kernel32.lib setupapi.lib Vfw32.lib comctl32.lib glut32.lib rtAudio.lib videoInput.lib libfreetype.lib FreeImage.lib qtmlClient.lib dsound.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib glew32s.lib fmodex_vc.lib glu32.lib crypt32.lib libeay32MD.lib ssleay32MD.lib PocoFoundationmd.lib PocoNetmd.lib PocoUtilmd.lib PocoXMLmd.lib Ws2_32.lib tess2.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB:PocoFoundationd.lib /NODEFAULTLIB:atlthunk.lib /NODEFAULTLIB:LIBC.lib /NODEFAULTLIB:LIBCMT /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"bin\uiExploration5_remote.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE:NO /NXCOMPAT /IMPLIB:"bin\uiExploration5_remote.lib" /MACHINE:X86 /SAFESEH obj\Release\icon.res
+         obj\Release\UdpSocketWin.obj
+         obj\Release\IpEndpointName.obj
+         obj\Release\NetworkingUtilsWin.obj
+         obj\Release\OscOutboundPacketStream.obj
+         obj\Release\OscPrintReceivedElements.obj
+         obj\Release\OscReceivedElements.obj
+         obj\Release\OscTypes.obj
+         obj\Release\ofxOscBundle.obj
+         obj\Release\ofxOscMessage.obj
+         obj\Release\ofxOscParameterSync.obj
+         obj\Release\ofxOscReceiver.obj
+         obj\Release\ofxOscSender.obj
+         obj\Release\main.obj
+         obj\Release\ofApp.obj
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\libs\openFrameworksCompiled\lib\vs\openframeworksLib.lib
+            Creating library bin\uiExploration5_remote.lib and object bin\uiExploration5_remote.exp
+         LINK : /LTCG specified but no code generation required; remove /LTCG from the link command line to improve linker performance
+         emptyExample.vcxproj -> C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\bin\uiExploration5_remote.exe
+       PostBuildEvent:
+         xcopy /e /i /y "C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\*.dll" "C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\bin"
+         :VCEnd
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\Assimp32.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\fmodex.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\fmodexL.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\FreeImage.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\FreeType-6.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\glut32.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\libeay32.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\ssleay32.dll
+         C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\..\..\..\export\vs\Zlib.dll
+         9 File(s) copied
+     1>Done Building Project "C:\Users\jnoble\code\of_v0.8.4_vs_release\of_teague\MS_PPI\uiExploration5_remote\emptyExample.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.86
