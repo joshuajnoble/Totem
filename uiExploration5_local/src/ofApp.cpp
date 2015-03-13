@@ -26,12 +26,13 @@ void ofApp::setup(){
 		}
 	}
     
+	mainImg.loadImage("call1.jpg");
+	small1.loadImage("call2.jpg");
+	small2.loadImage("call3.jpg");
 
 	if (!grabber.isInitialized()) {
 		ofExit();
 	}
-
-    //din.loadFont("fonts/FF_DIN_Pro_Light_Italic.otf", 32);
 
 	fbo.allocate(800, 480, GL_RGB);
 	
@@ -58,6 +59,12 @@ void ofApp::update(){
 		ofTranslate(0, 480);
 		ofRotate(rotation);
 		grabber.getTextureReference().drawSubsection(0, 0, 480, 480, 0, 0);
+
+		// draw some images for other remote users
+		//mainImg.draw(0, 480);
+		small1.draw(40, 480);
+		small2.draw(280, 480);
+
 		ofPopMatrix();
 		// draw other UI here
 		fbo.end();

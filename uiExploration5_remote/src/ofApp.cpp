@@ -9,7 +9,7 @@ void ofApp::setup(){
     warpedH = 1080;
 
     /// set up the cylinder
-	cylinder.set(warpedW, warpedH * 5, 120, 60, 0, false);
+	cylinder.set(warpedW, warpedH * 6, 120, 60, 0, false);
 	cylinder.mapTexCoords(0, 0, warpedW, warpedH);
 
 	sender.setup("localhost", 8888);
@@ -32,7 +32,8 @@ void ofApp::setup(){
 	}
  
     //din.loadFont("fonts/FF_DIN_Pro_Light_Italic.otf", 32);
-    
+	gradient.loadImage("CylinderUI_Grad-01.png");
+	overlay.loadImage("CylinderUI-01.png");
 	
 }
 
@@ -115,14 +116,10 @@ void ofApp::drawTexturedCylinder(){
 		grabber.getTextureReference().unbind();
     ofPopMatrix();
     ofDisableDepthTest();
-    
-//    ofEnableAlphaBlending();
-//    ofSetColor(255, 255, 255, 50);
-//    ofRect(100, 0, ofGetWidth() - 200, ofGetHeight());
-//    ofDisableAlphaBlending();
-    
-    //ofSetColor(0, 0, 0);
-    //din.drawString("Call with Teague", 150, 100);
+
+	gradient.draw(0, 0, 1920, 1280);
+	overlay.draw(-120, -50, 1920, 1280);
+
 }
 
 

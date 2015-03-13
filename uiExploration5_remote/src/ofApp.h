@@ -113,6 +113,8 @@ class ofApp : public ofBaseApp{
     ofTrueTypeFont din;
     bool pixelsLoaded;
     
+	ofImage gradient, overlay;
+
     ofCylinderPrimitive cylinder;
 		
 	ofxOscSender sender;

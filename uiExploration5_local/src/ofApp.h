@@ -105,6 +105,8 @@ class ofApp : public ofBaseApp{
 		float blurredMouseX;
 		float blurredMouseY;
     
+		ofImage mainImg, small1, small2;
+
     bool drawCylinder;
     ofTrueTypeFont din;
     bool pixelsLoaded;
