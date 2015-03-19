@@ -18,21 +18,24 @@ void ofApp::setup(){
     cylinder.mapTexCoords(0, 0, unwarpedW, unwarpedH);
 
     //grabber.listDevices();
-	vector<ofVideoDevice> devices = grabber.listDevices();
-	for (int i = 0; i < devices.size(); i++){
-		if (devices.at(i).deviceName.find("Logitech") != string::npos){
-			grabber.setDeviceID(i);
-			grabber.initGrabber(640, 480, true);
-		}
-	}
+	//vector<ofVideoDevice> devices = grabber.listDevices();
+	//for (int i = 0; i < devices.size(); i++){
+	//	if (devices.at(i).deviceName.find("Logitech") != string::npos){
+	//		grabber.setDeviceID(i);
+	//		grabber.initGrabber(640, 480, true);
+	//	}
+	//}
+
+	// initialize Spout as a receiver
+	ofxSpout::init("", 640, 480, false);
     
 	mainImg.loadImage("call1.jpg");
 	small1.loadImage("call2.jpg");
 	small2.loadImage("call3.jpg");
 
-	if (!grabber.isInitialized()) {
+	/*if (!grabber.isInitialized()) {
 		ofExit();
-	}
+	}*/
 
 	fbo.allocate(800, 480, GL_RGB);
 	
@@ -40,7 +43,7 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::exit(){
-	grabber.close();
+	ofxSpout::exit();
 }
 
 
@@ -48,27 +51,31 @@ void ofApp::exit(){
 void ofApp::update(){
     
     //ofSetVerticalSync(false);  
-    grabber.update();
+    //grabber.update();
     
     
-    if (grabber.isFrameNew()){
+    ///if (grabber.isFrameNew()){
         //
-		fbo.begin();
-		ofBackground(0, 0, 0);
-		ofPushMatrix();
-		ofTranslate(0, 480);
-		ofRotate(rotation);
-		grabber.getTextureReference().drawSubsection(0, 0, 480, 480, 0, 0);
 
-		// draw some images for other remote users
-		//mainImg.draw(0, 480);
-		small1.draw(40, 480);
-		small2.draw(280, 480);
+	fbo.begin();
+	ofBackground(0, 0, 0);
+	ofPushMatrix();
+	//ofTranslate(0, 480);
+	//ofRotate(rotation);
 
-		ofPopMatrix();
-		// draw other UI here
-		fbo.end();
-    }
+	// init receiver if it's not already initialized
+	ofxSpout::initReceiver();
+	ofxSpout::receiveTexture();
+
+	// draw some images for other remote users
+	//mainImg.draw(0, 480);
+	small1.draw(40, 480);
+	small2.draw(280, 480);
+
+	ofPopMatrix();
+	// draw other UI here
+	fbo.end();
+    //}
     
 
 	// check for waiting messages

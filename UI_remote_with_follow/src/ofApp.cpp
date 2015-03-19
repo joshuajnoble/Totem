@@ -1,8 +1,9 @@
 #include "ofApp.h"
 
 float lastElapsed;
+#define CYLINDER_PIECE_WIDTH 44
+#define CYLINDER_PIECE_HEIGHT 2
 
-//--------------------------------------------------------------
 void ofApp::setup(){
 
 	blurredMouseX = 0;
@@ -12,9 +13,15 @@ void ofApp::setup(){
 
     /// set up the cylinder
 	cylinder.set(warpedW, warpedH * 6, 120, 60, 0, false);
-	cylinder.mapTexCoords(0, 0, warpedW, warpedH);
+	//cylinder.mapTexCoords(0, 0, warpedW, warpedH);
+	cylinder.mapTexCoords(warpedW, 0, 0, warpedH);
+
+	createCylinderPiece(leftCylinderPiece, warpedW, 1080, CYLINDER_PIECE_WIDTH);
+	createCylinderPiece(rightCylinderPiece, warpedW, 1080, CYLINDER_PIECE_WIDTH);
 
 	sender.setup("localhost", 8888);
+	
+	ofxSpout::init("", ofGetWidth(), ofGetHeight(), false);
 
     vector<ofVideoDevice> dd = grabber.listDevices();
 
@@ -39,37 +46,44 @@ void ofApp::setup(){
 	
 	serial.setup("/COM5", 115200);
 
-	lastElapsed = ofGetElapsedTimef();
+	finder.setup("haarcascade_frontalface_default.xml");
+	finder.setPreset(ofxCv::ObjectFinder::Fast);
+	finder.getTracker().setSmoothingRate(.3);
 
+	lastElapsed = ofGetElapsedTimef();
+	navState = USER_CONTROL;
+	userDisplayState = UDS_SHOW_FEED;
 }
 
-//--------------------------------------------------------------
 void ofApp::exit()
 {
-
 	grabber.close();
-
 }
 
 
-//--------------------------------------------------------------
 void ofApp::update(){
     
     ofSetVerticalSync(false);  
     grabber.update();
     
     
-    if (grabber.isFrameNew()){}
+    if (grabber.isFrameNew()){
+	}
 
 	int nRead = 0;
 
 	unsigned char bytesReturned[2];
 	// if there's two bytes to be read, read until you get them both
-	if (serial.readBytes(bytesReturned, 2) > 0)
+	if (serial.readBytes(bytesReturned, 1) > 0)
 	{
 		if (navState == SYSTEM_CONTROL)
 		{
-			blurredMouseX = (int(bytesReturned[0]) * (TWO_PI/6.0));
+			if (bytesReturned[0] > '1' && bytesReturned[0] < '8')
+			{
+				blurredMouseX = (int(bytesReturned[0] - '2') * 59);
+				cout << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
+
+			}
 		}
 	};
     
@@ -80,159 +94,243 @@ void ofApp::update(){
 
 		if (userControlCountdown < 0)
 		{
+			cout << " should be system control  " << endl;
 			navState = SYSTEM_CONTROL;
 		}
 	}
 }
 
 
-
-//--------------------------------------------------------------
 void ofApp::draw(){
 	// draw everything.
 	ofBackground(64,64,64);	
 	
-	//drawPlayer();
-	//drawUnwarpedVideo();
-
     if(drawCylinder) {
-        drawTexturedCylinder();
+		ofEnableDepthTest();
+		ofPushMatrix();
+		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
+		ofRotateY(blurredMouseX);
+		grabber.getTextureReference().bind();
+		cylinder.draw();
+		grabber.getTextureReference().unbind();
+		ofPopMatrix();
+		ofDisableDepthTest();
+
+		gradient.draw(0, 0, 1920, 1280);
+		overlay.draw(-120, -50, 1920, 1280);
+
 	}
 	else {
 		drawPlayer();
 	}
+
+	// init receiver if it's not already initialized
+	ofxSpout::initReceiver();
+
+	// receive Spout texture
+	ofxSpout::receiveTexture();
+	ofxSpout::draw(600, 0, 300, 210);
 }
 
-//--------------------------------------------------------------
 void ofApp::drawUnwarpedVideo(){
 	// draw the unwarped (corrected) video in a strip at the bottom.
 	ofSetColor(255, 255, 255);
-    unwarpedImage.draw(0, ofGetHeight() - unwarpedH);
+	unwarpedImage.draw(0, ofGetHeight() - unwarpedImage.getHeight());
 }
 
-//--------------------------------------------------------------
 void ofApp::drawPlayer(){
-	
-	
-	// draw the (warped) player
 	ofSetColor(255, 255, 255);
-	playerScaleFactor = (float)(ofGetHeight() - unwarpedH)/(float)warpedH;
-
-	//1920
     grabber.draw(0, 0, 1920/2, 1080/2);
 
 }
 
-//--------------------------------------------------------------
+void ofApp::findLeftFace()
+{
+	//finder.findHaarObjects(grabber.getPixels());
+	finder.update(grabber.getPixelsRef());
+	
+	ofRectangle leftMost;
+
+
+	for (int i = 0; i < finder.size(); i++) {
+		ofRectangle object = finder.getObjectSmoothed(i);
+		if (object.getTopLeft().x < leftMost.getTopLeft().x) {
+			leftMost = object;
+		}
+	}
+
+	if (leftMost.getWidth() < 300) {
+		leftMost.scaleWidth(300);
+	}
+
+	mapTexCoords(rightCylinderPiece, leftMost.getTopLeft().x, leftMost.getTopLeft().y, leftMost.getBottomRight().x, 320);
+}
+
+void ofApp::findRightFace()
+{
+	//finder.findHaarObjects(grabber.getPixels());
+	finder.update(grabber.getPixelsRef());
+
+	ofRectangle rightMost;
+
+	for (int i = 0; i < finder.size(); i++) {
+		ofRectangle object = finder.getObjectSmoothed(i);
+		if (object.getTopRight().x < rightMost.getTopRight().x) {
+			rightMost = object;
+		}
+	}
+
+	if (rightMost.getWidth() < 300) {
+		rightMost.scaleWidth(300);
+	}
+
+	mapTexCoords(rightCylinderPiece, rightMost.getTopLeft().x, rightMost.getTopLeft().y, rightMost.getBottomRight().x, 320);
+
+}
+
+void ofApp::drawLeftCylinder()
+{
+	float A = 0.90;
+	float B = 1.0 - A;
+	currentLeftCylinder = A * currentLeftCylinder + B * targetLeftCylinder;
+
+	grabber.getTextureReference().bind();
+	leftCylinderPiece.draw();
+	grabber.getTextureReference().unbind();
+}
+
+void ofApp::drawRightCylinder()
+{
+	float A = 0.90;
+	float B = 1.0 - A;
+	currentRightCylinder = A * currentRightCylinder + B * targetRightCylinder;
+
+	grabber.getTextureReference().bind();
+	rightCylinderPiece.draw();
+	grabber.getTextureReference().unbind();
+}
+
+void ofApp::drawRemoteUser()
+{
+	//remoteUserVideo.draw(ofGetWidth() / 2, 300);
+}
+
 void ofApp::drawTexturedCylinder(){
 	// draw the texture-mapped cylinder.
-
-    float A = 0.90;
-    float B = 1.0-A;
-    blurredMouseX = A*blurredMouseX + B*mouseX;
     
-    ofEnableDepthTest();
-    ofPushMatrix();
-        ofTranslate(ofGetWidth()/2, (ofGetHeight()/2), 100);
-        ofRotateY(RAD_TO_DEG * ofMap(blurredMouseX, 0, ofGetWidth(),  TWO_PI, -TWO_PI));
-        grabber.getTextureReference().bind();
-        cylinder.draw();
-		grabber.getTextureReference().unbind();
-    ofPopMatrix();
-    ofDisableDepthTest();
-
-	gradient.draw(0, 0, 1920, 1280);
-	overlay.draw(-120, -50, 1920, 1280);
 
 }
 
 
-//--------------------------------------------------------------
 void ofApp::keyPressed  (int key){ 
 	
 	switch (key){
 	case ' ':
 		drawCylinder = !drawCylinder;
 		break;
+
+	case 'm':
+		if (userDisplayState == UDS_SHOW_BOTH_LOCAL_USER) {
+			userDisplayState = UDS_SHOW_FEED;
+		}
+		else {
+			int i = (int)userDisplayState;
+			userDisplayState = (USER_DISPLAY_STATE) ++i;
+		}
+
+		break;
 	}
+
 	
 }
 
 
 
-//--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
 
 	userControlCountdown = 5.0;
+	navState = USER_CONTROL;
 
-	//bMousePressed = true;
-	//if (bMousePressedInPlayer){
-	//	testMouseInPlayer();
-	//}
-	//if (bMousepressedInUnwarped && !bSavingOutVideo){
-		angularOffset = ofMap(mouseX, 0, ofGetWidth(), 0-180, 180, false);
+	float A = 0.90;
+	float B = 1.0-A;
+	blurredMouseX = A*blurredMouseX + B*mouseX;
 
-		ofxOscMessage m;
-		m.setAddress("position");
-		m.addIntArg(angularOffset);
-		sender.sendMessage(m);
 
-		bAngularOffsetChanged = true;
-	//}
+	angularOffset = ofMap(mouseX, 0, ofGetWidth(), 0-180, 180, false);
+
+	ofxOscMessage m;
+	m.setAddress("position");
+	m.addIntArg(angularOffset);
+	sender.sendMessage(m);
+
+	bAngularOffsetChanged = true;
 }
 
-//--------------------------------------------------------------
+
 void ofApp::mousePressed(int x, int y, int button){
-	bMousePressed         = true;
-	bMousePressedInPlayer = testMouseInPlayer();
-	
-	bMousepressedInUnwarped = false;
-	if (mouseY > (ofGetHeight() - unwarpedH)){
-		bMousepressedInUnwarped = true;
-	}
+	userControlCountdown = 5.0;
+	navState = USER_CONTROL;
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-	//if (bMousePressedInPlayer){
-	//	testMouseInPlayer();
-	//}
-	//bMousepressedInUnwarped = false;
-	//bMousePressedInPlayer = false;
-	//bMousePressed = false;
 }
 
-//--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-	//bMousepressedInUnwarped = false;
-	//bMousePressedInPlayer = false;
-	//bMousePressed = false;
 }
-//--------------------------------------------------------------
+
 void ofApp::keyReleased(int key){ 
 }
 
-//--------------------------------------------------------------
 void ofApp::windowResized(int w, int h){
 }
 
-//--------------------------------------------------------------
-bool ofApp::testMouseInPlayer(){
-	bool out = false;
-	
-	if ((mouseX < playerScaleFactor*warpedW) && 
-		(mouseY < playerScaleFactor*warpedH)){
-		
-		if (bSavingOutVideo == false){
-			float newCx = (float)mouseX * ((float)warpedH/(float)(ofGetHeight() - unwarpedH));
-			float newCy = (float)mouseY * ((float)warpedH/(float)(ofGetHeight() - unwarpedH));	
-			if ((newCx != warpedCx) || (newCy != warpedCy)){
-				warpedCx = newCx;
-				warpedCy = newCy;
-			}
-			bCenterChanged = true;
-			out = true;
-		}
+void ofApp::createCylinderPiece(ofMesh &m, float radius, float height, float degrees)
+{
+
+	int f = 0;
+	for (float deg = 0; deg < degrees; deg+=2.0, f += 4){
+		float ca = deg * 0.01745329252;//cache current angle
+		float na = (deg + 1) * 0.01745329252;//cache next angle (could do with a conditional and storing previous angle)
+		float ccos = cos(ca);//current cos
+		float csin = sin(ca);//current sin
+		float ncos = cos(na);//next cos
+		float nsin = sin(na);//next sin
+
+		ofVec3f tl(radius * ccos, height * .5, radius * csin);//top left = current angle, positive y
+		ofVec3f bl(radius * ccos, -height * .5, radius * csin);//bottom left = current angle, negative y
+		ofVec3f tr(radius * ncos, height * .5, radius * nsin);//top right = next angle, positive y
+		ofVec3f br(radius * ncos, -height * .5, radius * nsin);//bottom right = next angle, negative y
+
+		/*
+		tl--tr
+		|  /|
+		| / |
+		|/  |
+		bl--br
+		*/
+
+		m.addVertex(tl);
+		m.addVertex(tr);
+		m.addVertex(bl);
+
+		m.addVertex(bl);
+		m.addVertex(tr);
+		m.addVertex(br);
+
 	}
-	return out;
+}
+
+void ofApp::mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2) {
+	//setTexCoords( u1, v1, u2, v2 );
+	ofVec4f prevTcoord(0, 0, CYLINDER_PIECE_WIDTH / 2, CYLINDER_PIECE_HEIGHT);
+
+	for (int j = 0; j < m.getNumTexCoords(); j++) {
+		ofVec2f tcoord = m.getTexCoord(j);
+		tcoord.x = ofMap(tcoord.x, prevTcoord.x, prevTcoord.z, u1, u2);
+		tcoord.y = ofMap(tcoord.y, prevTcoord.y, prevTcoord.w, v1, v2);
+
+		m.setTexCoord(j, tcoord);
+	}
+
+	//texCoords.set(u1, v1, u2, v2);
 }

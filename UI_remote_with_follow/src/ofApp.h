@@ -2,10 +2,9 @@
 
 #include "ofMain.h"
 #include "ofTexture.h"
-
-
+#include "ofxCv.h"
 #include "ofxOsc.h"
-
+#include "ofxSpout.h"
 //#include <ofxNetwork.h>
 
 //#define IMAGE
@@ -15,115 +14,90 @@ enum NAV_STATE {
 	USER_CONTROL, SYSTEM_CONTROL
 };
 
+enum USER_DISPLAY_STATE {
+	UDS_SHOW_FEED, UDS_SHOW_REMOTE_USER, UDS_SHOW_L_LOCAL_USER, UDS_SHOW_BOTH_LOCAL_USER
+};
 
 class ofApp : public ofBaseApp{
 	
 	public:
 		
-		//----------------------------------------
-		/* standard openFrameworks app stuff */
-		void setup();
-		void update();
-		void draw();
-		void exit();
+	//----------------------------------------
+	/* standard openFrameworks app stuff */
+	void setup();
+	void update();
+	void draw();
+	void exit();
 	
-		void keyPressed  (int key);
-		void keyReleased(int key);
-		void mouseMoved(int x, int y );
-		void mouseDragged(int x, int y, int button);
-		void mousePressed(int x, int y, int button);
-		void mouseReleased(int x, int y, int button);
-		void windowResized(int w, int h);
+	void keyPressed  (int key);
+	void keyReleased(int key);
+	void mouseMoved(int x, int y );
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
+	void windowResized(int w, int h);
     
 		
-		//----------------------------------------
-		/* Panoramic unwarp stuff */
+	//----------------------------------------
+	/* Panoramic unwarp stuff */
 	
-        ofImage image;
-		ofVideoPlayer player;
+    ofImage image;
+	ofVideoPlayer player;
     
-        ofVideoGrabber grabber;
-		int	currentCodecId;
-		string outputFileName;
-		char *handyString;
+    ofVideoGrabber grabber;
+	int	currentCodecId;
+	string outputFileName;
+	char *handyString;
 	
-		void computePanoramaProperties();
-		void computeInversePolarTransform();
+	void computePanoramaProperties();
+	void computeInversePolarTransform();
 		 
-		void drawTexturedCylinder();
-		void drawPlayer();
-		void drawUnwarpedVideo();
-		 
-		bool testMouseInPlayer();
-		bool bMousePressed;
-		bool bMousePressedInPlayer;
-		bool bMousepressedInUnwarped;
-		bool bAngularOffsetChanged;
-		bool bPlayerPaused;
-		bool bCenterChanged;
-		bool bSavingOutVideo;
-		bool bSaveAudioToo;
-		int  nWrittenFrames;
-		int  codecQuality;
-		
-		ofImage unwarpedImage;
-        ofPixels conversionPixels;
-        ofPixels inputPixels;
-    
-		unsigned char *warpedPixels;
-		//unsigned char *unwarpedPixels;
-        ofPixels unwarpedPixels;
-		
-		int   warpedW;
-		int   warpedH;
-		float unwarpedW;
-		float unwarpedH;
-		float warpedCx;
-		float warpedCy;
-		float savedWarpedCx;
-		float savedWarpedCy;
-		float savedAngularOffset;
-		float angularOffset;
+	void drawTexturedCylinder();
+	void drawPlayer();
+	void drawUnwarpedVideo();
 	
-		float maxR;
-		float minR;
-		float maxR_factor;
-		float minR_factor;
-		int   interpMethod; 
-		float playerScaleFactor;
+	void drawLeftCylinder();
+	void drawRightCylinder();
+	void drawRemoteUser();
+	
+	void findLeftFace();
+	void findRightFace();
 
-		unsigned char *blackColor;
-	
-		float *xocvdata;
-		float *yocvdata;
-	
-		float yWarpA; // for parabolic fit for Y unwarping
-		float yWarpB;
-		float yWarpC;
-	
-		//-----------------------------------
-		/* For the texture-mapped cylinder */
-		ofTexture unwarpedTexture;
-		int   cylinderRes;
-		float *cylinderX;
-		float *cylinderY;
-		float cylinderWedgeAngle;
-		float blurredMouseX;
-		float blurredMouseY;
+	void createCylinderPiece(ofMesh &m, float radius, float height, float degrees);
+	void mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2);
+	bool bAngularOffsetChanged;
+
+	ofImage unwarpedImage;
+    
+	float currentLeftCylinder, currentRightCylinder, targetLeftCylinder, targetRightCylinder;
+	ofVec2f leftCylinderBegin, rightCylinderBegin;
+	//
+	int   warpedW;
+	int   warpedH;
+	float angularOffset;
+
+	ofTexture unwarpedTexture;
+	int   cylinderRes;
+	float *cylinderX;
+	float *cylinderY;
+	float cylinderWedgeAngle;
+	float blurredMouseX;
+	float blurredMouseY;
     
     bool drawCylinder;
     ofTrueTypeFont din;
     bool pixelsLoaded;
     
 	ofImage gradient, overlay;
-
     ofCylinderPrimitive cylinder;
-		
 	ofxOscSender sender;
 	ofSerial serial;
 
 	NAV_STATE navState;
+	float userControlCountdown;
+	ofMesh leftCylinderPiece, rightCylinderPiece;
 
-	flaot userControlCountdown;
+	USER_DISPLAY_STATE userDisplayState;
 
+	ofxCv::ObjectFinder finder;
 };

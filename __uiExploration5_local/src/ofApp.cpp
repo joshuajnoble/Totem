@@ -10,6 +10,11 @@ void ofApp::setup(){
     
 	rec.setup(8888);
 
+	//create the socket and set to send to 127.0.0.1:11999
+	videoStreamer.Create();
+	videoStreamer.Connect("127.0.0.1", 11999);
+	videoStreamer.SetNonBlocking(true);
+
     warpedW = 1920;
     warpedH = 1080;
 
@@ -51,6 +56,9 @@ void ofApp::update(){
     
     
     if (grabber.isFrameNew()){
+
+		
+
         //
 		fbo.begin();
 		ofBackground(0, 0, 0);

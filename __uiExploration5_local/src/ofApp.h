@@ -1,12 +1,11 @@
 #ifndef _BLOGGIE_APP
 #define _BLOGGIE_APP
-
 #include "ofMain.h"
 
 //#define IMAGE
 #define GRABBER
 
-
+#include "ofxNetwork.h"
 #include "ofxOsc.h"
 
 class ofApp : public ofBaseApp{
@@ -112,6 +111,7 @@ class ofApp : public ofBaseApp{
     ofCylinderPrimitive cylinder;
 
 	ofxOscReceiver rec;
+	ofxUDPManager videoStreamer;
 
 	ofFbo fbo;
 		

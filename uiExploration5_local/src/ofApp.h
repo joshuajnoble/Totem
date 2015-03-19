@@ -1,12 +1,11 @@
-#ifndef _BLOGGIE_APP
-#define _BLOGGIE_APP
+#pragma once
 
 #include "ofMain.h"
 
 //#define IMAGE
 #define GRABBER
 
-
+#include "ofxSpout.h"
 #include "ofxOsc.h"
 
 class ofApp : public ofBaseApp{
@@ -118,6 +117,3 @@ class ofApp : public ofBaseApp{
 	ofFbo fbo;
 		
 };
-
-#endif	
-

@@ -43,6 +43,9 @@
     <ClCompile Include="..\..\..\..\..\Downloads\openFrameworks-VS2013\openFrameworks-VS2013\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
       <Filter>addons\ofxOsc</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxSpout\src\ofxSpout.cpp">
+      <Filter>addons\ofxSpout</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -53,6 +56,9 @@
     </Filter>
     <Filter Include="addons\ofxOsc">
       <UniqueIdentifier>{1ee8f714-f0dd-449c-8407-ff6ff149daba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxSpout">
+      <UniqueIdentifier>{65bfcdfa-2f94-4b6c-84a2-06ef0e0fee27}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +124,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h">
       <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxSpout\src\ofxSpout.h">
+      <Filter>addons\ofxSpout</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxSpout\src\Spout.h">
+      <Filter>addons\ofxSpout</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
