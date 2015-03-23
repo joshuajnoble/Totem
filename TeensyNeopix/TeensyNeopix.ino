@@ -38,11 +38,16 @@ int rotateToCounter = 0;
 int targetRotationPoint = 0;
 int currentRotationPoint = 0;
 
+int mode = LET_ME_TALK;
+
 ANIMATION_TIMING animationState = NONE;
 
 void setup() {
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
+  
+  mode = LET_ME_TALK;
+  animationState = FLASH_TO_NOTICE_INC;
   
   Serial.begin(115200);
 }
@@ -59,6 +64,7 @@ void loop() {
     if(type == '1')
     {
       mode = LET_ME_TALK;
+      animationState = FLASH_TO_NOTICE_INC;
     }
     if(type == '2')
     {
@@ -84,10 +90,10 @@ void loop() {
       
       
       // TODO THIS NEEDS TO ACCOUNT FOR COUNTER-CLOCKWISE ROTATION
-      if( rotateToCounterm > 200 && currentRotationPoint != targetRotationPoint )
+      if( rotateToCounter > 200 && currentRotationPoint != targetRotationPoint )
       {
         
-        rotateToCounterm = 0;
+        rotateToCounter = 0;
         
         if(currentRotationPoint < targetRotationPoint) {
          currentRotationPoint++;
@@ -100,6 +106,7 @@ void loop() {
     break;
     
     case FLASH_TO_NOTICE_INC:
+      Serial.println(" flash inc ");
       flashToNoticeCount++;
       if(flashToNoticeCount % 1000) {
         flashToNoticeBrightness++;
@@ -113,6 +120,7 @@ void loop() {
     break;
     
     case FLASH_TO_NOTICE_BRIGHT:
+       Serial.println(" flash bright ");
        flashToNoticeCount++;
        if(flashToNoticeCount > 8000000) {
          animationState = FLASH_TO_NOTICE_DEC;
@@ -123,6 +131,7 @@ void loop() {
     break;
     
     case FLASH_TO_NOTICE_DEC:
+      Serial.println(" flash dec ");
       flashToNoticeCount++;
       if(flashToNoticeCount % 1000) {
         flashToNoticeBrightness--;
