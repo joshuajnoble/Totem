@@ -1,8 +1,9 @@
 #include <Adafruit_NeoPixel.h>
 
+
 #define PIN 23
 
-#define PINS_IN_STRIP 16
+#define PINS_IN_STRIP 48
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
@@ -11,7 +12,7 @@
 //   NEO_KHZ400  400 KHz (classic 'v1' (not v2) FLORA pixels, WS2811 drivers)
 //   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
 //   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(60, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(PINS_IN_STRIP, PIN, NEO_GRB + NEO_KHZ800);
 
 // IMPORTANT: To reduce NeoPixel burnout risk, add 1000 uF capacitor across
 // pixel power leads, add 300 - 500 Ohm resistor on first pixel's data input
@@ -26,142 +27,198 @@ enum ANIMATION_TIMING {
   ROTATE_TO_GAZE,
   FLASH_TO_NOTICE_INC,
   FLASH_TO_NOTICE_BRIGHT,
-  FLASH_TO_NOTICE_DEC
+  FLASH_TO_NOTICE_DEC,
+  FLASH_TO_NOTICE_DARK
 };
 
 int flashToNoticeCount = 0;
 int flashToNoticeBrightness = 0;
-int flashToNoticeTimer = 0;
+int flashToNoticeCycles = 0;
 
 int rotateToCounter = 0;
 
 int targetRotationPoint = 0;
 int currentRotationPoint = 0;
 
-int mode = LET_ME_TALK;
+int mode = 0;
+int scrollDirection = 1;
+
 
 ANIMATION_TIMING animationState = NONE;
 
 void setup() {
+  Serial.begin(115200);
+  Serial.println(" OK " );
+
+  pinMode(2, OUTPUT);
+
   strip.begin();
   strip.show(); // Initialize all pixels to 'off'
-  
-  mode = LET_ME_TALK;
-  animationState = FLASH_TO_NOTICE_INC;
-  
-  Serial.begin(115200);
+
 }
 
 
 
 void loop() {
-  
+
   // are we getting anything?
   while( Serial.available() > 1 )
   {
-    
+
     int type = Serial.read();
     if(type == '1')
     {
       mode = LET_ME_TALK;
       animationState = FLASH_TO_NOTICE_INC;
+      flashToNoticeCycles = 0;
     }
     if(type == '2')
     {
       mode = REMOTE_GAZE;
-      targetRotationPoint = int(Serial.read());
-    }    
+      animationState = ROTATE_TO_GAZE;
+      targetRotationPoint = int(Serial.parseInt());
+      
+      
+      //t 10, c 45
+      if(targetRotationPoint - currentRotationPoint > 0)
+      {
+        if(currentRotationPoint + (PINS_IN_STRIP - targetRotationPoint) > (targetRotationPoint - currentRotationPoint)) {
+          scrollDirection = 1;
+        } else {
+          scrollDirection = -1;
+        }
+      }
+      else
+      {
+        // (45 - 10) + targetRotationPoint > abs(10-45)
+        if(PINS_IN_STRIP - currentRotationPoint + targetRotationPoint < (currentRotationPoint - targetRotationPoint)) {
+          scrollDirection = 1;
+        } else {
+          scrollDirection = -1;
+        }
+      }    
+    }
   }
-  
+
   switch(animationState)
   {
-    case NONE:
+  case NONE:
     break;
-    
-    case ROTATE_TO_GAZE:
-      rotateToCounter++;
 
-      strip.setPixelColor( currentRotationPoint - 2, 122, 122, 122 );      
-      strip.setPixelColor( currentRotationPoint - 1, 255, 255, 255 );
-      strip.setPixelColor( currentRotationPoint, 255, 255, 255 );
-      strip.setPixelColor( currentRotationPoint + 1, 255, 255, 255 );
-      strip.setPixelColor( currentRotationPoint + 2, 122, 122, 122 );
-      strip.show();
+  case ROTATE_TO_GAZE:
+    rotateToCounter++;
+
+    //colorWipe(0);
+    strip.setPixelColor( currentRotationPoint - 3, 0, 0, 0 );
+    strip.setPixelColor( currentRotationPoint - 2, 20, 20, 20 );      
+    strip.setPixelColor( currentRotationPoint - 1, 80, 80, 80 );
+    strip.setPixelColor( currentRotationPoint, 255, 255, 255 );
+    strip.setPixelColor( currentRotationPoint + 1, 80, 80, 80 );
+    strip.setPixelColor( currentRotationPoint + 2, 20, 20, 20 );
+    strip.setPixelColor( currentRotationPoint + 3, 0, 0, 0 );
+    strip.show();
+
+    if(rotateToCounter > 6 && currentRotationPoint != targetRotationPoint )
+    {
+
+      rotateToCounter = 0;
+
+      if(currentRotationPoint != targetRotationPoint) {
+        currentRotationPoint += scrollDirection;
+        
+        if(currentRotationPoint < 0) {
+          strip.setPixelColor( 0, 0, 0, 0 );
+          strip.setPixelColor( 1, 0, 0, 0 );
+          strip.setPixelColor( 2, 0, 0, 0 );
+          currentRotationPoint = PINS_IN_STRIP;
+        }
+        
+        if(currentRotationPoint > PINS_IN_STRIP) {
+          strip.setPixelColor( PINS_IN_STRIP-2, 0, 0, 0 );
+          strip.setPixelColor( PINS_IN_STRIP-1, 0, 0, 0 );
+          strip.setPixelColor( PINS_IN_STRIP, 0, 0, 0 );
+          currentRotationPoint = 0;
+        }
+        
+      }
+    }
+
+    break;
+
+  case FLASH_TO_NOTICE_INC:
+    //Serial.print( " inc " );
+    //digitalWrite(2, LOW);
+    flashToNoticeCount++;
+    if(flashToNoticeCount > 9) {
+      flashToNoticeCount = 0;
+      flashToNoticeBrightness+=1;
+    }
+    if(flashToNoticeBrightness > 150) {
+      flashToNoticeCount = 0;
+      animationState = FLASH_TO_NOTICE_BRIGHT;
+    }
+
+    colorWipe( flashToNoticeBrightness );
+
+    break;
+
+  case FLASH_TO_NOTICE_BRIGHT:
+
+    digitalWrite(2, HIGH);
+    //Serial.print( " bright " );
+    flashToNoticeCount++;
+    if(flashToNoticeCount > 2) {
+      flashToNoticeCount = 0;
+      animationState = FLASH_TO_NOTICE_DEC;
+    }
+
+    colorWipe( flashToNoticeBrightness );
+
+    break;
+
+  case FLASH_TO_NOTICE_DEC:
+    digitalWrite(2, LOW);
+    //Serial.print( " dec " );
+    flashToNoticeCount++;
+    if(flashToNoticeCount > 4) {
+      flashToNoticeCount = 0;
+      flashToNoticeBrightness -= 1;
+    }
+    if(flashToNoticeBrightness < 10) {
+      flashToNoticeCount = 0;
+      animationState = FLASH_TO_NOTICE_DARK;
+    }
+
+    colorWipe( flashToNoticeBrightness );
+
+    break;
+
+    // NOT NEEDED?
+  case FLASH_TO_NOTICE_DARK:
+    flashToNoticeCount++;
+    if(flashToNoticeCount > 400) {
+      flashToNoticeCount = 0;
+      animationState = FLASH_TO_NOTICE_INC;
       
+      flashToNoticeCycles++;
       
-      // TODO THIS NEEDS TO ACCOUNT FOR COUNTER-CLOCKWISE ROTATION
-      if( rotateToCounter > 200 && currentRotationPoint != targetRotationPoint )
+      if(flashToNoticeCycles > 3)
       {
-        
-        rotateToCounter = 0;
-        
-        if(currentRotationPoint < targetRotationPoint) {
-         currentRotationPoint++;
-        }
-        if(currentRotationPoint > targetRotationPoint) {
-         currentRotationPoint--;
-        }
+        animationState = NONE;
       }
-      
+    }
+    colorWipe( 0);
     break;
-    
-    case FLASH_TO_NOTICE_INC:
-      Serial.println(" flash inc ");
-      flashToNoticeCount++;
-      if(flashToNoticeCount % 1000) {
-        flashToNoticeBrightness++;
-      }
-      if(flashToNoticeBrightness > 254) {
-        animationState = FLASH_TO_NOTICE_BRIGHT;
-      }
-      
-      colorWipe( flashToNoticeBrightness );
-      
-    break;
-    
-    case FLASH_TO_NOTICE_BRIGHT:
-       Serial.println(" flash bright ");
-       flashToNoticeCount++;
-       if(flashToNoticeCount > 8000000) {
-         animationState = FLASH_TO_NOTICE_DEC;
-       }
-       
-       colorWipe( flashToNoticeBrightness );
-       
-    break;
-    
-    case FLASH_TO_NOTICE_DEC:
-      Serial.println(" flash dec ");
-      flashToNoticeCount++;
-      if(flashToNoticeCount % 1000) {
-        flashToNoticeBrightness--;
-      }
-      if(flashToNoticeBrightness < 1) {
-        animationState = FLASH_TO_NOTICE_INC;
-      }
-      
-      colorWipe( flashToNoticeBrightness );
-      
-    break;
-    
-//    // NOT NEEDED?
-//    case FLASH_TO_NOTICE_DARK:
-//       flashToNoticeCount++;
-//       if(flashToNoticeCount > 4000000) {
-//         animationState = FLASH_TO_NOTICE_INC;
-//       }
-//       colorWipe( flashToNoticeBrightness );
-//    break;
-    
+
   }
 }
 
 // Fill the dots one after the other with a color
 void colorWipe(uint8_t c) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, c, c, c);
-      //strip.show();
-      //delay(wait);
+    strip.setPixelColor(i, c, c, c);
+    ///strip.show();
+    //delay(wait);
   }
   strip.show();
 }
@@ -171,13 +228,16 @@ void colorWipe(uint8_t c) {
 uint32_t Wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if(WheelPos < 85) {
-   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
-  } else if(WheelPos < 170) {
+    return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+  } 
+  else if(WheelPos < 170) {
     WheelPos -= 85;
-   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
-  } else {
-   WheelPos -= 170;
-   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+  } 
+  else {
+    WheelPos -= 170;
+    return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
   }
 }
+
 

@@ -13,8 +13,8 @@ void ofApp::setup(){
 
     /// set up the cylinder
 	cylinder.set(warpedW, warpedH * 6, 120, 60, 0, false);
-	//cylinder.mapTexCoords(0, 0, warpedW, warpedH);
-	cylinder.mapTexCoords(warpedW, 0, 0, warpedH);
+	cylinder.mapTexCoords(0, 0, warpedW, warpedH);
+	//cylinder.mapTexCoords(warpedW, 0, 0, warpedH);
 
 	createCylinderPiece(leftCylinderPiece, warpedW, 1080, CYLINDER_PIECE_WIDTH);
 	createCylinderPiece(rightCylinderPiece, warpedW, 1080, CYLINDER_PIECE_WIDTH);
@@ -44,7 +44,7 @@ void ofApp::setup(){
 	gradient.loadImage("CylinderUI_Grad-01.png");
 	overlay.loadImage("CylinderUI-01.png");
 	
-	serial.setup("/COM5", 115200);
+	serial.setup("/COM3", 115200);
 
 	finder.setup("haarcascade_frontalface_default.xml");
 	finder.setPreset(ofxCv::ObjectFinder::Fast);
@@ -96,6 +96,7 @@ void ofApp::update(){
 		{
 			cout << " should be system control  " << endl;
 			navState = SYSTEM_CONTROL;
+
 		}
 	}
 }
@@ -117,7 +118,7 @@ void ofApp::draw(){
 		ofDisableDepthTest();
 
 		gradient.draw(0, 0, 1920, 1280);
-		overlay.draw(-120, -50, 1920, 1280);
+		//overlay.draw(-120, -50, 1920, 1280);
 
 	}
 	else {
@@ -239,6 +240,12 @@ void ofApp::keyPressed  (int key){
 		}
 
 		break;
+
+	case 'h':
+		{
+			serial.writeByte('1');
+		} 
+		break;
 	}
 
 	
@@ -263,6 +270,39 @@ void ofApp::mouseDragged(int x, int y, int button){
 	m.addIntArg(angularOffset);
 	sender.sendMessage(m);
 
+	float adaptedMouseX = blurredMouseX;
+	float denominator = fmod(adaptedMouseX , 450.0);
+	adaptedMouseX -= denominator * 450.0;
+
+	int led = ofMap(adaptedMouseX, 0, 450, 0, 48, false);
+
+	//cout << angularOffset << " " << led << endl;
+
+	unsigned char val[4];
+	//val[0] = '2';
+	//if (led > 9) {
+	//	val[1] = (unsigned char) led % 10;
+	//	val[2] = (unsigned char) led - (led / 10);
+	//	val[3] = '/n';
+	//}
+	//else {
+	//	val[1] = (unsigned char) led;
+	//	val[2] = '/n';
+	//}
+
+	stringstream ss;
+
+	ss << '2' << led;
+
+	cout << ss << endl;
+
+	for (int i = 0; i < ss.str().size(); i++)
+	{
+		val[i] = (unsigned char)ss.str().at(i);
+	}
+
+	serial.writeBytes(&val[0], 4);
+
 	bAngularOffsetChanged = true;
 }
 
@@ -273,12 +313,14 @@ void ofApp::mousePressed(int x, int y, int button){
 }
 
 void ofApp::mouseReleased(int x, int y, int button){
+	serial.writeByte('3');
 }
 
 void ofApp::mouseMoved(int x, int y ){
 }
 
 void ofApp::keyReleased(int key){ 
+
 }
 
 void ofApp::windowResized(int w, int h){
