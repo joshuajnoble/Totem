@@ -5,6 +5,7 @@
 #include "ofxCv.h"
 #include "ofxOsc.h"
 #include "ofxSpout.h"
+#include "ofxGui.h"
 //#include <ofxNetwork.h>
 
 //#define IMAGE
@@ -54,8 +55,6 @@ class ofApp : public ofBaseApp{
 		 
 	void drawTexturedCylinder();
 	void drawPlayer();
-	void drawUnwarpedVideo();
-	
 	void drawLeftCylinder();
 	void drawRightCylinder();
 	void drawRemoteUser();
@@ -84,7 +83,7 @@ class ofApp : public ofBaseApp{
 	float blurredMouseX;
 	float blurredMouseY;
     
-    bool drawCylinder;
+    bool drawCylinder, isDrawingLeftCylinder, isDrawingRightCylinder;
     ofTrueTypeFont din;
     bool pixelsLoaded;
     
@@ -96,8 +95,16 @@ class ofApp : public ofBaseApp{
 	NAV_STATE navState;
 	float userControlCountdown;
 	ofMesh leftCylinderPiece, rightCylinderPiece;
+	ofVec4f prevTcoordLCP, prevTcoordRCP;
+	ofPixels cropped;
 
 	USER_DISPLAY_STATE userDisplayState;
 
 	ofxCv::ObjectFinder finder;
+
+	ofEasyCam cam;
+
+	ofxPanel gui;
+	ofxFloatSlider xPosition, yPosition, zPosition, rotation;
+	
 };

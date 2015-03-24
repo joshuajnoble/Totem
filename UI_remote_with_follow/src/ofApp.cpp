@@ -4,6 +4,8 @@ float lastElapsed;
 #define CYLINDER_PIECE_WIDTH 44
 #define CYLINDER_PIECE_HEIGHT 2
 
+#define PIECE_TEXCOORD_WIDTH 720
+
 void ofApp::setup(){
 
 	blurredMouseX = 0;
@@ -16,8 +18,13 @@ void ofApp::setup(){
 	cylinder.mapTexCoords(0, 0, warpedW, warpedH);
 	//cylinder.mapTexCoords(warpedW, 0, 0, warpedH);
 
-	createCylinderPiece(leftCylinderPiece, warpedW, 1080, CYLINDER_PIECE_WIDTH);
-	createCylinderPiece(rightCylinderPiece, warpedW, 1080, CYLINDER_PIECE_WIDTH);
+	//rightCylinderPiece.setMode(ofPrimitiveMode::OF_PRIMITIVE_TRIANGLE_STRIP  );
+
+	createCylinderPiece(leftCylinderPiece, warpedW, 1080 * 2, CYLINDER_PIECE_WIDTH);
+	createCylinderPiece(rightCylinderPiece, warpedW, 1080 * 2, CYLINDER_PIECE_WIDTH);
+
+	isDrawingLeftCylinder = false;
+	isDrawingRightCylinder = false;
 
 	sender.setup("localhost", 8888);
 	
@@ -47,12 +54,21 @@ void ofApp::setup(){
 	serial.setup("/COM3", 115200);
 
 	finder.setup("haarcascade_frontalface_default.xml");
-	finder.setPreset(ofxCv::ObjectFinder::Fast);
-	finder.getTracker().setSmoothingRate(.3);
+	finder.setPreset(ofxCv::ObjectFinder::Accurate);
+	//finder.getTracker().setSmoothingRate(.3);
 
 	lastElapsed = ofGetElapsedTimef();
 	navState = USER_CONTROL;
 	userDisplayState = UDS_SHOW_FEED;
+
+	cam.enableMouseInput();
+	cam.enableMouseMiddleButton();
+	gui.setup(); // most of the time you don't need a name
+
+	gui.add(xPosition.setup("x pos", 0, -2000, 1000));
+	gui.add(yPosition.setup("y pos", 0, -200, 1000));
+	gui.add(zPosition.setup("z pos", 0, -2000, 1000));
+	gui.add(rotation.setup("rot", 0, 0, 360));
 }
 
 void ofApp::exit()
@@ -107,6 +123,7 @@ void ofApp::draw(){
 	ofBackground(64,64,64);	
 	
     if(drawCylinder) {
+	
 		ofEnableDepthTest();
 		ofPushMatrix();
 		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
@@ -120,6 +137,27 @@ void ofApp::draw(){
 		gradient.draw(0, 0, 1920, 1280);
 		//overlay.draw(-120, -50, 1920, 1280);
 
+		if (isDrawingLeftCylinder)
+		{
+			ofPushMatrix();
+			ofTranslate(430, (ofGetHeight() / 2), 300);
+			ofRotateY(135);
+			drawLeftCylinder();
+			ofPopMatrix();
+
+			/*cam.begin();
+			drawLeftCylinder();
+			cam.end();*/
+		}
+		if (isDrawingRightCylinder)
+		{
+			ofPushMatrix();
+			ofTranslate(1200, (ofGetHeight() / 2), 100);
+			ofRotateY(80);
+			drawRightCylinder();
+			ofPopMatrix();
+		}
+
 	}
 	else {
 		drawPlayer();
@@ -128,64 +166,71 @@ void ofApp::draw(){
 	// init receiver if it's not already initialized
 	ofxSpout::initReceiver();
 
-	// receive Spout texture
+	// receive Spout texturen
 	ofxSpout::receiveTexture();
 	ofxSpout::draw(600, 0, 300, 210);
-}
 
-void ofApp::drawUnwarpedVideo(){
-	// draw the unwarped (corrected) video in a strip at the bottom.
-	ofSetColor(255, 255, 255);
-	unwarpedImage.draw(0, ofGetHeight() - unwarpedImage.getHeight());
+	gui.draw();
 }
 
 void ofApp::drawPlayer(){
 	ofSetColor(255, 255, 255);
-    grabber.draw(0, 0, 1920/2, 1080/2);
-
+    grabber.draw(0, 0, 1920, 1080);
+	for (int i = 0; i < finder.size(); i++)
+	{
+		ofNoFill();
+		ofRect(finder.getObject(i).x, 400, finder.getObject(i).width, 400);
+	}
 }
 
 void ofApp::findLeftFace()
 {
-	//finder.findHaarObjects(grabber.getPixels());
-	finder.update(grabber.getPixelsRef());
+	finder.clear();
+	grabber.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
+	finder.update(cropped);
 	
-	ofRectangle leftMost;
+	ofRectangle leftMost(1920, 0, 1920, 0);
 
 
 	for (int i = 0; i < finder.size(); i++) {
 		ofRectangle object = finder.getObjectSmoothed(i);
-		if (object.getTopLeft().x < leftMost.getTopLeft().x) {
+		if (object.getTopLeft().x < leftMost.getTopLeft().x && object.x > 0) {
 			leftMost = object;
+
+			cout << leftMost << endl;
 		}
 	}
 
-	if (leftMost.getWidth() < 300) {
-		leftMost.scaleWidth(300);
+	if (leftMost.x > 1920) {
+		leftMost.x = 1920;
 	}
-
-	mapTexCoords(rightCylinderPiece, leftMost.getTopLeft().x, leftMost.getTopLeft().y, leftMost.getBottomRight().x, 320);
+	//mapTexCoords(leftCylinderPiece, leftMost.x + 100, 380, leftMost.x + PIECE_TEXCOORD_WIDTH - 100, 700);
+	mapTexCoords(leftCylinderPiece, max(600, min(1920, (int)leftMost.x - 200)), 380, 0, 700);
 }
 
 void ofApp::findRightFace()
 {
 	//finder.findHaarObjects(grabber.getPixels());
-	finder.update(grabber.getPixelsRef());
 
-	ofRectangle rightMost;
+	finder.clear();
+	grabber.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
+	finder.update(cropped);
+
+	ofRectangle rightMost; 
 
 	for (int i = 0; i < finder.size(); i++) {
-		ofRectangle object = finder.getObjectSmoothed(i);
-		if (object.getTopRight().x < rightMost.getTopRight().x) {
+		ofRectangle object = finder.getObject(i);
+		if (object.x > rightMost.x && object.x < 1920) {
 			rightMost = object;
+			rightMost.width = object.width;
+			cout << rightMost << endl;
+
 		}
 	}
-
-	if (rightMost.getWidth() < 300) {
-		rightMost.scaleWidth(300);
+	if (rightMost.x < 700) {
+		rightMost.x = 700;
 	}
-
-	mapTexCoords(rightCylinderPiece, rightMost.getTopLeft().x, rightMost.getTopLeft().y, rightMost.getBottomRight().x, 320);
+	mapTexCoords(rightCylinderPiece, min(1920, max(500, (int) rightMost.x + 200)), 380, 0, 700);
 
 }
 
@@ -246,6 +291,21 @@ void ofApp::keyPressed  (int key){
 			serial.writeByte('1');
 		} 
 		break;
+
+	case 'r':
+		isDrawingRightCylinder = !isDrawingRightCylinder;
+		if (isDrawingRightCylinder) {
+			findRightFace();
+		}
+		currentRightCylinder = targetRightCylinder = 1400;
+		break;
+	case 'l':
+		isDrawingLeftCylinder = !isDrawingLeftCylinder;
+		if (isDrawingLeftCylinder) {
+			findLeftFace();
+		}
+		currentLeftCylinder = targetLeftCylinder = 0;
+		break;
 	}
 
 	
@@ -278,32 +338,20 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 	//cout << angularOffset << " " << led << endl;
 
-	unsigned char val[4];
-	//val[0] = '2';
-	//if (led > 9) {
-	//	val[1] = (unsigned char) led % 10;
-	//	val[2] = (unsigned char) led - (led / 10);
-	//	val[3] = '/n';
+	//unsigned char val[4];
+
+	//stringstream ss;
+
+	//ss << '2' << led;
+
+	//for (int i = 0; i < ss.str().size(); i++)
+	//{
+	//	val[i] = (unsigned char)ss.str().at(i);
 	//}
-	//else {
-	//	val[1] = (unsigned char) led;
-	//	val[2] = '/n';
-	//}
 
-	stringstream ss;
+	//serial.writeBytes(&val[0], 4);
 
-	ss << '2' << led;
-
-	cout << ss << endl;
-
-	for (int i = 0; i < ss.str().size(); i++)
-	{
-		val[i] = (unsigned char)ss.str().at(i);
-	}
-
-	serial.writeBytes(&val[0], 4);
-
-	bAngularOffsetChanged = true;
+	//bAngularOffsetChanged = true;
 }
 
 
@@ -329,8 +377,12 @@ void ofApp::windowResized(int w, int h){
 void ofApp::createCylinderPiece(ofMesh &m, float radius, float height, float degrees)
 {
 
+	m.setupIndicesAuto();
+
+	ofVec2f lastCoord;
 	int f = 0;
-	for (float deg = 0; deg < degrees; deg+=2.0, f += 4){
+	for (float deg = 0; deg < degrees; deg+=1.0, f += 4)
+	{
 		float ca = deg * 0.01745329252;//cache current angle
 		float na = (deg + 1) * 0.01745329252;//cache next angle (could do with a conditional and storing previous angle)
 		float ccos = cos(ca);//current cos
@@ -351,28 +403,78 @@ void ofApp::createCylinderPiece(ofMesh &m, float radius, float height, float deg
 		bl--br
 		*/
 
+		// 6 verts
 		m.addVertex(tl);
+		m.addTexCoord(ofVec2f(radius * ccos, 380));
 		m.addVertex(tr);
+		m.addTexCoord(ofVec2f(radius * ncos, 380));
 		m.addVertex(bl);
+		m.addTexCoord(ofVec2f(radius * ccos, 700));
 
 		m.addVertex(bl);
+		m.addTexCoord(ofVec2f(radius * ccos, 700));
 		m.addVertex(tr);
+		m.addTexCoord(ofVec2f(radius * ncos, 380));
 		m.addVertex(br);
+		m.addTexCoord(ofVec2f(radius * ncos, 700));
 
+		lastCoord.set(ofVec2f(radius * ncos, 700));
 	}
+
+	prevTcoordLCP.set(0, 0, lastCoord.x, lastCoord.y);
+	prevTcoordRCP.set(0, 0, lastCoord.x, lastCoord.y);
+
 }
 
-void ofApp::mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2) {
-	//setTexCoords( u1, v1, u2, v2 );
-	ofVec4f prevTcoord(0, 0, CYLINDER_PIECE_WIDTH / 2, CYLINDER_PIECE_HEIGHT);
+void ofApp::mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2)
+{
+	//for (int j = 0; j < m.getNumTexCoords(); j++)
+	//{
+	//	ofVec2f tcoord = m.getTexCoord(j);
+	//	tcoord.x = ofMap(tcoord.x, prevTcoordRCP.x, prevTcoordRCP.z, u1, u2, true);
+	//	m.setTexCoord(j, tcoord);
+	//}
 
-	for (int j = 0; j < m.getNumTexCoords(); j++) {
-		ofVec2f tcoord = m.getTexCoord(j);
-		tcoord.x = ofMap(tcoord.x, prevTcoord.x, prevTcoord.z, u1, u2);
-		tcoord.y = ofMap(tcoord.y, prevTcoord.y, prevTcoord.w, v1, v2);
+	m.clearTexCoords();
+	m.clearVertices();
 
-		m.setTexCoord(j, tcoord);
+	int f = 0;
+	for (float deg = 0; deg < 44.0; deg += 1.0, f += 4)
+	{
+		float ca = deg * 0.01745329252;//cache current angle
+		float na = (deg + 1) * 0.01745329252;//cache next angle (could do with a conditional and storing previous angle)
+		float ccos = cos(ca);//current cos
+		float csin = sin(ca);//current sin
+		float ncos = cos(na);//next cos
+		float nsin = sin(na);//next sin
+
+		ofVec3f tl(warpedW * ccos, 1080, warpedW * csin);//top left = current angle, positive y
+		ofVec3f bl(warpedW * ccos, -1080, warpedW * csin);//bottom left = current angle, negative y
+		ofVec3f tr(warpedW * ncos, 1080, warpedW * nsin);//top right = next angle, positive y
+		ofVec3f br(warpedW * ncos, -1080, warpedW * nsin);//bottom right = next angle, negative y
+
+		/*
+		tl--tr
+		|  /|
+		| / |
+		|/  |
+		bl--br
+		*/
+
+		// 6 verts
+		m.addVertex(tl);
+		m.addTexCoord(ofVec2f((warpedW * ccos) - (warpedW - u1), 700));
+		m.addVertex(tr);
+		m.addTexCoord(ofVec2f((warpedW * ncos) - (warpedW - u1), 700));
+		m.addVertex(bl);
+		m.addTexCoord(ofVec2f((warpedW * ccos) - (warpedW - u1), 380));
+
+		m.addVertex(bl);
+		m.addTexCoord(ofVec2f((warpedW * ccos) - (warpedW - u1), 380));
+		m.addVertex(tr);
+		m.addTexCoord(ofVec2f((warpedW * ncos) - (warpedW - u1), 700));
+		m.addVertex(br);
+		m.addTexCoord(ofVec2f((warpedW * ncos) - (warpedW - u1), 380));
+
 	}
-
-	//texCoords.set(u1, v1, u2, v2);
 }
