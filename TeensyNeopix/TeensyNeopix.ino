@@ -2,7 +2,7 @@
 
 
 #define PIN 23
-#define PINS_IN_STRIP 48
+#define PINS_IN_STRIP 45
 
 volatile long milliTimeout;
 volatile int firstPin;
@@ -353,6 +353,5 @@ void six()
     }
   }
 }
-
 
 
