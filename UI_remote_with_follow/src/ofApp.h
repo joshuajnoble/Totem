@@ -6,6 +6,7 @@
 #include "ofxOsc.h"
 #include "ofxSpout.h"
 #include "ofxGui.h"
+
 //#include <ofxNetwork.h>
 
 //#define IMAGE
@@ -107,4 +108,6 @@ class ofApp : public ofBaseApp{
 	ofxPanel gui;
 	ofxFloatSlider xPosition, yPosition, zPosition, rotation;
 	
+	int detectedMicrophone[6];
+	bool isDoingMicDetection;
 };
