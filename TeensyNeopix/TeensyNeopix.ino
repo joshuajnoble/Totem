@@ -172,7 +172,7 @@ void loop() {
       flashToNoticeCount = 0;
       flashToNoticeBrightness+=1;
     }
-    if(flashToNoticeBrightness > 150) {
+    if(flashToNoticeBrightness > 100) {
       flashToNoticeCount = 0;
       animationState = FLASH_TO_NOTICE_BRIGHT;
     }
@@ -215,7 +215,7 @@ void loop() {
     // NOT NEEDED?
   case FLASH_TO_NOTICE_DARK:
     flashToNoticeCount++;
-    if(flashToNoticeCount > 400) {
+    if(flashToNoticeCount > 300) {
       flashToNoticeCount = 0;
       animationState = FLASH_TO_NOTICE_INC;
       
