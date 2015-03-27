@@ -12,6 +12,8 @@
 //#define IMAGE
 #define GRABBER
 
+#define MIC_DEBUGGING
+
 enum NAV_STATE {
 	USER_CONTROL, SYSTEM_CONTROL
 };
@@ -110,4 +112,6 @@ class ofApp : public ofBaseApp{
 	
 	int detectedMicrophone[6];
 	bool isDoingMicDetection;
+
+	ofImage panoView;
 };

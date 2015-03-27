@@ -25,13 +25,15 @@ void ofApp::setup(){
 
 	isDrawingLeftCylinder = false;
 	isDrawingRightCylinder = false;
-	isDoingMicDetection = false;
+	isDoingMicDetection = true;
 
 	sender.setup("localhost", 8888);
 	
 	ofxSpout::init("", ofGetWidth(), ofGetHeight(), false);
 
     vector<ofVideoDevice> dd = grabber.listDevices();
+
+#ifndef MIC_DEBUGGING
 
 	for (int i = 0; i < dd.size(); i++)
 	{
@@ -47,12 +49,18 @@ void ofApp::setup(){
 	{
 		ofExit();
 	}
+
+#else
+
+	panoView.loadImage("panoView.png");
+
+#endif
  
     //din.loadFont("fonts/FF_DIN_Pro_Light_Italic.otf", 32);
 	gradient.loadImage("CylinderUI_Grad-01.png");
-	overlay.loadImage("CylinderUI-01.png");
+	//overlay.loadImage("CylinderUI-01.png");
 	
-	serial.setup("/COM3", 115200);
+	serial.setup("/COM6", 115200);
 
 	finder.setup("haarcascade_frontalface_default.xml");
 	finder.setPreset(ofxCv::ObjectFinder::Accurate);
@@ -83,12 +91,14 @@ void ofApp::exit()
 void ofApp::update(){
     
     ofSetVerticalSync(false);  
-    grabber.update();
     
+#ifndef MIC_DEBUGGING
+	grabber.update();
     
     if (grabber.isFrameNew()){
 	}
 
+#endif
 	int nRead = 0;
 
 	unsigned char bytesReturned[2];
@@ -101,7 +111,7 @@ void ofApp::update(){
 			{
 				//blurredMouseX = (int(bytesReturned[0] - '2') * 59);
 				//cout << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
-				detectedMicrophone[int(bytesReturned[0] - '2')] += 4;
+				detectedMicrophone[int(bytesReturned[0] - '2')] += 60;
 
 				int highestIndex = -1, highestValue = -1;
 				for (int i = 0; i < 6; i++){
@@ -112,6 +122,8 @@ void ofApp::update(){
 				}
 
 				blurredMouseX = (highestIndex * 59);
+
+				cout << "changing from mic " << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
 
 			}
 		}
@@ -151,11 +163,22 @@ void ofApp::draw(){
 	
 		ofEnableDepthTest();
 		ofPushMatrix();
+
+#ifdef MIC_DEBUGGING
+		
+		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
+		ofRotateY(blurredMouseX);
+		panoView.getTextureReference().bind();
+		cylinder.draw();
+		panoView.getTextureReference().unbind();
+
+#else
 		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
 		ofRotateY(blurredMouseX);
 		grabber.getTextureReference().bind();
 		cylinder.draw();
 		grabber.getTextureReference().unbind();
+#endif
 		ofPopMatrix();
 		ofDisableDepthTest();
 
