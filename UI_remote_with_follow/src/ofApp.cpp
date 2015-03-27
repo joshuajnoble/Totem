@@ -6,6 +6,8 @@ float lastElapsed;
 
 #define PIECE_TEXCOORD_WIDTH 720
 
+float lastSentMouseLocation;
+
 void ofApp::setup(){
 
 	blurredMouseX = 0;
@@ -25,6 +27,7 @@ void ofApp::setup(){
 
 	isDrawingLeftCylinder = false;
 	isDrawingRightCylinder = false;
+	isDrawingSecondRemote = false;
 
 	sender.setup("localhost", 8888);
 	
@@ -69,6 +72,12 @@ void ofApp::setup(){
 	gui.add(yPosition.setup("y pos", 0, -200, 1000));
 	gui.add(zPosition.setup("z pos", 0, -2000, 1000));
 	gui.add(rotation.setup("rot", 0, 0, 360));
+
+	lastSentMouseLocation = ofGetElapsedTimef();
+
+	//remotePlayer.loadMovie("videos/remoteVideo.mov");
+	//remotePlayer.setLoopState(ofLoopType::OF_LOOP_NORMAL);
+	//remotePlayer.play();
 }
 
 void ofApp::exit()
@@ -84,6 +93,11 @@ void ofApp::update(){
     
     
     if (grabber.isFrameNew()){
+	}
+
+	if (isDrawingSecondRemote)
+	{
+		remotePlayer.update();
 	}
 
 	int nRead = 0;
@@ -158,6 +172,11 @@ void ofApp::draw(){
 			ofPopMatrix();
 		}
 
+		if (isDrawingSecondRemote)
+		{
+			remotePlayer.draw(1400, 200);
+		}
+
 	}
 	else {
 		drawPlayer();
@@ -205,7 +224,7 @@ void ofApp::findLeftFace()
 		leftMost.x = 1920;
 	}
 	//mapTexCoords(leftCylinderPiece, leftMost.x + 100, 380, leftMost.x + PIECE_TEXCOORD_WIDTH - 100, 700);
-	mapTexCoords(leftCylinderPiece, max(600, min(1920, (int)leftMost.x - 200)), 380, 0, 700);
+	mapTexCoords(leftCylinderPiece, max(400, min(1920, (int)leftMost.x + 200)), 380, 0, 700);
 }
 
 void ofApp::findRightFace()
@@ -299,6 +318,11 @@ void ofApp::keyPressed  (int key){
 		}
 		currentRightCylinder = targetRightCylinder = 1400;
 		break;
+
+	case 'z':
+		isDrawingSecondRemote = !isDrawingSecondRemote;
+		break;
+
 	case 'l':
 		isDrawingLeftCylinder = !isDrawingLeftCylinder;
 		if (isDrawingLeftCylinder) {
@@ -334,22 +358,24 @@ void ofApp::mouseDragged(int x, int y, int button){
 	float denominator = fmod(adaptedMouseX , 450.0);
 	adaptedMouseX -= denominator * 450.0;
 
-	int led = ofMap(adaptedMouseX, 0, 450, 0, 48, false);
+	if (ofGetElapsedTimef() - lastSentMouseLocation > 0.05)
+	{
 
-	//cout << angularOffset << " " << led << endl;
+		//int led = ofMap(adaptedMouseX, 0, 450, 0, 48, false);
+		int led = ofMap(blurredMouseX, 0, ofGetWidth(), 0, 48, false);
 
-	//unsigned char val[4];
+		unsigned char val[4];
+		stringstream ss;
+		ss << '2' << led;
 
-	//stringstream ss;
+		cout << led << " " << ss << endl;
 
-	//ss << '2' << led;
+		strncpy((char*)&val[0], ss.str().c_str(), sizeof(val));
+		serial.writeBytes(&val[0], 4);
 
-	//for (int i = 0; i < ss.str().size(); i++)
-	//{
-	//	val[i] = (unsigned char)ss.str().at(i);
-	//}
+		lastSentMouseLocation = ofGetElapsedTimef();
+	}
 
-	//serial.writeBytes(&val[0], 4);
 
 	//bAngularOffsetChanged = true;
 }
