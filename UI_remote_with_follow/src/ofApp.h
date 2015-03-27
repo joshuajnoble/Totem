@@ -47,6 +47,7 @@ class ofApp : public ofBaseApp{
 	
     ofImage image;
 	ofVideoPlayer player;
+	ofVideoPlayer remotePlayer;
     
     ofVideoGrabber grabber;
 	int	currentCodecId;
@@ -86,7 +87,7 @@ class ofApp : public ofBaseApp{
 	float blurredMouseX;
 	float blurredMouseY;
     
-    bool drawCylinder, isDrawingLeftCylinder, isDrawingRightCylinder;
+	bool drawCylinder, isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
     ofTrueTypeFont din;
     bool pixelsLoaded;
     
