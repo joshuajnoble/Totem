@@ -8,7 +8,7 @@ volatile long milliTimeout;
 volatile int firstPin;
 
 volatile int lastPin;
-const int TIMEOUT = 30000;
+const int TIMEOUT = 50000;
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
@@ -237,9 +237,10 @@ void loop() {
     milliTimeout -= 1;
   }
 
-  if(firstPin != 0)
+  if(firstPin != lastPin && firstPin != 0)
   {
     Serial.println (firstPin);
+    lastPin = firstPin; // cache for next time so we don't send again
     firstPin = 0;
   }
   
@@ -255,23 +256,6 @@ void colorWipe(uint8_t c) {
   strip.show();
 }
 
-// Input a value 0 to 255 to get a color value.
-// The colours are a transition r - g - b - back to r.
-uint32_t Wheel(byte WheelPos) {
-  WheelPos = 255 - WheelPos;
-  if(WheelPos < 85) {
-    return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
-  } 
-  else if(WheelPos < 170) {
-    WheelPos -= 85;
-    return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
-  } 
-  else {
-    WheelPos -= 170;
-    return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-  }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // interrupts for the directional mic
 ///////////////////////////////////////////////////////////////////////////////
@@ -281,11 +265,9 @@ void seven()
   if(milliTimeout < 1)
   {
     milliTimeout = TIMEOUT;
-    if(lastPin != 7)
-    {
+
       firstPin = 7;
-      lastPin = 7;
-    }
+
   }
 }
 
@@ -294,11 +276,7 @@ void two()
   if(milliTimeout < 1)
   {
     milliTimeout = TIMEOUT;
-    if(lastPin != 2)
-    {
       firstPin = 2;
-      lastPin = 2;
-    }
   }
 }
 
@@ -307,11 +285,7 @@ void three()
   if(milliTimeout < 1)
   {
     milliTimeout = TIMEOUT;
-    if(lastPin != 3)
-    {
       firstPin = 3;
-      lastPin = 3;
-    }
   }
 }
 
@@ -320,11 +294,7 @@ void four()
   if(milliTimeout < 1)
   {
     milliTimeout = TIMEOUT;
-    if(lastPin != 4)
-    {
-      firstPin = 4;
-      lastPin = 4;
-    }
+    firstPin = 4;
   }
 }
 
@@ -333,11 +303,7 @@ void five()
   if(milliTimeout < 1)
   {
     milliTimeout = TIMEOUT;
-    if(lastPin != 5)
-    {
       firstPin = 5;
-      lastPin = 5;
-    }
   }
 }
 
@@ -346,11 +312,7 @@ void six()
   if(milliTimeout < 1)
   {
     milliTimeout = TIMEOUT;
-    if(lastPin != 6)
-    {
       firstPin = 6;
-      lastPin = 6;
-    }
   }
 }
 
