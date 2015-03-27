@@ -28,6 +28,7 @@ void ofApp::setup(){
 	isDrawingLeftCylinder = false;
 	isDrawingRightCylinder = false;
 	isDrawingSecondRemote = false;
+	isDoingMicDetection = false;
 
 	sender.setup("localhost", 8888);
 	
@@ -78,6 +79,8 @@ void ofApp::setup(){
 	//remotePlayer.loadMovie("videos/remoteVideo.mov");
 	//remotePlayer.setLoopState(ofLoopType::OF_LOOP_NORMAL);
 	//remotePlayer.play();
+
+	memset(&detectedMicrophone[0], 0, sizeof(int) * 6);
 }
 
 void ofApp::exit()
@@ -110,8 +113,19 @@ void ofApp::update(){
 		{
 			if (bytesReturned[0] > '1' && bytesReturned[0] < '8')
 			{
-				blurredMouseX = (int(bytesReturned[0] - '2') * 59);
-				cout << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
+				//blurredMouseX = (int(bytesReturned[0] - '2') * 59);
+				//cout << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
+				detectedMicrophone[int(bytesReturned[0] - '2')] += 4;
+
+				int highestIndex = -1, highestValue = -1;
+				for (int i = 0; i < 6; i++){
+					if (detectedMicrophone[i] > highestValue) {
+						highestValue = detectedMicrophone[i];
+						highestIndex = i;
+					}
+				}
+
+				blurredMouseX = (highestIndex * 59);
 
 			}
 		}
@@ -129,6 +143,17 @@ void ofApp::update(){
 
 		}
 	}
+
+	if (isDoingMicDetection)
+	{
+		// decay
+		for (int i = 0; i < 6; i++){
+			if (detectedMicrophone[i] > 0) {
+				detectedMicrophone[i] -= 1;
+			}
+		}
+	}
+
 }
 
 
