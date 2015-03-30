@@ -67,9 +67,9 @@ void ofApp::setup(){
 	
 	serial.setup("/COM6", 115200);
 
-	finder.setup("haarcascade_frontalface_default.xml");
+	finder.setup("haarcascade_mcs_upperbody.xml");
 	finder.setPreset(ofxCv::ObjectFinder::Accurate);
-	//finder.getTracker().setSmoothingRate(.3);
+	finder.setMaxSizeScale(3.0);
 
 	lastElapsed = ofGetElapsedTimef();
 	navState = USER_CONTROL;
@@ -86,9 +86,9 @@ void ofApp::setup(){
 
 	lastSentMouseLocation = ofGetElapsedTimef();
 
-	//remotePlayer.loadMovie("videos/remoteVideo.mov");
-	//remotePlayer.setLoopState(ofLoopType::OF_LOOP_NORMAL);
-	//remotePlayer.play();
+	remotePlayer.loadMovie("IMG_1628.mov");
+	remotePlayer.setLoopState(ofLoopType::OF_LOOP_NORMAL);
+	remotePlayer.play();
 
 	memset(&detectedMicrophone[0], 0, sizeof(int) * 6);
 }
@@ -119,7 +119,7 @@ void ofApp::update(){
 
 	unsigned char bytesReturned[2];
 	// if there's two bytes to be read, read until you get them both
-	if (serial.readBytes(bytesReturned, 1) > 0)
+	if (serial.isInitialized() && serial.readBytes(bytesReturned, 1) > 0)
 	{
 		if (navState == SYSTEM_CONTROL)
 		{
@@ -244,7 +244,17 @@ void ofApp::draw(){
 
 void ofApp::drawPlayer(){
 	ofSetColor(255, 255, 255);
-    grabber.draw(0, 0, 1920, 1080);
+
+#ifdef MIC_DEBUGGING
+
+    panoView.draw(0, 0, 1920, 1080);
+
+#else
+
+	grabber.draw(0, 0, 1920, 1080);
+
+#endif
+
 	for (int i = 0; i < finder.size(); i++)
 	{
 		ofNoFill();
@@ -255,9 +265,20 @@ void ofApp::drawPlayer(){
 void ofApp::findLeftFace()
 {
 	finder.clear();
+
+
+#ifdef MIC_DEBUGGING
+
+	panoView.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
+	finder.update(panoView.getPixelsRef());
+
+#else
+
 	grabber.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
 	finder.update(cropped);
 	
+#endif
+
 	ofRectangle leftMost(1920, 0, 1920, 0);
 
 
@@ -281,9 +302,18 @@ void ofApp::findRightFace()
 {
 	//finder.findHaarObjects(grabber.getPixels());
 
-	finder.clear();
+
+#ifdef MIC_DEBUGGING
+
+	panoView.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
+	finder.update(panoView.getPixelsRef());
+
+#else
+
 	grabber.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
 	finder.update(cropped);
+
+#endif
 
 	ofRectangle rightMost; 
 
@@ -309,9 +339,19 @@ void ofApp::drawLeftCylinder()
 	float B = 1.0 - A;
 	currentLeftCylinder = A * currentLeftCylinder + B * targetLeftCylinder;
 
+#ifdef MIC_DEBUGGING
+
+	panoView.getTextureReference().bind();
+	leftCylinderPiece.draw();
+	panoView.getTextureReference().unbind();
+
+#else
+
 	grabber.getTextureReference().bind();
 	leftCylinderPiece.draw();
 	grabber.getTextureReference().unbind();
+
+#endif
 }
 
 void ofApp::drawRightCylinder()
@@ -320,9 +360,19 @@ void ofApp::drawRightCylinder()
 	float B = 1.0 - A;
 	currentRightCylinder = A * currentRightCylinder + B * targetRightCylinder;
 
+#ifdef MIC_DEBUGGING
+
+	panoView.getTextureReference().bind();
+	rightCylinderPiece.draw();
+	panoView.getTextureReference().unbind();
+
+#else
+
 	grabber.getTextureReference().bind();
 	rightCylinderPiece.draw();
 	grabber.getTextureReference().unbind();
+
+#endif
 }
 
 void ofApp::drawRemoteUser()
