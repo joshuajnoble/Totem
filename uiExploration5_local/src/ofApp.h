@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxTween.h"
 
 //#define IMAGE
 #define GRABBER
@@ -18,35 +19,21 @@ class ofApp : public ofBaseApp{
 		void update();
 		void draw();
 		void exit();
-	
 		void keyPressed  (int key);
-		//void keyReleased(int key);
-		//void mouseMoved(int x, int y );
-		//void mouseDragged(int x, int y, int button);
-		//void mousePressed(int x, int y, int button);
-		//void mouseReleased(int x, int y, int button);
-		//void windowResized(int w, int h);
-  //  
-		
-		//----------------------------------------
-		/* Panoramic unwarp stuff */
 	
         ofImage image;
 		ofVideoPlayer player;
-    
-
-    
 		ofImage small3, small1, small2;
 
-    bool drawCylinder;
-    ofTrueTypeFont din;
-    bool pixelsLoaded;
+		bool drawCylinder;
+		ofTrueTypeFont din;
+		bool pixelsLoaded;
     
-    ofCylinderPrimitive cylinder;
+		ofCylinderPrimitive cylinder;
 
-	ofxOscReceiver rec;
-	ofFbo fbo;
+		ofxOscReceiver rec;
+		ofFbo fbo;
 
-	bool drawSecondRemote;
+		bool drawSecondRemote;
 		
 };
