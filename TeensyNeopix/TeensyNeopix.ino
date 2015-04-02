@@ -41,7 +41,7 @@ int flashToNoticeBrightness = 0;
 int flashToNoticeCycles = 0;
 
 int rotateToCounter = 0;
-
+int showRotationCounter = 0;
 int targetRotationPoint = 0;
 int currentRotationPoint = 0;
 
@@ -85,37 +85,46 @@ void loop() {
   {
 
     int type = Serial.read();
+    
+    // show let me talk
     if(type == '1')
     {
       mode = LET_ME_TALK;
       animationState = FLASH_TO_NOTICE_INC;
       flashToNoticeCycles = 0;
     }
+    
+    // set the rotation
     if(type == '2')
     {
       mode = REMOTE_GAZE;
       animationState = ROTATE_TO_GAZE;
-      targetRotationPoint = int(Serial.parseInt());
+      int tmpRotationPoint = int(Serial.parseInt());
       
-      
-      //t 10, c 45
-      if(targetRotationPoint - currentRotationPoint > 0)
+      if(tmpRotationPoint < 45 && tmpRotationPoint > 0)
       {
-        if(currentRotationPoint + (PINS_IN_STRIP - targetRotationPoint) > (targetRotationPoint - currentRotationPoint)) {
-          scrollDirection = 1;
-        } else {
-          scrollDirection = -1;
+        targetRotationPoint = tmpRotationPoint;
+        showRotationCounter = 0;
+        //t 10, c 45
+        if(targetRotationPoint - currentRotationPoint > 0)
+        {
+          if(currentRotationPoint + (PINS_IN_STRIP - targetRotationPoint) > (targetRotationPoint - currentRotationPoint)) {
+            scrollDirection = 1;
+          } else {
+            scrollDirection = -1;
+          }
+        }
+        else
+        {
+          // (45 - 10) + targetRotationPoint > abs(10-45)
+          if(PINS_IN_STRIP - currentRotationPoint + targetRotationPoint < (currentRotationPoint - targetRotationPoint)) {
+            scrollDirection = 1;
+          } else {
+            scrollDirection = -1;
+          }
         }
       }
-      else
-      {
-        // (45 - 10) + targetRotationPoint > abs(10-45)
-        if(PINS_IN_STRIP - currentRotationPoint + targetRotationPoint < (currentRotationPoint - targetRotationPoint)) {
-          scrollDirection = 1;
-        } else {
-          scrollDirection = -1;
-        }
-      }    
+      //end
     }
   }
 
@@ -127,15 +136,39 @@ void loop() {
   case ROTATE_TO_GAZE:
     rotateToCounter++;
 
-    //colorWipe(0);
-    strip.setPixelColor( currentRotationPoint - 3, 0, 0, 0 );
-    strip.setPixelColor( currentRotationPoint - 2, 20, 20, 20 );      
-    strip.setPixelColor( currentRotationPoint - 1, 80, 80, 80 );
-    strip.setPixelColor( currentRotationPoint, 255, 255, 255 );
-    strip.setPixelColor( currentRotationPoint + 1, 80, 80, 80 );
-    strip.setPixelColor( currentRotationPoint + 2, 20, 20, 20 );
-    strip.setPixelColor( currentRotationPoint + 3, 0, 0, 0 );
-    strip.show();
+    if( currentRotationPoint == targetRotationPoint && showRotationCounter < 1000 )
+    {
+      Serial.println("showRotationCounter");
+      showRotationCounter+=1;
+      
+      int fadeout = (1000 - showRotationCounter)/4;
+      
+      strip.setPixelColor( currentRotationPoint - 3, 0, 0, 0 );
+      strip.setPixelColor( currentRotationPoint - 2, fadeout/10, fadeout/10, fadeout/10 );      
+      strip.setPixelColor( currentRotationPoint - 1, fadeout/2, fadeout/2, fadeout/2 );
+      strip.setPixelColor( currentRotationPoint, fadeout, fadeout, fadeout );
+      strip.setPixelColor( currentRotationPoint + 1, fadeout/2, fadeout/2, fadeout/2 );
+      strip.setPixelColor( currentRotationPoint + 2, fadeout/10, fadeout/10, fadeout/1020 );
+      strip.setPixelColor( currentRotationPoint + 3, 0, 0, 0 );
+      strip.show();
+      
+      if(showRotationCounter == 1000) {
+        colorWipe(0);
+        showRotationCounter = -1;
+        animationState = NONE;
+      }
+    }
+    else
+    {
+      strip.setPixelColor( currentRotationPoint - 3, 0, 0, 0 );
+      strip.setPixelColor( currentRotationPoint - 2, 20, 20, 20 );      
+      strip.setPixelColor( currentRotationPoint - 1, 80, 80, 80 );
+      strip.setPixelColor( currentRotationPoint, 255, 255, 255 );
+      strip.setPixelColor( currentRotationPoint + 1, 80, 80, 80 );
+      strip.setPixelColor( currentRotationPoint + 2, 20, 20, 20 );
+      strip.setPixelColor( currentRotationPoint + 3, 0, 0, 0 );
+      strip.show();
+    }
 
     if(rotateToCounter > 6 && currentRotationPoint != targetRotationPoint )
     {
@@ -161,7 +194,7 @@ void loop() {
         
       }
     }
-
+    
     break;
 
   case FLASH_TO_NOTICE_INC:

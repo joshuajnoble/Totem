@@ -15,7 +15,7 @@ void ofApp::setup()
 	for (int i = 0; i < devices.size(); i++){
 		if (devices.at(i).deviceName.find("Logitech") != string::npos){
 			grabber.setDeviceID(i);
-			grabber.initGrabber(640, 480, true);
+			grabber.initGrabber(960, 720, true);
 		}
 	}
 

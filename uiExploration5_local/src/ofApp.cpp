@@ -10,34 +10,16 @@ void ofApp::setup(){
     
 	rec.setup(8888);
 
-    warpedW = 1920;
-    warpedH = 1080;
-
-    /// set up the cylinder
-    cylinder.set(unwarpedW, unwarpedH * 8, 120, 60, 0, false);
-    cylinder.mapTexCoords(0, 0, unwarpedW, unwarpedH);
-
-    //grabber.listDevices();
-	//vector<ofVideoDevice> devices = grabber.listDevices();
-	//for (int i = 0; i < devices.size(); i++){
-	//	if (devices.at(i).deviceName.find("Logitech") != string::npos){
-	//		grabber.setDeviceID(i);
-	//		grabber.initGrabber(640, 480, true);
-	//	}
-	//}
+	player.loadMovie("IMG_1628.mov");
 
 	// initialize Spout as a receiver
 	ofxSpout::init("", 640, 480, false);
-    
-	mainImg.loadImage("call1.jpg");
-	small1.loadImage("call2.jpg");
-	small2.loadImage("call3.jpg");
-
-	/*if (!grabber.isInitialized()) {
-		ofExit();
-	}*/
+	small1.loadImage("meg.png");
+	small2.loadImage("matt.png");
 
 	fbo.allocate(800, 480, GL_RGB);
+
+	drawSecondRemote = false;
 	
 }
 
@@ -49,34 +31,42 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    
-    //ofSetVerticalSync(false);  
-    //grabber.update();
-    
-    
-    ///if (grabber.isFrameNew()){
-        //
+
+	if (drawSecondRemote)
+	{
+		player.update();
+	}
+
+	ofxSpout::initReceiver();
+	ofxSpout::receiveTexture();
 
 	fbo.begin();
 	ofBackground(0, 0, 0);
 	ofPushMatrix();
-	//ofTranslate(0, 480);
-	//ofRotate(rotation);
+	ofTranslate(0, 480);
+	ofRotate(rotation);
 
-	// init receiver if it's not already initialized
-	ofxSpout::initReceiver();
-	ofxSpout::receiveTexture();
+	if (drawSecondRemote)
+	{
 
-	// draw some images for other remote users
-	//mainImg.draw(0, 480);
-	small1.draw(40, 480);
-	small2.draw(280, 480);
+		ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
+		player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
+		ofSetColor(0, 0, 0);
+		ofRect(0, 395, 480, 10);
+		ofSetColor(255, 255, 255);
+	}
+	else
+	{
+		ofxSpout::drawSubsection(-100, 10, 660, 660, 100, 0, 720, 720);
+		//ofxSpout::draw(0, 0, 500, 500);
+		small1.draw(100, 670, 150, 120);
+		small2.draw(260, 670, 150, 120);
+		//small3.draw(325, 540, 150, 120);
+	}
 
 	ofPopMatrix();
 	// draw other UI here
 	fbo.end();
-    //}
-    
 
 	// check for waiting messages
 	while (rec.hasWaitingMessages()){
@@ -85,9 +75,20 @@ void ofApp::update(){
 		rec.getNextMessage(&m);
 
 		// check for mouse moved message
-		if (m.getAddress() == "/position"){
+		if (m.getAddress() == "position"){
 			// both the arguments are int32's
 			selectedScreen = (m.getArgAsInt32(0) + 180) / 90;
+		}
+
+		if (m.getAddress() == "second_remote_on")
+		{
+			drawSecondRemote = true;
+			player.play();
+		}
+
+		if (m.getAddress() == "second_remote_off")
+		{
+			drawSecondRemote = false;
 		}
 	}
 
@@ -98,7 +99,7 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
 	// draw everything.
-	ofBackground(64,64,64);	
+	ofBackground(64, 64, 64);
 
 	//grabber.draw(0, 0);
 
@@ -108,76 +109,26 @@ void ofApp::draw(){
 	//ofRotate(90);
 	fbo.draw(0, 0);
 	if (selectedScreen != 0 && selectedScreen != -1) {
-		ofSetColor(0, 0, 0, 20);
-		ofRect(0, 0, 480, 480);
+		//ofRect(0, 0, 480, 480);
 		ofSetColor(255, 255, 255, 255);
 	}
 	ofTranslate(800, 0);
 	fbo.draw(0, 0);
 	if (selectedScreen != 1 && selectedScreen != -1) {
-		ofSetColor(0, 0, 0, 20);
-		ofRect(0, 0, 480, 480);
 		ofSetColor(255, 255, 255, 255);
 	}
 	ofTranslate(800, 0);
 	fbo.draw(0, 0);
 	if (selectedScreen != 2 && selectedScreen != -1) {
-		ofSetColor(0, 0, 0, 20);
-		ofRect(0, 0, 480, 480);
 		ofSetColor(255, 255, 255, 255);
 	}
 	ofTranslate(800, 0);
 	fbo.draw(0, 0);
 	if (selectedScreen != 3 && selectedScreen != -1) {
-		ofSetColor(0, 0, 0, 20);
-		ofRect(0, 0, 480, 480);
 		ofSetColor(255, 255, 255, 255);
 	}
-	ofPopMatrix(); 
+	ofPopMatrix();
 }
-
-//--------------------------------------------------------------
-void ofApp::drawUnwarpedVideo(){
-	// draw the unwarped (corrected) video in a strip at the bottom.
-	ofSetColor(255, 255, 255);
-    unwarpedImage.draw(0, ofGetHeight() - unwarpedH);
-}
-
-//--------------------------------------------------------------
-void ofApp::drawPlayer(){
-	
-	// do this in an FBO
-	//ofSetColor(255, 255, 255);
-	//playerScaleFactor = (float)(ofGetHeight() - unwarpedH)/(float)warpedH;
-
-}
-
-////--------------------------------------------------------------
-//void ofApp::drawTexturedCylinder(){
-//	// draw the texture-mapped cylinder.
-//
-//    float A = 0.90;
-//    float B = 1.0-A;
-//    blurredMouseX = A*blurredMouseX + B*mouseX;
-//    
-//    ofEnableDepthTest();
-//    ofPushMatrix();
-//        ofTranslate(ofGetWidth()/2, (ofGetHeight()/2), 100);
-//        ofRotateY(RAD_TO_DEG * ofMap(blurredMouseX, 0, ofGetWidth(),  TWO_PI, -TWO_PI));
-//        grabber.getTextureReference().bind();
-//        cylinder.draw();
-//		grabber.getTextureReference().unbind();
-//    ofPopMatrix();
-//    ofDisableDepthTest();
-//    
-////    ofEnableAlphaBlending();
-////    ofSetColor(255, 255, 255, 50);
-////    ofRect(100, 0, ofGetWidth() - 200, ofGetHeight());
-////    ofDisableAlphaBlending();
-//    
-//    ofSetColor(0, 0, 0);
-//    din.drawString("Call with Teague", 150, 100);
-//}
 
 
 //--------------------------------------------------------------
@@ -205,74 +156,4 @@ void ofApp::keyPressed  (int key){
 		break;
 	}
 	
-}
-
-
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-	bMousePressed = true;
-	if (bMousePressedInPlayer){
-		testMouseInPlayer();
-	}
-	if (bMousepressedInUnwarped && !bSavingOutVideo){
-		angularOffset = ofMap(mouseX, 0, ofGetWidth(), 0-180, 180, false);
-		bAngularOffsetChanged = true;
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-	bMousePressed         = true;
-	bMousePressedInPlayer = testMouseInPlayer();
-	
-	bMousepressedInUnwarped = false;
-	if (mouseY > (ofGetHeight() - unwarpedH)){
-		bMousepressedInUnwarped = true;
-	}
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-	if (bMousePressedInPlayer){
-		testMouseInPlayer();
-	}
-	bMousepressedInUnwarped = false;
-	bMousePressedInPlayer = false;
-	bMousePressed = false;
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-	bMousepressedInUnwarped = false;
-	bMousePressedInPlayer = false;
-	bMousePressed = false;
-}
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){ 
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-}
-
-//--------------------------------------------------------------
-bool ofApp::testMouseInPlayer(){
-	bool out = false;
-	
-	if ((mouseX < playerScaleFactor*warpedW) && 
-		(mouseY < playerScaleFactor*warpedH)){
-		
-		if (bSavingOutVideo == false){
-			float newCx = (float)mouseX * ((float)warpedH/(float)(ofGetHeight() - unwarpedH));
-			float newCy = (float)mouseY * ((float)warpedH/(float)(ofGetHeight() - unwarpedH));	
-			if ((newCx != warpedCx) || (newCy != warpedCy)){
-				warpedCx = newCx;
-				warpedCy = newCy;
-			}
-			bCenterChanged = true;
-			out = true;
-		}
-	}
-	return out;
 }

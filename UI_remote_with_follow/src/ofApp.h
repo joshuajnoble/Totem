@@ -114,5 +114,5 @@ class ofApp : public ofBaseApp{
 	int detectedMicrophone[6];
 	bool isDoingMicDetection;
 
-	ofImage panoView;
+	ofImage panoView, remoteCaller, remoteCaller1, remoteCaller2;
 };

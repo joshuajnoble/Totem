@@ -1,10 +1,12 @@
-#include "ofApp.h"
+#include "ofApp.h"  
 
 float lastElapsed;
 #define CYLINDER_PIECE_WIDTH 44
 #define CYLINDER_PIECE_HEIGHT 2
 
 #define PIECE_TEXCOORD_WIDTH 720
+
+#define NEO_PIXELS_COUNT 45
 
 float lastSentMouseLocation;
 
@@ -28,9 +30,8 @@ void ofApp::setup(){
 	isDrawingLeftCylinder = false;
 	isDrawingRightCylinder = false;
 
-	isDoingMicDetection = true;
-	isDrawingSecondRemote = false;
 	isDoingMicDetection = false;
+	isDrawingSecondRemote = false;
 
 	sender.setup("localhost", 8888);
 	
@@ -65,7 +66,7 @@ void ofApp::setup(){
 	gradient.loadImage("CylinderUI_Grad-01.png");
 	//overlay.loadImage("CylinderUI-01.png");
 	
-	serial.setup("/COM6", 115200);
+	serial.setup("/COM3", 115200);
 
 	finder.setup("haarcascade_mcs_upperbody.xml");
 	finder.setPreset(ofxCv::ObjectFinder::Accurate);
@@ -89,6 +90,10 @@ void ofApp::setup(){
 	remotePlayer.loadMovie("IMG_1628.mov");
 	remotePlayer.setLoopState(ofLoopType::OF_LOOP_NORMAL);
 	remotePlayer.play();
+
+	remoteCaller.loadImage("meg.png");
+	remoteCaller1.loadImage("matt.png");
+	remoteCaller2.loadImage("josh.png");
 
 	memset(&detectedMicrophone[0], 0, sizeof(int) * 6);
 }
@@ -208,11 +213,8 @@ void ofApp::draw(){
 			ofRotateY(135);
 			drawLeftCylinder();
 			ofPopMatrix();
-
-			/*cam.begin();
-			drawLeftCylinder();
-			cam.end();*/
 		}
+
 		if (isDrawingRightCylinder)
 		{
 			ofPushMatrix();
@@ -222,9 +224,26 @@ void ofApp::draw(){
 			ofPopMatrix();
 		}
 
+		const int iconYPosition = 920;
+
 		if (isDrawingSecondRemote)
 		{
-			remotePlayer.draw(1400, 200);
+			//remotePlayer.draw(1300, 100, (1080/2), (1920/2));
+			remotePlayer.getTextureReference().drawSubsection(1160, 210, 660, 660, 0, 0, 1080, 1080);
+			ofSetColor(255, 255, 255, 255);
+			remoteCaller.draw((ofGetWidth() / 2), iconYPosition, 150, 120);
+			ofSetColor(255, 255, 255, 150);
+			remoteCaller2.draw((ofGetWidth() / 2) + 160, iconYPosition, 150, 120);
+			remoteCaller1.draw((ofGetWidth() / 2) + 320, iconYPosition, 150, 120);
+			ofSetColor(255, 255, 255, 255);
+		}
+		else
+		{
+			ofSetColor(255, 255, 255, 150);
+			remoteCaller2.draw((ofGetWidth() / 2) + 160, iconYPosition, 150, 120);
+			remoteCaller1.draw((ofGetWidth() / 2) + 320, iconYPosition, 150, 120);
+			remoteCaller.draw((ofGetWidth() / 2), iconYPosition, 150, 120);
+			ofSetColor(255, 255, 255, 255);
 		}
 
 	}
@@ -237,7 +256,7 @@ void ofApp::draw(){
 
 	// receive Spout texturen
 	ofxSpout::receiveTexture();
-	ofxSpout::draw(600, 0, 300, 210);
+	ofxSpout::draw( (ofGetWidth()/2) - 150, 0, 300, 210);
 
 	gui.draw();
 }
@@ -394,17 +413,6 @@ void ofApp::keyPressed  (int key){
 		drawCylinder = !drawCylinder;
 		break;
 
-	case 'm':
-		if (userDisplayState == UDS_SHOW_BOTH_LOCAL_USER) {
-			userDisplayState = UDS_SHOW_FEED;
-		}
-		else {
-			int i = (int)userDisplayState;
-			userDisplayState = (USER_DISPLAY_STATE) ++i;
-		}
-
-		break;
-
 	case 'h':
 		{
 			serial.writeByte('1');
@@ -421,6 +429,19 @@ void ofApp::keyPressed  (int key){
 
 	case 'z':
 		isDrawingSecondRemote = !isDrawingSecondRemote;
+		if (isDrawingSecondRemote) {
+			ofxOscMessage m;
+			m.setAddress("second_remote_on");
+			sender.sendMessage(m);
+		} else {
+			ofxOscMessage m;
+			m.setAddress("second_remote_off");
+			sender.sendMessage(m);
+		}
+		break;
+
+	case 'm':
+		isDoingMicDetection = !isDoingMicDetection;
 		break;
 
 	case 'l':
@@ -461,8 +482,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 	if (ofGetElapsedTimef() - lastSentMouseLocation > 0.05)
 	{
 
-		//int led = ofMap(adaptedMouseX, 0, 450, 0, 48, false);
-		int led = ofMap(blurredMouseX, 0, ofGetWidth(), 0, 48, false);
+		int led = ofMap(blurredMouseX, 0, ofGetWidth(), 0, NEO_PIXELS_COUNT, false);
 
 		unsigned char val[4];
 		stringstream ss;
