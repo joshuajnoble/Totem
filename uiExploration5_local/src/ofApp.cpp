@@ -20,7 +20,11 @@ void ofApp::setup(){
 	fbo.allocate(800, 480, GL_RGB);
 
 	drawSecondRemote = false;
-	
+
+	remotePosition.set(100, 670);
+	remoteScale.set(150, 120);
+	mainPosition.set(-100, 10);
+	mainScale.set(660, 660);
 }
 
 //--------------------------------------------------------------
@@ -31,6 +35,8 @@ void ofApp::exit(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+	mainPlaylist.update();
 
 	if (drawSecondRemote)
 	{
@@ -49,15 +55,19 @@ void ofApp::update(){
 	if (drawSecondRemote)
 	{
 
-		ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
-		player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
+		//ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
+		//player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
+
+		ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
+		player.getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player.getWidth(), 800);
+
 		ofSetColor(0, 0, 0);
-		ofRect(0, 395, 480, 10);
+		ofRect(0, remotePosition.y, 480, 10);
 		ofSetColor(255, 255, 255);
 	}
 	else
 	{
-		ofxSpout::drawSubsection(-100, 10, 660, 660, 100, 0, 720, 720);
+		ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
 		//ofxSpout::draw(0, 0, 500, 500);
 		small1.draw(100, 670, 150, 120);
 		small2.draw(260, 670, 150, 120);
@@ -83,12 +93,34 @@ void ofApp::update(){
 		if (m.getAddress() == "second_remote_on")
 		{
 			drawSecondRemote = true;
+
+			mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &remotePosition.x, 0));
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remotePosition.y, 400));
+
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.x, 500));
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.y, 400));
+
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.x, -24));
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.y, 0));
+
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.x, 528));
+			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.y, 400));
+
 			player.play();
 		}
 
 		if (m.getAddress() == "second_remote_off")
 		{
 			drawSecondRemote = false;
+
+			remotePosition.set(100, 670);
+			remoteScale.set(150, 120);
+			mainPosition.set(-150, 10);
+			mainScale.set(960 * 0.90, 660);
+
+			player.stop();
+			player.setPosition(0);
+
 		}
 	}
 
@@ -156,4 +188,10 @@ void ofApp::keyPressed  (int key){
 		break;
 	}
 	
+}
+
+
+void ofApp::onKeyframe(ofxPlaylistEventArgs& args)
+{
+
 }

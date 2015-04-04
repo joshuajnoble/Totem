@@ -150,7 +150,10 @@ void loop() {
       strip.setPixelColor( currentRotationPoint + 1, fadeout/2, fadeout/2, fadeout/2 );
       strip.setPixelColor( currentRotationPoint + 2, fadeout/10, fadeout/10, fadeout/1020 );
       strip.setPixelColor( currentRotationPoint + 3, 0, 0, 0 );
-      strip.show();
+
+//      setPixelsAround(currentRotationPoint, fadeout, 5);
+     
+      strip.show();  
       
       if(showRotationCounter == 1000) {
         colorWipe(0);
@@ -160,13 +163,14 @@ void loop() {
     }
     else
     {
-      strip.setPixelColor( currentRotationPoint - 3, 0, 0, 0 );
+      strip.setPixelColor( currentRotationPoint - 3, 0, 0, 0);     
       strip.setPixelColor( currentRotationPoint - 2, 20, 20, 20 );      
       strip.setPixelColor( currentRotationPoint - 1, 80, 80, 80 );
       strip.setPixelColor( currentRotationPoint, 255, 255, 255 );
       strip.setPixelColor( currentRotationPoint + 1, 80, 80, 80 );
       strip.setPixelColor( currentRotationPoint + 2, 20, 20, 20 );
       strip.setPixelColor( currentRotationPoint + 3, 0, 0, 0 );
+//      setPixelsAround(currentRotationPoint, 255, 5 );
       strip.show();
     }
 
@@ -287,6 +291,30 @@ void colorWipe(uint8_t c) {
     //delay(wait);
   }
   strip.show();
+}
+
+void setPixelsAround(int currentRotationPoint, int fadeout, int lights)
+{
+
+  strip.setPixelColor( currentRotationPoint + lights + 1, 0, 0, 0 );
+  strip.setPixelColor( currentRotationPoint - lights - 1, 0, 0, 0 );
+  
+  for( int i = currentRotationPoint - lights; i < (currentRotationPoint + lights); i++ )
+  {
+    if( i < 0)
+    {
+      strip.setPixelColor( 45 - i, fadeout, fadeout, fadeout );
+    } 
+    else if( i > 45 )
+    {
+      strip.setPixelColor( i - 45, fadeout, fadeout, fadeout );
+    } 
+    else 
+    {
+      strip.setPixelColor( i, fadeout, fadeout, fadeout );
+    }
+  }
+  
 }
 
 ///////////////////////////////////////////////////////////////////////////////

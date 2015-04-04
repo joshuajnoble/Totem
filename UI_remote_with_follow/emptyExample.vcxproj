@@ -59,7 +59,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxSpout\src;..\..\..\addons\ofxCv\libs;..\..\..\addons\ofxCv\libs\CLD;..\..\..\addons\ofxCv\libs\CLD\include;..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\addons\ofxCv\libs\CLD\src;..\..\..\addons\ofxCv\libs\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\src;..\..\..\addons\ofxCv\src;..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxSpout\src;..\..\..\addons\ofxCv\libs;..\..\..\addons\ofxCv\libs\CLD;..\..\..\addons\ofxCv\libs\CLD\include;..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\addons\ofxCv\libs\CLD\src;..\..\..\addons\ofxCv\libs\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\src;..\..\..\addons\ofxCv\src;..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxPlaylist\src;..\..\..\addons\ofxPlaylist\src\Easings</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -132,6 +132,21 @@
     <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.cpp" />
     <ClCompile Include="..\..\..\addons\ofxSpout\src\ofxSpout.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -188,6 +203,24 @@
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h" />
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h" />
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxBaseKeyframe.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEasingExt.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h" />
     <ClInclude Include="..\..\..\addons\ofxSpout\src\ofxSpout.h" />
     <ClInclude Include="..\..\..\addons\ofxSpout\src\Spout.h" />
     <ClInclude Include="src\ofApp.h" />

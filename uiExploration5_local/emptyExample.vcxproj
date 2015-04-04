@@ -59,7 +59,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxSpout\src\;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxSpout\src\;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxOsc\src;src;..\..\..\addons\ofxPlaylist\src;..\..\..\addons\ofxPlaylist\src\Easings</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -105,6 +105,51 @@
     <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp" />
     <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxSpout\src\ofxSpout.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -132,6 +177,60 @@
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h" />
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h" />
     <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h" />
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxBaseKeyframe.h">
+      <DeploymentContent>true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEasingExt.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxSpout\src\ofxSpout.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
@@ -149,6 +248,9 @@
     <ResourceCompile Include="icon.rc">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\addons\ofxPlaylist\src\Easings\easing_terms_of_use.html" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

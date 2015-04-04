@@ -1,16 +1,21 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxTween.h"
 
 //#define IMAGE
 #define GRABBER
 
 #include "ofxSpout.h"
 #include "ofxOsc.h"
+#include "ofxPlaylist.h"
 
 class ofApp : public ofBaseApp{
 	
+
+	ofxPlaylist mainPlaylist;
+	ofVec2f remotePosition, remoteScale;
+	ofVec2f mainPosition, mainScale;
+
 	public:
 		
 		//----------------------------------------
@@ -20,6 +25,7 @@ class ofApp : public ofBaseApp{
 		void draw();
 		void exit();
 		void keyPressed  (int key);
+		void onKeyframe(ofxPlaylistEventArgs& args);
 	
         ofImage image;
 		ofVideoPlayer player;

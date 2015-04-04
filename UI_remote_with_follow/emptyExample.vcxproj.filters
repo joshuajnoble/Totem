@@ -124,6 +124,51 @@
     <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
       <Filter>addons\ofxGui</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -146,6 +191,9 @@
     </Filter>
     <Filter Include="addons\ofxGui">
       <UniqueIdentifier>{286f8b99-c140-4ccf-ad01-260df49ac13f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPlaylist">
+      <UniqueIdentifier>{5a9afb54-2f6f-4d4a-81f4-ea859f260d2e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -310,6 +358,60 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
       <Filter>addons\ofxGui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxBaseKeyframe.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEasingExt.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h">
+      <Filter>addons\ofxPlaylist</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.h">
+      <Filter>addons\ofxPlaylist</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

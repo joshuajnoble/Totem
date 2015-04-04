@@ -6,7 +6,7 @@
 #include "ofxOsc.h"
 #include "ofxSpout.h"
 #include "ofxGui.h"
-
+#include "ofxPlaylist.h"
 //#include <ofxNetwork.h>
 
 //#define IMAGE
@@ -24,6 +24,9 @@ enum USER_DISPLAY_STATE {
 
 class ofApp : public ofBaseApp{
 	
+	ofxPlaylist mainPlaylist;
+	float rotateToPosition;
+
 	public:
 		
 	//----------------------------------------
@@ -46,7 +49,6 @@ class ofApp : public ofBaseApp{
 	/* Panoramic unwarp stuff */
 	
     ofImage image;
-	ofVideoPlayer player;
 	ofVideoPlayer remotePlayer;
     
     ofVideoGrabber grabber;

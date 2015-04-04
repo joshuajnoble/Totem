@@ -89,7 +89,6 @@ void ofApp::setup(){
 
 	remotePlayer.loadMovie("IMG_1628.mov");
 	remotePlayer.setLoopState(ofLoopType::OF_LOOP_NORMAL);
-	remotePlayer.play();
 
 	remoteCaller.loadImage("meg.png");
 	remoteCaller1.loadImage("matt.png");
@@ -106,6 +105,7 @@ void ofApp::exit()
 
 void ofApp::update(){
     
+	mainPlaylist.update();
     ofSetVerticalSync(false);  
     
 #ifndef MIC_DEBUGGING
@@ -142,7 +142,8 @@ void ofApp::update(){
 					}
 				}
 
-				blurredMouseX = (highestIndex * 59);
+				//blurredMouseX = (highestIndex * 59);
+				mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &rotateToPosition, (highestIndex * 59)));
 
 				cout << "changing from mic " << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
 
@@ -188,14 +189,14 @@ void ofApp::draw(){
 #ifdef MIC_DEBUGGING
 		
 		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
-		ofRotateY(blurredMouseX);
+		ofRotateY(rotateToPosition);
 		panoView.getTextureReference().bind();
 		cylinder.draw();
 		panoView.getTextureReference().unbind();
 
 #else
 		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
-		ofRotateY(blurredMouseX);
+		ofRotateY(rotateToPosition);
 		grabber.getTextureReference().bind();
 		cylinder.draw();
 		grabber.getTextureReference().unbind();
@@ -433,10 +434,15 @@ void ofApp::keyPressed  (int key){
 			ofxOscMessage m;
 			m.setAddress("second_remote_on");
 			sender.sendMessage(m);
+
+			remotePlayer.play();
 		} else {
 			ofxOscMessage m;
 			m.setAddress("second_remote_off");
 			sender.sendMessage(m);
+
+			remotePlayer.stop();
+			remotePlayer.setPosition(0);
 		}
 		break;
 
@@ -465,24 +471,28 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 	float A = 0.90;
 	float B = 1.0-A;
-	blurredMouseX = A*blurredMouseX + B*mouseX;
+	//blurredMouseX = A*blurredMouseX + B*mouseX;
+	//blurredMouseX = ofMap(mouseX, 0, ofGetWidth(), -180, 180);
 
+	rotateToPosition = ofMap(mouseX, 0, ofGetWidth(), -180, 180);
 
-	angularOffset = ofMap(mouseX, 0, ofGetWidth(), 0-180, 180, false);
+	cout << blurredMouseX << endl;
 
-	ofxOscMessage m;
-	m.setAddress("position");
-	m.addIntArg(angularOffset);
-	sender.sendMessage(m);
+	//angularOffset = ofMap(mouseX, 0, ofGetWidth(), 0-180, 180, false);
 
-	float adaptedMouseX = blurredMouseX;
-	float denominator = fmod(adaptedMouseX , 450.0);
-	adaptedMouseX -= denominator * 450.0;
+	//ofxOscMessage m;
+	//m.setAddress("position");
+	//m.addIntArg(angularOffset);
+	//sender.sendMessage(m);
+
+	//float adaptedMouseX = blurredMouseX;
+	//float denominator = fmod(adaptedMouseX , 450.0);
+	//adaptedMouseX -= denominator * 450.0;
 
 	if (ofGetElapsedTimef() - lastSentMouseLocation > 0.05)
 	{
 
-		int led = ofMap(blurredMouseX, 0, ofGetWidth(), 0, NEO_PIXELS_COUNT, false);
+		int led = ofMap(blurredMouseX, -180, 180, 0, NEO_PIXELS_COUNT, false);
 
 		unsigned char val[4];
 		stringstream ss;
