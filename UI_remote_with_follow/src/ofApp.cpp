@@ -142,10 +142,12 @@ void ofApp::update(){
 					}
 				}
 
-				//blurredMouseX = (highestIndex * 59);
-				mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &rotateToPosition, (highestIndex * 59)));
+				float rotation = 300 - (highestIndex * 59);
+				if (rotation < 0) { rotation += 360; }
 
-				cout << "changing from mic " << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
+				//blurredMouseX = (highestIndex * 59);
+				mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &rotateToPosition, rotation));
+				cout << "changing from mic " << int(bytesReturned[0] - '2') << " " << rotation << " " << rotateToPosition << endl;
 
 			}
 		}
@@ -258,8 +260,6 @@ void ofApp::draw(){
 	// receive Spout texturen
 	ofxSpout::receiveTexture();
 	ofxSpout::draw( (ofGetWidth()/2) - 150, 0, 300, 210);
-
-	gui.draw();
 }
 
 void ofApp::drawPlayer(){
@@ -471,28 +471,14 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 	float A = 0.90;
 	float B = 1.0-A;
-	//blurredMouseX = A*blurredMouseX + B*mouseX;
-	//blurredMouseX = ofMap(mouseX, 0, ofGetWidth(), -180, 180);
 
 	rotateToPosition = ofMap(mouseX, 0, ofGetWidth(), -180, 180);
 
-	cout << blurredMouseX << endl;
-
-	//angularOffset = ofMap(mouseX, 0, ofGetWidth(), 0-180, 180, false);
-
-	//ofxOscMessage m;
-	//m.setAddress("position");
-	//m.addIntArg(angularOffset);
-	//sender.sendMessage(m);
-
-	//float adaptedMouseX = blurredMouseX;
-	//float denominator = fmod(adaptedMouseX , 450.0);
-	//adaptedMouseX -= denominator * 450.0;
-
+	cout << rotateToPosition << endl;
 	if (ofGetElapsedTimef() - lastSentMouseLocation > 0.05)
 	{
 
-		int led = ofMap(blurredMouseX, -180, 180, 0, NEO_PIXELS_COUNT, false);
+		int led = NEO_PIXELS_COUNT - ofMap(rotateToPosition, -180, 180, 0, NEO_PIXELS_COUNT, false);
 
 		unsigned char val[4];
 		stringstream ss;
