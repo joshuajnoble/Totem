@@ -53,7 +53,7 @@ ANIMATION_TIMING animationState = NONE;
 
 void setup() {
   Serial.begin(115200);
-  Serial.println(" OK " );
+  //Serial.println(" OK " );
 
   pinMode(2, OUTPUT);
 
@@ -138,7 +138,7 @@ void loop() {
 
     if( currentRotationPoint == targetRotationPoint && showRotationCounter < 1000 )
     {
-      Serial.println("showRotationCounter");
+      //Serial.println("showRotationCounter");
       showRotationCounter+=1;
       
       int fadeout = (1000 - showRotationCounter)/4;

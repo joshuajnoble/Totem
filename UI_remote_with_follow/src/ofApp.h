@@ -12,7 +12,7 @@
 //#define IMAGE
 #define GRABBER
 
-#define MIC_DEBUGGING
+//#define MIC_DEBUGGING
 
 enum NAV_STATE {
 	USER_CONTROL, SYSTEM_CONTROL
