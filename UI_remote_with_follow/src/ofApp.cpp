@@ -12,6 +12,8 @@ float lastSentMouseLocation;
 
 void ofApp::setup(){
 
+	showInstructions = false;
+
 	blurredMouseX = 0;
     
     warpedW = 1920;
@@ -132,7 +134,8 @@ void ofApp::update(){
 			{
 				//blurredMouseX = (int(bytesReturned[0] - '2') * 59);
 				//cout << bytesReturned[0] << " " << int(bytesReturned[0] - '2') << " " << blurredMouseX << endl;
-				detectedMicrophone[int(bytesReturned[0] - '2')] += 60;
+				int index = int(bytesReturned[0] - '2');
+				detectedMicrophone[index] += 60;
 
 				int highestIndex = -1, highestValue = -1;
 				for (int i = 0; i < 6; i++){
@@ -142,12 +145,22 @@ void ofApp::update(){
 					}
 				}
 
-				float rotation = 300 - (highestIndex * 59);
+				float rotation = (highestIndex * 59);
 				if (rotation < 0) { rotation += 360; }
 
-				//blurredMouseX = (highestIndex * 59);
-				mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &rotateToPosition, rotation));
-				cout << "changing from mic " << int(bytesReturned[0] - '2') << " " << rotation << " " << rotateToPosition << endl;
+				// trying to send position
+				//mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &rotateToPosition, rotation));
+
+				//int led = NEO_PIXELS_COUNT - ofMap(rotation, -180, 180, 0, NEO_PIXELS_COUNT, false);
+
+				//unsigned char val[4];
+				//stringstream ss;
+				//ss << '2' << led;
+				//strncpy((char*)&val[0], ss.str().c_str(), sizeof(val));
+				//serial.writeBytes(&val[0], 4);
+				// end saving position
+
+				cout << "changing from mic " << bytesReturned[0] << " " << index << " " << rotation << " " << rotateToPosition << endl;
 
 			}
 		}
@@ -260,6 +273,12 @@ void ofApp::draw(){
 	// receive Spout texturen
 	ofxSpout::receiveTexture();
 	ofxSpout::draw( (ofGetWidth()/2) - 150, 0, 300, 210);
+
+
+	if (showInstructions)
+	{
+		ofDrawBitmapString(" ?: show instructions \n z: show remote caller \n m: turn on directional mics \n l: look for the left-most participant \n r: look for the right most participant \n space: show the raw v360 feed", 50, 50);
+	}
 }
 
 void ofApp::drawPlayer(){
@@ -280,6 +299,7 @@ void ofApp::drawPlayer(){
 		ofNoFill();
 		ofRect(finder.getObject(i).x, 400, finder.getObject(i).width, 400);
 	}
+
 }
 
 void ofApp::findLeftFace()
@@ -456,6 +476,10 @@ void ofApp::keyPressed  (int key){
 			findLeftFace();
 		}
 		currentLeftCylinder = targetLeftCylinder = 0;
+		break;
+
+	case '/':
+		showInstructions = !showInstructions;
 		break;
 	}
 

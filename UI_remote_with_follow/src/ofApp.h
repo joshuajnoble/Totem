@@ -117,4 +117,6 @@ class ofApp : public ofBaseApp{
 	bool isDoingMicDetection;
 
 	ofImage panoView, remoteCaller, remoteCaller1, remoteCaller2;
+
+	bool showInstructions;
 };
