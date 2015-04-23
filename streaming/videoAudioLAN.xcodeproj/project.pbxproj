@@ -1,0 +1,2218 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		00F34FED40D9CA7764D1A70A /* splitting_filter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 335F5430FEF73D8DFD23E1DD /* splitting_filter.cc */; };
+		064FF839DB0AECCFBF3E17A0 /* hanning_table.c in Sources */ = {isa = PBXBuildFile; fileRef = 18606D56E57868579972CC34 /* hanning_table.c */; };
+		0A1E25F7ABDF306BF58250A9 /* vector_scaling_operations.c in Sources */ = {isa = PBXBuildFile; fileRef = EC8D5790D068B76CC5724066 /* vector_scaling_operations.c */; };
+		0D4F32158AC9BC5CA9DF92FA /* aec_rdft_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 40AE57553D35497205E28678 /* aec_rdft_sse2.c */; };
+		0E56F6618456C03111E6DA79 /* delay_estimator_float.c in Sources */ = {isa = PBXBuildFile; fileRef = F63AC1AD0D6DC3BFD5F45A9F /* delay_estimator_float.c */; };
+		0F7B40F4D6D0E42451C182DF /* cos_table.c in Sources */ = {isa = PBXBuildFile; fileRef = B9126F3938A9762AC9C23464 /* cos_table.c */; };
+		0FAEAEA463DB67B1B12703B0 /* gain_control_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 88F44649FD8477AC8B342798 /* gain_control_impl.cc */; };
+		1242EAA683BC358212294C56 /* ring_buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = C131DAC3B09C9B6F64682819 /* ring_buffer.c */; };
+		138B4CB9C2A5F5C77A221365 /* vad_gmm.c in Sources */ = {isa = PBXBuildFile; fileRef = 601A82C689D56FDD42A0DC2C /* vad_gmm.c */; };
+		1996976C22F9ED07BA05B38E /* complex_ifft.c in Sources */ = {isa = PBXBuildFile; fileRef = 03837FFD0AC71EFAEB28AB7F /* complex_ifft.c */; };
+		1A0B4DE7CD6FBC09037D78CF /* snappy-sinksource.cc in Sources */ = {isa = PBXBuildFile; fileRef = B54869073BE1018F875A141C /* snappy-sinksource.cc */; };
+		1AF0E4F73852F8812D17EB62 /* aec_rdft.c in Sources */ = {isa = PBXBuildFile; fileRef = EB0FE488884462AF11DD38A1 /* aec_rdft.c */; };
+		1C89BDB39A0E3A519FDE6434 /* lpc_to_refl_coef.c in Sources */ = {isa = PBXBuildFile; fileRef = 73BC6BDE1643ABD1C205ED61 /* lpc_to_refl_coef.c */; };
+		1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 907C5B5E104864A2D3A25745 /* ofxToggle.cpp */; };
+		1F7224305CB9F5875DEE71DB /* processing_component.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8BE0863D742EDF2791C7B3F8 /* processing_component.cc */; };
+		2098E4ABC7FBAC153B4A40D3 /* ofxNiceStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F1E234F5E807A318015ADD61 /* ofxNiceStream.cpp */; };
+		218781F14D02A3CAE7E80153 /* division_operations.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E5E856C17C82AF4BFC1916F /* division_operations.c */; };
+		22AEBF81BAEE3E962870B427 /* digital_agc.c in Sources */ = {isa = PBXBuildFile; fileRef = F9B9F657BA92D3B42014E1C1 /* digital_agc.c */; };
+		23180B1D10A7FF4B97D22E65 /* min_max_operations.c in Sources */ = {isa = PBXBuildFile; fileRef = 094E19FE5DC7E19670B98793 /* min_max_operations.c */; };
+		275E48B039C78AF6A3E77709 /* ofxGstRTPServer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882BD199D799A105064879C4 /* ofxGstRTPServer.cpp */; };
+		3539AA6AA6289A788093A307 /* downsample_fast.c in Sources */ = {isa = PBXBuildFile; fileRef = F077B4045BFBE1F3A5333C7C /* downsample_fast.c */; };
+		36C9C69F78FE3062912467A1 /* cross_correlation.c in Sources */ = {isa = PBXBuildFile; fileRef = 049F636A917F5AF2AAC96CAE /* cross_correlation.c */; };
+		3D6CF0026C0C20EC1CBD7443 /* level_estimator_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8AB2057FAEF1AF17268EC7C0 /* level_estimator_impl.cc */; };
+		41B7D230F859F42C24D38926 /* filter_ar.c in Sources */ = {isa = PBXBuildFile; fileRef = A990D42D803AF08154A15728 /* filter_ar.c */; };
+		43346A1773C89F6E37A5088E /* ofxEchoCancel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AD5FEBF40274BCDBB215401 /* ofxEchoCancel.cpp */; };
+		454582BDF7BB97435CDCFC44 /* energy.c in Sources */ = {isa = PBXBuildFile; fileRef = D91B22106E2CC190E613D9E8 /* energy.c */; };
+		46B3A00BD49F6458870CE003 /* critical_section.cc in Sources */ = {isa = PBXBuildFile; fileRef = F7AFCDD93C9414CFDA4A0628 /* critical_section.cc */; };
+		4792756E50EECC3F4493DD36 /* ofxGstOscDoubleBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 70C3CA451A023F15FDDEBE11 /* ofxGstOscDoubleBuffer.cpp */; };
+		483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 78D67A00EB899FAC09430597 /* ofxLabel.cpp */; };
+		4BA71B1B079846F072B225E7 /* ofxXMPP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AB79A50BB06896059D9C6F42 /* ofxXMPP.cpp */; };
+		4E5416D7A50E5C07086B2CF3 /* sin_table_1024.c in Sources */ = {isa = PBXBuildFile; fileRef = 7B902921761F7C0B49F3DA52 /* sin_table_1024.c */; };
+		5006E2C870C8E09CC907A0AC /* spl_sqrt.c in Sources */ = {isa = PBXBuildFile; fileRef = 2395E50170DED49CBAE7A054 /* spl_sqrt.c */; };
+		5020E7D2B4DF77E828D776C7 /* min_max_operations_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = AE462C28DF5EF170C0C8EB32 /* min_max_operations_neon.c */; };
+		507D6982FACD77A2E2B602CD /* analog_agc.c in Sources */ = {isa = PBXBuildFile; fileRef = B446D39E4F5D052240511E33 /* analog_agc.c */; };
+		55CC5FCA1FECBB84185BFC9B /* auto_correlation.c in Sources */ = {isa = PBXBuildFile; fileRef = 0493AA7EAAB3A3D7AB814F56 /* auto_correlation.c */; };
+		57650EB492F2A462DDA1C139 /* aecm_core.c in Sources */ = {isa = PBXBuildFile; fileRef = 3685D996CB88CC9FEF41FCA9 /* aecm_core.c */; };
+		5A08D4B5EBE422D93AF69949 /* spl_version.c in Sources */ = {isa = PBXBuildFile; fileRef = 734F31B4C34AB14177C58328 /* spl_version.c */; };
+		5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C88333E71C9457E441C33474 /* ofxButton.cpp */; };
+		60852B7A80E6B7AE4BEE9C6C /* webrtc_fft_t_rad.c in Sources */ = {isa = PBXBuildFile; fileRef = 462DB596F8A673AA9658D4C4 /* webrtc_fft_t_rad.c */; };
+		656FFDE671449163E2E463DE /* resample.c in Sources */ = {isa = PBXBuildFile; fileRef = 97494AE90887048B1A290D0C /* resample.c */; };
+		69F78C71C7C5941B9C293F5D /* cpu_features.cc in Sources */ = {isa = PBXBuildFile; fileRef = 699A8B31EE7D95201DCC019A /* cpu_features.cc */; };
+		6A9F823F0F0F862FECD0DE71 /* audio_buffer.cc in Sources */ = {isa = PBXBuildFile; fileRef = B51706076D5F263FAAB54946 /* audio_buffer.cc */; };
+		6AAD1C07D97CA6C9B2476EFF /* get_scaling_square.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A17DCCC777F57DB3F517DF3 /* get_scaling_square.c */; };
+		733FCD84FF87AC80D8122192 /* echo_control_mobile.c in Sources */ = {isa = PBXBuildFile; fileRef = 32A7C781C463163D16E32493 /* echo_control_mobile.c */; };
+		77863249753EEB659D13C1DB /* splitting_filter.c in Sources */ = {isa = PBXBuildFile; fileRef = 0068766CB2097D05049C7E87 /* splitting_filter.c */; };
+		77E8E360F5A37418FEC66C38 /* resample_by_2.c in Sources */ = {isa = PBXBuildFile; fileRef = 120D6A1B8140CB19CFC5FEFC /* resample_by_2.c */; };
+		7959F94BE88E4ED46BAF7536 /* noise_suppression_x.c in Sources */ = {isa = PBXBuildFile; fileRef = 27BFC35694657F8CE75FD435 /* noise_suppression_x.c */; };
+		7A0D4B535F7BFF66B2B7BCD3 /* ns_core.c in Sources */ = {isa = PBXBuildFile; fileRef = CFFCB24327F56056E2119743 /* ns_core.c */; };
+		7BEA11DC0B05B0080425F929 /* vad_core.c in Sources */ = {isa = PBXBuildFile; fileRef = C407D6CE72676C9B3977D305 /* vad_core.c */; };
+		7CF2EF2360506D7D80ECA0C1 /* webrtc_vad.c in Sources */ = {isa = PBXBuildFile; fileRef = 5D156F92C2AF7770F8087636 /* webrtc_vad.c */; };
+		7EFF7E96D1260EFE4440A382 /* audio_processing_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7C41DC905560B99BCE5EC2D6 /* audio_processing_impl.cc */; };
+		83310FCEA2433CDA67488B3A /* ofxGstRTPUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 7719DE0E5F099165E74324DF /* ofxGstRTPUtils.cpp */; };
+		837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F2C6477A769C03A56D1401 /* ofxSlider.cpp */; };
+		856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9604B925D32EE39065747725 /* ofxBaseGui.cpp */; };
+		8726638A0BCDCA737FECC344 /* dot_product_with_scale.c in Sources */ = {isa = PBXBuildFile; fileRef = 8072A1431DE5433004CCAEEC /* dot_product_with_scale.c */; };
+		88DB40B4136D73EA13F30F60 /* vad_filterbank.c in Sources */ = {isa = PBXBuildFile; fileRef = 3E01430D38C3812FAF1F7F71 /* vad_filterbank.c */; };
+		89ACAE7E6C46589A3E817EEC /* spl_sqrt_floor.c in Sources */ = {isa = PBXBuildFile; fileRef = 9FD4CC071A27123A5AC30377 /* spl_sqrt_floor.c */; };
+		8E35073DFBC783ACACB60E81 /* noise_suppression_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 506DEE712760F090729D52CC /* noise_suppression_impl.cc */; };
+		95925FD49199918741BD33EA /* aec_core.c in Sources */ = {isa = PBXBuildFile; fileRef = 8996FEE812BEF6A1DDB327FD /* aec_core.c */; };
+		96AAEFBFE1088E959AD9D861 /* aec_core_sse2.c in Sources */ = {isa = PBXBuildFile; fileRef = 3022B7009E7CAC6F466231F2 /* aec_core_sse2.c */; };
+		973B72960831DDD9110731DC /* nsx_core_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = 8066D4F63085923296EB30AB /* nsx_core_neon.c */; };
+		993ABE175DC979ECF9EB86D1 /* randn_table.c in Sources */ = {isa = PBXBuildFile; fileRef = 3F7FF1A6D715D600CB4C6FD1 /* randn_table.c */; };
+		99D847CC2A2388A64042DDEB /* echo_control_mobile_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 47312697AFAC124F8E83968D /* echo_control_mobile_impl.cc */; };
+		9B82AE5F37302A2D17DBBA1B /* get_hanning_window.c in Sources */ = {isa = PBXBuildFile; fileRef = 7BC5654F9D25916618DF48E8 /* get_hanning_window.c */; };
+		9D99424B122DE3C1D83A3670 /* ofGstVideoGrabber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F198996ED5C849097CC1ABB5 /* ofGstVideoGrabber.cpp */; };
+		A21D66DDCBD4E05E6CB7D308 /* refl_coef_to_lpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 291DD4D49C237EBFF3790DD3 /* refl_coef_to_lpc.c */; };
+		A4B08708CF7C4058C489EA35 /* snappy-stubs-internal.cc in Sources */ = {isa = PBXBuildFile; fileRef = 87C76A447EB0BA85735BF586 /* snappy-stubs-internal.cc */; };
+		A5C744B90019B5A5B65F2A94 /* echo_cancellation_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = FC0A02026173B4C1344EBCC9 /* echo_cancellation_impl.cc */; };
+		A85C7D3377FF7D6925B12E83 /* voice_detection_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = 7922DD16E8363A60E5F03DAA /* voice_detection_impl.cc */; };
+		B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */; };
+		B41046D14B5166FC7C9D6A6F /* snappy.cc in Sources */ = {isa = PBXBuildFile; fileRef = 3A6B48558974FAA735CD619C /* snappy.cc */; };
+		B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */; };
+		B63FCFD5019D422D001B098B /* sin_table.c in Sources */ = {isa = PBXBuildFile; fileRef = 38CCBBE42D3684A1509A73DA /* sin_table.c */; };
+		B7CD57BA0201D805A305E7F5 /* fft4g.c in Sources */ = {isa = PBXBuildFile; fileRef = 19B1C4CA8B23134EA44E59BE /* fft4g.c */; };
+		B82801B57A0F30262E27AAF9 /* resample_by_2_internal.c in Sources */ = {isa = PBXBuildFile; fileRef = 2C585D467D24CBD17619FFF2 /* resample_by_2_internal.c */; };
+		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		BC5516DFBD3440E5AE40B04E /* echo_cancellation.c in Sources */ = {isa = PBXBuildFile; fileRef = 7959A7735759E6187464B449 /* echo_cancellation.c */; };
+		BD34F17BEF33919CCD1947AE /* aecm_core_neon.c in Sources */ = {isa = PBXBuildFile; fileRef = AE9A084AABFBC9E05344C768 /* aecm_core_neon.c */; };
+		BD9294D692B37E5FD1FC8282 /* critical_section_posix.cc in Sources */ = {isa = PBXBuildFile; fileRef = D1CC06448292175925BF8B44 /* critical_section_posix.cc */; };
+		BE71AEBD4B1B5691BD72D1E8 /* ofxOscPacketPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 42593364E6D9A2FE9147D200 /* ofxOscPacketPool.cpp */; };
+		C0E2D22980B4B85A0413E94C /* ofxGstRTPClient.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 48DA26471156B1C99B440D00 /* ofxGstRTPClient.cpp */; };
+		C20FBEF43CBA0B5611B4DD64 /* ilbc_specific_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = CF28B063C2ECBB6B3741C97F /* ilbc_specific_functions.c */; };
+		C847E1E91AE6210B0053F5C4 /* ofxOscBundle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1C21AE6210B0053F5C4 /* ofxOscBundle.cpp */; };
+		C847E1EA1AE6210B0053F5C4 /* ofxOscMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1C41AE6210B0053F5C4 /* ofxOscMessage.cpp */; };
+		C847E1EB1AE6210B0053F5C4 /* ofxOscParameterSync.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1C61AE6210B0053F5C4 /* ofxOscParameterSync.cpp */; };
+		C847E1EC1AE6210B0053F5C4 /* ofxOscReceiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1C81AE6210B0053F5C4 /* ofxOscReceiver.cpp */; };
+		C847E1ED1AE6210B0053F5C4 /* ofxOscSender.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1CA1AE6210B0053F5C4 /* ofxOscSender.cpp */; };
+		C847E1EE1AE6210B0053F5C4 /* IpEndpointName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1D01AE6210B0053F5C4 /* IpEndpointName.cpp */; };
+		C847E1EF1AE6210B0053F5C4 /* NetworkingUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1D51AE6210B0053F5C4 /* NetworkingUtils.cpp */; };
+		C847E1F01AE6210B0053F5C4 /* UdpSocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1D61AE6210B0053F5C4 /* UdpSocket.cpp */; };
+		C847E1F11AE6210B0053F5C4 /* OscOutboundPacketStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1E01AE6210B0053F5C4 /* OscOutboundPacketStream.cpp */; };
+		C847E1F21AE6210B0053F5C4 /* OscPrintReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1E31AE6210B0053F5C4 /* OscPrintReceivedElements.cpp */; };
+		C847E1F31AE6210B0053F5C4 /* OscReceivedElements.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1E51AE6210B0053F5C4 /* OscReceivedElements.cpp */; };
+		C847E1F41AE6210B0053F5C4 /* OscTypes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1E71AE6210B0053F5C4 /* OscTypes.cpp */; };
+		C847E1FE1AE621B00053F5C4 /* ofxDepthCompressedFrame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1F81AE621B00053F5C4 /* ofxDepthCompressedFrame.cpp */; };
+		C847E1FF1AE621B00053F5C4 /* ofxDepthOctree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1FA1AE621B00053F5C4 /* ofxDepthOctree.cpp */; };
+		C847E2001AE621B00053F5C4 /* ofxDepthStreamCompression.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C847E1FC1AE621B00053F5C4 /* ofxDepthStreamCompression.cpp */; };
+		CBF808232044B9C0E6F3A331 /* delay_estimator.c in Sources */ = {isa = PBXBuildFile; fileRef = 28008BA19DE36F2C12D5590A /* delay_estimator.c */; };
+		CCCF8AFF3FF60E10599E25AF /* copy_set_operations.c in Sources */ = {isa = PBXBuildFile; fileRef = AADB4C1DA7ABD9EA347CD3C1 /* copy_set_operations.c */; };
+		CD11FAB2A8FAA8CBB648FC1F /* nsx_core.c in Sources */ = {isa = PBXBuildFile; fileRef = FEDC4A46D39C89C1F4013AF0 /* nsx_core.c */; };
+		D2868B39EDF8FFB99D403ACC /* high_pass_filter_impl.cc in Sources */ = {isa = PBXBuildFile; fileRef = E32BE63689C74703AABB9334 /* high_pass_filter_impl.cc */; };
+		D5BB4353A55242E5F0953C04 /* noise_suppression.c in Sources */ = {isa = PBXBuildFile; fileRef = DD41E26AE93B06DBE18A182D /* noise_suppression.c */; };
+		D706AF1475A1D7D5873D3262 /* ofxNiceAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CBA9185890E8CCC8DBE24595 /* ofxNiceAgent.cpp */; };
+		D70A4ED918AA0DAD718EFDF3 /* randomization_functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AFE97B07D81CF2422AD9BB /* randomization_functions.c */; };
+		D791ECC47781AB1B0380BC91 /* resampler.c in Sources */ = {isa = PBXBuildFile; fileRef = 0E5163F898A01EC910C8EAEC /* resampler.c */; };
+		D814404F1FBDE48B369A9D9F /* resample_fractional.c in Sources */ = {isa = PBXBuildFile; fileRef = 04CB59E2511BB1AD65749FDE /* resample_fractional.c */; };
+		D9E0FD19C9669E39698E712E /* filter_ma_fast_q12.c in Sources */ = {isa = PBXBuildFile; fileRef = 66E318E2C864EA39FC733147 /* filter_ma_fast_q12.c */; };
+		DCC7D6008547E298E34EB6C3 /* ofxWebRTCAudioPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2CD7D424FD5B978E1957D464 /* ofxWebRTCAudioPool.cpp */; };
+		DDBDC0F26B755528E419F89B /* webrtc_fft_t_1024_8.c in Sources */ = {isa = PBXBuildFile; fileRef = 9B758F5D8D486AA8873A1C05 /* webrtc_fft_t_1024_8.c */; };
+		DEC16A207A18E4863A10A9F9 /* levinson_durbin.c in Sources */ = {isa = PBXBuildFile; fileRef = 3885299E5C1A44974C971D94 /* levinson_durbin.c */; };
+		E03C3278E61E9BEE08D7EF7D /* filter_ar_fast_q12.c in Sources */ = {isa = PBXBuildFile; fileRef = D41B9E7115B1C2FB0174834A /* filter_ar_fast_q12.c */; };
+		E0AEC48E98C9AE6BE29E11A1 /* sqrt_of_one_minus_x_squared.c in Sources */ = {isa = PBXBuildFile; fileRef = A94E3CE53EF0FA95A1C63E36 /* sqrt_of_one_minus_x_squared.c */; };
+		E0BEA34064A480FEA1FB2B58 /* complex_bit_reverse.c in Sources */ = {isa = PBXBuildFile; fileRef = C300A457E45C9852D8D17FAB /* complex_bit_reverse.c */; };
+		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
+		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
+		E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */; };
+		E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */; };
+		E45BE97E0E8CC7DD009D7055 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9740E8CC7DD009D7055 /* Carbon.framework */; };
+		E45BE97F0E8CC7DD009D7055 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9750E8CC7DD009D7055 /* CoreAudio.framework */; };
+		E45BE9800E8CC7DD009D7055 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9760E8CC7DD009D7055 /* CoreFoundation.framework */; };
+		E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9770E8CC7DD009D7055 /* CoreServices.framework */; };
+		E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9790E8CC7DD009D7055 /* OpenGL.framework */; };
+		E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */; };
+		E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1D0A3A1BDC003C02F2 /* main.cpp */; };
+		E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */; };
+		E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424410CC5A17004149E2 /* AppKit.framework */; };
+		E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424510CC5A17004149E2 /* Cocoa.framework */; };
+		E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4C2424610CC5A17004149E2 /* IOKit.framework */; };
+		E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
+		E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */; };
+		E7E077E815D3B6510020DFD4 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7E077E715D3B6510020DFD4 /* QTKit.framework */; };
+		E7F985F815E0DEA3003869B5 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7F985F515E0DE99003869B5 /* Accelerate.framework */; };
+		E847409F2A10E24CC30D9F83 /* vad_sp.c in Sources */ = {isa = PBXBuildFile; fileRef = 2A8DF00CD3673A820292D01D /* vad_sp.c */; };
+		EA6B03BE577F2E744640A557 /* ofGstVideoPlayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 161677514B5A7F41CC4D5133 /* ofGstVideoPlayer.cpp */; };
+		EFF44E8E264F0AD343D1E018 /* ofGstUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4EF80366647ACFEB44E48FA6 /* ofGstUtils.cpp */; };
+		F1CEA93D60B56823A6ED102F /* auto_corr_to_refl_coef.c in Sources */ = {isa = PBXBuildFile; fileRef = 7FF0BC3425343578C3889924 /* auto_corr_to_refl_coef.c */; };
+		F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */; };
+		F8C11D6590ACB065AA259E47 /* resample_48khz.c in Sources */ = {isa = PBXBuildFile; fileRef = 04C34CE1A12ABCA684BE3B1C /* resample_48khz.c */; };
+		FFBB07628A0BE5A9DE9B384E /* complex_fft.c in Sources */ = {isa = PBXBuildFile; fileRef = 1CE2315B6D2D29303DEA5B40 /* complex_fft.c */; };
+		FFE8FF878DB8E10310F0617A /* ofxGstXMPPRTP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 525F8CDA7D477D2EFE140A4E /* ofxGstXMPPRTP.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		E4328147138ABC890047C5CB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = E4B27C1510CBEB8E00536013;
+			remoteInfo = openFrameworks;
+		};
+		E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = E4B27C1410CBEB8E00536013;
+			remoteInfo = openFrameworks;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		E4C2427710CC5ABF004149E2 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0068766CB2097D05049C7E87 /* splitting_filter.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = splitting_filter.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/splitting_filter.c"; sourceTree = SOURCE_ROOT; };
+		02AFE97B07D81CF2422AD9BB /* randomization_functions.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = randomization_functions.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/randomization_functions.c"; sourceTree = SOURCE_ROOT; };
+		03837FFD0AC71EFAEB28AB7F /* complex_ifft.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = complex_ifft.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/complex_ifft.c"; sourceTree = SOURCE_ROOT; };
+		0493AA7EAAB3A3D7AB814F56 /* auto_correlation.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = auto_correlation.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/auto_correlation.c"; sourceTree = SOURCE_ROOT; };
+		049F636A917F5AF2AAC96CAE /* cross_correlation.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = cross_correlation.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/cross_correlation.c"; sourceTree = SOURCE_ROOT; };
+		04C34CE1A12ABCA684BE3B1C /* resample_48khz.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = resample_48khz.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/resample_48khz.c"; sourceTree = SOURCE_ROOT; };
+		04CB59E2511BB1AD65749FDE /* resample_fractional.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = resample_fractional.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/resample_fractional.c"; sourceTree = SOURCE_ROOT; };
+		094E19FE5DC7E19670B98793 /* min_max_operations.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = min_max_operations.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/min_max_operations.c"; sourceTree = SOURCE_ROOT; };
+		0A1DAC09F322AE313A40706D /* ofxToggle.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxToggle.h; path = ../../../addons/ofxGui/src/ofxToggle.h; sourceTree = SOURCE_ROOT; };
+		0E5163F898A01EC910C8EAEC /* resampler.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = resampler.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/resampler.c"; sourceTree = SOURCE_ROOT; };
+		0E94E378BAEED7ACAC4E9461 /* aec_core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = aec_core.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/aec_core.h"; sourceTree = SOURCE_ROOT; };
+		0E990BBC766D300B34791EEB /* critical_section_wrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = critical_section_wrapper.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/interface/critical_section_wrapper.h"; sourceTree = SOURCE_ROOT; };
+		0FA5069D10E89116D6FDF7D0 /* strophepp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = strophepp.h; path = ../../../addons/ofxXMPP/libs/strophe/include/strophepp.h; sourceTree = SOURCE_ROOT; };
+		120D6A1B8140CB19CFC5FEFC /* resample_by_2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = resample_by_2.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/resample_by_2.c"; sourceTree = SOURCE_ROOT; };
+		15F2C6477A769C03A56D1401 /* ofxSlider.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxSlider.cpp; path = ../../../addons/ofxGui/src/ofxSlider.cpp; sourceTree = SOURCE_ROOT; };
+		161677514B5A7F41CC4D5133 /* ofGstVideoPlayer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofGstVideoPlayer.cpp; path = ../../../libs/openFrameworks/video/ofGstVideoPlayer.cpp; sourceTree = SOURCE_ROOT; };
+		1652229498F19F6395EE7137 /* snappy.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = snappy.h; path = ../../../addons/ofxGstRTP/libs/snappy/src/snappy.h; sourceTree = SOURCE_ROOT; };
+		17E65988300FBD9AAA2CD0CA /* ofxGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGui.h; path = ../../../addons/ofxGui/src/ofxGui.h; sourceTree = SOURCE_ROOT; };
+		18606D56E57868579972CC34 /* hanning_table.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = hanning_table.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/hanning_table.c"; sourceTree = SOURCE_ROOT; };
+		18872AAC0D2A9B620B09DBD4 /* ofxOscPacketPool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxOscPacketPool.h; path = ../../../addons/ofxGstRTP/src/ofxOscPacketPool.h; sourceTree = SOURCE_ROOT; };
+		19B1C4CA8B23134EA44E59BE /* fft4g.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = fft4g.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/fft4g.c"; sourceTree = SOURCE_ROOT; };
+		1C0DA2561397A7DE0246858B /* ofxGuiGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGuiGroup.h; path = ../../../addons/ofxGui/src/ofxGuiGroup.h; sourceTree = SOURCE_ROOT; };
+		1C184AAB27ABF6A7A7A746D0 /* aec_rdft.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = aec_rdft.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/aec_rdft.h"; sourceTree = SOURCE_ROOT; };
+		1CE2315B6D2D29303DEA5B40 /* complex_fft.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = complex_fft.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/complex_fft.c"; sourceTree = SOURCE_ROOT; };
+		1FC078EA5DCA483B5AF262A8 /* snappy-stubs-internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "snappy-stubs-internal.h"; path = "../../../addons/ofxGstRTP/libs/snappy/src/snappy-stubs-internal.h"; sourceTree = SOURCE_ROOT; };
+		2395E50170DED49CBAE7A054 /* spl_sqrt.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = spl_sqrt.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/spl_sqrt.c"; sourceTree = SOURCE_ROOT; };
+		23BB89C3A52E81F6C32BF9BE /* snappy-sinksource.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "snappy-sinksource.h"; path = "../../../addons/ofxGstRTP/libs/snappy/src/snappy-sinksource.h"; sourceTree = SOURCE_ROOT; };
+		27BFC35694657F8CE75FD435 /* noise_suppression_x.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = noise_suppression_x.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/noise_suppression_x.c"; sourceTree = SOURCE_ROOT; };
+		28008BA19DE36F2C12D5590A /* delay_estimator.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = delay_estimator.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/delay_estimator.c"; sourceTree = SOURCE_ROOT; };
+		2834D88A62CD23F3DE2C47D1 /* ofxButton.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxButton.h; path = ../../../addons/ofxGui/src/ofxButton.h; sourceTree = SOURCE_ROOT; };
+		291DD4D49C237EBFF3790DD3 /* refl_coef_to_lpc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = refl_coef_to_lpc.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/refl_coef_to_lpc.c"; sourceTree = SOURCE_ROOT; };
+		2A8DF00CD3673A820292D01D /* vad_sp.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = vad_sp.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_sp.c"; sourceTree = SOURCE_ROOT; };
+		2BE604818152C27AF4DB410E /* stream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stream.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/stream.h; sourceTree = SOURCE_ROOT; };
+		2C4D38E8EFFADEE676366C3C /* module.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = module.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/interface/module.h"; sourceTree = SOURCE_ROOT; };
+		2C585D467D24CBD17619FFF2 /* resample_by_2_internal.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = resample_by_2_internal.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/resample_by_2_internal.c"; sourceTree = SOURCE_ROOT; };
+		2CA2561F444DFFF4540E02A9 /* delay_estimator_float.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = delay_estimator_float.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/delay_estimator_float.h"; sourceTree = SOURCE_ROOT; };
+		2CD7D424FD5B978E1957D464 /* ofxWebRTCAudioPool.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxWebRTCAudioPool.cpp; path = ../../../addons/ofxGstRTP/src/ofxWebRTCAudioPool.cpp; sourceTree = SOURCE_ROOT; };
+		2F1AF1B5CA9EAA5A5309245C /* udp-bsd.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "udp-bsd.h"; path = "../../../addons/ofxNice/libs/libnice/include/nice/udp-bsd.h"; sourceTree = SOURCE_ROOT; };
+		3022B7009E7CAC6F466231F2 /* aec_core_sse2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = aec_core_sse2.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/aec_core_sse2.c"; sourceTree = SOURCE_ROOT; };
+		3060633F7CC949A1A7C6D864 /* conncheck.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = conncheck.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/conncheck.h; sourceTree = SOURCE_ROOT; };
+		31FE6628E2F92513E251C974 /* typedefs.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = typedefs.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/typedefs.h"; sourceTree = SOURCE_ROOT; };
+		32A7C781C463163D16E32493 /* echo_control_mobile.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = echo_control_mobile.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/echo_control_mobile.c"; sourceTree = SOURCE_ROOT; };
+		335F5430FEF73D8DFD23E1DD /* splitting_filter.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = splitting_filter.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/splitting_filter.cc"; sourceTree = SOURCE_ROOT; };
+		3685D996CB88CC9FEF41FCA9 /* aecm_core.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = aecm_core.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/aecm_core.c"; sourceTree = SOURCE_ROOT; };
+		3747D839058EC071FF1C1FCF /* ofxEchoCancel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxEchoCancel.h; path = ../../../addons/ofxEchoCancel/src/ofxEchoCancel.h; sourceTree = SOURCE_ROOT; };
+		3848364670B04E7CEBD37432 /* candidate.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = candidate.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/candidate.h; sourceTree = SOURCE_ROOT; };
+		3885299E5C1A44974C971D94 /* levinson_durbin.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = levinson_durbin.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/levinson_durbin.c"; sourceTree = SOURCE_ROOT; };
+		38CCBBE42D3684A1509A73DA /* sin_table.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = sin_table.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/sin_table.c"; sourceTree = SOURCE_ROOT; };
+		3A6B48558974FAA735CD619C /* snappy.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = snappy.cc; path = ../../../addons/ofxGstRTP/libs/snappy/src/snappy.cc; sourceTree = SOURCE_ROOT; };
+		3DC5E5B192F54247CBB1B282 /* vad_defines.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = vad_defines.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_defines.h"; sourceTree = SOURCE_ROOT; };
+		3E01430D38C3812FAF1F7F71 /* vad_filterbank.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = vad_filterbank.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_filterbank.c"; sourceTree = SOURCE_ROOT; };
+		3E5E856C17C82AF4BFC1916F /* division_operations.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = division_operations.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/division_operations.c"; sourceTree = SOURCE_ROOT; };
+		3F7FF1A6D715D600CB4C6FD1 /* randn_table.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = randn_table.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/randn_table.c"; sourceTree = SOURCE_ROOT; };
+		402D8281D8D882D3BDC008A3 /* gstnicesink.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gstnicesink.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/gstnicesink.h; sourceTree = SOURCE_ROOT; };
+		40AE57553D35497205E28678 /* aec_rdft_sse2.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = aec_rdft_sse2.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/aec_rdft_sse2.c"; sourceTree = SOURCE_ROOT; };
+		42593364E6D9A2FE9147D200 /* ofxOscPacketPool.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxOscPacketPool.cpp; path = ../../../addons/ofxGstRTP/src/ofxOscPacketPool.cpp; sourceTree = SOURCE_ROOT; };
+		428D2E9828B2DBA67AE2D279 /* ofxGstRTPUtils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstRTPUtils.h; path = ../../../addons/ofxGstRTP/src/ofxGstRTPUtils.h; sourceTree = SOURCE_ROOT; };
+		4310CECD7A2E1014C8B2FC0B /* stuncrc32.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stuncrc32.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/stuncrc32.h; sourceTree = SOURCE_ROOT; };
+		462DB596F8A673AA9658D4C4 /* webrtc_fft_t_rad.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = webrtc_fft_t_rad.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/webrtc_fft_t_rad.c"; sourceTree = SOURCE_ROOT; };
+		46E69FD30891A8EEE5BD4B01 /* resample_by_2_internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = resample_by_2_internal.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/resample_by_2_internal.h"; sourceTree = SOURCE_ROOT; };
+		46FBBBEB67CC2747B7655F3E /* stun5389.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stun5389.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/stun5389.h; sourceTree = SOURCE_ROOT; };
+		47312697AFAC124F8E83968D /* echo_control_mobile_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = echo_control_mobile_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/echo_control_mobile_impl.cc"; sourceTree = SOURCE_ROOT; };
+		48B3898D9DBDAAA26E4783FC /* ring_buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ring_buffer.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/ring_buffer.h"; sourceTree = SOURCE_ROOT; };
+		48DA26471156B1C99B440D00 /* ofxGstRTPClient.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGstRTPClient.cpp; path = ../../../addons/ofxGstRTP/src/ofxGstRTPClient.cpp; sourceTree = SOURCE_ROOT; };
+		4990D84A15C555C4241C791F /* processing_component.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = processing_component.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/processing_component.h"; sourceTree = SOURCE_ROOT; };
+		4AD5FEBF40274BCDBB215401 /* ofxEchoCancel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxEchoCancel.cpp; path = ../../../addons/ofxEchoCancel/src/ofxEchoCancel.cpp; sourceTree = SOURCE_ROOT; };
+		4C873EA78F21829765CFBFC7 /* delay_estimator.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = delay_estimator.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/delay_estimator.h"; sourceTree = SOURCE_ROOT; };
+		4EF80366647ACFEB44E48FA6 /* ofGstUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofGstUtils.cpp; path = ../../../libs/openFrameworks/video/ofGstUtils.cpp; sourceTree = SOURCE_ROOT; };
+		4FA5C1589B6570673A5C156A /* tcp-turn.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "tcp-turn.h"; path = "../../../addons/ofxNice/libs/libnice/include/nice/tcp-turn.h"; sourceTree = SOURCE_ROOT; };
+		4FF1E1C3B03966163405C77A /* gstnicesrc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gstnicesrc.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/gstnicesrc.h; sourceTree = SOURCE_ROOT; };
+		506DEE712760F090729D52CC /* noise_suppression_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = noise_suppression_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/noise_suppression_impl.cc"; sourceTree = SOURCE_ROOT; };
+		5191B5B7C8DF765EEE1FDD5F /* ofxXMPP.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxXMPP.h; path = ../../../addons/ofxXMPP/src/ofxXMPP.h; sourceTree = SOURCE_ROOT; };
+		525F8CDA7D477D2EFE140A4E /* ofxGstXMPPRTP.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGstXMPPRTP.cpp; path = ../../../addons/ofxGstRTP/src/ofxGstXMPPRTP.cpp; sourceTree = SOURCE_ROOT; };
+		52AFA1F08C420992CAAAE648 /* ofxSlider.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSlider.h; path = ../../../addons/ofxGui/src/ofxSlider.h; sourceTree = SOURCE_ROOT; };
+		5715DEAEEE1D2F845553543C /* nsx_core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = nsx_core.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/nsx_core.h"; sourceTree = SOURCE_ROOT; };
+		57745A661C6D0D8803CBF668 /* debug.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = debug.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/debug.h; sourceTree = SOURCE_ROOT; };
+		5A17DCCC777F57DB3F517DF3 /* get_scaling_square.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = get_scaling_square.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/get_scaling_square.c"; sourceTree = SOURCE_ROOT; };
+		5A48ADD35F433A921D64909B /* noise_suppression.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = noise_suppression.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/interface/noise_suppression.h"; sourceTree = SOURCE_ROOT; };
+		5A7F734F466CAEAEA903FD8D /* spl_inl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = spl_inl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface/spl_inl.h"; sourceTree = SOURCE_ROOT; };
+		5D156F92C2AF7770F8087636 /* webrtc_vad.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = webrtc_vad.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/webrtc_vad.c"; sourceTree = SOURCE_ROOT; };
+		5D253858408E53AF4E77BCB4 /* snappy-stubs-public.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "snappy-stubs-public.h"; path = "../../../addons/ofxGstRTP/libs/snappy/src/snappy-stubs-public.h"; sourceTree = SOURCE_ROOT; };
+		5F26F956BB7E84FCC3670C51 /* spl_inl_armv7.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = spl_inl_armv7.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface/spl_inl_armv7.h"; sourceTree = SOURCE_ROOT; };
+		601A82C689D56FDD42A0DC2C /* vad_gmm.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = vad_gmm.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_gmm.c"; sourceTree = SOURCE_ROOT; };
+		61F9B230F8184417CA65453B /* socks5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = socks5.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/socks5.h; sourceTree = SOURCE_ROOT; };
+		65FA59909FB21AB7D0339B6B /* ofxNiceStream.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNiceStream.h; path = ../../../addons/ofxNice/src/ofxNiceStream.h; sourceTree = SOURCE_ROOT; };
+		66E318E2C864EA39FC733147 /* filter_ma_fast_q12.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = filter_ma_fast_q12.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/filter_ma_fast_q12.c"; sourceTree = SOURCE_ROOT; };
+		6707A61C2255CE39705297C7 /* ofxWebRTCAudioPool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxWebRTCAudioPool.h; path = ../../../addons/ofxGstRTP/src/ofxWebRTCAudioPool.h; sourceTree = SOURCE_ROOT; };
+		6716F57DC68FD8D08297C092 /* turn.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = turn.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/turn.h; sourceTree = SOURCE_ROOT; };
+		699A8B31EE7D95201DCC019A /* cpu_features.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = cpu_features.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source/cpu_features.cc"; sourceTree = SOURCE_ROOT; };
+		6A331F9EC2A82624DD34B780 /* ofxGstRTPClient.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstRTPClient.h; path = ../../../addons/ofxGstRTP/src/ofxGstRTPClient.h; sourceTree = SOURCE_ROOT; };
+		70C3CA451A023F15FDDEBE11 /* ofxGstOscDoubleBuffer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGstOscDoubleBuffer.cpp; path = ../../../addons/ofxGstRTP/src/ofxGstOscDoubleBuffer.cpp; sourceTree = SOURCE_ROOT; };
+		719BAE1CE1A5745D2F7BF0D8 /* critical_section_posix.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = critical_section_posix.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source/critical_section_posix.h"; sourceTree = SOURCE_ROOT; };
+		734F31B4C34AB14177C58328 /* spl_version.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = spl_version.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/spl_version.c"; sourceTree = SOURCE_ROOT; };
+		73BC6BDE1643ABD1C205ED61 /* lpc_to_refl_coef.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = lpc_to_refl_coef.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/lpc_to_refl_coef.c"; sourceTree = SOURCE_ROOT; };
+		76C040667EFF987F07377A97 /* noise_suppression_x.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = noise_suppression_x.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/interface/noise_suppression_x.h"; sourceTree = SOURCE_ROOT; };
+		7719DE0E5F099165E74324DF /* ofxGstRTPUtils.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGstRTPUtils.cpp; path = ../../../addons/ofxGstRTP/src/ofxGstRTPUtils.cpp; sourceTree = SOURCE_ROOT; };
+		7816B7E5F8A14FD6BECC4256 /* ns_core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ns_core.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/ns_core.h"; sourceTree = SOURCE_ROOT; };
+		78D67A00EB899FAC09430597 /* ofxLabel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxLabel.cpp; path = ../../../addons/ofxGui/src/ofxLabel.cpp; sourceTree = SOURCE_ROOT; };
+		7922DD16E8363A60E5F03DAA /* voice_detection_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = voice_detection_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/voice_detection_impl.cc"; sourceTree = SOURCE_ROOT; };
+		7959A7735759E6187464B449 /* echo_cancellation.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = echo_cancellation.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/echo_cancellation.c"; sourceTree = SOURCE_ROOT; };
+		7B902921761F7C0B49F3DA52 /* sin_table_1024.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = sin_table_1024.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/sin_table_1024.c"; sourceTree = SOURCE_ROOT; };
+		7BC5654F9D25916618DF48E8 /* get_hanning_window.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = get_hanning_window.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/get_hanning_window.c"; sourceTree = SOURCE_ROOT; };
+		7C41DC905560B99BCE5EC2D6 /* audio_processing_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = audio_processing_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/audio_processing_impl.cc"; sourceTree = SOURCE_ROOT; };
+		7FF0BC3425343578C3889924 /* auto_corr_to_refl_coef.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = auto_corr_to_refl_coef.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/auto_corr_to_refl_coef.c"; sourceTree = SOURCE_ROOT; };
+		802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxSliderGroup.cpp; path = ../../../addons/ofxGui/src/ofxSliderGroup.cpp; sourceTree = SOURCE_ROOT; };
+		8066D4F63085923296EB30AB /* nsx_core_neon.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = nsx_core_neon.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/nsx_core_neon.c"; sourceTree = SOURCE_ROOT; };
+		8072A1431DE5433004CCAEEC /* dot_product_with_scale.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = dot_product_with_scale.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/dot_product_with_scale.c"; sourceTree = SOURCE_ROOT; };
+		878E12C8ADEC10392CF00C65 /* strophe.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = strophe.h; path = ../../../addons/ofxXMPP/libs/strophe/include/strophe.h; sourceTree = SOURCE_ROOT; };
+		87C0BACDD919AA13893B89C4 /* md5.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = md5.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/md5.h; sourceTree = SOURCE_ROOT; };
+		87C76A447EB0BA85735BF586 /* snappy-stubs-internal.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = "snappy-stubs-internal.cc"; path = "../../../addons/ofxGstRTP/libs/snappy/src/snappy-stubs-internal.cc"; sourceTree = SOURCE_ROOT; };
+		87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxBaseGui.h; path = ../../../addons/ofxGui/src/ofxBaseGui.h; sourceTree = SOURCE_ROOT; };
+		882BD199D799A105064879C4 /* ofxGstRTPServer.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGstRTPServer.cpp; path = ../../../addons/ofxGstRTP/src/ofxGstRTPServer.cpp; sourceTree = SOURCE_ROOT; };
+		88F44649FD8477AC8B342798 /* gain_control_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = gain_control_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/gain_control_impl.cc"; sourceTree = SOURCE_ROOT; };
+		89449E3044D456F7DE7BEA14 /* ofxPanel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxPanel.h; path = ../../../addons/ofxGui/src/ofxPanel.h; sourceTree = SOURCE_ROOT; };
+		8996FEE812BEF6A1DDB327FD /* aec_core.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = aec_core.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/aec_core.c"; sourceTree = SOURCE_ROOT; };
+		8AB2057FAEF1AF17268EC7C0 /* level_estimator_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = level_estimator_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/level_estimator_impl.cc"; sourceTree = SOURCE_ROOT; };
+		8B0F80D7EE9D9B08A87A18F5 /* pseudotcp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = pseudotcp.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/pseudotcp.h; sourceTree = SOURCE_ROOT; };
+		8B36EC21B11A99FF90149B51 /* vad_core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = vad_core.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_core.h"; sourceTree = SOURCE_ROOT; };
+		8B74A251CC5A0B3EEABC5460 /* level_estimator_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = level_estimator_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/level_estimator_impl.h"; sourceTree = SOURCE_ROOT; };
+		8BE0863D742EDF2791C7B3F8 /* processing_component.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = processing_component.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/processing_component.cc"; sourceTree = SOURCE_ROOT; };
+		8D750029D532CD22C56CF60E /* aecm_core.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = aecm_core.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/aecm_core.h"; sourceTree = SOURCE_ROOT; };
+		8E4E637B9294721603F91752 /* random.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = random.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/random.h; sourceTree = SOURCE_ROOT; };
+		8EDBDB8658BBF9E78EAF12AA /* echo_cancellation.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = echo_cancellation.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/interface/echo_cancellation.h"; sourceTree = SOURCE_ROOT; };
+		907C5B5E104864A2D3A25745 /* ofxToggle.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxToggle.cpp; path = ../../../addons/ofxGui/src/ofxToggle.cpp; sourceTree = SOURCE_ROOT; };
+		90A3E54A7C993203937AFAA4 /* ofxGstVideoDoubleBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstVideoDoubleBuffer.h; path = ../../../addons/ofxGstRTP/src/ofxGstVideoDoubleBuffer.h; sourceTree = SOURCE_ROOT; };
+		9277E4D7A1E15047501FDD75 /* noise_suppression_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = noise_suppression_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/noise_suppression_impl.h"; sourceTree = SOURCE_ROOT; };
+		94658A92B50E7A6D7F663A37 /* critical_section_windows.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = critical_section_windows.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source/critical_section_windows.h"; sourceTree = SOURCE_ROOT; };
+		9604B925D32EE39065747725 /* ofxBaseGui.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxBaseGui.cpp; path = ../../../addons/ofxGui/src/ofxBaseGui.cpp; sourceTree = SOURCE_ROOT; };
+		962AA7F10B3D2E25FFB61019 /* cpu_features_wrapper.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cpu_features_wrapper.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/interface/cpu_features_wrapper.h"; sourceTree = SOURCE_ROOT; };
+		97494AE90887048B1A290D0C /* resample.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = resample.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/resample.c"; sourceTree = SOURCE_ROOT; };
+		975E762D777E056FF2238387 /* voice_detection_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = voice_detection_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/voice_detection_impl.h"; sourceTree = SOURCE_ROOT; };
+		97D098779D1333755447C006 /* socket.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = socket.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/socket.h; sourceTree = SOURCE_ROOT; };
+		99211D95EBD61912226273D0 /* utils.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = utils.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/utils.h; sourceTree = SOURCE_ROOT; };
+		99466A57DBF2349C88635731 /* ofxGstRTPServer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstRTPServer.h; path = ../../../addons/ofxGstRTP/src/ofxGstRTPServer.h; sourceTree = SOURCE_ROOT; };
+		9AABCA1CE7F8C538AF45DCD6 /* component.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = component.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/component.h; sourceTree = SOURCE_ROOT; };
+		9B758F5D8D486AA8873A1C05 /* webrtc_fft_t_1024_8.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = webrtc_fft_t_1024_8.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/webrtc_fft_t_1024_8.c"; sourceTree = SOURCE_ROOT; };
+		9BCD8144E68ABBCA17ECBACA /* rand.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = rand.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/rand.h; sourceTree = SOURCE_ROOT; };
+		9C3F7B5607423EE50B6285F4 /* stunagent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stunagent.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/stunagent.h; sourceTree = SOURCE_ROOT; };
+		9C5182C83E4B73B6B6C74B3D /* ofxNice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNice.h; path = ../../../addons/ofxNice/src/ofxNice.h; sourceTree = SOURCE_ROOT; };
+		9CBB4FA6A230DDE9D324F766 /* echo_cancellation_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = echo_cancellation_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/echo_cancellation_impl.h"; sourceTree = SOURCE_ROOT; };
+		9DBACF8C0839C9823AB5BBCA /* audio_processing.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = audio_processing.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/interface/audio_processing.h"; sourceTree = SOURCE_ROOT; };
+		9FBD973A0C982D88B7C55F6A /* gain_control.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gain_control.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/interface/gain_control.h"; sourceTree = SOURCE_ROOT; };
+		9FD4CC071A27123A5AC30377 /* spl_sqrt_floor.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = spl_sqrt_floor.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/spl_sqrt_floor.c"; sourceTree = SOURCE_ROOT; };
+		A4D326AE9C3620AB24CBE38C /* interfaces.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = interfaces.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/interfaces.h; sourceTree = SOURCE_ROOT; };
+		A94E3CE53EF0FA95A1C63E36 /* sqrt_of_one_minus_x_squared.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = sqrt_of_one_minus_x_squared.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/sqrt_of_one_minus_x_squared.c"; sourceTree = SOURCE_ROOT; };
+		A990D42D803AF08154A15728 /* filter_ar.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = filter_ar.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/filter_ar.c"; sourceTree = SOURCE_ROOT; };
+		AADB4C1DA7ABD9EA347CD3C1 /* copy_set_operations.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = copy_set_operations.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/copy_set_operations.c"; sourceTree = SOURCE_ROOT; };
+		AB402CD244B84E39522E4583 /* analog_agc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = analog_agc.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/analog_agc.h"; sourceTree = SOURCE_ROOT; };
+		AB79A50BB06896059D9C6F42 /* ofxXMPP.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxXMPP.cpp; path = ../../../addons/ofxXMPP/src/ofxXMPP.cpp; sourceTree = SOURCE_ROOT; };
+		AE462C28DF5EF170C0C8EB32 /* min_max_operations_neon.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = min_max_operations_neon.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/min_max_operations_neon.c"; sourceTree = SOURCE_ROOT; };
+		AE9A084AABFBC9E05344C768 /* aecm_core_neon.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = aecm_core_neon.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/aecm_core_neon.c"; sourceTree = SOURCE_ROOT; };
+		AF6FED2E7677A6A4147276F9 /* stunhmac.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = stunhmac.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/stunhmac.h; sourceTree = SOURCE_ROOT; };
+		B130545E47B084267DC2431F /* fft4g.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = fft4g.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/fft4g.h"; sourceTree = SOURCE_ROOT; };
+		B446D39E4F5D052240511E33 /* analog_agc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = analog_agc.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/analog_agc.c"; sourceTree = SOURCE_ROOT; };
+		B51706076D5F263FAAB54946 /* audio_buffer.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = audio_buffer.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/audio_buffer.cc"; sourceTree = SOURCE_ROOT; };
+		B54869073BE1018F875A141C /* snappy-sinksource.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = "snappy-sinksource.cc"; path = "../../../addons/ofxGstRTP/libs/snappy/src/snappy-sinksource.cc"; sourceTree = SOURCE_ROOT; };
+		B651E23E91FCC421A7333692 /* common_types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = common_types.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_types.h"; sourceTree = SOURCE_ROOT; };
+		B87C60311EC1FE841C1ECD89 /* ofxLabel.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxLabel.h; path = ../../../addons/ofxGui/src/ofxLabel.h; sourceTree = SOURCE_ROOT; };
+		B8EC0F3BB8565E2427323C11 /* nsx_defines.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = nsx_defines.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/nsx_defines.h"; sourceTree = SOURCE_ROOT; };
+		B9126F3938A9762AC9C23464 /* cos_table.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = cos_table.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/cos_table.c"; sourceTree = SOURCE_ROOT; };
+		BA002A9773F0D8387B039A82 /* webrtc_vad.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = webrtc_vad.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/interface/webrtc_vad.h"; sourceTree = SOURCE_ROOT; };
+		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
+		BC8E3EEA1B97165390ADC06C /* ofxGstPixelsPool.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstPixelsPool.h; path = ../../../addons/ofxGstRTP/src/ofxGstPixelsPool.h; sourceTree = SOURCE_ROOT; };
+		BD0EFE6E7629FCF157022C67 /* agent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = agent.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/agent.h; sourceTree = SOURCE_ROOT; };
+		C04D53031811EBD0F53A0F2A /* snappy-internal.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "snappy-internal.h"; path = "../../../addons/ofxGstRTP/libs/snappy/src/snappy-internal.h"; sourceTree = SOURCE_ROOT; };
+		C131DAC3B09C9B6F64682819 /* ring_buffer.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = ring_buffer.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/ring_buffer.c"; sourceTree = SOURCE_ROOT; };
+		C222F86544E352B3E8C02C7D /* splitting_filter.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = splitting_filter.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/splitting_filter.h"; sourceTree = SOURCE_ROOT; };
+		C2A2D555EF6B847A9525241C /* address.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = address.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/address.h; sourceTree = SOURCE_ROOT; };
+		C300A457E45C9852D8D17FAB /* complex_bit_reverse.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = complex_bit_reverse.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/complex_bit_reverse.c"; sourceTree = SOURCE_ROOT; };
+		C407D6CE72676C9B3977D305 /* vad_core.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = vad_core.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_core.c"; sourceTree = SOURCE_ROOT; };
+		C48D1BBC5D71CDCF0D7E2515 /* high_pass_filter_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = high_pass_filter_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/high_pass_filter_impl.h"; sourceTree = SOURCE_ROOT; };
+		C70D8946940288799E82131E /* ofxSliderGroup.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxSliderGroup.h; path = ../../../addons/ofxGui/src/ofxSliderGroup.h; sourceTree = SOURCE_ROOT; };
+		C847E1C01AE6210B0053F5C4 /* ofxOsc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOsc.h; sourceTree = "<group>"; };
+		C847E1C11AE6210B0053F5C4 /* ofxOscArg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscArg.h; sourceTree = "<group>"; };
+		C847E1C21AE6210B0053F5C4 /* ofxOscBundle.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscBundle.cpp; sourceTree = "<group>"; };
+		C847E1C31AE6210B0053F5C4 /* ofxOscBundle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscBundle.h; sourceTree = "<group>"; };
+		C847E1C41AE6210B0053F5C4 /* ofxOscMessage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscMessage.cpp; sourceTree = "<group>"; };
+		C847E1C51AE6210B0053F5C4 /* ofxOscMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscMessage.h; sourceTree = "<group>"; };
+		C847E1C61AE6210B0053F5C4 /* ofxOscParameterSync.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscParameterSync.cpp; sourceTree = "<group>"; };
+		C847E1C71AE6210B0053F5C4 /* ofxOscParameterSync.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscParameterSync.h; sourceTree = "<group>"; };
+		C847E1C81AE6210B0053F5C4 /* ofxOscReceiver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscReceiver.cpp; sourceTree = "<group>"; };
+		C847E1C91AE6210B0053F5C4 /* ofxOscReceiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscReceiver.h; sourceTree = "<group>"; };
+		C847E1CA1AE6210B0053F5C4 /* ofxOscSender.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxOscSender.cpp; sourceTree = "<group>"; };
+		C847E1CB1AE6210B0053F5C4 /* ofxOscSender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxOscSender.h; sourceTree = "<group>"; };
+		C847E1D01AE6210B0053F5C4 /* IpEndpointName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = IpEndpointName.cpp; sourceTree = "<group>"; };
+		C847E1D11AE6210B0053F5C4 /* IpEndpointName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IpEndpointName.h; sourceTree = "<group>"; };
+		C847E1D21AE6210B0053F5C4 /* NetworkingUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NetworkingUtils.h; sourceTree = "<group>"; };
+		C847E1D31AE6210B0053F5C4 /* PacketListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PacketListener.h; sourceTree = "<group>"; };
+		C847E1D51AE6210B0053F5C4 /* NetworkingUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NetworkingUtils.cpp; sourceTree = "<group>"; };
+		C847E1D61AE6210B0053F5C4 /* UdpSocket.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UdpSocket.cpp; sourceTree = "<group>"; };
+		C847E1D71AE6210B0053F5C4 /* TimerListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimerListener.h; sourceTree = "<group>"; };
+		C847E1D81AE6210B0053F5C4 /* UdpSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UdpSocket.h; sourceTree = "<group>"; };
+		C847E1DD1AE6210B0053F5C4 /* MessageMappingOscPacketListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageMappingOscPacketListener.h; sourceTree = "<group>"; };
+		C847E1DE1AE6210B0053F5C4 /* OscException.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscException.h; sourceTree = "<group>"; };
+		C847E1DF1AE6210B0053F5C4 /* OscHostEndianness.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscHostEndianness.h; sourceTree = "<group>"; };
+		C847E1E01AE6210B0053F5C4 /* OscOutboundPacketStream.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscOutboundPacketStream.cpp; sourceTree = "<group>"; };
+		C847E1E11AE6210B0053F5C4 /* OscOutboundPacketStream.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscOutboundPacketStream.h; sourceTree = "<group>"; };
+		C847E1E21AE6210B0053F5C4 /* OscPacketListener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscPacketListener.h; sourceTree = "<group>"; };
+		C847E1E31AE6210B0053F5C4 /* OscPrintReceivedElements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscPrintReceivedElements.cpp; sourceTree = "<group>"; };
+		C847E1E41AE6210B0053F5C4 /* OscPrintReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscPrintReceivedElements.h; sourceTree = "<group>"; };
+		C847E1E51AE6210B0053F5C4 /* OscReceivedElements.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscReceivedElements.cpp; sourceTree = "<group>"; };
+		C847E1E61AE6210B0053F5C4 /* OscReceivedElements.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscReceivedElements.h; sourceTree = "<group>"; };
+		C847E1E71AE6210B0053F5C4 /* OscTypes.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OscTypes.cpp; sourceTree = "<group>"; };
+		C847E1E81AE6210B0053F5C4 /* OscTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OscTypes.h; sourceTree = "<group>"; };
+		C847E1F71AE621B00053F5C4 /* ofxCompress.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxCompress.h; sourceTree = "<group>"; };
+		C847E1F81AE621B00053F5C4 /* ofxDepthCompressedFrame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthCompressedFrame.cpp; sourceTree = "<group>"; };
+		C847E1F91AE621B00053F5C4 /* ofxDepthCompressedFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxDepthCompressedFrame.h; sourceTree = "<group>"; };
+		C847E1FA1AE621B00053F5C4 /* ofxDepthOctree.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthOctree.cpp; sourceTree = "<group>"; };
+		C847E1FB1AE621B00053F5C4 /* ofxDepthOctree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxDepthOctree.h; sourceTree = "<group>"; };
+		C847E1FC1AE621B00053F5C4 /* ofxDepthStreamCompression.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ofxDepthStreamCompression.cpp; sourceTree = "<group>"; };
+		C847E1FD1AE621B00053F5C4 /* ofxDepthStreamCompression.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ofxDepthStreamCompression.h; sourceTree = "<group>"; };
+		C88333E71C9457E441C33474 /* ofxButton.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxButton.cpp; path = ../../../addons/ofxGui/src/ofxButton.cpp; sourceTree = SOURCE_ROOT; };
+		CAE031D18270403F3DCC8690 /* module_common_types.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = module_common_types.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/interface/module_common_types.h"; sourceTree = SOURCE_ROOT; };
+		CBA9185890E8CCC8DBE24595 /* ofxNiceAgent.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNiceAgent.cpp; path = ../../../addons/ofxNice/src/ofxNiceAgent.cpp; sourceTree = SOURCE_ROOT; };
+		CBC67C0C1F1DB909620DE28D /* audio_processing_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = audio_processing_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/audio_processing_impl.h"; sourceTree = SOURCE_ROOT; };
+		CD35ACE7CBE7941BE945A176 /* discovery.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = discovery.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/discovery.h; sourceTree = SOURCE_ROOT; };
+		CE37276FAB368AF63869F6FC /* windows_private.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = windows_private.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/windows_private.h"; sourceTree = SOURCE_ROOT; };
+		CEDD72D0808DA6C1801228EA /* echo_control_mobile_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = echo_control_mobile_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/echo_control_mobile_impl.h"; sourceTree = SOURCE_ROOT; };
+		CF28B063C2ECBB6B3741C97F /* ilbc_specific_functions.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = ilbc_specific_functions.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/ilbc_specific_functions.c"; sourceTree = SOURCE_ROOT; };
+		CFFCB24327F56056E2119743 /* ns_core.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = ns_core.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/ns_core.c"; sourceTree = SOURCE_ROOT; };
+		D0A60CFA15E7E42CA91C8FC6 /* vad_filterbank.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = vad_filterbank.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_filterbank.h"; sourceTree = SOURCE_ROOT; };
+		D11930E5040BDF71DD1F5268 /* defines.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = defines.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/defines.h"; sourceTree = SOURCE_ROOT; };
+		D1CC06448292175925BF8B44 /* critical_section_posix.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = critical_section_posix.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source/critical_section_posix.cc"; sourceTree = SOURCE_ROOT; };
+		D41B9E7115B1C2FB0174834A /* filter_ar_fast_q12.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = filter_ar_fast_q12.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/filter_ar_fast_q12.c"; sourceTree = SOURCE_ROOT; };
+		D91B22106E2CC190E613D9E8 /* energy.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = energy.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/energy.c"; sourceTree = SOURCE_ROOT; };
+		D93301AD48AA7A31B4FEE535 /* tcp-bsd.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = "tcp-bsd.h"; path = "../../../addons/ofxNice/libs/libnice/include/nice/tcp-bsd.h"; sourceTree = SOURCE_ROOT; };
+		D9C3601E1D70318D512DE0F3 /* audio_buffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = audio_buffer.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/audio_buffer.h"; sourceTree = SOURCE_ROOT; };
+		DA57E45C79D528CFFD049542 /* vad_gmm.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = vad_gmm.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_gmm.h"; sourceTree = SOURCE_ROOT; };
+		DC1F7C156050F82FB9E57F48 /* digital_agc.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = digital_agc.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/digital_agc.h"; sourceTree = SOURCE_ROOT; };
+		DC6F841ACA336805049FCD0A /* vad_sp.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = vad_sp.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source/vad_sp.h"; sourceTree = SOURCE_ROOT; };
+		DD41E26AE93B06DBE18A182D /* noise_suppression.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = noise_suppression.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/noise_suppression.c"; sourceTree = SOURCE_ROOT; };
+		E0E5DDD6A633FE69614D54C1 /* resampler.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = resampler.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/resampler.h"; sourceTree = SOURCE_ROOT; };
+		E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxPanel.cpp; path = ../../../addons/ofxGui/src/ofxPanel.cpp; sourceTree = SOURCE_ROOT; };
+		E32BE63689C74703AABB9334 /* high_pass_filter_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = high_pass_filter_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/high_pass_filter_impl.cc"; sourceTree = SOURCE_ROOT; };
+		E3A04EFBF848491ACDB561AF /* ofxGstRTPConstants.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstRTPConstants.h; path = ../../../addons/ofxGstRTP/src/ofxGstRTPConstants.h; sourceTree = SOURCE_ROOT; };
+		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
+		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
+		E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ApplicationServices.framework; path = /System/Library/Frameworks/ApplicationServices.framework; sourceTree = "<absolute>"; };
+		E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
+		E45BE9740E8CC7DD009D7055 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
+		E45BE9750E8CC7DD009D7055 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = /System/Library/Frameworks/CoreAudio.framework; sourceTree = "<absolute>"; };
+		E45BE9760E8CC7DD009D7055 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = /System/Library/Frameworks/CoreFoundation.framework; sourceTree = "<absolute>"; };
+		E45BE9770E8CC7DD009D7055 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
+		E45BE9790E8CC7DD009D7055 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
+		E4B69B5B0A3A1756003C02F2 /* example-video_audio_LANDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-video_audio_LANDebug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E4B69E1D0A3A1BDC003C02F2 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = src/main.cpp; sourceTree = SOURCE_ROOT; };
+		E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofApp.cpp; path = src/ofApp.cpp; sourceTree = SOURCE_ROOT; };
+		E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ofApp.h; path = src/ofApp.h; sourceTree = SOURCE_ROOT; };
+		E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "openFrameworks-Info.plist"; sourceTree = "<group>"; };
+		E4C2424410CC5A17004149E2 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		E4C2424510CC5A17004149E2 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		E4C2424610CC5A17004149E2 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = /System/Library/Frameworks/IOKit.framework; sourceTree = "<absolute>"; };
+		E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/osx/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
+		E4EB6923138AFD0F00A09F29 /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
+		E69B16E7AB9EB09334000410 /* gstnice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gstnice.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/gstnice.h; sourceTree = SOURCE_ROOT; };
+		E6F649711DEBD2B0B6DBAC93 /* sha1.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = sha1.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/sha1.h; sourceTree = SOURCE_ROOT; };
+		E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		E7E077E715D3B6510020DFD4 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		E7F985F515E0DE99003869B5 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = /System/Library/Frameworks/Accelerate.framework; sourceTree = "<absolute>"; };
+		EB0FE488884462AF11DD38A1 /* aec_rdft.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = aec_rdft.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/aec_rdft.c"; sourceTree = SOURCE_ROOT; };
+		EC8D5790D068B76CC5724066 /* vector_scaling_operations.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = vector_scaling_operations.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/vector_scaling_operations.c"; sourceTree = SOURCE_ROOT; };
+		ECED1ACDF3A11EC66B86FE6C /* ofxGstOscDoubleBuffer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstOscDoubleBuffer.h; path = ../../../addons/ofxGstRTP/src/ofxGstOscDoubleBuffer.h; sourceTree = SOURCE_ROOT; };
+		ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxGuiGroup.cpp; path = ../../../addons/ofxGui/src/ofxGuiGroup.cpp; sourceTree = SOURCE_ROOT; };
+		EFAEEB2DB91B0DC398AF209E /* ofxGstXMPPRTP.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxGstXMPPRTP.h; path = ../../../addons/ofxGstRTP/src/ofxGstXMPPRTP.h; sourceTree = SOURCE_ROOT; };
+		F05A8E790678F6D568DEA51F /* nice.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = nice.h; path = ../../../addons/ofxNice/libs/libnice/include/nice/nice.h; sourceTree = SOURCE_ROOT; };
+		F077B4045BFBE1F3A5333C7C /* downsample_fast.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = downsample_fast.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source/downsample_fast.c"; sourceTree = SOURCE_ROOT; };
+		F198996ED5C849097CC1ABB5 /* ofGstVideoGrabber.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofGstVideoGrabber.cpp; path = ../../../libs/openFrameworks/video/ofGstVideoGrabber.cpp; sourceTree = SOURCE_ROOT; };
+		F1E234F5E807A318015ADD61 /* ofxNiceStream.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxNiceStream.cpp; path = ../../../addons/ofxNice/src/ofxNiceStream.cpp; sourceTree = SOURCE_ROOT; };
+		F3FB821AE46C0A376AD8BE8B /* signal_processing_library.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = signal_processing_library.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface/signal_processing_library.h"; sourceTree = SOURCE_ROOT; };
+		F63AC1AD0D6DC3BFD5F45A9F /* delay_estimator_float.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = delay_estimator_float.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility/delay_estimator_float.c"; sourceTree = SOURCE_ROOT; };
+		F7AFCDD93C9414CFDA4A0628 /* critical_section.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = critical_section.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source/critical_section.cc"; sourceTree = SOURCE_ROOT; };
+		F88BF10D68122CCA9731E4D4 /* echo_control_mobile.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = echo_control_mobile.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/interface/echo_control_mobile.h"; sourceTree = SOURCE_ROOT; };
+		F88F4ECDE792E18F0CDE8EFE /* gain_control_impl.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = gain_control_impl.h; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/gain_control_impl.h"; sourceTree = SOURCE_ROOT; };
+		F9B9F657BA92D3B42014E1C1 /* digital_agc.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = digital_agc.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/digital_agc.c"; sourceTree = SOURCE_ROOT; };
+		FC0A02026173B4C1344EBCC9 /* echo_cancellation_impl.cc */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = echo_cancellation_impl.cc; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/echo_cancellation_impl.cc"; sourceTree = SOURCE_ROOT; };
+		FEDC4A46D39C89C1F4013AF0 /* nsx_core.c */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.c; fileEncoding = 30; name = nsx_core.c; path = "../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/nsx_core.c"; sourceTree = SOURCE_ROOT; };
+		FF07572A61AAFC5425953FD8 /* ofxNiceAgent.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = ofxNiceAgent.h; path = ../../../addons/ofxNice/src/ofxNiceAgent.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		E4B69B590A3A1756003C02F2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E7F985F815E0DEA3003869B5 /* Accelerate.framework in Frameworks */,
+				E7E077E815D3B6510020DFD4 /* QTKit.framework in Frameworks */,
+				E4EB6799138ADC1D00A09F29 /* GLUT.framework in Frameworks */,
+				E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */,
+				E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */,
+				E45BE97C0E8CC7DD009D7055 /* ApplicationServices.framework in Frameworks */,
+				E45BE97D0E8CC7DD009D7055 /* AudioToolbox.framework in Frameworks */,
+				E45BE97E0E8CC7DD009D7055 /* Carbon.framework in Frameworks */,
+				E45BE97F0E8CC7DD009D7055 /* CoreAudio.framework in Frameworks */,
+				E45BE9800E8CC7DD009D7055 /* CoreFoundation.framework in Frameworks */,
+				E45BE9810E8CC7DD009D7055 /* CoreServices.framework in Frameworks */,
+				E45BE9830E8CC7DD009D7055 /* OpenGL.framework in Frameworks */,
+				E45BE9840E8CC7DD009D7055 /* QuickTime.framework in Frameworks */,
+				E4C2424710CC5A17004149E2 /* AppKit.framework in Frameworks */,
+				E4C2424810CC5A17004149E2 /* Cocoa.framework in Frameworks */,
+				E4C2424910CC5A17004149E2 /* IOKit.framework in Frameworks */,
+				E7E077E515D3B63C0020DFD4 /* CoreVideo.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		15FA3429A979E1B577015B4F /* agc */ = {
+			isa = PBXGroup;
+			children = (
+				B446D39E4F5D052240511E33 /* analog_agc.c */,
+				AB402CD244B84E39522E4583 /* analog_agc.h */,
+				F9B9F657BA92D3B42014E1C1 /* digital_agc.c */,
+				DC1F7C156050F82FB9E57F48 /* digital_agc.h */,
+				FC3D9266603063DD27ABE06B /* interface */,
+			);
+			name = agc;
+			sourceTree = "<group>";
+		};
+		1A7357EDBBBF193518FBC020 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				B651E23E91FCC421A7333692 /* common_types.h */,
+				FCC6D3CF175591FE2BBFEB3A /* modules */,
+				391ADCED81C0588753BB2D7C /* system_wrappers */,
+				B5FF738C583297C7B276BFEC /* common_audio */,
+				31FE6628E2F92513E251C974 /* typedefs.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		1D1FC8B89DB2B15EE54967FB /* src */ = {
+			isa = PBXGroup;
+			children = (
+				4AD5FEBF40274BCDBB215401 /* ofxEchoCancel.cpp */,
+				3747D839058EC071FF1C1FCF /* ofxEchoCancel.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		2374762700158BC19B3BF6A6 /* strophe */ = {
+			isa = PBXGroup;
+			children = (
+				246ABFA35D972C280F39A5CA /* include */,
+			);
+			name = strophe;
+			sourceTree = "<group>";
+		};
+		246ABFA35D972C280F39A5CA /* include */ = {
+			isa = PBXGroup;
+			children = (
+				0FA5069D10E89116D6FDF7D0 /* strophepp.h */,
+				878E12C8ADEC10392CF00C65 /* strophe.h */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		26F231DABF7423B123D749B9 /* aec */ = {
+			isa = PBXGroup;
+			children = (
+				7959A7735759E6187464B449 /* echo_cancellation.c */,
+				E0E5DDD6A633FE69614D54C1 /* resampler.h */,
+				3022B7009E7CAC6F466231F2 /* aec_core_sse2.c */,
+				0E94E378BAEED7ACAC4E9461 /* aec_core.h */,
+				1C184AAB27ABF6A7A7A746D0 /* aec_rdft.h */,
+				0E5163F898A01EC910C8EAEC /* resampler.c */,
+				E7EE25D0239F860C821B9CB6 /* interface */,
+				EB0FE488884462AF11DD38A1 /* aec_rdft.c */,
+				40AE57553D35497205E28678 /* aec_rdft_sse2.c */,
+				8996FEE812BEF6A1DDB327FD /* aec_core.c */,
+			);
+			name = aec;
+			sourceTree = "<group>";
+		};
+		2B54BA199FDBCE190DE41C09 /* ofxGstRTP */ = {
+			isa = PBXGroup;
+			children = (
+				9621B8AFCD906E9941A46F48 /* src */,
+				969E7302DC08118B89F3F0D5 /* libs */,
+			);
+			name = ofxGstRTP;
+			sourceTree = "<group>";
+		};
+		391ADCED81C0588753BB2D7C /* system_wrappers */ = {
+			isa = PBXGroup;
+			children = (
+				76DA2E61C70E1A1C8C0D5821 /* source */,
+				51FF3A543DC10A1ACC513FB7 /* interface */,
+			);
+			name = system_wrappers;
+			sourceTree = "<group>";
+		};
+		3DC690EF14259F8F55B7FA89 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				BA002A9773F0D8387B039A82 /* webrtc_vad.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		480A780D8D0308AE4A368801 /* ofxGui */ = {
+			isa = PBXGroup;
+			children = (
+				A763ED608B35AE3310251DEE /* src */,
+			);
+			name = ofxGui;
+			sourceTree = "<group>";
+		};
+		4AA028954F9F8BCD4BB166D5 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				734F31B4C34AB14177C58328 /* spl_version.c */,
+				2C585D467D24CBD17619FFF2 /* resample_by_2_internal.c */,
+				5A17DCCC777F57DB3F517DF3 /* get_scaling_square.c */,
+				9B758F5D8D486AA8873A1C05 /* webrtc_fft_t_1024_8.c */,
+				EC8D5790D068B76CC5724066 /* vector_scaling_operations.c */,
+				1CE2315B6D2D29303DEA5B40 /* complex_fft.c */,
+				094E19FE5DC7E19670B98793 /* min_max_operations.c */,
+				04CB59E2511BB1AD65749FDE /* resample_fractional.c */,
+				8072A1431DE5433004CCAEEC /* dot_product_with_scale.c */,
+				38CCBBE42D3684A1509A73DA /* sin_table.c */,
+				049F636A917F5AF2AAC96CAE /* cross_correlation.c */,
+				120D6A1B8140CB19CFC5FEFC /* resample_by_2.c */,
+				46E69FD30891A8EEE5BD4B01 /* resample_by_2_internal.h */,
+				3F7FF1A6D715D600CB4C6FD1 /* randn_table.c */,
+				18606D56E57868579972CC34 /* hanning_table.c */,
+				3E5E856C17C82AF4BFC1916F /* division_operations.c */,
+				0493AA7EAAB3A3D7AB814F56 /* auto_correlation.c */,
+				02AFE97B07D81CF2422AD9BB /* randomization_functions.c */,
+				7FF0BC3425343578C3889924 /* auto_corr_to_refl_coef.c */,
+				A94E3CE53EF0FA95A1C63E36 /* sqrt_of_one_minus_x_squared.c */,
+				F077B4045BFBE1F3A5333C7C /* downsample_fast.c */,
+				7B902921761F7C0B49F3DA52 /* sin_table_1024.c */,
+				D41B9E7115B1C2FB0174834A /* filter_ar_fast_q12.c */,
+				0068766CB2097D05049C7E87 /* splitting_filter.c */,
+				73BC6BDE1643ABD1C205ED61 /* lpc_to_refl_coef.c */,
+				AADB4C1DA7ABD9EA347CD3C1 /* copy_set_operations.c */,
+				CF28B063C2ECBB6B3741C97F /* ilbc_specific_functions.c */,
+				2395E50170DED49CBAE7A054 /* spl_sqrt.c */,
+				66E318E2C864EA39FC733147 /* filter_ma_fast_q12.c */,
+				04C34CE1A12ABCA684BE3B1C /* resample_48khz.c */,
+				7BC5654F9D25916618DF48E8 /* get_hanning_window.c */,
+				D91B22106E2CC190E613D9E8 /* energy.c */,
+				03837FFD0AC71EFAEB28AB7F /* complex_ifft.c */,
+				9FD4CC071A27123A5AC30377 /* spl_sqrt_floor.c */,
+				462DB596F8A673AA9658D4C4 /* webrtc_fft_t_rad.c */,
+				C300A457E45C9852D8D17FAB /* complex_bit_reverse.c */,
+				291DD4D49C237EBFF3790DD3 /* refl_coef_to_lpc.c */,
+				97494AE90887048B1A290D0C /* resample.c */,
+				3885299E5C1A44974C971D94 /* levinson_durbin.c */,
+				A990D42D803AF08154A15728 /* filter_ar.c */,
+				AE462C28DF5EF170C0C8EB32 /* min_max_operations_neon.c */,
+				B9126F3938A9762AC9C23464 /* cos_table.c */,
+			);
+			name = source;
+			sourceTree = "<group>";
+		};
+		4E01CE47AE952B381B211679 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				F88BF10D68122CCA9731E4D4 /* echo_control_mobile.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		51FF3A543DC10A1ACC513FB7 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				0E990BBC766D300B34791EEB /* critical_section_wrapper.h */,
+				962AA7F10B3D2E25FFB61019 /* cpu_features_wrapper.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		574DF41209DC302807CA58B2 /* nice */ = {
+			isa = PBXGroup;
+			children = (
+				8B0F80D7EE9D9B08A87A18F5 /* pseudotcp.h */,
+				E69B16E7AB9EB09334000410 /* gstnice.h */,
+				2BE604818152C27AF4DB410E /* stream.h */,
+				402D8281D8D882D3BDC008A3 /* gstnicesink.h */,
+				3060633F7CC949A1A7C6D864 /* conncheck.h */,
+				D93301AD48AA7A31B4FEE535 /* tcp-bsd.h */,
+				4310CECD7A2E1014C8B2FC0B /* stuncrc32.h */,
+				CD35ACE7CBE7941BE945A176 /* discovery.h */,
+				57745A661C6D0D8803CBF668 /* debug.h */,
+				6716F57DC68FD8D08297C092 /* turn.h */,
+				87C0BACDD919AA13893B89C4 /* md5.h */,
+				99211D95EBD61912226273D0 /* utils.h */,
+				2F1AF1B5CA9EAA5A5309245C /* udp-bsd.h */,
+				4FF1E1C3B03966163405C77A /* gstnicesrc.h */,
+				61F9B230F8184417CA65453B /* socks5.h */,
+				E6F649711DEBD2B0B6DBAC93 /* sha1.h */,
+				97D098779D1333755447C006 /* socket.h */,
+				9BCD8144E68ABBCA17ECBACA /* rand.h */,
+				46FBBBEB67CC2747B7655F3E /* stun5389.h */,
+				F05A8E790678F6D568DEA51F /* nice.h */,
+				9C3F7B5607423EE50B6285F4 /* stunagent.h */,
+				AF6FED2E7677A6A4147276F9 /* stunhmac.h */,
+				8E4E637B9294721603F91752 /* random.h */,
+				4FA5C1589B6570673A5C156A /* tcp-turn.h */,
+				3848364670B04E7CEBD37432 /* candidate.h */,
+				9AABCA1CE7F8C538AF45DCD6 /* component.h */,
+				BD0EFE6E7629FCF157022C67 /* agent.h */,
+				C2A2D555EF6B847A9525241C /* address.h */,
+				A4D326AE9C3620AB24CBE38C /* interfaces.h */,
+			);
+			name = nice;
+			sourceTree = "<group>";
+		};
+		5E0772723B0D2E728E54F15C /* ofxXMPP */ = {
+			isa = PBXGroup;
+			children = (
+				7FCC51E5DC67D014EF966FA2 /* src */,
+				D274F5A894B0828E92C001FD /* libs */,
+			);
+			name = ofxXMPP;
+			sourceTree = "<group>";
+		};
+		6D5B668AA66D03F330EA4C02 /* libnice */ = {
+			isa = PBXGroup;
+			children = (
+				B00FC0745F151158A2E046EC /* include */,
+			);
+			name = libnice;
+			sourceTree = "<group>";
+		};
+		6FEF020851D0554C7ECF8E22 /* vad */ = {
+			isa = PBXGroup;
+			children = (
+				D19BF13D57E07A103A26DD0C /* main */,
+			);
+			name = vad;
+			sourceTree = "<group>";
+		};
+		72C23EDF61E708C093E10FF7 /* webrtc-audio-processing */ = {
+			isa = PBXGroup;
+			children = (
+				1A7357EDBBBF193518FBC020 /* src */,
+			);
+			name = "webrtc-audio-processing";
+			sourceTree = "<group>";
+		};
+		765B208307C286B5B3EF5D3B /* ofxEchoCancel */ = {
+			isa = PBXGroup;
+			children = (
+				1D1FC8B89DB2B15EE54967FB /* src */,
+				D7C29002A5D510F391523560 /* libs */,
+			);
+			name = ofxEchoCancel;
+			sourceTree = "<group>";
+		};
+		76DA2E61C70E1A1C8C0D5821 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				F7AFCDD93C9414CFDA4A0628 /* critical_section.cc */,
+				699A8B31EE7D95201DCC019A /* cpu_features.cc */,
+				719BAE1CE1A5745D2F7BF0D8 /* critical_section_posix.h */,
+				D1CC06448292175925BF8B44 /* critical_section_posix.cc */,
+				94658A92B50E7A6D7F663A37 /* critical_section_windows.h */,
+			);
+			name = source;
+			sourceTree = "<group>";
+		};
+		78609DB808D3BF9A86A476BD /* source */ = {
+			isa = PBXGroup;
+			children = (
+				3E01430D38C3812FAF1F7F71 /* vad_filterbank.c */,
+				5D156F92C2AF7770F8087636 /* webrtc_vad.c */,
+				DC6F841ACA336805049FCD0A /* vad_sp.h */,
+				C407D6CE72676C9B3977D305 /* vad_core.c */,
+				601A82C689D56FDD42A0DC2C /* vad_gmm.c */,
+				DA57E45C79D528CFFD049542 /* vad_gmm.h */,
+				2A8DF00CD3673A820292D01D /* vad_sp.c */,
+				3DC5E5B192F54247CBB1B282 /* vad_defines.h */,
+				8B36EC21B11A99FF90149B51 /* vad_core.h */,
+				D0A60CFA15E7E42CA91C8FC6 /* vad_filterbank.h */,
+			);
+			name = source;
+			sourceTree = "<group>";
+		};
+		7FCC51E5DC67D014EF966FA2 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				AB79A50BB06896059D9C6F42 /* ofxXMPP.cpp */,
+				5191B5B7C8DF765EEE1FDD5F /* ofxXMPP.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		85D6327DD83956EBB4ACB151 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				9DBACF8C0839C9823AB5BBCA /* audio_processing.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		866D248A25C464C34D413F4A /* ofxNice */ = {
+			isa = PBXGroup;
+			children = (
+				8CAC430BCECF080C8C4C99EA /* src */,
+				9C02BA77D92D38A673DCD411 /* libs */,
+			);
+			name = ofxNice;
+			sourceTree = "<group>";
+		};
+		8CAC430BCECF080C8C4C99EA /* src */ = {
+			isa = PBXGroup;
+			children = (
+				FF07572A61AAFC5425953FD8 /* ofxNiceAgent.h */,
+				65FA59909FB21AB7D0339B6B /* ofxNiceStream.h */,
+				CBA9185890E8CCC8DBE24595 /* ofxNiceAgent.cpp */,
+				9C5182C83E4B73B6B6C74B3D /* ofxNice.h */,
+				F1E234F5E807A318015ADD61 /* ofxNiceStream.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		8E8AF83368B186D6A7FDF9E9 /* utility */ = {
+			isa = PBXGroup;
+			children = (
+				19B1C4CA8B23134EA44E59BE /* fft4g.c */,
+				4C873EA78F21829765CFBFC7 /* delay_estimator.h */,
+				2CA2561F444DFFF4540E02A9 /* delay_estimator_float.h */,
+				F63AC1AD0D6DC3BFD5F45A9F /* delay_estimator_float.c */,
+				28008BA19DE36F2C12D5590A /* delay_estimator.c */,
+				48B3898D9DBDAAA26E4783FC /* ring_buffer.h */,
+				B130545E47B084267DC2431F /* fft4g.h */,
+				C131DAC3B09C9B6F64682819 /* ring_buffer.c */,
+			);
+			name = utility;
+			sourceTree = "<group>";
+		};
+		9621B8AFCD906E9941A46F48 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				BC8E3EEA1B97165390ADC06C /* ofxGstPixelsPool.h */,
+				90A3E54A7C993203937AFAA4 /* ofxGstVideoDoubleBuffer.h */,
+				42593364E6D9A2FE9147D200 /* ofxOscPacketPool.cpp */,
+				428D2E9828B2DBA67AE2D279 /* ofxGstRTPUtils.h */,
+				18872AAC0D2A9B620B09DBD4 /* ofxOscPacketPool.h */,
+				7719DE0E5F099165E74324DF /* ofxGstRTPUtils.cpp */,
+				525F8CDA7D477D2EFE140A4E /* ofxGstXMPPRTP.cpp */,
+				70C3CA451A023F15FDDEBE11 /* ofxGstOscDoubleBuffer.cpp */,
+				E3A04EFBF848491ACDB561AF /* ofxGstRTPConstants.h */,
+				99466A57DBF2349C88635731 /* ofxGstRTPServer.h */,
+				ECED1ACDF3A11EC66B86FE6C /* ofxGstOscDoubleBuffer.h */,
+				48DA26471156B1C99B440D00 /* ofxGstRTPClient.cpp */,
+				2CD7D424FD5B978E1957D464 /* ofxWebRTCAudioPool.cpp */,
+				882BD199D799A105064879C4 /* ofxGstRTPServer.cpp */,
+				6707A61C2255CE39705297C7 /* ofxWebRTCAudioPool.h */,
+				EFAEEB2DB91B0DC398AF209E /* ofxGstXMPPRTP.h */,
+				6A331F9EC2A82624DD34B780 /* ofxGstRTPClient.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		9689C15435F75911297536C0 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				5D253858408E53AF4E77BCB4 /* snappy-stubs-public.h */,
+				3A6B48558974FAA735CD619C /* snappy.cc */,
+				23BB89C3A52E81F6C32BF9BE /* snappy-sinksource.h */,
+				87C76A447EB0BA85735BF586 /* snappy-stubs-internal.cc */,
+				B54869073BE1018F875A141C /* snappy-sinksource.cc */,
+				C04D53031811EBD0F53A0F2A /* snappy-internal.h */,
+				1FC078EA5DCA483B5AF262A8 /* snappy-stubs-internal.h */,
+				1652229498F19F6395EE7137 /* snappy.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		969E7302DC08118B89F3F0D5 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				D01EAF66DFFCD6BEB459A955 /* snappy */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		970C1DA4BECEB96E3B6F3F7A /* signal_processing_library */ = {
+			isa = PBXGroup;
+			children = (
+				C6B287F8BD048A6F480EDFC2 /* main */,
+			);
+			name = signal_processing_library;
+			sourceTree = "<group>";
+		};
+		9C02BA77D92D38A673DCD411 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				6D5B668AA66D03F330EA4C02 /* libnice */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		9EFB869E85D8B72A93A6E470 /* audio_processing */ = {
+			isa = PBXGroup;
+			children = (
+				B51706076D5F263FAAB54946 /* audio_buffer.cc */,
+				CBC67C0C1F1DB909620DE28D /* audio_processing_impl.h */,
+				FC0A02026173B4C1344EBCC9 /* echo_cancellation_impl.cc */,
+				F88F4ECDE792E18F0CDE8EFE /* gain_control_impl.h */,
+				506DEE712760F090729D52CC /* noise_suppression_impl.cc */,
+				8AB2057FAEF1AF17268EC7C0 /* level_estimator_impl.cc */,
+				7C41DC905560B99BCE5EC2D6 /* audio_processing_impl.cc */,
+				C7F172AB9D5D00FCABC2907A /* aecm */,
+				D9C3601E1D70318D512DE0F3 /* audio_buffer.h */,
+				CD3EE3DBA535915CC69CC5F6 /* ns */,
+				CEDD72D0808DA6C1801228EA /* echo_control_mobile_impl.h */,
+				88F44649FD8477AC8B342798 /* gain_control_impl.cc */,
+				47312697AFAC124F8E83968D /* echo_control_mobile_impl.cc */,
+				E32BE63689C74703AABB9334 /* high_pass_filter_impl.cc */,
+				4990D84A15C555C4241C791F /* processing_component.h */,
+				9277E4D7A1E15047501FDD75 /* noise_suppression_impl.h */,
+				7922DD16E8363A60E5F03DAA /* voice_detection_impl.cc */,
+				9CBB4FA6A230DDE9D324F766 /* echo_cancellation_impl.h */,
+				8B74A251CC5A0B3EEABC5460 /* level_estimator_impl.h */,
+				C48D1BBC5D71CDCF0D7E2515 /* high_pass_filter_impl.h */,
+				8E8AF83368B186D6A7FDF9E9 /* utility */,
+				335F5430FEF73D8DFD23E1DD /* splitting_filter.cc */,
+				85D6327DD83956EBB4ACB151 /* interface */,
+				975E762D777E056FF2238387 /* voice_detection_impl.h */,
+				26F231DABF7423B123D749B9 /* aec */,
+				C222F86544E352B3E8C02C7D /* splitting_filter.h */,
+				15FA3429A979E1B577015B4F /* agc */,
+				8BE0863D742EDF2791C7B3F8 /* processing_component.cc */,
+			);
+			name = audio_processing;
+			sourceTree = "<group>";
+		};
+		A763ED608B35AE3310251DEE /* src */ = {
+			isa = PBXGroup;
+			children = (
+				78D67A00EB899FAC09430597 /* ofxLabel.cpp */,
+				52AFA1F08C420992CAAAE648 /* ofxSlider.h */,
+				E112B3AEBEA2C091BF2B40AE /* ofxPanel.cpp */,
+				B87C60311EC1FE841C1ECD89 /* ofxLabel.h */,
+				907C5B5E104864A2D3A25745 /* ofxToggle.cpp */,
+				802251BAF1B35B1D67B32FD0 /* ofxSliderGroup.cpp */,
+				2834D88A62CD23F3DE2C47D1 /* ofxButton.h */,
+				17E65988300FBD9AAA2CD0CA /* ofxGui.h */,
+				15F2C6477A769C03A56D1401 /* ofxSlider.cpp */,
+				9604B925D32EE39065747725 /* ofxBaseGui.cpp */,
+				C70D8946940288799E82131E /* ofxSliderGroup.h */,
+				87F26B4B24CBD428AD9EEBAA /* ofxBaseGui.h */,
+				1C0DA2561397A7DE0246858B /* ofxGuiGroup.h */,
+				ECF8674C7975F1063C5E30CA /* ofxGuiGroup.cpp */,
+				C88333E71C9457E441C33474 /* ofxButton.cpp */,
+				89449E3044D456F7DE7BEA14 /* ofxPanel.h */,
+				0A1DAC09F322AE313A40706D /* ofxToggle.h */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		A9510872505516423E0BAEC9 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				5A48ADD35F433A921D64909B /* noise_suppression.h */,
+				76C040667EFF987F07377A97 /* noise_suppression_x.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		B00FC0745F151158A2E046EC /* include */ = {
+			isa = PBXGroup;
+			children = (
+				574DF41209DC302807CA58B2 /* nice */,
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		B5FF738C583297C7B276BFEC /* common_audio */ = {
+			isa = PBXGroup;
+			children = (
+				6FEF020851D0554C7ECF8E22 /* vad */,
+				970C1DA4BECEB96E3B6F3F7A /* signal_processing_library */,
+			);
+			name = common_audio;
+			sourceTree = "<group>";
+		};
+		BB4B014C10F69532006C3DED /* addons */ = {
+			isa = PBXGroup;
+			children = (
+				480A780D8D0308AE4A368801 /* ofxGui */,
+				5E0772723B0D2E728E54F15C /* ofxXMPP */,
+				866D248A25C464C34D413F4A /* ofxNice */,
+				2B54BA199FDBCE190DE41C09 /* ofxGstRTP */,
+				765B208307C286B5B3EF5D3B /* ofxEchoCancel */,
+				C847E1BE1AE6210B0053F5C4 /* ofxOsc */,
+				C847E1F51AE621B00053F5C4 /* ofxDepthStreamCompression */,
+			);
+			name = addons;
+			sourceTree = "<group>";
+		};
+		BBAB23C913894ECA00AA2426 /* system frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E7F985F515E0DE99003869B5 /* Accelerate.framework */,
+				E4C2424410CC5A17004149E2 /* AppKit.framework */,
+				E4C2424510CC5A17004149E2 /* Cocoa.framework */,
+				E4C2424610CC5A17004149E2 /* IOKit.framework */,
+				E45BE9710E8CC7DD009D7055 /* AGL.framework */,
+				E45BE9720E8CC7DD009D7055 /* ApplicationServices.framework */,
+				E45BE9730E8CC7DD009D7055 /* AudioToolbox.framework */,
+				E45BE9740E8CC7DD009D7055 /* Carbon.framework */,
+				E45BE9750E8CC7DD009D7055 /* CoreAudio.framework */,
+				E45BE9760E8CC7DD009D7055 /* CoreFoundation.framework */,
+				E45BE9770E8CC7DD009D7055 /* CoreServices.framework */,
+				E45BE9790E8CC7DD009D7055 /* OpenGL.framework */,
+				E45BE97A0E8CC7DD009D7055 /* QuickTime.framework */,
+				E7E077E415D3B63C0020DFD4 /* CoreVideo.framework */,
+				E7E077E715D3B6510020DFD4 /* QTKit.framework */,
+			);
+			name = "system frameworks";
+			sourceTree = "<group>";
+		};
+		BBAB23CA13894EDB00AA2426 /* 3rd party frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBAB23BE13894E4700AA2426 /* GLUT.framework */,
+			);
+			name = "3rd party frameworks";
+			sourceTree = "<group>";
+		};
+		C6B287F8BD048A6F480EDFC2 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				4AA028954F9F8BCD4BB166D5 /* source */,
+				FE711F8D1ECEC2F07B5C76F5 /* interface */,
+			);
+			name = main;
+			sourceTree = "<group>";
+		};
+		C7F172AB9D5D00FCABC2907A /* aecm */ = {
+			isa = PBXGroup;
+			children = (
+				8D750029D532CD22C56CF60E /* aecm_core.h */,
+				3685D996CB88CC9FEF41FCA9 /* aecm_core.c */,
+				AE9A084AABFBC9E05344C768 /* aecm_core_neon.c */,
+				4E01CE47AE952B381B211679 /* interface */,
+				32A7C781C463163D16E32493 /* echo_control_mobile.c */,
+			);
+			name = aecm;
+			sourceTree = "<group>";
+		};
+		C847E1BE1AE6210B0053F5C4 /* ofxOsc */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1BF1AE6210B0053F5C4 /* src */,
+				C847E1CC1AE6210B0053F5C4 /* libs */,
+			);
+			name = ofxOsc;
+			sourceTree = "<group>";
+		};
+		C847E1BF1AE6210B0053F5C4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1C01AE6210B0053F5C4 /* ofxOsc.h */,
+				C847E1C11AE6210B0053F5C4 /* ofxOscArg.h */,
+				C847E1C21AE6210B0053F5C4 /* ofxOscBundle.cpp */,
+				C847E1C31AE6210B0053F5C4 /* ofxOscBundle.h */,
+				C847E1C41AE6210B0053F5C4 /* ofxOscMessage.cpp */,
+				C847E1C51AE6210B0053F5C4 /* ofxOscMessage.h */,
+				C847E1C61AE6210B0053F5C4 /* ofxOscParameterSync.cpp */,
+				C847E1C71AE6210B0053F5C4 /* ofxOscParameterSync.h */,
+				C847E1C81AE6210B0053F5C4 /* ofxOscReceiver.cpp */,
+				C847E1C91AE6210B0053F5C4 /* ofxOscReceiver.h */,
+				C847E1CA1AE6210B0053F5C4 /* ofxOscSender.cpp */,
+				C847E1CB1AE6210B0053F5C4 /* ofxOscSender.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxOsc/src;
+			sourceTree = "<group>";
+		};
+		C847E1CC1AE6210B0053F5C4 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1CD1AE6210B0053F5C4 /* oscpack */,
+			);
+			name = libs;
+			path = ../../../addons/ofxOsc/libs;
+			sourceTree = "<group>";
+		};
+		C847E1CD1AE6210B0053F5C4 /* oscpack */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1CE1AE6210B0053F5C4 /* src */,
+			);
+			path = oscpack;
+			sourceTree = "<group>";
+		};
+		C847E1CE1AE6210B0053F5C4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1CF1AE6210B0053F5C4 /* ip */,
+				C847E1DC1AE6210B0053F5C4 /* osc */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		C847E1CF1AE6210B0053F5C4 /* ip */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1D01AE6210B0053F5C4 /* IpEndpointName.cpp */,
+				C847E1D11AE6210B0053F5C4 /* IpEndpointName.h */,
+				C847E1D21AE6210B0053F5C4 /* NetworkingUtils.h */,
+				C847E1D31AE6210B0053F5C4 /* PacketListener.h */,
+				C847E1D41AE6210B0053F5C4 /* posix */,
+				C847E1D71AE6210B0053F5C4 /* TimerListener.h */,
+				C847E1D81AE6210B0053F5C4 /* UdpSocket.h */,
+			);
+			path = ip;
+			sourceTree = "<group>";
+		};
+		C847E1D41AE6210B0053F5C4 /* posix */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1D51AE6210B0053F5C4 /* NetworkingUtils.cpp */,
+				C847E1D61AE6210B0053F5C4 /* UdpSocket.cpp */,
+			);
+			path = posix;
+			sourceTree = "<group>";
+		};
+		C847E1DC1AE6210B0053F5C4 /* osc */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1DD1AE6210B0053F5C4 /* MessageMappingOscPacketListener.h */,
+				C847E1DE1AE6210B0053F5C4 /* OscException.h */,
+				C847E1DF1AE6210B0053F5C4 /* OscHostEndianness.h */,
+				C847E1E01AE6210B0053F5C4 /* OscOutboundPacketStream.cpp */,
+				C847E1E11AE6210B0053F5C4 /* OscOutboundPacketStream.h */,
+				C847E1E21AE6210B0053F5C4 /* OscPacketListener.h */,
+				C847E1E31AE6210B0053F5C4 /* OscPrintReceivedElements.cpp */,
+				C847E1E41AE6210B0053F5C4 /* OscPrintReceivedElements.h */,
+				C847E1E51AE6210B0053F5C4 /* OscReceivedElements.cpp */,
+				C847E1E61AE6210B0053F5C4 /* OscReceivedElements.h */,
+				C847E1E71AE6210B0053F5C4 /* OscTypes.cpp */,
+				C847E1E81AE6210B0053F5C4 /* OscTypes.h */,
+			);
+			path = osc;
+			sourceTree = "<group>";
+		};
+		C847E1F51AE621B00053F5C4 /* ofxDepthStreamCompression */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1F61AE621B00053F5C4 /* src */,
+			);
+			name = ofxDepthStreamCompression;
+			sourceTree = "<group>";
+		};
+		C847E1F61AE621B00053F5C4 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				C847E1F71AE621B00053F5C4 /* ofxCompress.h */,
+				C847E1F81AE621B00053F5C4 /* ofxDepthCompressedFrame.cpp */,
+				C847E1F91AE621B00053F5C4 /* ofxDepthCompressedFrame.h */,
+				C847E1FA1AE621B00053F5C4 /* ofxDepthOctree.cpp */,
+				C847E1FB1AE621B00053F5C4 /* ofxDepthOctree.h */,
+				C847E1FC1AE621B00053F5C4 /* ofxDepthStreamCompression.cpp */,
+				C847E1FD1AE621B00053F5C4 /* ofxDepthStreamCompression.h */,
+			);
+			name = src;
+			path = ../../../addons/ofxDepthStreamCompression/src;
+			sourceTree = "<group>";
+		};
+		CD3EE3DBA535915CC69CC5F6 /* ns */ = {
+			isa = PBXGroup;
+			children = (
+				B8EC0F3BB8565E2427323C11 /* nsx_defines.h */,
+				8066D4F63085923296EB30AB /* nsx_core_neon.c */,
+				D11930E5040BDF71DD1F5268 /* defines.h */,
+				FEDC4A46D39C89C1F4013AF0 /* nsx_core.c */,
+				DD41E26AE93B06DBE18A182D /* noise_suppression.c */,
+				5715DEAEEE1D2F845553543C /* nsx_core.h */,
+				27BFC35694657F8CE75FD435 /* noise_suppression_x.c */,
+				7816B7E5F8A14FD6BECC4256 /* ns_core.h */,
+				CE37276FAB368AF63869F6FC /* windows_private.h */,
+				CFFCB24327F56056E2119743 /* ns_core.c */,
+				A9510872505516423E0BAEC9 /* interface */,
+			);
+			name = ns;
+			sourceTree = "<group>";
+		};
+		D01EAF66DFFCD6BEB459A955 /* snappy */ = {
+			isa = PBXGroup;
+			children = (
+				9689C15435F75911297536C0 /* src */,
+			);
+			name = snappy;
+			sourceTree = "<group>";
+		};
+		D19BF13D57E07A103A26DD0C /* main */ = {
+			isa = PBXGroup;
+			children = (
+				78609DB808D3BF9A86A476BD /* source */,
+				3DC690EF14259F8F55B7FA89 /* interface */,
+			);
+			name = main;
+			sourceTree = "<group>";
+		};
+		D274F5A894B0828E92C001FD /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				2374762700158BC19B3BF6A6 /* strophe */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		D7C29002A5D510F391523560 /* libs */ = {
+			isa = PBXGroup;
+			children = (
+				72C23EDF61E708C093E10FF7 /* webrtc-audio-processing */,
+			);
+			name = libs;
+			sourceTree = "<group>";
+		};
+		E4328144138ABC890047C5CB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E4328148138ABC890047C5CB /* openFrameworksDebug.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E45BE5980E8CC70C009D7055 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BBAB23CA13894EDB00AA2426 /* 3rd party frameworks */,
+				BBAB23C913894ECA00AA2426 /* system frameworks */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
+		E4B69B4A0A3A1720003C02F2 = {
+			isa = PBXGroup;
+			children = (
+				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
+				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
+				E4B69E1C0A3A1BDC003C02F2 /* src */,
+				E4EEC9E9138DF44700A80321 /* openFrameworks */,
+				BB4B014C10F69532006C3DED /* addons */,
+				E45BE5980E8CC70C009D7055 /* frameworks */,
+				E4B69B5B0A3A1756003C02F2 /* example-video_audio_LANDebug.app */,
+			);
+			sourceTree = "<group>";
+		};
+		E4B69E1C0A3A1BDC003C02F2 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
+				E4B69E1E0A3A1BDC003C02F2 /* ofApp.cpp */,
+				E4B69E1F0A3A1BDC003C02F2 /* ofApp.h */,
+			);
+			path = src;
+			sourceTree = SOURCE_ROOT;
+		};
+		E4EEC9E9138DF44700A80321 /* openFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E4EB691F138AFCF100A09F29 /* CoreOF.xcconfig */,
+				E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */,
+			);
+			name = openFrameworks;
+			sourceTree = "<group>";
+		};
+		E7EE25D0239F860C821B9CB6 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				8EDBDB8658BBF9E78EAF12AA /* echo_cancellation.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		F21C08933824641675329AA7 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				CAE031D18270403F3DCC8690 /* module_common_types.h */,
+				2C4D38E8EFFADEE676366C3C /* module.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		FC3D9266603063DD27ABE06B /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				9FBD973A0C982D88B7C55F6A /* gain_control.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+		FCC6D3CF175591FE2BBFEB3A /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				F21C08933824641675329AA7 /* interface */,
+				9EFB869E85D8B72A93A6E470 /* audio_processing */,
+			);
+			name = modules;
+			sourceTree = "<group>";
+		};
+		FE711F8D1ECEC2F07B5C76F5 /* interface */ = {
+			isa = PBXGroup;
+			children = (
+				5A7F734F466CAEAEA903FD8D /* spl_inl.h */,
+				F3FB821AE46C0A376AD8BE8B /* signal_processing_library.h */,
+				5F26F956BB7E84FCC3670C51 /* spl_inl_armv7.h */,
+			);
+			name = interface;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		E4B69B5A0A3A1756003C02F2 /* videoAudioLAN */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "videoAudioLAN" */;
+			buildPhases = (
+				E4B69B580A3A1756003C02F2 /* Sources */,
+				E4B69B590A3A1756003C02F2 /* Frameworks */,
+				E4B6FFFD0C3F9AB9008CF71C /* ShellScript */,
+				E4C2427710CC5ABF004149E2 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E4EEB9AC138B136A00A80321 /* PBXTargetDependency */,
+			);
+			name = videoAudioLAN;
+			productName = myOFApp;
+			productReference = E4B69B5B0A3A1756003C02F2 /* example-video_audio_LANDebug.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		E4B69B4C0A3A1720003C02F2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0460;
+			};
+			buildConfigurationList = E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "videoAudioLAN" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
+			mainGroup = E4B69B4A0A3A1720003C02F2;
+			productRefGroup = E4B69B4A0A3A1720003C02F2;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E4328144138ABC890047C5CB /* Products */;
+					ProjectRef = E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				E4B69B5A0A3A1756003C02F2 /* videoAudioLAN */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E4328148138ABC890047C5CB /* openFrameworksDebug.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = openFrameworksDebug.a;
+			remoteRef = E4328147138ABC890047C5CB /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E4B6FFFD0C3F9AB9008CF71C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp -f ../../../libs/fmodex/lib/osx/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/libfmodex.dylib\"; install_name_tool -change ./libfmodex.dylib @executable_path/libfmodex.dylib \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME\";\nmkdir -p \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\ncp -f \"$ICON_FILE\" \"$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Resources/\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		E4B69B580A3A1756003C02F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E4B69E200A3A1BDC003C02F2 /* main.cpp in Sources */,
+				C847E1ED1AE6210B0053F5C4 /* ofxOscSender.cpp in Sources */,
+				E4B69E210A3A1BDC003C02F2 /* ofApp.cpp in Sources */,
+				483908258D00B98B4BE69F07 /* ofxLabel.cpp in Sources */,
+				F285EB3169F1566CA3D93C20 /* ofxPanel.cpp in Sources */,
+				1CD33E884D9E3358252E82A1 /* ofxToggle.cpp in Sources */,
+				B56FE57CC35806596D38118C /* ofxSliderGroup.cpp in Sources */,
+				837220E80EB56CD44AD27F2A /* ofxSlider.cpp in Sources */,
+				856AA354D08AB4B323081444 /* ofxBaseGui.cpp in Sources */,
+				B266578FC55D23BFEBC042E7 /* ofxGuiGroup.cpp in Sources */,
+				5CBB2AB3A60F65431D7B555D /* ofxButton.cpp in Sources */,
+				4BA71B1B079846F072B225E7 /* ofxXMPP.cpp in Sources */,
+				D706AF1475A1D7D5873D3262 /* ofxNiceAgent.cpp in Sources */,
+				2098E4ABC7FBAC153B4A40D3 /* ofxNiceStream.cpp in Sources */,
+				EFF44E8E264F0AD343D1E018 /* ofGstUtils.cpp in Sources */,
+				EA6B03BE577F2E744640A557 /* ofGstVideoPlayer.cpp in Sources */,
+				9D99424B122DE3C1D83A3670 /* ofGstVideoGrabber.cpp in Sources */,
+				BE71AEBD4B1B5691BD72D1E8 /* ofxOscPacketPool.cpp in Sources */,
+				83310FCEA2433CDA67488B3A /* ofxGstRTPUtils.cpp in Sources */,
+				FFE8FF878DB8E10310F0617A /* ofxGstXMPPRTP.cpp in Sources */,
+				4792756E50EECC3F4493DD36 /* ofxGstOscDoubleBuffer.cpp in Sources */,
+				C0E2D22980B4B85A0413E94C /* ofxGstRTPClient.cpp in Sources */,
+				DCC7D6008547E298E34EB6C3 /* ofxWebRTCAudioPool.cpp in Sources */,
+				275E48B039C78AF6A3E77709 /* ofxGstRTPServer.cpp in Sources */,
+				B41046D14B5166FC7C9D6A6F /* snappy.cc in Sources */,
+				A4B08708CF7C4058C489EA35 /* snappy-stubs-internal.cc in Sources */,
+				1A0B4DE7CD6FBC09037D78CF /* snappy-sinksource.cc in Sources */,
+				43346A1773C89F6E37A5088E /* ofxEchoCancel.cpp in Sources */,
+				6A9F823F0F0F862FECD0DE71 /* audio_buffer.cc in Sources */,
+				A5C744B90019B5A5B65F2A94 /* echo_cancellation_impl.cc in Sources */,
+				8E35073DFBC783ACACB60E81 /* noise_suppression_impl.cc in Sources */,
+				3D6CF0026C0C20EC1CBD7443 /* level_estimator_impl.cc in Sources */,
+				7EFF7E96D1260EFE4440A382 /* audio_processing_impl.cc in Sources */,
+				C847E1F01AE6210B0053F5C4 /* UdpSocket.cpp in Sources */,
+				C847E1EE1AE6210B0053F5C4 /* IpEndpointName.cpp in Sources */,
+				57650EB492F2A462DDA1C139 /* aecm_core.c in Sources */,
+				BD34F17BEF33919CCD1947AE /* aecm_core_neon.c in Sources */,
+				733FCD84FF87AC80D8122192 /* echo_control_mobile.c in Sources */,
+				973B72960831DDD9110731DC /* nsx_core_neon.c in Sources */,
+				CD11FAB2A8FAA8CBB648FC1F /* nsx_core.c in Sources */,
+				D5BB4353A55242E5F0953C04 /* noise_suppression.c in Sources */,
+				7959F94BE88E4ED46BAF7536 /* noise_suppression_x.c in Sources */,
+				C847E1EC1AE6210B0053F5C4 /* ofxOscReceiver.cpp in Sources */,
+				7A0D4B535F7BFF66B2B7BCD3 /* ns_core.c in Sources */,
+				C847E1F31AE6210B0053F5C4 /* OscReceivedElements.cpp in Sources */,
+				0FAEAEA463DB67B1B12703B0 /* gain_control_impl.cc in Sources */,
+				99D847CC2A2388A64042DDEB /* echo_control_mobile_impl.cc in Sources */,
+				D2868B39EDF8FFB99D403ACC /* high_pass_filter_impl.cc in Sources */,
+				A85C7D3377FF7D6925B12E83 /* voice_detection_impl.cc in Sources */,
+				B7CD57BA0201D805A305E7F5 /* fft4g.c in Sources */,
+				C847E2001AE621B00053F5C4 /* ofxDepthStreamCompression.cpp in Sources */,
+				0E56F6618456C03111E6DA79 /* delay_estimator_float.c in Sources */,
+				CBF808232044B9C0E6F3A331 /* delay_estimator.c in Sources */,
+				1242EAA683BC358212294C56 /* ring_buffer.c in Sources */,
+				00F34FED40D9CA7764D1A70A /* splitting_filter.cc in Sources */,
+				BC5516DFBD3440E5AE40B04E /* echo_cancellation.c in Sources */,
+				96AAEFBFE1088E959AD9D861 /* aec_core_sse2.c in Sources */,
+				D791ECC47781AB1B0380BC91 /* resampler.c in Sources */,
+				1AF0E4F73852F8812D17EB62 /* aec_rdft.c in Sources */,
+				0D4F32158AC9BC5CA9DF92FA /* aec_rdft_sse2.c in Sources */,
+				95925FD49199918741BD33EA /* aec_core.c in Sources */,
+				507D6982FACD77A2E2B602CD /* analog_agc.c in Sources */,
+				22AEBF81BAEE3E962870B427 /* digital_agc.c in Sources */,
+				1F7224305CB9F5875DEE71DB /* processing_component.cc in Sources */,
+				46B3A00BD49F6458870CE003 /* critical_section.cc in Sources */,
+				69F78C71C7C5941B9C293F5D /* cpu_features.cc in Sources */,
+				BD9294D692B37E5FD1FC8282 /* critical_section_posix.cc in Sources */,
+				88DB40B4136D73EA13F30F60 /* vad_filterbank.c in Sources */,
+				7CF2EF2360506D7D80ECA0C1 /* webrtc_vad.c in Sources */,
+				7BEA11DC0B05B0080425F929 /* vad_core.c in Sources */,
+				138B4CB9C2A5F5C77A221365 /* vad_gmm.c in Sources */,
+				C847E1F41AE6210B0053F5C4 /* OscTypes.cpp in Sources */,
+				E847409F2A10E24CC30D9F83 /* vad_sp.c in Sources */,
+				5A08D4B5EBE422D93AF69949 /* spl_version.c in Sources */,
+				B82801B57A0F30262E27AAF9 /* resample_by_2_internal.c in Sources */,
+				C847E1EF1AE6210B0053F5C4 /* NetworkingUtils.cpp in Sources */,
+				C847E1E91AE6210B0053F5C4 /* ofxOscBundle.cpp in Sources */,
+				6AAD1C07D97CA6C9B2476EFF /* get_scaling_square.c in Sources */,
+				DDBDC0F26B755528E419F89B /* webrtc_fft_t_1024_8.c in Sources */,
+				0A1E25F7ABDF306BF58250A9 /* vector_scaling_operations.c in Sources */,
+				C847E1EA1AE6210B0053F5C4 /* ofxOscMessage.cpp in Sources */,
+				FFBB07628A0BE5A9DE9B384E /* complex_fft.c in Sources */,
+				23180B1D10A7FF4B97D22E65 /* min_max_operations.c in Sources */,
+				D814404F1FBDE48B369A9D9F /* resample_fractional.c in Sources */,
+				8726638A0BCDCA737FECC344 /* dot_product_with_scale.c in Sources */,
+				B63FCFD5019D422D001B098B /* sin_table.c in Sources */,
+				36C9C69F78FE3062912467A1 /* cross_correlation.c in Sources */,
+				77E8E360F5A37418FEC66C38 /* resample_by_2.c in Sources */,
+				993ABE175DC979ECF9EB86D1 /* randn_table.c in Sources */,
+				064FF839DB0AECCFBF3E17A0 /* hanning_table.c in Sources */,
+				218781F14D02A3CAE7E80153 /* division_operations.c in Sources */,
+				55CC5FCA1FECBB84185BFC9B /* auto_correlation.c in Sources */,
+				D70A4ED918AA0DAD718EFDF3 /* randomization_functions.c in Sources */,
+				F1CEA93D60B56823A6ED102F /* auto_corr_to_refl_coef.c in Sources */,
+				E0AEC48E98C9AE6BE29E11A1 /* sqrt_of_one_minus_x_squared.c in Sources */,
+				C847E1FE1AE621B00053F5C4 /* ofxDepthCompressedFrame.cpp in Sources */,
+				3539AA6AA6289A788093A307 /* downsample_fast.c in Sources */,
+				4E5416D7A50E5C07086B2CF3 /* sin_table_1024.c in Sources */,
+				E03C3278E61E9BEE08D7EF7D /* filter_ar_fast_q12.c in Sources */,
+				77863249753EEB659D13C1DB /* splitting_filter.c in Sources */,
+				C847E1EB1AE6210B0053F5C4 /* ofxOscParameterSync.cpp in Sources */,
+				1C89BDB39A0E3A519FDE6434 /* lpc_to_refl_coef.c in Sources */,
+				CCCF8AFF3FF60E10599E25AF /* copy_set_operations.c in Sources */,
+				C847E1F11AE6210B0053F5C4 /* OscOutboundPacketStream.cpp in Sources */,
+				C847E1FF1AE621B00053F5C4 /* ofxDepthOctree.cpp in Sources */,
+				C20FBEF43CBA0B5611B4DD64 /* ilbc_specific_functions.c in Sources */,
+				5006E2C870C8E09CC907A0AC /* spl_sqrt.c in Sources */,
+				D9E0FD19C9669E39698E712E /* filter_ma_fast_q12.c in Sources */,
+				F8C11D6590ACB065AA259E47 /* resample_48khz.c in Sources */,
+				9B82AE5F37302A2D17DBBA1B /* get_hanning_window.c in Sources */,
+				C847E1F21AE6210B0053F5C4 /* OscPrintReceivedElements.cpp in Sources */,
+				454582BDF7BB97435CDCFC44 /* energy.c in Sources */,
+				1996976C22F9ED07BA05B38E /* complex_ifft.c in Sources */,
+				89ACAE7E6C46589A3E817EEC /* spl_sqrt_floor.c in Sources */,
+				60852B7A80E6B7AE4BEE9C6C /* webrtc_fft_t_rad.c in Sources */,
+				E0BEA34064A480FEA1FB2B58 /* complex_bit_reverse.c in Sources */,
+				A21D66DDCBD4E05E6CB7D308 /* refl_coef_to_lpc.c in Sources */,
+				656FFDE671449163E2E463DE /* resample.c in Sources */,
+				DEC16A207A18E4863A10A9F9 /* levinson_durbin.c in Sources */,
+				41B7D230F859F42C24D38926 /* filter_ar.c in Sources */,
+				5020E7D2B4DF77E828D776C7 /* min_max_operations_neon.c in Sources */,
+				0F7B40F4D6D0E42451C182DF /* cos_table.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		E4EEB9AC138B136A00A80321 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = openFrameworks;
+			targetProxy = E4EEB9AB138B136A00A80321 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		E4B69B4E0A3A1720003C02F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxGui/libs,
+					../../../addons/ofxGui/src,
+					"../../../addons/#",
+					this,
+					addons,
+					are,
+					needed,
+					if,
+					NAT,
+					transversal,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/libs,
+					"../../../addons/#",
+					this,
+					addons,
+					are,
+					needed,
+					if,
+					NAT,
+					transversal,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/src,
+					../../../addons/ofxXMPP/libs,
+					../../../addons/ofxXMPP/libs/strophe,
+					../../../addons/ofxXMPP/libs/strophe/include,
+					../../../addons/ofxXMPP/libs/strophe/lib,
+					../../../addons/ofxXMPP/libs/strophe/lib/osx,
+					../../../addons/ofxXMPP/src,
+					../../../addons/ofxNice/libs,
+					../../../addons/ofxNice/libs/libnice,
+					../../../addons/ofxNice/libs/libnice/include,
+					../../../addons/ofxNice/libs/libnice/include/nice,
+					../../../addons/ofxNice/libs/libnice/lib,
+					../../../addons/ofxNice/libs/libnice/lib/osx,
+					../../../addons/ofxNice/src,
+					/Library/Frameworks/GStreamer.framework/Headers,
+					../../../addons/ofxGstRTP/libs,
+					../../../addons/ofxGstRTP/libs/snappy,
+					../../../addons/ofxGstRTP/libs/snappy/src,
+					../../../addons/ofxGstRTP/src,
+					"../../../addons/#",
+					this,
+					addon,
+					is,
+					needed,
+					if,
+					echo,
+					cancel,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/libs,
+					"../../../addons/#",
+					this,
+					addon,
+					is,
+					needed,
+					if,
+					echo,
+					cancel,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/src,
+					../../../addons/ofxEchoCancel/libs,
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test/android/apmtest/jni",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source",
+					../../../addons/ofxEchoCancel/src,
+					src,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__MACOSX_CORE__",
+					"-lpthread",
+					"-mtune=native",
+					"-DWEBRTC_NS_FLOAT",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					../../../addons/ofxXMPP/libs/strophe/lib/osx/strophe.a,
+					"-lresolv",
+					../../../addons/ofxNice/libs/libnice/lib/osx/socket.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/agent.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/gstnice.a,
+					"../../../addons/ofxNice/libs/libnice/lib/osx/nice-random.a",
+					../../../addons/ofxNice/libs/libnice/lib/osx/stun.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/nice.a,
+					"-lresolv",
+					"-F/Library/Frameworks",
+					"-framework",
+					GStreamer,
+				);
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E4B69B4F0A3A1720003C02F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E4EB6923138AFD0F00A09F29 /* Project.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH)";
+				CONFIGURATION_BUILD_DIR = "$(SRCROOT)/bin/";
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS = YES;
+				GCC_WARN_ABOUT_INVALID_OFFSETOF_MACRO = NO;
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_VALUE = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxGui/libs,
+					../../../addons/ofxGui/src,
+					"../../../addons/#",
+					this,
+					addons,
+					are,
+					needed,
+					if,
+					NAT,
+					transversal,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/libs,
+					"../../../addons/#",
+					this,
+					addons,
+					are,
+					needed,
+					if,
+					NAT,
+					transversal,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/src,
+					../../../addons/ofxXMPP/libs,
+					../../../addons/ofxXMPP/libs/strophe,
+					../../../addons/ofxXMPP/libs/strophe/include,
+					../../../addons/ofxXMPP/libs/strophe/lib,
+					../../../addons/ofxXMPP/libs/strophe/lib/osx,
+					../../../addons/ofxXMPP/src,
+					../../../addons/ofxNice/libs,
+					../../../addons/ofxNice/libs/libnice,
+					../../../addons/ofxNice/libs/libnice/include,
+					../../../addons/ofxNice/libs/libnice/include/nice,
+					../../../addons/ofxNice/libs/libnice/lib,
+					../../../addons/ofxNice/libs/libnice/lib/osx,
+					../../../addons/ofxNice/src,
+					/Library/Frameworks/GStreamer.framework/Headers,
+					../../../addons/ofxGstRTP/libs,
+					../../../addons/ofxGstRTP/libs/snappy,
+					../../../addons/ofxGstRTP/libs/snappy/src,
+					../../../addons/ofxGstRTP/src,
+					"../../../addons/#",
+					this,
+					addon,
+					is,
+					needed,
+					if,
+					echo,
+					cancel,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/libs,
+					"../../../addons/#",
+					this,
+					addon,
+					is,
+					needed,
+					if,
+					echo,
+					cancel,
+					is,
+					enabled,
+					in,
+					ofGstRTPConstants.h,
+					/src,
+					../../../addons/ofxEchoCancel/libs,
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test/android/apmtest/jni",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source",
+					../../../addons/ofxEchoCancel/src,
+					src,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-D__MACOSX_CORE__",
+					"-lpthread",
+					"-mtune=native",
+					"-DWEBRTC_NS_FLOAT",
+					"-DNDEBUG",
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					../../../addons/ofxXMPP/libs/strophe/lib/osx/strophe.a,
+					"-lresolv",
+					../../../addons/ofxNice/libs/libnice/lib/osx/socket.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/agent.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/gstnice.a,
+					"../../../addons/ofxNice/libs/libnice/lib/osx/nice-random.a",
+					../../../addons/ofxNice/libs/libnice/lib/osx/stun.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/nice.a,
+					"-lresolv",
+					"-F/Library/Frameworks",
+					"-framework",
+					GStreamer,
+				);
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		E4B69B600A3A1757003C02F2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					/Users/dantheman/src/openFrameworks/addons/ofxSyphon/libs/Syphon/lib/osx,
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = NONE;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxGui/libs,
+					../../../addons/ofxGui/src,
+					../../../addons/ofxXMPP/libs,
+					../../../addons/ofxXMPP/libs/strophe,
+					../../../addons/ofxXMPP/libs/strophe/include,
+					../../../addons/ofxXMPP/libs/strophe/lib,
+					../../../addons/ofxXMPP/libs/strophe/lib/osx,
+					../../../addons/ofxXMPP/src,
+					../../../addons/ofxNice/libs,
+					../../../addons/ofxNice/libs/libnice,
+					../../../addons/ofxNice/libs/libnice/include,
+					../../../addons/ofxNice/libs/libnice/include/nice,
+					../../../addons/ofxNice/libs/libnice/lib,
+					../../../addons/ofxNice/libs/libnice/lib/osx,
+					../../../addons/ofxNice/src,
+					"/Library/Frameworks/GStreamer.framework/Versions/Current/Headers/**",
+					../../../addons/ofxGstRTP/libs,
+					../../../addons/ofxGstRTP/libs/snappy,
+					../../../addons/ofxGstRTP/libs/snappy/src,
+					../../../addons/ofxGstRTP/src,
+					../../../addons/ofxEchoCancel/libs,
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test/android/apmtest/jni",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source",
+					../../../addons/ofxEchoCancel/src,
+					src,
+				);
+				ICON = "$(ICON_NAME_DEBUG)";
+				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				INFOPLIST_FILE = "openFrameworks-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_18)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_19)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_20)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_21)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_26)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_27)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_28)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_29)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_30)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_31)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_32)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_33)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_34)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_35)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_36)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_37)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_38)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_39)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_40)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_41)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_42)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_43)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_44)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_45)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_46)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_47)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_48)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_49)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_52)",
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					../../../addons/ofxXMPP/libs/strophe/lib/osx/strophe.a,
+					"-lresolv",
+					../../../addons/ofxNice/libs/libnice/lib/osx/socket.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/agent.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/gstnice.a,
+					"../../../addons/ofxNice/libs/libnice/lib/osx/nice-random.a",
+					../../../addons/ofxNice/libs/libnice/lib/osx/stun.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/nice.a,
+					"-lresolv",
+					"-F/Library/Frameworks",
+					"-framework",
+					GStreamer,
+				);
+				PRODUCT_NAME = videoAudioLANDebug;
+				SDKROOT = macosx10.9;
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		E4B69B610A3A1757003C02F2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					/Users/dantheman/src/openFrameworks/addons/ofxSyphon/libs/Syphon/lib/osx,
+				);
+				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = NONE;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					../../../addons/ofxOsc/libs,
+					../../../addons/ofxOsc/libs/oscpack,
+					../../../addons/ofxOsc/libs/oscpack/src,
+					../../../addons/ofxOsc/libs/oscpack/src/ip,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/posix,
+					../../../addons/ofxOsc/libs/oscpack/src/ip/win32,
+					../../../addons/ofxOsc/libs/oscpack/src/osc,
+					../../../addons/ofxOsc/src,
+					../../../addons/ofxGui/libs,
+					../../../addons/ofxGui/src,
+					../../../addons/ofxXMPP/libs,
+					../../../addons/ofxXMPP/libs/strophe,
+					../../../addons/ofxXMPP/libs/strophe/include,
+					../../../addons/ofxXMPP/libs/strophe/lib,
+					../../../addons/ofxXMPP/libs/strophe/lib/osx,
+					../../../addons/ofxXMPP/src,
+					../../../addons/ofxNice/libs,
+					../../../addons/ofxNice/libs/libnice,
+					../../../addons/ofxNice/libs/libnice/include,
+					../../../addons/ofxNice/libs/libnice/include/nice,
+					../../../addons/ofxNice/libs/libnice/lib,
+					../../../addons/ofxNice/libs/libnice/lib/osx,
+					../../../addons/ofxNice/src,
+					"/Library/Frameworks/GStreamer.framework/Versions/Current/Headers/**",
+					../../../addons/ofxGstRTP/libs,
+					../../../addons/ofxGstRTP/libs/snappy,
+					../../../addons/ofxGstRTP/libs/snappy/src,
+					../../../addons/ofxGstRTP/src,
+					../../../addons/ofxEchoCancel/libs,
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/signal_processing_library/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/source",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/common_audio/vad/main/test/unit_test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aec/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/aecm/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/agc/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/ns/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/test/android/apmtest/jni",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/audio_processing/utility",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/modules/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/interface",
+					"../../../addons/ofxEchoCancel/libs/webrtc-audio-processing/src/system_wrappers/source",
+					../../../addons/ofxEchoCancel/src,
+					src,
+				);
+				ICON = "$(ICON_NAME_RELEASE)";
+				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
+				INFOPLIST_FILE = "openFrameworks-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_14)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_15)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_7)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_8)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_9)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_10)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_11)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_12)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_13)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_16)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_17)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_18)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_19)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_20)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_21)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_22)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_23)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_24)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_25)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_26)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_27)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_28)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_29)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_30)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_31)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_32)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_33)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_34)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_35)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_36)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_37)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_38)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_39)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_40)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_41)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_42)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_43)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_44)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_45)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_46)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_47)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_48)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_49)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_50)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_51)",
+				);
+				OTHER_LDFLAGS = (
+					"$(OF_CORE_LIBS)",
+					../../../addons/ofxXMPP/libs/strophe/lib/osx/strophe.a,
+					"-lresolv",
+					../../../addons/ofxNice/libs/libnice/lib/osx/socket.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/agent.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/gstnice.a,
+					"../../../addons/ofxNice/libs/libnice/lib/osx/nice-random.a",
+					../../../addons/ofxNice/libs/libnice/lib/osx/stun.a,
+					../../../addons/ofxNice/libs/libnice/lib/osx/nice.a,
+					"-lresolv",
+					"-F/Library/Frameworks",
+					"-framework",
+					GStreamer,
+				);
+				PRODUCT_NAME = videoAudioLAN;
+				SDKROOT = macosx10.9;
+				USER_HEADER_SEARCH_PATHS = "";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		E4B69B4D0A3A1720003C02F2 /* Build configuration list for PBXProject "videoAudioLAN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4B69B4E0A3A1720003C02F2 /* Debug */,
+				E4B69B4F0A3A1720003C02F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E4B69B5F0A3A1757003C02F2 /* Build configuration list for PBXNativeTarget "videoAudioLAN" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E4B69B600A3A1757003C02F2 /* Debug */,
+				E4B69B610A3A1757003C02F2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = E4B69B4C0A3A1720003C02F2 /* Project object */;
+}
