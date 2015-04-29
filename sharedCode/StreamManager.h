@@ -18,13 +18,23 @@ public:
     StreamManager();
     ~StreamManager();
     
+    struct clientParameters{
+        string ipAddress;
+        string audioPort;
+        string videoPort;
+        string remoteAudioPort;
+        string remoteVideoPort;
+        string clientID;
+    };
+    
     void setup(int _width = 640, int _height = 480);
     void update();
+    void exit();
     void drawDebug();
     void setImageSource(shared_ptr<ofImage> cam_img);
     
-    void newClient(string ip, int audioPort, int videoPort);
-    void newServer(string ip, int audioPort, int videoPort);
+    void newClient(clientParameters params);
+    void newServer(clientParameters params);
     void newFrame();
     bool isFrameNew();
     void newData(DataPacket& _packet);
@@ -41,13 +51,13 @@ public:
     float width;
     float height;
     
-    vector<ofxGstRTPClient*> clients;
-    vector<ofxGstRTPServer*> servers;
+    map<string, ofxGstRTPClient*> clients;
+    map<string, ofxGstRTPServer*> servers;
     
     //    ofVideoPlayer player;
-    vector<ofFbo* > remoteVideos;
+    map<string, ofFbo*> remoteVideos;
     ofTexture mLoadingScreen;
-    vector<bool> bConnected;
+    map<string,bool> bConnected;
     
     ofxPanel gui;
     ofxPanel clientGui;
@@ -55,15 +65,11 @@ public:
     
     float lastSend;
     
-    struct clientParameters{
-        string ipAddress;
-        string audioPort;
-        string videoPort;
-        string clientID;
-    };
+
     
     clientParameters thisClient;
     
+    string localIPAddrss;
     float rotation;
     int videoPort;
     int audioPort;
