@@ -20,28 +20,42 @@ void StreamManager::setup(int _width, int _height){
     width = _width;
     height = _height;
     
-    localIPAddrss = "192.168.1.130";
+    //
+    //  All Client Settings are in /data/client_settings.xml
+    //
+    //  - Unique Client ID                  <clientID>
+    //  - IP Address of the Machine         <ipAddress>
+    //  - Unique Video Streaming Port       <videoPort>
+    //  - Unique Audio Streaming Port       <audioPort>
+    //  - Broadcast Address of the Network  <broadcastAddress>
+    //
+    
+    ofXml settings;
+    settings.load("client_settings.xml");
 
-	thisClient.ipAddress = "192.168.1.130";
-	thisClient.clientID = "CLIENT-5600";
-	thisClient.videoPort = "7000";
-	thisClient.audioPort = "8000";
+	thisClient.ipAddress = settings.getValue<string>("//ipAddress");
+	thisClient.clientID = settings.getValue<string>("//clientID");
+	thisClient.videoPort = settings.getValue<string>("//videoPort");
+	thisClient.audioPort = settings.getValue<string>("//audioPort");
     
     oscBroadcaster = new ofxServerOscManager();
-    ///
-    ///     Put the Broadcast IP of your Network Here
-    ///
-    oscBroadcaster->init("192.168.1.255", 1234, 2345);
-    
-    
+    oscBroadcaster->init(settings.getValue<string>("//broadcastAddress"), 1234, 2345);
     oscReceiver = new ofxClientOSCManager();
-    oscReceiver->init(0, 1234);
+    oscReceiver->init(hash(thisClient.clientID.c_str()), 1234);
     
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
     commonTimeOsc->setEaseOffset( true );
     
     ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
     
+}
+
+int StreamManager::hash(const char * str)
+{
+    int h = 0;
+    while (*str)
+        h = h << 1 ^ *str++;
+    return h;
 }
 
 void StreamManager::newData( DataPacket& _packet  )
@@ -53,7 +67,7 @@ void StreamManager::newData( DataPacket& _packet  )
         newConnection.videoPort = _packet.valuesString[2];
         newConnection.clientID = _packet.valuesString[3];
         
-        if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != localIPAddrss){
+        if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
             ofNotifyEvent(newClientEvent, newConnection.clientID, this);
             connections[newConnection.clientID] = newConnection;
             
@@ -113,29 +127,13 @@ void StreamManager::setImageSource(shared_ptr<ofImage> cam_img){
 }
 
 void StreamManager::update(){
-    
-    
-    // Put the IP Address of the Remote Machine Here for Client 1
-    
-    //if(ofGetElapsedTimef() - lastSend > 1.5){
-    //    DataPacket p;
-    //    p.valuesString.push_back(localIPAddrss);
-    //    p.valuesString.push_back("8000");
-    //    p.valuesString.push_back("7000");
-    //    p.valuesString.push_back("6000");
-    //    p.valuesString.push_back("5000");
-    //    p.valuesString.push_back("CLIENT-7800");
-    //    oscBroadcaster->sendData(p);
-    //}
-    
-    //Put the IP Address of the Remote Machine Here for Client 2
-    
+
         if(ofGetElapsedTimef() - lastSend > 1.5){
             DataPacket p;
-            p.valuesString.push_back("192.168.1.130");
-            p.valuesString.push_back("8000");
-            p.valuesString.push_back("7000");
-            p.valuesString.push_back("CLIENT-5600");
+            p.valuesString.push_back(thisClient.ipAddress);
+            p.valuesString.push_back(thisClient.audioPort);
+            p.valuesString.push_back(thisClient.videoPort);
+            p.valuesString.push_back(thisClient.clientID);
             oscBroadcaster->sendData(p, true);
         }
     
