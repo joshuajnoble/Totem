@@ -29,6 +29,11 @@ void StreamManager::setup(int _width, int _height){
     //  - Unique Audio Streaming Port       <audioPort>
     //  - Broadcast Address of the Network  <broadcastAddress>
     //
+    // port numbers have to be even according to the standard and have to be separated by at least
+    // 4 numbers since internally rtp uses the next 2 odd port numbers for communicating stats
+    // of the network state through rctp, so if we set 5000 for video internally it'll use
+    // also 5001 and 5003
+
     
     ofXml settings;
     settings.load("client_settings.xml");
@@ -67,7 +72,7 @@ void StreamManager::newData( DataPacket& _packet  )
         newConnection.videoPort = _packet.valuesString[2];
         newConnection.clientID = _packet.valuesString[3];
         
-        if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
+        if(connections.find(newConnection.clientID) == connections.end() && newConnection.clientID != thisClient.clientID){
             ofNotifyEvent(newClientEvent, newConnection.clientID, this);
             connections[newConnection.clientID] = newConnection;
             
@@ -178,10 +183,6 @@ void StreamManager::drawDebug(){
         i++;
     }
 }
-// port numbers have to be even according to the standard and have to be separated by at least
-// 4 numbers since internally rtp uses the next 2 odd port numbers for communicating stats
-// of the network state through rctp, so if we set 5000 for video internally it'll use
-// also 5001 and 5003
 
 
 void StreamManager::newServer(clientParameters params){
