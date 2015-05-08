@@ -7,9 +7,9 @@ repo for MS PPI
 # Totem
 Totem for MS
 
-# Addon
+# openFrameworks Addons
 
-Clone the following addons to OF_0.8.4_ROOT/addons/
+Clone the following addons to ```OF_0.8.4_ROOT/addons/```
 
 - [ofxGstRTP](https://github.com/studiostudio/ofxGstRTP)
 - [ofxGStreamer](https://github.com/studiostudio/ofxGsttreamer)
