@@ -7,6 +7,29 @@ repo for MS PPI
 # Totem
 Totem for MS
 
+# Addon
+
+Clone the following addons to OF_0.8.4_ROOT/addons/
+
+- [ofxGstRTP](https://github.com/studiostudio/ofxGstRTP)
+- [ofxGStreamer](https://github.com/studiostudio/ofxGsttreamer)
+- [ofxNice](https://github.com/studiostudio/ofxNice)
+- [ofxSnappy](https://github.com/studiostudio/ofxSnappy)
+- [ofxDepthStreamCompression](http://github.com/studiostudio/ofxDepthStreamCompression)
+- [ofxEchoCancel](http://github.com/studiostudio/ofxEchoCancel)
+
+This addons requires the v0.8.4 branch that targets ofxOSC in openFrameworks v0.8.4
+- [ofxOSCSync](https://github.com/studiostudio/ofxOSCSync/tree/v0.8.4) 
+   ```
+    git clone https://github.com/studiostudio/ofxOSCSync
+    
+    git fetch origin
+    
+    git checkout v0.8.4
+```
+
+
+=======
 
 #GStreamer install
 To Install GStreamer on Windows do the following:
@@ -28,25 +51,17 @@ You must use the Package Generator aka yee old Project Generator from /devApps t
 
 You must select the following addons when creating a new project
 
-ofxDepthStreamCompression
-ofxEchoCancel
-ofxGStreamer
-ofxGstRTP
-ofxGui
-ofxNetwork
-ofxNice
-ofxOsc
-ofxSnappy
-ofxXmlSettings
-ofxXMPP
-
-
-
-
-Editing OF:
-
-There is a conflict with using GStreamer on 0.8.4 with the core.  You must comment out a line in the Quicktime Library : libs/quicktime/include/Processes.h
-
+- ofxDepthStreamCompression
+- ofxEchoCancel
+- ofxGStreamer
+- ofxGstRTP
+- ofxGui
+- ofxNetwork
+- ofxNice
+- ofxOsc
+- ofxSnappy
+- ofxXmlSettings
+- ofxXMPP
 
 
 
@@ -54,31 +69,34 @@ Editing ofxGstRTPConstants.h
 
 You will need to disable NICE and EchoCancel in ofxGstRTPConstants.h as those features cause issues on Windows.
 
+```
 /*
-* ofxGstRTPConstants.h
-*
-*  Created on: Oct 9, 2013
-*      Author: arturo
-*/
+ * ofxGstRTPConstants.h
+ *
+ *  Created on: Oct 9, 2013
+ *      Author: arturo
+ */
+ 
+ #ifndef OFXGSTRTPCONSTANTS_H_
+ #define OFXGSTRTPCONSTANTS_H_
+ 
+ /// when enabled the addon will have dependencies with ofxXMPP and ofxNice
+ /// if disabled ofxGstXMPPRTP won't work and connection will need to be done
+ /// through ofxGstServer/client to a specific port and IP address
+ #define ENABLE_NAT_TRANSVERSAL 0
+ 
+ /// when enabled the addon will have dependencies with ofxEchoCancel on linux
+ /// the pulse server can do echo cancellation natively so there's no need to enable
+ /// this flag
+ #define ENABLE_ECHO_CANCEL 0
+ 
+ #endif /* OFXGSTRTPCONSTANTS_H_ */
+```
+ 
+ 
 
-#ifndef OFXGSTRTPCONSTANTS_H_
-#define OFXGSTRTPCONSTANTS_H_
+ofxNiceAgent.h might need the following line at the top:
 
-/// when enabled the addon will have dependencies with ofxXMPP and ofxNice
-/// if disabled ofxGstXMPPRTP won't work and connection will need to be done
-/// through ofxGstServer/client to a specific port and IP address
-#define ENABLE_NAT_TRANSVERSAL 0
-
-/// when enabled the addon will have dependencies with ofxEchoCancel on linux
-/// the pulse server can do echo cancellation natively so there's no need to enable
-/// this flag
-#define ENABLE_ECHO_CANCEL 0
-
-#endif /* OFXGSTRTPCONSTANTS_H_ */
-
-
-ofxNiceAgent.h will need the following line at the top:
-
-#define uint uint32_t
+```#define uint uint32_t```
 
 You’re ready to build!
