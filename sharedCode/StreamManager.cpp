@@ -162,6 +162,8 @@ void StreamManager::update(){
                 bConnected[iter->first]= true;
             }
         }else{
+
+            // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();
                 remoteVideos[iter->first]->begin();
