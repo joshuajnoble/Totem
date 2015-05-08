@@ -7,7 +7,7 @@ repo for MS PPI
 # Totem
 Totem for MS
 
-# openFrameworks Addons
+## openFrameworks Addons
 
 Clone the following addons to ```OF_0.8.4_ROOT/addons/```
 
@@ -29,9 +29,7 @@ This addons requires the v0.8.4 branch that targets ofxOSC in openFrameworks v0.
 ```
 
 
-=======
-
-#GStreamer install
+##GStreamer install
 To Install GStreamer on Windows do the following:
 
 Download GStreamer v1.0. To install it under windows use the 1.2.2 packages located http://gstreamer.freedesktop.org/data/pkg/windows/1.2.2/ any later version from http://gstreamer.freedesktop.org/data/pkg/windows should work but haven't been tested yet. It is important to install the custom version and select all installation options when the installer asks, or it won't install some plugins like h264 encoder and decoder, audio input... in general everything in gstreamer bad and ugly won't be installed with the typical installation mode.  The Custom installation allows you to put the package anywhere on your machine.
