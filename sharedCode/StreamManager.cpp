@@ -44,16 +44,13 @@ void StreamManager::setup(int _width, int _height){
 	thisClient.audioPort = settings.getValue<string>("//audioPort");
 	thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
 	thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
-    
-	cout<<thisClient.ipAddress<<endl;
-	cout<<thisClient.clientID<<endl;
-	cout<<thisClient.videoPort<<endl;
-	cout<<thisClient.audioPort<<endl;
+   
 
 
     oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
     oscBroadcaster->init( settings.getValue<string>("//broadcastAddress"), 1234, 2345);
     oscReceiver =  ofPtr<ofxClientOSCManager>(new ofxClientOSCManager());
+
     oscReceiver->init(0, 1234);
     
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
@@ -84,7 +81,10 @@ void StreamManager::newData( DataPacket& _packet  )
             ofNotifyEvent(newClientEvent, newConnection.clientID, this);
             connections[newConnection.clientID] = newConnection;
             
-            cout<<newConnection.clientID<<endl;
+            ofLog(OF_LOG_VERBOSE)<<"CLIENT ID "<<newConnection.clientID<<endl;
+            ofLog(OF_LOG_VERBOSE)<<"AudioPort "<<newConnection.audioPort<<endl;
+            ofLog(OF_LOG_VERBOSE)<<"VideoPort "<<newConnection.videoPort<<endl;
+            ofLog(OF_LOG_VERBOSE)<<"IpAddress "<<newConnection.ipAddress<<endl;
             
             newClient(newConnection);
             newServer(newConnection);
@@ -152,8 +152,7 @@ void StreamManager::update(){
 			}
 			p.valuesString.push_back(thisClient.clientID);
             oscBroadcaster->sendData(p, true);
-
-			lastSend = ofGetElapsedTimef();
+            lastSend = ofGetElapsedTimef();
         }
     
     
@@ -171,6 +170,8 @@ void StreamManager::update(){
                 bConnected[iter->first]= true;
             }
         }else{
+
+            // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();
                 remoteVideos[iter->first]->begin();

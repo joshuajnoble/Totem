@@ -18,6 +18,7 @@ public:
     StreamManager();
     ~StreamManager();
     
+    // this is the config for the manager
     struct clientParameters{
         string ipAddress;
         string audioPort;
@@ -27,15 +28,27 @@ public:
         string clientID;
     };
     
+    // initialize everything
     void setup(int _width = 640, int _height = 480);
+
+    // call this every frame
     void update();
+
+    // close everything down
     void exit();
+
     void drawDebug();
     void setImageSource(ofPtr<ofImage> cam_img);
     int hash(const char * str);
+
+    // add a new client
     void newClient(clientParameters params);
+
+    // add a new server
     void newServer(clientParameters params);
     void newFrame();
+
+    // is there a new frame
     bool isFrameNew();
     void newData(DataPacket& _packet);
     bool bNewFrame;
@@ -51,6 +64,7 @@ public:
     float width;
     float height;
     
+
     map<string, ofPtr<ofxGstRTPClient> > clients;
     map<string, ofPtr<ofxGstRTPServer> > servers;
     
