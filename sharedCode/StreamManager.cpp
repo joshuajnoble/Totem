@@ -157,12 +157,12 @@ void StreamManager::update(){
     
     
     if(isFrameNew()){
-        for(map<string, ofPtr<ofxGstRTPServer>>::iterator iter = servers.begin(); iter != servers.end(); iter++){
+        for(map<string, ofPtr<ofxGstRTPServer> >::iterator iter = servers.begin(); iter != servers.end(); iter++){
             iter->second->newFrame(mImg->getPixelsRef());
         }
     }
     int i = 0;
-    for(map<string, ofPtr<ofxGstRTPClient>>::iterator iter = clients.begin(); iter != clients.end(); iter++){
+    for(map<string, ofPtr<ofxGstRTPClient> >::iterator iter = clients.begin(); iter != clients.end(); iter++){
         iter->second->update();
         if(iter->second->isFrameNewVideo()){
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
