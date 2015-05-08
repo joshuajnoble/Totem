@@ -22,8 +22,8 @@ public:
         string ipAddress;
         string audioPort;
         string videoPort;
-        string remoteAudioPort;
-        string remoteVideoPort;
+        string audioPortTwo;
+        string videoPortTwo;
         string clientID;
     };
     
@@ -31,7 +31,7 @@ public:
     void update();
     void exit();
     void drawDebug();
-    void setImageSource(shared_ptr<ofImage> cam_img);
+    void setImageSource(ofPtr<ofImage> cam_img);
     int hash(const char * str);
     void newClient(clientParameters params);
     void newServer(clientParameters params);
@@ -45,23 +45,23 @@ public:
     
     
     ofxCommonTimeOSC* commonTimeOsc;
-    ofxServerOscManager* oscBroadcaster;
-    ofxClientOSCManager* oscReceiver;
+    ofPtr<ofxServerOscManager> oscBroadcaster;
+    ofPtr<ofxClientOSCManager> oscReceiver;
     
     float width;
     float height;
     
-    map<string, ofxGstRTPClient*> clients;
-    map<string, ofxGstRTPServer*> servers;
+    map<string, ofPtr<ofxGstRTPClient> > clients;
+    map<string, ofPtr<ofxGstRTPServer> > servers;
     
     //    ofVideoPlayer player;
-    map<string, ofFbo*> remoteVideos;
+    map<string, ofPtr<ofFbo> > remoteVideos;
     ofTexture mLoadingScreen;
     map<string,bool> bConnected;
     
     ofxPanel gui;
     ofxPanel clientGui;
-    shared_ptr<ofImage> mImg;
+    ofPtr<ofImage> mImg;
     
     float lastSend;
     

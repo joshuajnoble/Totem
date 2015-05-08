@@ -36,17 +36,25 @@ void StreamManager::setup(int _width, int _height){
 
     
     ofXml settings;
-    settings.load("client_settings.xml");
+    settings.load(ofToDataPath("client_settings.xml"));
 
 	thisClient.ipAddress = settings.getValue<string>("//ipAddress");
 	thisClient.clientID = settings.getValue<string>("//clientID");
 	thisClient.videoPort = settings.getValue<string>("//videoPort");
 	thisClient.audioPort = settings.getValue<string>("//audioPort");
+	thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
+	thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
     
-    oscBroadcaster = new ofxServerOscManager();
-    oscBroadcaster->init(settings.getValue<string>("//broadcastAddress"), 1234, 2345);
-    oscReceiver = new ofxClientOSCManager();
-    oscReceiver->init(hash(thisClient.clientID.c_str()), 1234);
+	cout<<thisClient.ipAddress<<endl;
+	cout<<thisClient.clientID<<endl;
+	cout<<thisClient.videoPort<<endl;
+	cout<<thisClient.audioPort<<endl;
+
+
+    oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
+    oscBroadcaster->init( settings.getValue<string>("//broadcastAddress"), 1234, 2345);
+    oscReceiver =  ofPtr<ofxClientOSCManager>(new ofxClientOSCManager());
+    oscReceiver->init(0, 1234);
     
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
     commonTimeOsc->setEaseOffset( true );
@@ -72,7 +80,7 @@ void StreamManager::newData( DataPacket& _packet  )
         newConnection.videoPort = _packet.valuesString[2];
         newConnection.clientID = _packet.valuesString[3];
         
-        if(connections.find(newConnection.clientID) == connections.end() && newConnection.clientID != thisClient.clientID){
+        if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress!= thisClient.ipAddress){
             ofNotifyEvent(newClientEvent, newConnection.clientID, this);
             connections[newConnection.clientID] = newConnection;
             
@@ -90,11 +98,8 @@ void StreamManager::newData( DataPacket& _packet  )
             if(connections.find(name) != connections.end()){
                 clients[name]->close();
                 servers[name]->close();
-                delete clients[name];
                 clients.erase(name);
-                delete servers[name];
                 servers.erase(name);
-                delete remoteVideos[name];
                 remoteVideos.erase(name);
                 bConnected.erase(name);
 				connections.erase(name);
@@ -127,29 +132,38 @@ void StreamManager::newFrame(){
     bNewFrame = true;
 }
 
-void StreamManager::setImageSource(shared_ptr<ofImage> cam_img){
+void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
     mImg = cam_img;
 }
 
 void StreamManager::update(){
 
         if(ofGetElapsedTimef() - lastSend > 1.5){
+
             DataPacket p;
             p.valuesString.push_back(thisClient.ipAddress);
-            p.valuesString.push_back(thisClient.audioPort);
-            p.valuesString.push_back(thisClient.videoPort);
-            p.valuesString.push_back(thisClient.clientID);
+			if(clients.size() == 0){
+				p.valuesString.push_back(thisClient.audioPort);
+				p.valuesString.push_back(thisClient.videoPort);
+			}
+			if(clients.size() == 1){
+				p.valuesString.push_back(thisClient.audioPortTwo);
+				p.valuesString.push_back(thisClient.videoPortTwo);
+			}
+			p.valuesString.push_back(thisClient.clientID);
             oscBroadcaster->sendData(p, true);
+
+			lastSend = ofGetElapsedTimef();
         }
     
     
     if(isFrameNew()){
-        for(map<string, ofxGstRTPServer*>::iterator iter = servers.begin(); iter != servers.end(); iter++){
+        for(map<string, ofPtr<ofxGstRTPServer>>::iterator iter = servers.begin(); iter != servers.end(); iter++){
             iter->second->newFrame(mImg->getPixelsRef());
         }
     }
     int i = 0;
-    for(map<string, ofxGstRTPClient*>::iterator iter = clients.begin(); iter != clients.end(); iter++){
+    for(map<string, ofPtr<ofxGstRTPClient>>::iterator iter = clients.begin(); iter != clients.end(); iter++){
         iter->second->update();
         if(iter->second->isFrameNewVideo()){
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
@@ -178,7 +192,7 @@ void StreamManager::update(){
 
 void StreamManager::drawDebug(){
     int i = 0;
-    for(map<string, ofFbo*>::iterator iter = remoteVideos.begin(); iter != remoteVideos.end(); iter++){
+    for(map<string,  ofPtr<ofFbo> >::iterator iter = remoteVideos.begin(); iter != remoteVideos.end(); iter++){
         iter->second->draw(0+i*width/2, 0, width/2, height/2);
         i++;
     }
@@ -186,22 +200,31 @@ void StreamManager::drawDebug(){
 
 
 void StreamManager::newServer(clientParameters params){
-    servers[params.clientID] = new ofxGstRTPServer();
-    servers[params.clientID]->setup(params.ipAddress);
-	servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
-    servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-    servers[params.clientID]->videoBitrate = 1600;
-    servers[params.clientID]->play();
+	if(servers.size() == 0){
+		servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
+		servers[params.clientID]->setup(params.ipAddress);
+		servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
+		servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
+		servers[params.clientID]->videoBitrate = 1600;
+		servers[params.clientID]->play();
+	}else{
+		servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
+		servers[params.clientID]->setup(params.ipAddress);
+		servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
+		servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
+		servers[params.clientID]->videoBitrate = 1600;
+		servers[params.clientID]->play();
+	}
 }
 
 void StreamManager::newClient(clientParameters params){
     
-    clients[params.clientID] = new ofxGstRTPClient();
+    clients[params.clientID] = ofPtr<ofxGstRTPClient>(new ofxGstRTPClient());
     clients[params.clientID]->setup(params.ipAddress, 0);
 	clients[params.clientID]->addVideoChannel(ofToInt(params.videoPort));
     clients[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
     
-    remoteVideos[params.clientID] = new ofFbo();
+    remoteVideos[params.clientID] = ofPtr<ofFbo>(new ofFbo());
     remoteVideos[params.clientID]->allocate(width,height, GL_RGB);
     
     bConnected[params.clientID] = (false);
