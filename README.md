@@ -4,6 +4,25 @@ MS_PPI
 repo for MS PPI
 =======
 
+The folders/applications that are in this repo have the following purpose and legacy:
+
+Arduino/Teensy - This is where the application that lives on the Teensy resides
+
+gstStreamManager - This is the visual studio project for an application showing how the GSTStreamer manager class works
+
+gstStreamManager_mac - As above but the OSX version.
+
+localTotem - This is the application that runs on the totem itself. It draws the video feed into an FBO which is then stretched across the 4 displays.
+
+remoteUser - This is the application that shows the remote user experience. It draws the video into a cylinder and includes hot-keys to trigger events and Wizard-of-Oz the application
+
+sharedCode - This contains the code for the gstStreamManager class itself
+
+streaming - Not currently being used
+
+VideoLAN - Not currently being used
+
+
 # Totem
 Totem for MS
 
