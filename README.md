@@ -31,8 +31,8 @@ Totem for MS
 Clone the following addons to ```OF_0.8.4_ROOT/addons/```
 
 - [ofxGstRTP](https://github.com/studiostudio/ofxGstRTP)
-- [ofxGStreamer](https://github.com/studiostudio/ofxGsttreamer)
-- [ofxNice](https://github.com/studiostudio/ofxNice)
+- [ofxGStreamer](https://github.com/arturoc/ofxGStreamer)
+- [ofxNice](https://github.com/arturoc/ofxNice)
 - [ofxSnappy](https://github.com/studiostudio/ofxSnappy)
 - [ofxDepthStreamCompression](http://github.com/studiostudio/ofxDepthStreamCompression)
 - [ofxEchoCancel](http://github.com/studiostudio/ofxEchoCancel)
