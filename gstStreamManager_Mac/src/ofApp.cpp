@@ -6,7 +6,7 @@ void ofApp::setup(){
     grabber.setDeviceID(0);
     grabber.initGrabber(640,480, true);
     streaming.setup();
-    sharedImg = shared_ptr<ofImage>(new ofImage());
+    sharedImg = ofPtr<ofImage>(new ofImage());
     streaming.setImageSource(sharedImg);
     
 

@@ -7,6 +7,7 @@
 //
 
 #include "StreamManager.h"
+#include <Poco/URI.h>
 
 StreamManager::StreamManager(){
     
@@ -33,24 +34,24 @@ void StreamManager::setup(int _width, int _height){
     // 4 numbers since internally rtp uses the next 2 odd port numbers for communicating stats
     // of the network state through rctp, so if we set 5000 for video internally it'll use
     // also 5001 and 5003
-
+    
     
     ofXml settings;
     settings.load(ofToDataPath("client_settings.xml"));
-
-	thisClient.ipAddress = settings.getValue<string>("//ipAddress");
-	thisClient.clientID = settings.getValue<string>("//clientID");
-	thisClient.videoPort = settings.getValue<string>("//videoPort");
-	thisClient.audioPort = settings.getValue<string>("//audioPort");
-	thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
-	thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
-   
-
-
+    
+    thisClient.ipAddress = settings.getValue<string>("//ipAddress");
+    thisClient.clientID = settings.getValue<string>("//clientID");
+    thisClient.videoPort = settings.getValue<string>("//videoPort");
+    thisClient.audioPort = settings.getValue<string>("//audioPort");
+    thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
+    thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
+    
+    
+    
     oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
     oscBroadcaster->init( settings.getValue<string>("//broadcastAddress"), 1234, 2345);
     oscReceiver =  ofPtr<ofxClientOSCManager>(new ofxClientOSCManager());
-
+    
     oscReceiver->init(0, 1234);
     
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
@@ -70,31 +71,32 @@ int StreamManager::hash(const char * str)
 
 void StreamManager::newData( DataPacket& _packet  )
 {
-    if(_packet.valuesString.size() == 4){
-        clientParameters newConnection;
-        newConnection.ipAddress = _packet.valuesString[0];
-        newConnection.audioPort = _packet.valuesString[1];
-        newConnection.videoPort = _packet.valuesString[2];
-        newConnection.clientID = _packet.valuesString[3];
-        
-        if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress!= thisClient.ipAddress){
-            ofNotifyEvent(newClientEvent, newConnection.clientID, this);
-            connections[newConnection.clientID] = newConnection;
+    string decodedJson;
+    Poco::URI::decode(_packet.valuesString[0], decodedJson);
+    if(json.parse(decodedJson)){
+        if(json.isMember("connection")){
+            clientParameters newConnection;
+            newConnection.ipAddress = json["connection"]["ipAddress"].asString();
+            newConnection.audioPort = json["connection"]["audioPort"].asString();
+            newConnection.videoPort = json["connection"]["videoPort"].asString();
+            newConnection.clientID = json["connection"]["clientID"].asString();
             
-            ofLog(OF_LOG_VERBOSE)<<"CLIENT ID "<<newConnection.clientID<<endl;
-            ofLog(OF_LOG_VERBOSE)<<"AudioPort "<<newConnection.audioPort<<endl;
-            ofLog(OF_LOG_VERBOSE)<<"VideoPort "<<newConnection.videoPort<<endl;
-            ofLog(OF_LOG_VERBOSE)<<"IpAddress "<<newConnection.ipAddress<<endl;
-            
-            newClient(newConnection);
-            newServer(newConnection);
+            if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress!= thisClient.ipAddress){
+                ofNotifyEvent(newClientEvent, newConnection.clientID, this);
+                connections[newConnection.clientID] = newConnection;
+                
+                ofLog(OF_LOG_VERBOSE)<<"CLIENT ID "<<newConnection.clientID<<endl;
+                ofLog(OF_LOG_VERBOSE)<<"AudioPort "<<newConnection.audioPort<<endl;
+                ofLog(OF_LOG_VERBOSE)<<"VideoPort "<<newConnection.videoPort<<endl;
+                ofLog(OF_LOG_VERBOSE)<<"IpAddress "<<newConnection.ipAddress<<endl;
+                
+                newClient(newConnection);
+                newServer(newConnection);
+            }
         }
         
-    }
-    
-    if(_packet.valuesString.size() == 2){
-        if(_packet.valuesString[1] == "CLOSE"){
-            string name = _packet.valuesString[0];
+        if(json.isMember("disconnection")){
+            string name = json["disconnection"].asString();
             if(connections.find(name) != connections.end()){
                 clients[name]->close();
                 servers[name]->close();
@@ -102,24 +104,35 @@ void StreamManager::newData( DataPacket& _packet  )
                 servers.erase(name);
                 remoteVideos.erase(name);
                 bConnected.erase(name);
-				connections.erase(name);
+                connections.erase(name);
             }
         }
-    }
-    
-    if(_packet.valuesFloat.size() > 0){
-        rotation = _packet.valuesFloat[0];
+        
+        if(json.isMember("rotation")){
+            rotation =json["rotation"].asFloat();
+        }
     }
     
 }
 
+void StreamManager::sendRotation(float rotation){
+    ofxJSONElement sendJSON;
+    sendJSON["rotation"] = rotation;
+    sendJSONData(sendJSON);
+}
+
 void StreamManager::exit(){
-    
+    ofxJSONElement sendJSON;
+    sendJSON["disconnection"] = thisClient.clientID;
+    sendJSONData(sendJSON);
+}
+
+void StreamManager::sendJSONData(ofxJSONElement sendJSON){
     DataPacket p;
-	p.valuesString.push_back(thisClient.clientID);
-    p.valuesString.push_back("CLOSE");
+    string sendString;
+    Poco::URI::encode(sendJSON.getRawString(false), "/", sendString);
+    p.valuesString.push_back(sendString);
     oscBroadcaster->sendData(p, true);
-    
 }
 
 bool StreamManager::isFrameNew(){
@@ -137,23 +150,24 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 }
 
 void StreamManager::update(){
+    
+    if(ofGetElapsedTimef() - lastSend > 1.5){
+        ofxJSONElement sendJSON;
+        ofxJSONElement connection;
 
-        if(ofGetElapsedTimef() - lastSend > 1.5){
-
-            DataPacket p;
-            p.valuesString.push_back(thisClient.ipAddress);
-			if(clients.size() == 0){
-				p.valuesString.push_back(thisClient.audioPort);
-				p.valuesString.push_back(thisClient.videoPort);
-			}
-			if(clients.size() == 1){
-				p.valuesString.push_back(thisClient.audioPortTwo);
-				p.valuesString.push_back(thisClient.videoPortTwo);
-			}
-			p.valuesString.push_back(thisClient.clientID);
-            oscBroadcaster->sendData(p, true);
-            lastSend = ofGetElapsedTimef();
+        connection["clientID"] = thisClient.clientID;
+        connection["ipAddress"] = thisClient.ipAddress;
+        if(servers.size() == 0){
+            connection["audioPort"] = thisClient.audioPort;
+            connection["videoPort"] = thisClient.videoPort;
+        }else{
+            connection["audioPort"] = thisClient.audioPortTwo;
+            connection["videoPort"] = thisClient.videoPortTwo;
         }
+        sendJSON["connection"] = connection;
+        sendJSONData(sendJSON);
+        lastSend = ofGetElapsedTimef();
+    }
     
     
     if(isFrameNew()){
@@ -170,7 +184,7 @@ void StreamManager::update(){
                 bConnected[iter->first]= true;
             }
         }else{
-
+            
             // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();
@@ -201,28 +215,28 @@ void StreamManager::drawDebug(){
 
 
 void StreamManager::newServer(clientParameters params){
-	if(servers.size() == 0){
-		servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
-		servers[params.clientID]->setup(params.ipAddress);
-		servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
-		servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-		servers[params.clientID]->videoBitrate = 1600;
-		servers[params.clientID]->play();
-	}else{
-		servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
-		servers[params.clientID]->setup(params.ipAddress);
-		servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
-		servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
-		servers[params.clientID]->videoBitrate = 1600;
-		servers[params.clientID]->play();
-	}
+    if(servers.size() == 0){
+        servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
+        servers[params.clientID]->setup(params.ipAddress);
+        servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
+        servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
+        servers[params.clientID]->videoBitrate = 1600;
+        servers[params.clientID]->play();
+    }else{
+        servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
+        servers[params.clientID]->setup(params.ipAddress);
+        servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
+        servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
+        servers[params.clientID]->videoBitrate = 1600;
+        servers[params.clientID]->play();
+    }
 }
 
 void StreamManager::newClient(clientParameters params){
     
     clients[params.clientID] = ofPtr<ofxGstRTPClient>(new ofxGstRTPClient());
     clients[params.clientID]->setup(params.ipAddress, 0);
-	clients[params.clientID]->addVideoChannel(ofToInt(params.videoPort));
+    clients[params.clientID]->addVideoChannel(ofToInt(params.videoPort));
     clients[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
     
     remoteVideos[params.clientID] = ofPtr<ofFbo>(new ofFbo());

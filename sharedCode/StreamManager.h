@@ -12,6 +12,7 @@
 #include "ofxGstRTPClient.h"
 #include "ofxGstRTPServer.h"
 #include "ofxGui.h"
+#include "ofxJSON.h"
 
 class StreamManager{
 public:
@@ -30,24 +31,28 @@ public:
     
     // initialize everything
     void setup(int _width = 640, int _height = 480);
-
+    
     // call this every frame
     void update();
-
+    // function to URI escape JSON and Send via ofxOSCSync
+    void sendJSONData(ofxJSONElement json);
     // close everything down
     void exit();
-
+    
     void drawDebug();
     void setImageSource(ofPtr<ofImage> cam_img);
     int hash(const char * str);
-
+    
     // add a new client
     void newClient(clientParameters params);
-
+    
     // add a new server
     void newServer(clientParameters params);
     void newFrame();
-
+    
+    
+    void sendRotation(float rotation);
+    
     // is there a new frame
     bool isFrameNew();
     void newData(DataPacket& _packet);
@@ -56,6 +61,7 @@ public:
     ofEvent<string> newClientEvent;
     ofEvent<float> newRotationEvent;
     
+    ofxJSONElement json;
     
     ofxCommonTimeOSC* commonTimeOsc;
     ofPtr<ofxServerOscManager> oscBroadcaster;
@@ -64,7 +70,7 @@ public:
     float width;
     float height;
     
-
+    
     map<string, ofPtr<ofxGstRTPClient> > clients;
     map<string, ofPtr<ofxGstRTPServer> > servers;
     
@@ -79,7 +85,7 @@ public:
     
     float lastSend;
     
-
+    
     
     clientParameters thisClient;
     

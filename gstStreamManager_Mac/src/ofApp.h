@@ -32,6 +32,6 @@ public:
     void newClient(string & args);
     
     ofVideoGrabber grabber;
-    shared_ptr<ofImage> sharedImg;
+    ofPtr<ofImage> sharedImg;
     StreamManager streaming;
 };

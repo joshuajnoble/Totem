@@ -12,8 +12,12 @@
 	<dict>
 		<key>0ACD328CC81B0F6FD7AA37A2E7F0C19463D3A213</key>
 		<string>https://github.com/joshuajnoble/Totem.git</string>
+		<key>2DE9C8846D9375EAACFABA8963120E8E7719BAF5</key>
+		<string>https://github.com/openframeworks/openFrameworks.git</string>
 		<key>2F750D68E75345E71C71DBA69B734ED42BF924D1</key>
 		<string>https://github.com/arturoc/ofxGStreamer.git</string>
+		<key>5DB7C332A3A89035E93556A2A38BF414005BA671</key>
+		<string>https://github.com/bakercp/ofxJSON.git</string>
 		<key>62AD38A853790DF3EC11E6F04E12E51471859353</key>
 		<string>https://github.com/arturoc/ofxSnappy.git</string>
 		<key>76FA968CA334FB7BB92E03957D3EF6E86E0F8D32</key>
@@ -29,16 +33,20 @@
 	<dict>
 		<key>0ACD328CC81B0F6FD7AA37A2E7F0C19463D3A213</key>
 		<string>../../..</string>
+		<key>2DE9C8846D9375EAACFABA8963120E8E7719BAF5</key>
+		<string>../../../../../../openFrameworks</string>
 		<key>2F750D68E75345E71C71DBA69B734ED42BF924D1</key>
-		<string>../../../../../addons/ofxGStreamer</string>
+		<string>../../../../addons/ofxGStreamer</string>
+		<key>5DB7C332A3A89035E93556A2A38BF414005BA671</key>
+		<string>../../../../../../openFrameworks/addons/ofxJSON</string>
 		<key>62AD38A853790DF3EC11E6F04E12E51471859353</key>
-		<string>../../../../../addons/ofxSnappy</string>
+		<string>../../../../addons/ofxSnappy</string>
 		<key>76FA968CA334FB7BB92E03957D3EF6E86E0F8D32</key>
-		<string>../../../../../addons/ofxDepthStreamCompression</string>
+		<string>../../../../addons/ofxDepthStreamCompression</string>
 		<key>89AEA15953FADA42468C343CB60A9B1BA364E9AB</key>
-		<string>../../../../../addons/ofxGstRTP</string>
+		<string>../../../../addons/ofxGstRTP</string>
 		<key>C8B8E0396C2933B77303BEC9CDC120299A2B258D</key>
-		<string>../../../../../addons/ofxOSCSync</string>
+		<string>../../../../addons/ofxOSCSync</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/joshuajnoble/Totem.git</string>
@@ -76,6 +84,14 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5DB7C332A3A89035E93556A2A38BF414005BA671</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ofxJSON</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>C8B8E0396C2933B77303BEC9CDC120299A2B258D</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ofxOSCSync</string>
@@ -87,6 +103,14 @@
 			<string>62AD38A853790DF3EC11E6F04E12E51471859353</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ofxSnappy</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>2DE9C8846D9375EAACFABA8963120E8E7719BAF5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>openFrameworks</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
