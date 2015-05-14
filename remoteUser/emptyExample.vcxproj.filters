@@ -7,167 +7,164 @@
     <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Calibration.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Distance.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Flow.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Helpers.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Kalman.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxBaseGui.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxButton.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Downloads\openFrameworks-VS2013\openFrameworks-VS2013\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
-      <Filter>addons\ofxOsc</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxSpout\src\ofxSpout.cpp">
-      <Filter>addons\ofxSpout</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvContourFinder.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvFloatImage.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvContourFinder.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvFloatImage.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvImage.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvShortImage.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Calibration.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Distance.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Flow.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Helpers.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Kalman.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Tracker.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Utilities.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp">
-      <Filter>addons\ofxCv</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxLabel.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp">
-      <Filter>addons\ofxGui</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxPanel.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSlider.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSliderGroup.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxToggle.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Tracker.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Utilities.cpp">
+      <Filter>of</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp">
+      <Filter>of</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -195,226 +192,239 @@
     <Filter Include="addons\ofxPlaylist">
       <UniqueIdentifier>{5a9afb54-2f6f-4d4a-81f4-ea859f260d2e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="resourcs">
+      <UniqueIdentifier>{a73ff6be-89f0-43ee-a688-c43cc05439f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="of">
+      <UniqueIdentifier>{ab7495c9-5554-4b7a-abd5-04381cecdbcf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Calibration.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\ContourFinder.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Distance.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Flow.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Helpers.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Kalman.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\ObjectFinder.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxBaseGui.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxBaseKeyframe.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxButton.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOsc.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\src\ofxCv.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscArg.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvBlob.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvConstants.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvContourFinder.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvFloatImage.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h">
-      <Filter>addons\ofxOsc</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvGrayscaleImage.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxSpout\src\ofxSpout.h">
-      <Filter>addons\ofxSpout</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvHaarFinder.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxSpout\src\Spout.h">
-      <Filter>addons\ofxSpout</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvImage.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvBlob.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvShortImage.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvConstants.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvContourFinder.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvFloatImage.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEasingExt.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxOpenCv.h">
-      <Filter>addons\ofxOpenCV</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\src\ofxCv.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Calibration.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\ContourFinder.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Distance.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Flow.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Helpers.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxGui.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Kalman.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\ObjectFinder.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\RunningBackground.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxLabel.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Tracker.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxOpenCv.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Utilities.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOsc.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h">
-      <Filter>addons\ofxCv</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscArg.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxPanel.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h">
-      <Filter>addons\ofxGui</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxSlider.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxBaseKeyframe.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxSliderGroup.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxToggle.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEasingExt.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\RunningBackground.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\Spout.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Tracker.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Utilities.h">
+      <Filter>of</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h">
-      <Filter>addons\ofxPlaylist</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.h">
-      <Filter>addons\ofxPlaylist</Filter>
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h">
+      <Filter>of</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="icon.rc" />
+    <Image Include="resources\icon.ico">
+      <Filter>resourcs</Filter>
+    </Image>
+    <Image Include="resources\icon-debug.ico">
+      <Filter>resourcs</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <Filter>resourcs</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
