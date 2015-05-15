@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxSpout\src\ofxSpout.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons">
+      <UniqueIdentifier>{bec41f44-83c9-4d4e-bc97-ace6c7977e0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOsc">
+      <UniqueIdentifier>{a66c0ef5-cd8a-4322-ab11-db12c29ba1d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxSpout">
+      <UniqueIdentifier>{34c17113-9864-4aad-9e58-010c486ef3e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPlaylist">
+      <UniqueIdentifier>{b78fc563-8772-4a16-94e4-a923f1decdff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="openFrameworks">
+      <UniqueIdentifier>{85b3351d-56bc-44d2-9d7d-fee94d4e612e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxBaseKeyframe.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEasingExt.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOsc.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscArg.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\ofxSpout.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\Spout.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\easing_terms_of_use.html">
+      <Filter>openFrameworks</Filter>
+    </None>
+  </ItemGroup>
+</Project>

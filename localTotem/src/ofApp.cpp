@@ -58,7 +58,7 @@ void ofApp::update(){
 		//ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
 		//player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
 
-		ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
+		//ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
 		player.getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player.getWidth(), 800);
 
 		ofSetColor(0, 0, 0);
@@ -67,7 +67,7 @@ void ofApp::update(){
 	}
 	else
 	{
-		ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
+		//ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
 		//ofxSpout::draw(0, 0, 500, 500);
 		small1.draw(100, 670, 150, 120);
 		small2.draw(260, 670, 150, 120);
