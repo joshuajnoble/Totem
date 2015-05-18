@@ -97,6 +97,9 @@
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -240,6 +243,9 @@
       <Filter>openFrameworks</Filter>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h">
+      <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h">
       <Filter>openFrameworks</Filter>
     </ClInclude>
   </ItemGroup>

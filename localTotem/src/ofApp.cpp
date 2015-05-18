@@ -6,46 +6,98 @@ int rotation = -90;
 int selectedScreen = -1;
 
 //--------------------------------------------------------------
-void ofApp::setup(){
-    
+void ofApp::setup()
+{
+	if (this->useWebCam)
+	{
+		this->localPlayer = InitializePlayerFromCamera(this->webCamDeviceId, this->captureWidth, this->captureHeight);
+	}
+	else
+	{
+		std::string fullPath = ofToDataPath(this->videoFilename);
+		if (!ofFile::doesFileExist(fullPath))
+		{
+			cout << "The specified file, \"" << fullPath << "\" does not exist.";
+			ofExit();
+			return;
+		}
+
+		this->localPlayer = InitializeVideoPresenterFromFile(fullPath);
+	}
+
+	//fboLocalDraw.allocate(this->localPlayer->getWidth(), this->localPlayer->getHeight(), GL_RGB);
+	//vec2LocalDraw.set(0, 0);
+
 	rec.setup(8888);
 
-	player.loadMovie("IMG_1628.mov");
-
 	// initialize Spout as a receiver
-	ofxSpout::init("", 640, 480, false);
-	small1.loadImage("meg.png");
-	small2.loadImage("matt.png");
+	//ofxSpout::init("", 640, 480, false);
+	//small1.loadImage("meg.png");
+	//small2.loadImage("matt.png");
 
 	fbo.allocate(800, 480, GL_RGB);
 
 	drawSecondRemote = false;
-
 	remotePosition.set(100, 670);
 	remoteScale.set(150, 120);
 	mainPosition.set(-100, 10);
 	mainScale.set(660, 660);
+
+	this->isInitialized = true;
+}
+
+ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path) const
+{
+	ofVideoPlayer* player = new ofVideoPlayer();
+	ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
+	if (player->loadMovie(path))
+	{
+		player->setLoopState(OF_LOOP_NORMAL);
+		player->play();
+	}
+
+	return rval;
+}
+
+ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int width, int height) const
+{
+	ofVideoGrabber *grabber = new ofVideoGrabber();
+	ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
+	if (deviceId != 0)
+	{
+		grabber->setDeviceID(deviceId);
+	}
+
+	grabber->initGrabber(width, height);
+	return rval;
 }
 
 //--------------------------------------------------------------
 void ofApp::exit(){
-	ofxSpout::exit();
 }
 
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update()
+{
+	if (!this->isInitialized)
+	{
+		return;
+	}
+
+	this->localPlayer->update();
 
 	mainPlaylist.update();
 
 	if (drawSecondRemote)
 	{
-		player.update();
+		player->update();
 	}
 
-	ofxSpout::initReceiver();
-	ofxSpout::receiveTexture();
+	//ofxSpout::initReceiver();
+	//ofxSpout::receiveTexture();
 
+	
 	fbo.begin();
 	ofBackground(0, 0, 0);
 	ofPushMatrix();
@@ -59,7 +111,7 @@ void ofApp::update(){
 		//player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
 
 		//ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
-		player.getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player.getWidth(), 800);
+		//player->getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player->getWidth(), 800);
 
 		ofSetColor(0, 0, 0);
 		ofRect(0, remotePosition.y, 480, 10);
@@ -69,13 +121,15 @@ void ofApp::update(){
 	{
 		//ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
 		//ofxSpout::draw(0, 0, 500, 500);
-		small1.draw(100, 670, 150, 120);
-		small2.draw(260, 670, 150, 120);
+		//small1.draw(100, 670, 150, 120);
+		//small2.draw(260, 670, 150, 120);
 		//small3.draw(325, 540, 150, 120);
 	}
 
 	ofPopMatrix();
+
 	// draw other UI here
+
 	fbo.end();
 
 	// check for waiting messages
@@ -106,7 +160,7 @@ void ofApp::update(){
 			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.x, 528));
 			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.y, 400));
 
-			player.play();
+			//player.play();
 		}
 
 		if (m.getAddress() == "second_remote_off")
@@ -118,9 +172,8 @@ void ofApp::update(){
 			mainPosition.set(-150, 10);
 			mainScale.set(960 * 0.90, 660);
 
-			player.stop();
-			player.setPosition(0);
-
+			//player.stop();
+			//player.setPosition(0);
 		}
 	}
 
@@ -129,7 +182,13 @@ void ofApp::update(){
 
 
 //--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::draw()
+{
+	if (!this->isInitialized)
+	{
+		return;
+	}
+
 	// draw everything.
 	ofBackground(64, 64, 64);
 
@@ -160,26 +219,37 @@ void ofApp::draw(){
 		ofSetColor(255, 255, 255, 255);
 	}
 	ofPopMatrix();
+
+	if (this->showInput)
+	{
+		this->localPlayer->draw(0, 0);
+	}
 }
 
 
 //--------------------------------------------------------------
-void ofApp::keyPressed  (int key){ 
-	
+void ofApp::keyPressed(int key)
+{
+	if (!this->isInitialized)
+	{
+		return;
+	}
+
 	/*
-	<!-- // Press Space to toggle movie play.                      --> 
+	<!-- // Press Space to toggle movie play.                      -->
 	<!-- // Press 's' to save the geometry settings.               -->
 	<!-- // Press 'r' to reload the previously saved settings.     -->
 	<!-- // Use the +/- keys to change the export codec.           -->
 	<!-- // Press 'v' to export the unwarped video.                -->
 	<!-- // Use the arrow keys to nudge the center point.          -->
 	<!-- // Drag the unwarped video left or right to shift it.     -->
-	 */
+	*/
 
-	
-//	int nCodecs = videoRecorder->getNCodecs();
-	
-	switch (key){
+
+	//	int nCodecs = videoRecorder->getNCodecs();
+
+	switch (key)
+	{
 	case '+':
 		rotation += 1;
 		break;
@@ -187,11 +257,12 @@ void ofApp::keyPressed  (int key){
 		rotation -= 1;
 		break;
 	}
-	
 }
-
 
 void ofApp::onKeyframe(ofxPlaylistEventArgs& args)
 {
-
+	if (!this->isInitialized)
+	{
+		return;
+	}
 }

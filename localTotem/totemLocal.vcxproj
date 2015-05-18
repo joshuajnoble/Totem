@@ -59,7 +59,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>src;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxSpout\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxPlaylist\src;$(OFDIR)\addons\ofxPlaylist\src\Easings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -80,7 +80,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxSpout\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxPlaylist\src;$(OFDIR)\addons\ofxPlaylist\src\Easings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -99,6 +99,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp" />
@@ -165,6 +166,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
