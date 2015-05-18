@@ -76,9 +76,6 @@
     <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxSpout\src\ofxSpout.cpp">
-      <Filter>openFrameworks</Filter>
-    </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
@@ -100,6 +97,39 @@
     <ClCompile Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Calibration.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Distance.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Flow.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Helpers.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Kalman.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Tracker.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Utilities.cpp">
+      <Filter>openFrameworks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -111,14 +141,14 @@
     <Filter Include="addons\ofxOsc">
       <UniqueIdentifier>{a66c0ef5-cd8a-4322-ab11-db12c29ba1d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxSpout">
-      <UniqueIdentifier>{34c17113-9864-4aad-9e58-010c486ef3e6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons\ofxPlaylist">
       <UniqueIdentifier>{b78fc563-8772-4a16-94e4-a923f1decdff}</UniqueIdentifier>
     </Filter>
     <Filter Include="openFrameworks">
       <UniqueIdentifier>{85b3351d-56bc-44d2-9d7d-fee94d4e612e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxOpenCv">
+      <UniqueIdentifier>{d42f66d9-e093-4564-9b5e-be387717e014}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -207,9 +237,6 @@
       <Filter>openFrameworks</Filter>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
-      <Filter>openFrameworks</Filter>
-    </ClInclude>
-    <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\ofxSpout.h">
       <Filter>openFrameworks</Filter>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscException.h">

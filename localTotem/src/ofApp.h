@@ -4,6 +4,7 @@
 #include "ofxSpout\src\ofxSpout.h"
 #include "ofxOsc\src\ofxOsc.h"
 #include "ofxPlaylist\src\ofxPlaylist.h"
+#include "ofxCv\src\ofxCv.h"
 
 class ofApp : public ofBaseApp
 {
@@ -29,7 +30,11 @@ public:
 
 	// Public Config
 	bool showInput = false;
+	bool showUnwrapped = false;
 	ofPtr<ofBaseVideoDraws> videoSource;
+
+	ofImage videSourceUnwrapped;
+	ofxCv::Calibration videoSourceCalibration;
 
 	ofImage image;
 	ofPtr<ofBaseVideoDraws> player;

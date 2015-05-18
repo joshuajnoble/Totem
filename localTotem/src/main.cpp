@@ -13,6 +13,7 @@ int main(int argc, const char** argv)
 		std::cout << "Usage:" << std::endl <<
 			" -listDevices" << endl <<
 			" -showInput                  (Show the input video stream instead of the normal UI)" << endl <<
+			" -showUnwrapped              (Show the undistorted video stream instead of the normal UI)" << endl <<
 			" -sourceFile=<path>          (Uses a test file instead of the camera for inpput)" << endl <<
 			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
 			" -capWidth=<capture width>   (default=2048 pixels)" << endl <<
@@ -74,6 +75,12 @@ int main(int argc, const char** argv)
 	{
 		app->showInput = true;
 		ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
+	}
+
+	if (ofxArgParser::hasKey("showUnwrapped"))
+	{
+		app->showUnwrapped = true;
+		ofSetupOpenGL(&window, 3200, 490, OF_WINDOW);
 	}
 	else
 	{

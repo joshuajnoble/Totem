@@ -1,5 +1,8 @@
 #include "ofApp.h"
 
+using namespace ofxCv;
+using namespace cv;
+
 const int remoteVideoWidth = 480;
 int rotation = -90;
 
@@ -8,15 +11,16 @@ int selectedScreen = -1;
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	//fboLocalDraw.allocate(this->videoSource->getWidth(), this->videoSource->getHeight(), GL_RGB);
-	//vec2LocalDraw.set(0, 0);
-
-	rec.setup(8888);
+	rec.setup(8888);	
 
 	// initialize Spout as a receiver
 	//ofxSpout::init("", 640, 480, false);
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
+	this->videoSourceCalibration.setFillFrame(false);
+	auto ymlFullPath = ofToDataPath("undistort.yml");
+	this->videoSourceCalibration.load(ymlFullPath);
+	imitate(this->videSourceUnwrapped, *this->videoSource.get());
 
 	fbo.allocate(800, 480, GL_RGB);
 
@@ -69,6 +73,14 @@ void ofApp::update()
 	}
 
 	this->videoSource->update();
+	if (this->videoSource->isFrameNew())
+	{
+		auto cvVideoSource = toCv(*this->videoSource.get());
+		auto cvVideSourceUnwrapped = toCv(this->videSourceUnwrapped);
+		//this->videoSourceCalibration.undistort(cvVideoSource, cvVideSourceUnwrapped);
+		copy(cvVideoSource, cvVideSourceUnwrapped);
+		this->videSourceUnwrapped.update();
+	}
 
 	mainPlaylist.update();
 
@@ -79,7 +91,6 @@ void ofApp::update()
 
 	//ofxSpout::initReceiver();
 	//ofxSpout::receiveTexture();
-
 	
 	fbo.begin();
 	ofBackground(0, 0, 0);
@@ -206,6 +217,14 @@ void ofApp::draw()
 	if (this->showInput)
 	{
 		this->videoSource->draw(0, 0);
+	}
+	else if (this->showUnwrapped)
+	{
+		ofPushMatrix();
+		ofScale(0.25, 0.25);
+		this->videoSource->draw(0, 0);
+		this->videSourceUnwrapped.draw(2048, 0);
+		ofPopMatrix();
 	}
 }
 

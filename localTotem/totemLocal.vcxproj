@@ -59,7 +59,30 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>opencv_calib3d248d.lib;opencv_contrib248d.lib;opencv_core248d.lib;opencv_features2d248d.lib;opencv_flann248d.lib;opencv_gpu248d.lib;opencv_haartraining_engined.lib;opencv_highgui248d.lib;opencv_imgproc248d.lib;opencv_legacy248d.lib;opencv_ml248d.lib;opencv_nonfree248d.lib;opencv_objdetect248d.lib;opencv_photo248d.lib;opencv_stitching248d.lib;opencv_superres248d.lib;opencv_ts248d.lib;opencv_video248d.lib;opencv_videostab248d.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxSpout\libs\lib\vs\;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -80,7 +103,31 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>opencv_calib3d248.lib;opencv_contrib248.lib;opencv_core248.lib;opencv_features2d248.lib;opencv_flann248.lib;opencv_gpu248.lib;opencv_haartraining_engine.lib;opencv_highgui248.lib;opencv_imgproc248.lib;opencv_legacy248.lib;opencv_ml248.lib;opencv_nonfree248.lib;opencv_objdetect248.lib;opencv_photo248.lib;opencv_stitching248.lib;opencv_superres248.lib;opencv_ts248.lib;opencv_video248.lib;opencv_videostab248.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxSpout\libs\lib\vs\;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -100,6 +147,17 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Calibration.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Distance.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Flow.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Helpers.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Kalman.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Tracker.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Utilities.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp" />
@@ -158,9 +216,6 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxSpout\src\ofxSpout.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -240,9 +295,6 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
-    </ClInclude>
-    <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\ofxSpout.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\Spout.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
