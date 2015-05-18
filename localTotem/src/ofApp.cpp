@@ -8,24 +8,7 @@ int selectedScreen = -1;
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	if (this->useWebCam)
-	{
-		this->localPlayer = InitializePlayerFromCamera(this->webCamDeviceId, this->captureWidth, this->captureHeight);
-	}
-	else
-	{
-		std::string fullPath = ofToDataPath(this->videoFilename);
-		if (!ofFile::doesFileExist(fullPath))
-		{
-			cout << "The specified file, \"" << fullPath << "\" does not exist.";
-			ofExit();
-			return;
-		}
-
-		this->localPlayer = InitializeVideoPresenterFromFile(fullPath);
-	}
-
-	//fboLocalDraw.allocate(this->localPlayer->getWidth(), this->localPlayer->getHeight(), GL_RGB);
+	//fboLocalDraw.allocate(this->videoSource->getWidth(), this->videoSource->getHeight(), GL_RGB);
 	//vec2LocalDraw.set(0, 0);
 
 	rec.setup(8888);
@@ -46,7 +29,7 @@ void ofApp::setup()
 	this->isInitialized = true;
 }
 
-ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path) const
+ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path)
 {
 	ofVideoPlayer* player = new ofVideoPlayer();
 	ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
@@ -59,7 +42,7 @@ ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path
 	return rval;
 }
 
-ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int width, int height) const
+ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int width, int height)
 {
 	ofVideoGrabber *grabber = new ofVideoGrabber();
 	ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
@@ -85,7 +68,7 @@ void ofApp::update()
 		return;
 	}
 
-	this->localPlayer->update();
+	this->videoSource->update();
 
 	mainPlaylist.update();
 
@@ -222,7 +205,7 @@ void ofApp::draw()
 
 	if (this->showInput)
 	{
-		this->localPlayer->draw(0, 0);
+		this->videoSource->draw(0, 0);
 	}
 }
 

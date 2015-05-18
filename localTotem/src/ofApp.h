@@ -8,11 +8,8 @@
 class ofApp : public ofBaseApp
 {
 private:
-	ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path) const;
-	ofPtr<ofBaseVideoDraws> InitializePlayerFromCamera(int deviceId, int width, int height) const;
 	bool isInitialized = false;
 
-	ofPtr<ofBaseVideoDraws> localPlayer;
 	ofxPlaylist mainPlaylist;
 	ofVec2f remotePosition, remoteScale;
 	ofVec2f mainPosition, mainScale;
@@ -26,14 +23,13 @@ public:
 	void exit();
 	void keyPressed  (int key);
 	void onKeyframe(ofxPlaylistEventArgs& args);
-	
+
+	static ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path);
+	static ofPtr<ofBaseVideoDraws> InitializePlayerFromCamera(int deviceId, int width, int height);
+
 	// Public Config
 	bool showInput = false;
-	bool useWebCam = true;
-	int webCamDeviceId = 0;
-	int captureWidth = 2048;
-	int captureHeight = 2048;
-	std::string videoFilename;
+	ofPtr<ofBaseVideoDraws> videoSource;
 
 	ofImage image;
 	ofPtr<ofBaseVideoDraws> player;

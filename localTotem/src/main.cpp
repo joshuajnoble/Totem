@@ -30,64 +30,80 @@ int main(int argc, const char** argv)
 		if (ofxArgParser::hasKey("device") && ofxArgParser::getValue("device") == "")
 		{
 			std::cout << "The \"device\" param requires a device number.  See -help for details.";
-			return 0;
+			return -1;
 		}
 		if (ofxArgParser::hasKey("capWidth") && ofxArgParser::getValue("capWidth") == "")
 		{
 			std::cout << "The \"capWidth\" param requires a width.  See -help for details.";
-			return 0;
+			return -1;
 		}
 		if (ofxArgParser::hasKey("capHeight") && ofxArgParser::getValue("capHeight") == "")
 		{
 			std::cout << "The \"capHeight\" param requires a height.  See -help for details.";
-			return 0;
+			return -1;
 		}
 		if (ofxArgParser::hasKey("sourceFile") && ofxArgParser::getValue("sourceFile") == "")
 		{
 			std::cout << "The \"sourceFile\" param requires a video file path.  See -help for details.";
-			return 0;
+			return -1;
 		}
 	}
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
+	auto webCamDeviceId = 0;
+	if (ofxArgParser::hasKey("device"))
+	{
+		webCamDeviceId = ofToInt(ofxArgParser::getValue("device"));
+	}
+
+	auto captureWidth = 2048;
+	if (ofxArgParser::hasKey("capWidth"))
+	{
+		captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
+	}
+
+	auto captureHeight = 2048;
+	if (ofxArgParser::hasKey("capHeight"))
+	{
+		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
+	}
+
 	ofPtr<ofApp> app = ofPtr<ofApp>(new ofApp());
-
-	if (ofxArgParser::hasKey("sourceFile"))
-	{
-		std::string filename = ofxArgParser::getValue("sourceFile");
-		app->useWebCam = false;
-		app->videoFilename = filename;
-	}
-	else
-	{
-		if (ofxArgParser::hasKey("device"))
-		{
-			app->webCamDeviceId = atoi(ofxArgParser::getValue("device").c_str());
-		}
-
-		if (ofxArgParser::hasKey("capWidth"))
-		{
-			app->captureWidth = atoi(ofxArgParser::getValue("capWidth").c_str());
-		}
-
-		if (ofxArgParser::hasKey("capHeight"))
-		{
-			app->captureHeight = atoi(ofxArgParser::getValue("capHeight").c_str());
-		}
-	}
 
 	ofAppGlutWindow window;
 	if (ofxArgParser::hasKey("showInput"))
 	{
 		app->showInput = true;
-		ofSetupOpenGL(&window, app->captureWidth, app->captureHeight, OF_WINDOW);
+		ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
 	}
 	else
 	{
 		ofSetupOpenGL(&window, 3200, 490, OF_WINDOW);
 	}
+
+	// this kicks off the running of my app
+	// can be OF_WINDOW or OF_FULLSCREEN
+	// pass in width and height too:
+
+	ofPtr<ofBaseVideoDraws> videoSource;
+	if (ofxArgParser::hasKey("sourceFile"))
+	{
+		auto filename = ofxArgParser::getValue("sourceFile");
+		auto fullPath = ofToDataPath(filename);
+		if (!ofFile::doesFileExist(fullPath))
+		{
+			cout << "The specified file, \"" << fullPath << "\" does not exist.";
+			ofExit();
+			return -1;
+		}
+
+		videoSource = ofApp::InitializeVideoPresenterFromFile(fullPath);
+	}
+	else
+	{
+		videoSource = ofApp::InitializePlayerFromCamera(webCamDeviceId, captureWidth, captureHeight);
+	}
+
+	app->videoSource = videoSource;
 
 	ofSetWindowPosition(0, 0);
 
