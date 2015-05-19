@@ -79,7 +79,7 @@ int main(int argc, const char** argv)
 	else if (ofxArgParser::hasKey("showUnwrapped"))
 	{
 		app->showUnwrapped = true;
-		ofSetupOpenGL(&window, 3200, 490, OF_WINDOW);
+		ofSetupOpenGL(&window, 2048, 512, OF_WINDOW);
 	}
 	else
 	{

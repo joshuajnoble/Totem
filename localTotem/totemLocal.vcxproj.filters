@@ -163,6 +163,9 @@
     <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
       <Filter>addons\ofxXmlSettings</Filter>
     </ClCompile>
+    <ClCompile Include="src\ThreeSixtyUnwrap.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -310,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h">
       <Filter>openFrameworks</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ThreeSixtyUnwrap.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

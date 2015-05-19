@@ -230,6 +230,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h" />
@@ -311,6 +312,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\ThreeSixtyUnwrap.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
