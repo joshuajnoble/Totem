@@ -1,6 +1,6 @@
 #include "ofApp.h"
 
-#define LOGPOLAR
+#define JOSHNOBLE_UNWRAP
 
 using namespace ofxCv;
 using namespace cv;
@@ -98,17 +98,77 @@ void ofApp::setup()
 	rec.setup(8888);	
 
 	// initialize Spout as a receiver
-	//ofxSpout::init("", 640, 480, false);
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
-	this->videoSourceCalibration.setFillFrame(false);
-	auto ymlFullPath = ofToDataPath("undistort.yml");
-	this->videoSourceCalibration.load(ymlFullPath);
-	imitate(this->videSourceUnwrapped, *this->videoSource.get());
-	this->videSourceUnwrapped.width *= 4;
+
+#if defined(JOSHNOBLE_UNWRAP)
+	if (XML.loadFile("UnwarperSettings.xml")){
+		//printf("UnwarperSettings.xml loaded!\n");
+	}
+	else{
+		//printf("Unable to load UnwarperSettings.xml!\nPlease check 'data' folder.\n");
+	}
+
+	//maxR_factor   = XML.getValue("MAXR_FACTOR", 0.96);
+	//minR_factor   = XML.getValue("MINR_FACTOR", 0.16);
+	maxR_factor = XML.getValue("MAXR_FACTOR", 0.95);
+	minR_factor = XML.getValue("MINR_FACTOR", 0.45);
+	angularOffset = XML.getValue("ROTATION_DEGREES", 0.0);
+	unwarpedW = (int)XML.getValue("OUTPUT_W", 2048);
+	unwarpedH = (int)XML.getValue("OUTPUT_H", 512);
+	// Interpolation method: 
+	// 0 = CV_INTER_NN, 1 = CV_INTER_LINEAR, 2 = CV_INTER_CUBIC.
+	interpMethod = (int)XML.getValue("INTERP_METHOD", 1);
+	yWarpA = 0.1850;
+	yWarpB = 0.8184;
+	yWarpC = -0.0028;
+	yWarpA = XML.getValue("R_WARP_A", 0.1850);
+	yWarpB = XML.getValue("R_WARP_B", 0.8184);
+	yWarpC = XML.getValue("R_WARP_C", -0.0028);
+
+	//======================================
+	// create data structures for unwarping
+	blackOpenCV = cvScalarAll(0);
+	warpedW = this->videoSource->getWidth();
+	warpedH = this->videoSource->getHeight();
+
+	int nWarpedBytes = warpedW * warpedH * 3;
+	printf("warpedW = %d, warpedH = %d\n", warpedW, warpedH);
+
+	warpedImageOpenCV.allocate(warpedW, warpedH);
+	warpedPixels = new unsigned char[nWarpedBytes];
+	warpedIplImage = warpedImageOpenCV.getCvImage();
+	//cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedW, warpedH));
+	cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedW, warpedH));
+
+	int nUnwarpedPixels = unwarpedW * unwarpedH;
+	int nUnwarpedBytes = unwarpedW * unwarpedH * 3;
+	unwarpedImage.allocate(unwarpedW, unwarpedH, OF_IMAGE_COLOR);
+	//unwarpedPixels = new unsigned char[nUnwarpedBytes];
+	unwarpedPixels.allocate(unwarpedW, unwarpedH, 3);
+
+	unwarpedImageOpenCV.allocate(unwarpedW, unwarpedH);
+	unwarpedImageOpenCV.setROI(0, 0, unwarpedW, unwarpedH);
+	unwarpedIplImage = unwarpedImageOpenCV.getCvImage();
+
+	srcxArrayOpenCV.allocate(unwarpedW, unwarpedH);
+	srcyArrayOpenCV.allocate(unwarpedW, unwarpedH);
+	srcxArrayOpenCV.setROI(0, 0, unwarpedW, unwarpedH);
+	srcyArrayOpenCV.setROI(0, 0, unwarpedW, unwarpedH);
+
+	xocvdata = (float*)srcxArrayOpenCV.getCvImage()->imageData;
+	yocvdata = (float*)srcyArrayOpenCV.getCvImage()->imageData;
+
+	playerScaleFactor = (float)(ofGetHeight() - unwarpedH) / (float)warpedH;
+	savedWarpedCx = warpedCx = XML.getValue("CENTERX", warpedW / 2.0);
+	savedWarpedCy = warpedCy = XML.getValue("CENTERY", warpedH / 2.0);
+	savedAngularOffset = angularOffset;
+
+	computePanoramaProperties();
+	computeInversePolarTransform();
+#endif
 
 	fbo.allocate(800, 480, GL_RGB);
-
 	drawSecondRemote = false;
 	remotePosition.set(100, 670);
 	remoteScale.set(150, 120);
@@ -161,16 +221,49 @@ void ofApp::update()
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
 	{
+#if defined(JOSHNOBLE_UNWRAP)
+		auto bCenterChanged = false;
+		auto bAngularOffsetChanged = false;
+		if (bCenterChanged || bAngularOffsetChanged)
+		{
+			XML.setValue("CENTERX", warpedCx);
+			XML.setValue("CENTERY", warpedCy);
+			XML.setValue("ROTATION_DEGREES", angularOffset);
+
+			computePanoramaProperties();
+			computeInversePolarTransform();
+
+			bAngularOffsetChanged = false;
+			bCenterChanged = false;
+		}
+
+		memcpy(warpedPixels, this->videoSource->getPixels(), warpedW*warpedH * 3);
+		warpedIplImage->imageData = (char*)warpedPixels;
+
+		cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedIplImage->width, warpedIplImage->height));
+
+		cvRemap(warpedIplImage,
+			unwarpedIplImage,
+			srcxArrayOpenCV.getCvImage(),
+			srcyArrayOpenCV.getCvImage(),
+			interpMethod | CV_WARP_FILL_OUTLIERS, blackOpenCV );
+
+		unwarpedPixels.setFromPixels((unsigned char*) unwarpedIplImage->imageData, unwarpedIplImage->width, unwarpedIplImage->height, 3);
+		unwarpedPixels.mirror(true, false);
+
+		unwarpedImage.setFromPixels(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, OF_IMAGE_COLOR, true);
+		//unwarpedTexture.loadData(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, GL_RGB);
+#else
 		auto cvVideoSource = toCv(*this->videoSource);
 		auto cvVideSourceUnwrapped = toCv(this->videSourceUnwrapped);
 
-#ifdef LOGPOLAR
+#if defined(LOGPOLAR)
 		CvMat source = cvVideoSource;
 		CvMat dest = cvVideSourceUnwrapped;
 		cvLinearPolar(&source, &dest, cvPoint2D32f(source.cols / 2, source.rows / 2), this->doubleM, CV_INTER_CUBIC/*| CV_WARP_INVERSE_MAP*/);
 		//cvLogPolar(&source, &dest, cvPoint2D32f(source.cols / 2, source.rows / 2), this->doubleM / 10, CV_INTER_CUBIC/*| CV_WARP_INVERSE_MAP*/);
 		cvVideSourceUnwrapped = cv::Mat(&dest, false);
-#elif POLAR_MANUAL
+#elif define(POLAR_MANUAL)
 		//Options options;
 		//options.cx = 1024;
 		//options.cy = 1024;
@@ -182,9 +275,8 @@ void ofApp::update()
 #else
 		copy(cvVideoSource, cvVideSourceUnwrapped);
 #endif
-
-
 		this->videSourceUnwrapped.update();
+#endif
 	}
 
 	mainPlaylist.update();
@@ -325,6 +417,10 @@ void ofApp::draw()
 	}
 	else if (this->showUnwrapped)
 	{
+#if defined(JOSHNOBLE_UNWRAP)		
+		ofSetColor(255, 255, 255);
+		unwarpedImage.draw(0, 0);// ofGetHeight() - unwarpedH);
+#elif defined(LOGPOLAR)
 		ofPushMatrix();
 		//this->videoSource->draw(0, 0);
 		ofScale(0.25, 0.25);
@@ -335,6 +431,7 @@ void ofApp::draw()
 		this->videSourceUnwrapped.draw(0, 0);
 		ofPopMatrix();
 		ofPopMatrix();
+#endif
 	}
 }
 
@@ -387,3 +484,52 @@ void ofApp::onKeyframe(ofxPlaylistEventArgs& args)
 		return;
 	}
 }
+
+#if defined(JOSHNOBLE_UNWRAP)
+//=============================================
+void ofApp::computePanoramaProperties(){
+
+	//maxR_factor = 0.9 + 0.1*(float)mouseX/(float)ofGetWidth();
+	//minR_factor = 0.2 + 0.1*(float)mouseY/(float)ofGetHeight();
+
+	maxR = warpedH * maxR_factor / 2;
+	minR = warpedH * minR_factor / 2;
+}
+
+
+//Used for the by hand portion and OpenCV parts of the shootout. 
+//For the by hand, use the normal unwarpedW width instead of the step
+//For the OpenCV, get the widthStep from the CvImage and use that for quarterstep calculation
+//=============================================
+void ofApp::computeInversePolarTransform(){
+
+	// we assert that the two arrays have equal dimensions, srcxArray = srcyArray
+	float radius, angle;
+	float circFactor = 0 - TWO_PI / (float)unwarpedW;
+	float difR = maxR - minR;
+	int   dstRow, dstIndex;
+
+	xocvdata = (float*)srcxArrayOpenCV.getCvImage()->imageData;
+	yocvdata = (float*)srcyArrayOpenCV.getCvImage()->imageData;
+
+	for (int dsty = 0; dsty<unwarpedH; dsty++){
+		float y = ((float)dsty / (float)unwarpedH);
+		float yfrac = yWarpA*y*y + yWarpB*y + yWarpC;
+		yfrac = std::min(1.0f, std::max(0.0f, yfrac));
+
+		radius = (yfrac * difR) + minR;
+		dstRow = dsty * unwarpedW;
+
+		for (int dstx = 0; dstx<unwarpedW; dstx++){
+			dstIndex = dstRow + dstx;
+			angle = ((float)dstx * circFactor) + (DEG_TO_RAD * angularOffset);
+
+			xocvdata[dstRow + dstx] = warpedCx + radius*cosf(angle);
+			yocvdata[dstRow + dstx] = warpedCy + radius*sinf(angle);
+		}
+	}
+
+	srcxArrayOpenCV.setFromPixels(xocvdata, unwarpedW, unwarpedH);
+	srcyArrayOpenCV.setFromPixels(yocvdata, unwarpedW, unwarpedH);
+}
+#endif

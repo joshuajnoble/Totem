@@ -130,6 +130,39 @@
     <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Utilities.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvFloatImage.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvImage.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvShortImage.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvColorImage.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvContourFinder.cpp">
+      <Filter>addons\ofxOpenCv</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -149,6 +182,9 @@
     </Filter>
     <Filter Include="addons\ofxOpenCv">
       <UniqueIdentifier>{d42f66d9-e093-4564-9b5e-be387717e014}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings">
+      <UniqueIdentifier>{a2bd155d-ab06-49a9-8c72-67e1418b68e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
