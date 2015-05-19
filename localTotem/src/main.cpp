@@ -76,8 +76,7 @@ int main(int argc, const char** argv)
 		app->showInput = true;
 		ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
 	}
-
-	if (ofxArgParser::hasKey("showUnwrapped"))
+	else if (ofxArgParser::hasKey("showUnwrapped"))
 	{
 		app->showUnwrapped = true;
 		ofSetupOpenGL(&window, 3200, 490, OF_WINDOW);

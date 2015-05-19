@@ -14,6 +14,7 @@ private:
 	ofxPlaylist mainPlaylist;
 	ofVec2f remotePosition, remoteScale;
 	ofVec2f mainPosition, mainScale;
+	double doubleM = 2560;
 
 public:
 	//----------------------------------------

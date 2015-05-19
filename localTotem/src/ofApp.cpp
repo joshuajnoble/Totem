@@ -1,12 +1,96 @@
 #include "ofApp.h"
 
+#define LOGPOLAR
+
 using namespace ofxCv;
 using namespace cv;
 
-const int remoteVideoWidth = 480;
-int rotation = -90;
+namespace
+{
+	const int remoteVideoWidth = 480;
+	int rotation = -90;
+	int selectedScreen = -1;
 
-int selectedScreen = -1;
+#ifdef POLAR_MANUAL
+	int rnd(double d)
+	{
+		return static_cast<int>(d + 0.5);
+	}
+
+	int rndf(float d)
+	{
+		return static_cast<int>(d + 0.5);
+	}
+
+	struct Options
+	{
+		int cx, cy, ri, ro;
+		string input, output, filtered, test;
+		bool interpolation, bilinear, bicubic;
+		double sx, sy;
+		int blackThr;
+		int borderT, borderB, borderL, borderR;
+		bool fixedCenter, estimateCenterThreshold, estimateCenterEdge;
+		bool unwrap, createTest;
+		int minRadius, maxRadius;
+		int edgeCX, edgeCY, edgeDX, edgeDY;
+	};
+
+	void unwrap(const Options &opt, IplImage* inputImg, IplImage** outputImg)
+	{
+		// Create the unwrap image
+		int uwWidth = static_cast<int>(ceil((opt.ro * 2.0 * PI)*opt.sx));
+		int uwHeight = static_cast<int>(ceil((opt.ro - opt.ri + 1)*opt.sy));
+		IplImage* unwrappedImg = cvCreateImage(cvSize(uwWidth, uwHeight), 8, 3);
+
+		// Perform unwrapping
+		for (int uwX = 0; uwX<uwWidth; ++uwX)
+			for (int uwY = 0; uwY<uwHeight; ++uwY)
+			{
+				// Convert polar to cartesian
+				double w = -static_cast<double>(uwX)*2.0*PI / static_cast<double>(uwWidth);
+				double r = static_cast<double>(opt.ri) +
+					static_cast<double>(uwHeight - uwY)*static_cast<double>(opt.ro - opt.ri + 1) / static_cast<double>(uwHeight);
+				double iX = r*cos(w) + opt.cx;
+				double iY = r*sin(w) + opt.cy;
+
+				// Do safety check
+				if ((iX<1) || (iX>inputImg->width - 2) || (iY<1) || (iY>inputImg->height - 2))
+				{
+					*(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 0) = 0;
+					*(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 1) = 0;
+					*(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 2) = 0;
+				}
+				else // Tansform image data
+				{
+					//if (opt.interpolation)
+					//{ // With interpolation
+					//	*reinterpret_cast<unsigned char *>(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 0) =
+					//		getInterpolation(opt, inputImg, 0, iX, iY);
+					//	*reinterpret_cast<unsigned char *>(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 1) =
+					//		getInterpolation(opt, inputImg, 1, iX, iY);
+					//	*reinterpret_cast<unsigned char *>(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 2) =
+					//		getInterpolation(opt, inputImg, 2, iX, iY);
+					//}
+					//else
+					{ // No interpolation
+						int tmpX = rnd(iX);
+						int tmpY = rnd(iY);
+						*(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 0) =
+							*(inputImg->imageData + tmpY*inputImg->widthStep + tmpX * 3 + 0);
+						*(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 1) =
+							*(inputImg->imageData + tmpY*inputImg->widthStep + tmpX * 3 + 1);
+						*(unwrappedImg->imageData + uwY*unwrappedImg->widthStep + uwX * 3 + 2) =
+							*(inputImg->imageData + tmpY*inputImg->widthStep + tmpX * 3 + 2);
+					} // if
+				} // if
+			} // for
+
+		// Return the unwrapped image
+		(*outputImg) = unwrappedImg;
+	}
+#endif
+}
 
 //--------------------------------------------------------------
 void ofApp::setup()
@@ -21,6 +105,7 @@ void ofApp::setup()
 	auto ymlFullPath = ofToDataPath("undistort.yml");
 	this->videoSourceCalibration.load(ymlFullPath);
 	imitate(this->videSourceUnwrapped, *this->videoSource.get());
+	this->videSourceUnwrapped.width *= 4;
 
 	fbo.allocate(800, 480, GL_RGB);
 
@@ -60,7 +145,8 @@ ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int widt
 }
 
 //--------------------------------------------------------------
-void ofApp::exit(){
+void ofApp::exit()
+{
 }
 
 
@@ -75,10 +161,29 @@ void ofApp::update()
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
 	{
-		auto cvVideoSource = toCv(*this->videoSource.get());
+		auto cvVideoSource = toCv(*this->videoSource);
 		auto cvVideSourceUnwrapped = toCv(this->videSourceUnwrapped);
-		//this->videoSourceCalibration.undistort(cvVideoSource, cvVideSourceUnwrapped);
+
+#ifdef LOGPOLAR
+		CvMat source = cvVideoSource;
+		CvMat dest = cvVideSourceUnwrapped;
+		cvLinearPolar(&source, &dest, cvPoint2D32f(source.cols / 2, source.rows / 2), this->doubleM, CV_INTER_CUBIC/*| CV_WARP_INVERSE_MAP*/);
+		//cvLogPolar(&source, &dest, cvPoint2D32f(source.cols / 2, source.rows / 2), this->doubleM / 10, CV_INTER_CUBIC/*| CV_WARP_INVERSE_MAP*/);
+		cvVideSourceUnwrapped = cv::Mat(&dest, false);
+#elif POLAR_MANUAL
+		//Options options;
+		//options.cx = 1024;
+		//options.cy = 1024;
+		//options.ro = 0.5f;
+		//options.ri = 0.5f;
+		//options.sx = 2048;
+		//options.sy = 2048;
+		//unwrap(options, &cvVideoSource, &cvVideSourceUnwrapped);
+#else
 		copy(cvVideoSource, cvVideSourceUnwrapped);
+#endif
+
+
 		this->videSourceUnwrapped.update();
 	}
 
@@ -221,9 +326,14 @@ void ofApp::draw()
 	else if (this->showUnwrapped)
 	{
 		ofPushMatrix();
+		//this->videoSource->draw(0, 0);
 		ofScale(0.25, 0.25);
-		this->videoSource->draw(0, 0);
-		this->videSourceUnwrapped.draw(2048, 0);
+		ofTranslate(1024, 1024);
+		ofRotate(-90, 0, 0, 1);
+		ofPushMatrix();
+		ofTranslate(-1024, -1024);
+		this->videSourceUnwrapped.draw(0, 0);
+		ofPopMatrix();
 		ofPopMatrix();
 	}
 }
@@ -258,6 +368,15 @@ void ofApp::keyPressed(int key)
 	case '-':
 		rotation -= 1;
 		break;
+#ifdef LOGPOLAR
+	case '[':
+		doubleM -= 5;
+		if (doubleM <= 5) doubleM = 5;
+		break;
+	case ']':
+		doubleM += 5;
+		break;
+#endif
 	}
 }
 
