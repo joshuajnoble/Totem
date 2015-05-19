@@ -217,17 +217,17 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </ClCompile>
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvContourFinder.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvFloatImage.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvImage.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
-    <ClCompile Include="..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvContourFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvFloatImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
