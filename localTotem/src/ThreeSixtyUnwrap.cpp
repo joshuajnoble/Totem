@@ -14,16 +14,13 @@ void ThreeSixtyUnwrap::setup()
 	maxR_factor = XML.getValue("MAXR_FACTOR", 0.95);
 	minR_factor = XML.getValue("MINR_FACTOR", 0.45);
 	angularOffset = XML.getValue("ROTATION_DEGREES", 0.0);
-	double factor = 1.0;
+	double factor = 1.25;
 	unwarpedW = (int)XML.getValue("OUTPUT_W", 2048 * factor);
-	unwarpedH = (int)XML.getValue("OUTPUT_H", 2048 * (factor / 4));
+	unwarpedH = (int)XML.getValue("OUTPUT_H", 2048 * factor / 5);
 
 	// Interpolation method: 
 	// 0 = CV_INTER_NN, 1 = CV_INTER_LINEAR, 2 = CV_INTER_CUBIC.
 	interpMethod = (int)XML.getValue("INTERP_METHOD", 1);
-	yWarpA = 0.1850;
-	yWarpB = 0.8184;
-	yWarpC = -0.0028;
 	yWarpA = XML.getValue("R_WARP_A", 0.1850);
 	yWarpB = XML.getValue("R_WARP_B", 0.8184);
 	yWarpC = XML.getValue("R_WARP_C", -0.0028);

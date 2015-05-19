@@ -225,29 +225,6 @@ void ofApp::keyPressed(int key)
 	{
 		return;
 	}
-
-	/*
-	<!-- // Press Space to toggle movie play.                      -->
-	<!-- // Press 's' to save the geometry settings.               -->
-	<!-- // Press 'r' to reload the previously saved settings.     -->
-	<!-- // Use the +/- keys to change the export codec.           -->
-	<!-- // Press 'v' to export the unwarped video.                -->
-	<!-- // Use the arrow keys to nudge the center point.          -->
-	<!-- // Drag the unwarped video left or right to shift it.     -->
-	*/
-
-
-	//	int nCodecs = videoRecorder->getNCodecs();
-
-	switch (key)
-	{
-	case '+':
-		rotation += 1;
-		break;
-	case '-':
-		rotation -= 1;
-		break;
-	}
 }
 
 void ofApp::onKeyframe(ofxPlaylistEventArgs& args)
