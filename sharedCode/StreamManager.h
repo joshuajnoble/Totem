@@ -8,11 +8,11 @@
 
 #pragma once
 #include "ofMain.h"
-#include "ofxOSCSync.h"
-#include "ofxGstRTPClient.h"
-#include "ofxGstRTPServer.h"
-#include "ofxGui.h"
-#include "ofxJSON.h"
+#include "ofxOSCSync/src/ofxOSCSync.h"
+#include "ofxGstRTP/src/ofxGstRTPClient.h"
+#include "ofxGstRTP/src/ofxGstRTPServer.h"
+#include "ofxGui/src/ofxGui.h"
+#include "ofxJSON/src/ofxJSON.h"
 
 class StreamManager{
 public:

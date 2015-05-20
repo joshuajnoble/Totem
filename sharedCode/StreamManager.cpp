@@ -140,7 +140,10 @@ bool StreamManager::isFrameNew(){
         bNewFrame = false;
         return true;
     }
+
+	return false;
 }
+
 void StreamManager::newFrame(){
     bNewFrame = true;
 }
