@@ -200,6 +200,10 @@ void ofApp::draw()
 	{
 		this->unwrapper.draw(0, 0);
 	}
+	else
+	{
+		this->streamManager.drawDebug();
+	}
 }
 
 
