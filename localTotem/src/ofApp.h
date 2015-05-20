@@ -16,7 +16,7 @@ private:
 	ofVec2f remotePosition, remoteScale;
 	ofVec2f mainPosition, mainScale;
 	double doubleM = 2560;
-	ThreeSixtyUnwrap unwrapper;
+	//ThreeSixtyUnwrap unwrapper;
 	
 	StreamManager streamManager;
 	ofPtr<ofImage> remoteImage;
@@ -43,6 +43,7 @@ public:
 	// Legacy stuff
 	ofImage image;
 	ofPtr<ofBaseVideoDraws> player;
+	ofPtr<ofBaseVideoDraws> processedVideo;
 	ofImage small3, small1, small2;
 
 	bool drawCylinder;
@@ -54,5 +55,6 @@ public:
 	ofxOscReceiver rec;
 	ofFbo fbo;
 
+	bool passthroughVideo = false;
 	bool drawSecondRemote;
 };

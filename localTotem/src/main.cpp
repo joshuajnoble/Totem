@@ -13,6 +13,7 @@ int main(int argc, const char** argv)
 		std::cout << "Usage:" << std::endl <<
 			" -listDevices" << endl <<
 			" -showInput                  (Show the input video stream instead of the normal UI)" << endl <<
+			" -noUnwrap                   (Send the raw video stream without unwarpping it)" << endl <<
 			" -showUnwrapped              (Show the undistorted video stream instead of the normal UI)" << endl <<
 			" -sourceFile=<path>          (Uses a test file instead of the camera for inpput)" << endl <<
 			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
@@ -109,6 +110,7 @@ int main(int argc, const char** argv)
 		videoSource = ofApp::InitializePlayerFromCamera(webCamDeviceId, captureWidth, captureHeight);
 	}
 
+	app->passthroughVideo = ofxArgParser::hasKey("noUnwrap");
 	app->videoSource = videoSource;
 
 	ofSetWindowPosition(0, 0);

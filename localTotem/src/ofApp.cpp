@@ -28,14 +28,25 @@ void ofApp::setup()
 	mainPosition.set(-100, 10);
 	mainScale.set(660, 660);
 
-	double factor = 1.25;
-	this->unwrapper.initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
-	this->isInitialized = true;
+	if (this->passthroughVideo)
+	{
+		this->processedVideo = this->videoSource;
+	}
+	else
+	{
+		double factor = 1.25;
+		//this->unwrapper.initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
+		auto unwrapper = new ThreeSixtyUnwrap();
+		this->processedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
+		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
+	}
 
 	streamManager.setup(640, 480);
 	remoteImage = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
+
+	this->isInitialized = true;
 }
 
 //--------------------------------------------------------------
@@ -52,11 +63,11 @@ void ofApp::update()
 		return;
 	}
 
-	this->unwrapper.update();
+	this->processedVideo->update();
 
-	if (this->unwrapper.isFrameNew())
+	if (this->processedVideo->isFrameNew())
 	{
-		remoteImage->setFromPixels(this->unwrapper.getPixelsRef());
+		remoteImage->setFromPixels(this->processedVideo->getPixelsRef());
 		streamManager.newFrame();
 	}
 
@@ -198,7 +209,7 @@ void ofApp::draw()
 	}
 	else if (this->showUnwrapped)
 	{
-		this->unwrapper.draw(0, 0);
+		this->processedVideo->draw(0, 0);
 	}
 	else
 	{
