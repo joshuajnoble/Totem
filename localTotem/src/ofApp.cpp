@@ -31,13 +31,18 @@ void ofApp::setup()
 	double factor = 1.25;
 	this->unwrapper.initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
 	this->isInitialized = true;
+
+	streamManager.setup(640, 480);
+	remoteImage = ofPtr<ofImage>(new ofImage());
+	streamManager.setImageSource(remoteImage);
+	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 }
 
 //--------------------------------------------------------------
 void ofApp::exit()
 {
+	streamManager.exit();
 }
-
 
 //--------------------------------------------------------------
 void ofApp::update()
@@ -48,6 +53,14 @@ void ofApp::update()
 	}
 
 	this->unwrapper.update();
+
+	if (this->unwrapper.isFrameNew())
+	{
+		remoteImage->setFromPixels(this->unwrapper.getPixelsRef());
+		streamManager.newFrame();
+	}
+
+	streamManager.update();
 
 	mainPlaylist.update();
 
@@ -137,9 +150,7 @@ void ofApp::update()
 			//player.setPosition(0);
 		}
 	}
-
 }
-
 
 
 //--------------------------------------------------------------
@@ -233,4 +244,9 @@ ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int widt
 
 	grabber->initGrabber(width, height);
 	return rval;
+}
+
+void ofApp::newClient(string& args)
+{
+	ofLog() << "new client" << endl;
 }

@@ -5,6 +5,7 @@
 #include "ofxPlaylist\src\ofxPlaylist.h"
 #include "ofxCv\src\ofxCv.h"
 #include "ThreeSixtyUnwrap.h"
+#include "..\..\sharedCode\StreamManager.h"
 
 class ofApp : public ofBaseApp
 {
@@ -16,6 +17,10 @@ private:
 	ofVec2f mainPosition, mainScale;
 	double doubleM = 2560;
 	ThreeSixtyUnwrap unwrapper;
+	
+	StreamManager streamManager;
+	ofPtr<ofImage> remoteImage;
+	void newClient(string& args);
 
 public:
 	//----------------------------------------

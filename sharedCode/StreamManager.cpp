@@ -46,8 +46,6 @@ void StreamManager::setup(int _width, int _height){
     thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
     thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
     
-    
-    
     oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
     oscBroadcaster->init( settings.getValue<string>("//broadcastAddress"), 1234, 2345);
     oscReceiver =  ofPtr<ofxClientOSCManager>(new ofxClientOSCManager());
