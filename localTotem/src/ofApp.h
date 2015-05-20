@@ -35,6 +35,7 @@ public:
 	bool showUnwrapped = false;
 	ofPtr<ofBaseVideoDraws> videoSource;
 
+	// Legacy stuff
 	ofImage image;
 	ofPtr<ofBaseVideoDraws> player;
 	ofImage small3, small1, small2;

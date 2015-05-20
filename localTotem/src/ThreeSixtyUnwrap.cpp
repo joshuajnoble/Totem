@@ -1,7 +1,9 @@
 #include "ThreeSixtyUnwrap.h"
 
-void ThreeSixtyUnwrap::setup()
+void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, int outputWidth, int outputHeight)
 {
+	this->videoSource = videoSource;
+
 	if (XML.loadFile("UnwarperSettings.xml")){
 		//printf("UnwarperSettings.xml loaded!\n");
 	}
@@ -14,9 +16,8 @@ void ThreeSixtyUnwrap::setup()
 	maxR_factor = XML.getValue("MAXR_FACTOR", 0.95);
 	minR_factor = XML.getValue("MINR_FACTOR", 0.45);
 	angularOffset = XML.getValue("ROTATION_DEGREES", 0.0);
-	double factor = 1.25;
-	unwarpedW = (int)XML.getValue("OUTPUT_W", 2048 * factor);
-	unwarpedH = (int)XML.getValue("OUTPUT_H", 2048 * factor / 5);
+	unwarpedW = outputWidth;
+	unwarpedH = outputHeight;
 
 	// Interpolation method: 
 	// 0 = CV_INTER_NN, 1 = CV_INTER_LINEAR, 2 = CV_INTER_CUBIC.
@@ -34,7 +35,7 @@ void ThreeSixtyUnwrap::setup()
 	int nWarpedBytes = warpedW * warpedH * 3;
 
 	warpedImageOpenCV.allocate(warpedW, warpedH);
-	warpedPixels = new unsigned char[nWarpedBytes];
+	warpedPixels = ofPtr<unsigned char>(new unsigned char[nWarpedBytes]);
 	warpedIplImage = warpedImageOpenCV.getCvImage();
 	cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedW, warpedH));
 
@@ -67,8 +68,7 @@ void ThreeSixtyUnwrap::setup()
 void ThreeSixtyUnwrap::update()
 {
 	this->videoSource->update();
-	this->_isFramNew = this->videoSource->isFrameNew();
-	if (this->_isFramNew)
+	if (this->videoSource->isFrameNew())
 	{
 		if (_bCenterChanged || _bAngularOffsetChanged)
 		{
@@ -82,8 +82,8 @@ void ThreeSixtyUnwrap::update()
 			_bCenterChanged = false;
 		}
 
-		memcpy(warpedPixels, this->videoSource->getPixels(), warpedW*warpedH * 3);
-		warpedIplImage->imageData = (char*)warpedPixels;
+		memcpy(warpedPixels.get(), this->videoSource->getPixels(), warpedW*warpedH * 3);
+		warpedIplImage->imageData = (char*)warpedPixels.get();
 
 		cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedIplImage->width, warpedIplImage->height));
 
@@ -101,9 +101,14 @@ void ThreeSixtyUnwrap::update()
 	}
 }
 
-bool ThreeSixtyUnwrap::isFrameNew()
+void ThreeSixtyUnwrap::close()
 {
-	return this->_isFramNew;
+	this->warpedPixels.reset();
+	this->unwarpedImageOpenCV.clear();
+	this->unwarpedImage.clear();
+	this->unwarpedPixels.clear();
+	this->srcxArrayOpenCV.clear();
+	this->srcyArrayOpenCV.clear();
 }
 
 //=============================================

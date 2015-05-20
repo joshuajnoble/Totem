@@ -28,35 +28,9 @@ void ofApp::setup()
 	mainPosition.set(-100, 10);
 	mainScale.set(660, 660);
 
-	this->unwrapper.videoSource = this->videoSource;
-	this->unwrapper.setup();
+	double factor = 1.25;
+	this->unwrapper.initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
 	this->isInitialized = true;
-}
-
-ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path)
-{
-	ofVideoPlayer* player = new ofVideoPlayer();
-	ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
-	if (player->loadMovie(path))
-	{
-		player->setLoopState(OF_LOOP_NORMAL);
-		player->play();
-	}
-
-	return rval;
-}
-
-ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int width, int height)
-{
-	ofVideoGrabber *grabber = new ofVideoGrabber();
-	ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
-	if (deviceId != 0)
-	{
-		grabber->setDeviceID(deviceId);
-	}
-
-	grabber->initGrabber(width, height);
-	return rval;
 }
 
 //--------------------------------------------------------------
@@ -213,7 +187,7 @@ void ofApp::draw()
 	}
 	else if (this->showUnwrapped)
 	{
-		this->unwrapper.unwarpedImage.draw(0, 0);
+		this->unwrapper.draw(0, 0);
 	}
 }
 
@@ -233,4 +207,30 @@ void ofApp::onKeyframe(ofxPlaylistEventArgs& args)
 	{
 		return;
 	}
+}
+
+ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path)
+{
+	ofVideoPlayer* player = new ofVideoPlayer();
+	ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
+	if (player->loadMovie(path))
+	{
+		player->setLoopState(OF_LOOP_NORMAL);
+		player->play();
+	}
+
+	return rval;
+}
+
+ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int width, int height)
+{
+	ofVideoGrabber *grabber = new ofVideoGrabber();
+	ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
+	if (deviceId != 0)
+	{
+		grabber->setDeviceID(deviceId);
+	}
+
+	grabber->initGrabber(width, height);
+	return rval;
 }
