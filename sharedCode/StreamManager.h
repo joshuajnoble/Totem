@@ -43,10 +43,7 @@ public:
     void setImageSource(ofPtr<ofImage> cam_img);
     int hash(const char * str);
     
-    // add a new client
     void newClient(clientParameters params);
-    
-    // add a new server
     void newServer(clientParameters params);
     void newFrame();
     
@@ -70,11 +67,9 @@ public:
     float width;
     float height;
     
-    
     map<string, ofPtr<ofxGstRTPClient> > clients;
     map<string, ofPtr<ofxGstRTPServer> > servers;
     
-    //    ofVideoPlayer player;
     map<string, ofPtr<ofFbo> > remoteVideos;
     ofTexture mLoadingScreen;
     map<string,bool> bConnected;
@@ -85,8 +80,6 @@ public:
     
     float lastSend;
     
-    
-    
     clientParameters thisClient;
     
     string localIPAddrss;
@@ -95,5 +88,4 @@ public:
     int audioPort;
     
     map<string, clientParameters> connections;
-    
 };

@@ -277,6 +277,9 @@
     <ClCompile Include="$(OFDIR)\addons\ofxOSCSync\src\Server\ofxServerOscManager.cpp">
       <Filter>addons\ofxOSCSync\Server</Filter>
     </ClCompile>
+    <ClCompile Include="src\TotemDisplay.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -460,6 +463,9 @@
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h">
       <Filter>addons\ofxOsc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TotemDisplay.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

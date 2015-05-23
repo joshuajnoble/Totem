@@ -17,7 +17,6 @@ void ofApp::setup()
 {
 	rec.setup(8888);	
 
-	// initialize Spout as a receiver
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
 
@@ -28,6 +27,7 @@ void ofApp::setup()
 	mainPosition.set(-100, 10);
 	mainScale.set(660, 660);
 
+
 	if (this->passthroughVideo)
 	{
 		this->processedVideo = this->videoSource;
@@ -35,17 +35,17 @@ void ofApp::setup()
 	else
 	{
 		double factor = 1.25;
-		//this->unwrapper.initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
 		auto unwrapper = new ThreeSixtyUnwrap();
 		this->processedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
 		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
 	}
 
-	streamManager.setup(640, 480);
+	streamManager.setup(this->processedVideo->getWidth(), this->processedVideo->getHeight());
 	remoteImage = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 
+	this->totemDisplay.initTotemDisplay(4, 800, 1280);
 	this->isInitialized = true;
 }
 
@@ -75,47 +75,46 @@ void ofApp::update()
 
 	mainPlaylist.update();
 
+	this->totemDisplay.update();
+
 	if (drawSecondRemote)
 	{
 		player->update();
 	}
 
-	//ofxSpout::initReceiver();
-	//ofxSpout::receiveTexture();
-	
-	fbo.begin();
-	ofBackground(0, 0, 0);
-	ofPushMatrix();
-	ofTranslate(0, 480);
-	ofRotate(rotation);
+	//fbo.begin();
+	//ofBackground(0, 0, 0);
+	//ofPushMatrix();
+	//ofTranslate(0, 480);
+	//ofRotate(rotation);
 
-	if (drawSecondRemote)
-	{
+	//if (drawSecondRemote)
+	//{
 
-		//ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
-		//player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
+	//	//ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
+	//	//player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
 
-		//ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
-		//player->getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player->getWidth(), 800);
+	//	//ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
+	//	//player->getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player->getWidth(), 800);
 
-		ofSetColor(0, 0, 0);
-		ofRect(0, remotePosition.y, 480, 10);
-		ofSetColor(255, 255, 255);
-	}
-	else
-	{
-		//ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
-		//ofxSpout::draw(0, 0, 500, 500);
-		//small1.draw(100, 670, 150, 120);
-		//small2.draw(260, 670, 150, 120);
-		//small3.draw(325, 540, 150, 120);
-	}
+	//	ofSetColor(0, 0, 0);
+	//	ofRect(0, remotePosition.y, 480, 10);
+	//	ofSetColor(255, 255, 255);
+	//}
+	//else
+	//{
+	//	//ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
+	//	//ofxSpout::draw(0, 0, 500, 500);
+	//	//small1.draw(100, 670, 150, 120);
+	//	//small2.draw(260, 670, 150, 120);
+	//	//small3.draw(325, 540, 150, 120);
+	//}
 
-	ofPopMatrix();
+	//ofPopMatrix();
 
-	// draw other UI here
+	//// draw other UI here
 
-	fbo.end();
+	//fbo.end();
 
 	// check for waiting messages
 	while (rec.hasWaitingMessages()){
@@ -173,35 +172,35 @@ void ofApp::draw()
 	}
 
 	// draw everything.
-	ofBackground(64, 64, 64);
+	//ofBackground(64, 64, 64);
 
-	//grabber.draw(0, 0);
+	////grabber.draw(0, 0);
 
+	////fbo.draw(0, 0);
+
+	//ofPushMatrix();
+	////ofRotate(90);
 	//fbo.draw(0, 0);
-
-	ofPushMatrix();
-	//ofRotate(90);
-	fbo.draw(0, 0);
-	if (selectedScreen != 0 && selectedScreen != -1) {
-		//ofRect(0, 0, 480, 480);
-		ofSetColor(255, 255, 255, 255);
-	}
-	ofTranslate(800, 0);
-	fbo.draw(0, 0);
-	if (selectedScreen != 1 && selectedScreen != -1) {
-		ofSetColor(255, 255, 255, 255);
-	}
-	ofTranslate(800, 0);
-	fbo.draw(0, 0);
-	if (selectedScreen != 2 && selectedScreen != -1) {
-		ofSetColor(255, 255, 255, 255);
-	}
-	ofTranslate(800, 0);
-	fbo.draw(0, 0);
-	if (selectedScreen != 3 && selectedScreen != -1) {
-		ofSetColor(255, 255, 255, 255);
-	}
-	ofPopMatrix();
+	//if (selectedScreen != 0 && selectedScreen != -1) {
+	//	//ofRect(0, 0, 480, 480);
+	//	ofSetColor(255, 255, 255, 255);
+	//}
+	//ofTranslate(800, 0);
+	//fbo.draw(0, 0);
+	//if (selectedScreen != 1 && selectedScreen != -1) {
+	//	ofSetColor(255, 255, 255, 255);
+	//}
+	//ofTranslate(800, 0);
+	//fbo.draw(0, 0);
+	//if (selectedScreen != 2 && selectedScreen != -1) {
+	//	ofSetColor(255, 255, 255, 255);
+	//}
+	//ofTranslate(800, 0);
+	//fbo.draw(0, 0);
+	//if (selectedScreen != 3 && selectedScreen != -1) {
+	//	ofSetColor(255, 255, 255, 255);
+	//}
+	//ofPopMatrix();
 
 	if (this->showInput)
 	{
@@ -213,8 +212,11 @@ void ofApp::draw()
 	}
 	else
 	{
-		this->streamManager.drawDebug();
+		ofSetColor(255);
+		this->totemDisplay.draw();
 	}
+
+	//this->streamManager.drawDebug();
 }
 
 
@@ -264,4 +266,9 @@ ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int widt
 void ofApp::newClient(string& args)
 {
 	ofLog() << "new client" << endl;
+
+	// Show the clietn video
+	auto source = this->streamManager.remoteVideos.begin()->second;
+	// TODO, can't set an ofImage as an input so we need to change that!
+	//this->totemDisplay.setVideoSource(1, source);
 }

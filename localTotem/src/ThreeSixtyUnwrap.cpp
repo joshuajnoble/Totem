@@ -41,12 +41,12 @@ void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, int ou
 
 	int nUnwarpedPixels = unwarpedW * unwarpedH;
 	int nUnwarpedBytes = unwarpedW * unwarpedH * 3;
-	unwarpedImage.allocate(unwarpedW, unwarpedH, OF_IMAGE_COLOR);
+	unwrappedImage.allocate(unwarpedW, unwarpedH, OF_IMAGE_COLOR);
 	unwarpedPixels.allocate(unwarpedW, unwarpedH, 3);
 
-	unwarpedImageOpenCV.allocate(unwarpedW, unwarpedH);
-	unwarpedImageOpenCV.setROI(0, 0, unwarpedW, unwarpedH);
-	unwarpedIplImage = unwarpedImageOpenCV.getCvImage();
+	unwrappedImageOpenCV.allocate(unwarpedW, unwarpedH);
+	unwrappedImageOpenCV.setROI(0, 0, unwarpedW, unwarpedH);
+	unwarpedIplImage = unwrappedImageOpenCV.getCvImage();
 
 	srcxArrayOpenCV.allocate(unwarpedW, unwarpedH);
 	srcyArrayOpenCV.allocate(unwarpedW, unwarpedH);
@@ -96,16 +96,16 @@ void ThreeSixtyUnwrap::update()
 		unwarpedPixels.setFromPixels((unsigned char*)unwarpedIplImage->imageData, unwarpedIplImage->width, unwarpedIplImage->height, 3);
 		unwarpedPixels.mirror(true, false);
 
-		unwarpedImage.setFromPixels(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, OF_IMAGE_COLOR, true);
-		unwarpedImage.update();
+		unwrappedImage.setFromPixels(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, OF_IMAGE_COLOR, true);
+		unwrappedImage.update();
 	}
 }
 
 void ThreeSixtyUnwrap::close()
 {
 	this->warpedPixels.reset();
-	this->unwarpedImageOpenCV.clear();
-	this->unwarpedImage.clear();
+	this->unwrappedImageOpenCV.clear();
+	this->unwrappedImage.clear();
 	this->unwarpedPixels.clear();
 	this->srcxArrayOpenCV.clear();
 	this->srcyArrayOpenCV.clear();

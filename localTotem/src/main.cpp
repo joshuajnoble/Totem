@@ -80,11 +80,18 @@ int main(int argc, const char** argv)
 	else if (ofxArgParser::hasKey("showUnwrapped"))
 	{
 		app->showUnwrapped = true;
-		ofSetupOpenGL(&window, 2048, 512, OF_WINDOW);
+		if (ofxArgParser::hasKey("noUnwrap"))
+		{
+			ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
+		}
+		else
+		{
+			ofSetupOpenGL(&window, 2048, 512, OF_WINDOW);
+		}
 	}
 	else
 	{
-		ofSetupOpenGL(&window, 3200, 490, OF_WINDOW);
+		ofSetupOpenGL(&window, 800 * 4, 1280, OF_WINDOW);
 	}
 
 	// this kicks off the running of my app

@@ -17,17 +17,17 @@ public:
 	void close();
 
 	// ofBaseHasPixles implementation
-	unsigned char* getPixels() { return this->unwarpedImage.getPixels(); }
-	ofPixelsRef getPixelsRef() { return this->unwarpedImage.getPixelsRef(); }
-	void draw(float x, float y, float w, float h) { this->unwarpedImage.draw(x, y, w, h); }
-	void draw(float x, float y) { this->unwarpedImage.draw(x, y); }
+	unsigned char* getPixels() { return this->unwrappedImage.getPixels(); }
+	ofPixelsRef getPixelsRef() { return this->unwrappedImage.getPixelsRef(); }
+	void draw(float x, float y, float w, float h) { this->unwrappedImage.draw(x, y, w, h); }
+	void draw(float x, float y) { this->unwrappedImage.draw(x, y); }
 
 	// ofBaseVideoDraws implementation
-	float getHeight() { return this->unwarpedImage.getHeight(); }
-	float getWidth() { return this->unwarpedImage.getWidth(); }
+	float getHeight() { return this->unwrappedImage.getHeight(); }
+	float getWidth() { return this->unwrappedImage.getWidth(); }
 	bool isFrameNew() { return this->videoSource->isFrameNew(); }
-	ofTexture & getTextureReference() { return this->unwarpedImage.getTextureReference(); }
-	void setUseTexture(bool bUseTex) { this->unwarpedImage.setUseTexture(bUseTex); }
+	ofTexture & getTextureReference() { return this->unwrappedImage.getTextureReference(); }
+	void setUseTexture(bool bUseTex) { this->unwrappedImage.setUseTexture(bUseTex); }
 
 	void setVideoSource(ofPtr<ofBaseVideoDraws> videoSource) { this->videoSource = videoSource; }
 	ofPtr<ofBaseVideoDraws> getVideoSource() { return this->videoSource; }
@@ -65,7 +65,7 @@ private:
 	IplImage	*warpedIplImage;
 	IplImage	*unwarpedIplImage;
 	ofxCvColorImage	warpedImageOpenCV;
-	ofxCvColorImage unwarpedImageOpenCV;
+	ofxCvColorImage unwrappedImageOpenCV;
 	ofxCvFloatImage srcxArrayOpenCV;
 	ofxCvFloatImage srcyArrayOpenCV;
 
@@ -80,6 +80,5 @@ private:
 	bool _bAngularOffsetChanged = false;
 
 	ofPtr<ofBaseVideoDraws> videoSource;
-	ofImage unwarpedImage;
+	ofImage unwrappedImage;
 };
-
