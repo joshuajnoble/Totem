@@ -99,3 +99,8 @@ void TotemDisplay::draw()
 		fbo.draw(this->displayWidth * i, 0);
 	}
 }
+
+ofFbo& TotemDisplay::getDisplay(int totemDisplayId)
+{
+	return this->_output[totemDisplayId];
+}

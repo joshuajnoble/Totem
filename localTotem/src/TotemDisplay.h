@@ -11,6 +11,7 @@ public:
 	void update();
 	void draw();
 	void setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> videoSource);
+	ofFbo& getDisplay(int totemDisplayId);
 
 private:
 	bool isFirstTime = true;

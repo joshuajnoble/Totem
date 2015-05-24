@@ -47,6 +47,7 @@ public:
 	ofPtr<ofBaseVideoDraws> player;
 	ofPtr<ofBaseVideoDraws> processedVideo;
 	ofImage small3, small1, small2;
+	std::vector<ofPtr<ofFbo>> remoteVideoSources;
 
 	bool drawCylinder;
 	ofTrueTypeFont din;

@@ -1,7 +1,5 @@
 #include "ofApp.h"
 
-#define JOSHNOBLE_UNWRAP
-
 using namespace ofxCv;
 using namespace cv;
 
@@ -115,6 +113,14 @@ void ofApp::update()
 	//// draw other UI here
 
 	//fbo.end();
+
+	for (int i = 0; i < this->remoteVideoSources.size(); ++i)
+	{
+		auto output = this->totemDisplay.getDisplay(i);
+		output.begin();
+		this->remoteVideoSources[i]->draw(0, 0);
+		output.end();
+	}
 
 	// check for waiting messages
 	while (rec.hasWaitingMessages()){
@@ -263,12 +269,23 @@ ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int widt
 	return rval;
 }
 
+class ofFboAsVideo : public ofFbo, public ofBaseUpdates
+{
+public:
+	ofFboAsVideo(ofFbo input)
+	{
+		this->fbo = input;
+	}
+
+private:
+	ofFbo fbo;
+};
+
 void ofApp::newClient(string& args)
 {
 	ofLog() << "new client" << endl;
 
-	// Show the clietn video
+	// Show the client video
 	auto source = this->streamManager.remoteVideos.begin()->second;
-	// TODO, can't set an ofImage as an input so we need to change that!
-	//this->totemDisplay.setVideoSource(1, source);
+	this->remoteVideoSources.push_back(source);
 }
