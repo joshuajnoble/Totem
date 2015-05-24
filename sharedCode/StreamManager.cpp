@@ -133,7 +133,9 @@ void StreamManager::sendJSONData(ofxJSONElement sendJSON){
 }
 
 bool StreamManager::isFrameNew(){
-	return bNewFrame;
+	auto rval = bNewFrame;
+	this->bNewFrame = false;
+	return rval;
 }
 
 void StreamManager::newFrame(){
@@ -145,7 +147,6 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 }
 
 void StreamManager::update(){
-	this->bNewFrame = false;
     if(ofGetElapsedTimef() - lastSend > 1.5){
         ofxJSONElement sendJSON;
         ofxJSONElement connection;

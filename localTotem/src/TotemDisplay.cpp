@@ -1,4 +1,5 @@
 #include "TotemDisplay.h"
+#include <unordered_set>
 
 void TotemDisplay::initTotemDisplay(int count, int width, int height)
 {
@@ -31,6 +32,10 @@ void TotemDisplay::setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> vi
 
 void TotemDisplay::update()
 {
+	// If the same source is provided on multiple displays, then the first will get updated, but the second one won't (since it's isFrameNew flas will be reset)
+	// This set solves that problem for us by remembering if a given object has already indicated that is has a new frame;
+	std::unordered_set<intptr_t> sourceIsFrameName;
+
 	for (int i = 0; i < this->displayCount; ++i)
 	{
 		auto source = this->videoSources[i];
@@ -40,8 +45,10 @@ void TotemDisplay::update()
 		if (source.get())
 		{
 			source->update();
-			if (source->isFrameNew())
+			auto srcIntPtr = reinterpret_cast<intptr_t>(source.get());
+			if (source->isFrameNew() || sourceIsFrameName.find(srcIntPtr) != sourceIsFrameName.end())
 			{
+				sourceIsFrameName.insert(srcIntPtr);
 				if (abs(source->getWidth() / static_cast<float>(source->getHeight()) - this->displayRatio) <= 0.2f)
 				{
 					// Just direct draw or stretch to fit because the aspect ratios are very close
@@ -69,7 +76,7 @@ void TotemDisplay::update()
 		else
 		{
 			// Draw Debug Display
-			ofSetColor(0, 255 / (i + 1), 0);
+			ofSetColor(0, 191 / (i + 1) + 64, 0);
 			ofRect(0, 0, this->displayWidth, this->displayHeight);
 
 			ofSetColor(0);

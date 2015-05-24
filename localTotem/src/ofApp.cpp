@@ -44,6 +44,8 @@ void ofApp::setup()
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 
 	this->totemDisplay.initTotemDisplay(4, 800, 1280);
+	//this->totemDisplay.setVideoSource(2, this->videoSource);
+	//this->totemDisplay.setVideoSource(3, this->processedVideo);
 	this->isInitialized = true;
 }
 
@@ -218,7 +220,6 @@ void ofApp::draw()
 	}
 	else
 	{
-		ofSetColor(255);
 		this->totemDisplay.draw();
 	}
 
