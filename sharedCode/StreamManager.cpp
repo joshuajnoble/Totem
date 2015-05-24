@@ -80,14 +80,13 @@ void StreamManager::newData( DataPacket& _packet  )
             newConnection.clientID = json["connection"]["clientID"].asString();
             
             if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress!= thisClient.ipAddress){
-                ofNotifyEvent(newClientEvent, newConnection.clientID, this);
                 connections[newConnection.clientID] = newConnection;
                 
                 ofLog(OF_LOG_VERBOSE)<<"CLIENT ID "<<newConnection.clientID<<endl;
                 ofLog(OF_LOG_VERBOSE)<<"AudioPort "<<newConnection.audioPort<<endl;
                 ofLog(OF_LOG_VERBOSE)<<"VideoPort "<<newConnection.videoPort<<endl;
                 ofLog(OF_LOG_VERBOSE)<<"IpAddress "<<newConnection.ipAddress<<endl;
-                
+
                 newClient(newConnection);
                 newServer(newConnection);
             }
@@ -240,4 +239,6 @@ void StreamManager::newClient(clientParameters params){
     
     bConnected[params.clientID] = (false);
     clients[params.clientID]->play();
+
+	ofNotifyEvent(newClientEvent, params.clientID, this);
 }
