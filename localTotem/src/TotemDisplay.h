@@ -14,8 +14,8 @@ public:
 
 private:
 	bool isFirstTime = true;
-	ofFbo _output;
-	vector<ofPtr<ofBaseVideoDraws>> videoSources;
+	std::vector<ofFbo> _output;
+	std::vector<ofPtr<ofBaseVideoDraws>> videoSources;
 	float displayRatio;
 	int displayWidth, displayHeight;
 	int displayCount;
