@@ -38,14 +38,14 @@ void ofApp::setup()
 		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
 	}
 
-	streamManager.setup(this->processedVideo->getWidth(), this->processedVideo->getHeight());
+	streamManager.setup(640, 480);// this->processedVideo->getWidth(), this->processedVideo->getHeight());
 	remoteImage = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 
 	this->totemDisplay.initTotemDisplay(4, 800, 1280);
-	//this->totemDisplay.setVideoSource(2, this->videoSource);
-	//this->totemDisplay.setVideoSource(3, this->processedVideo);
+	this->totemDisplay.setVideoSource(2, this->videoSource);
+	this->totemDisplay.setVideoSource(3, this->processedVideo);
 	this->isInitialized = true;
 }
 
@@ -67,6 +67,8 @@ void ofApp::update()
 
 	if (this->processedVideo->isFrameNew())
 	{
+		auto pixels = this->processedVideo->getPixelsRef();
+		pixels.resize(640, 480);
 		remoteImage->setFromPixels(this->processedVideo->getPixelsRef());
 		streamManager.newFrame();
 	}
@@ -222,8 +224,6 @@ void ofApp::draw()
 	{
 		this->totemDisplay.draw();
 	}
-
-	//this->streamManager.drawDebug();
 }
 
 
@@ -288,5 +288,6 @@ void ofApp::newClient(string& args)
 
 	// Show the client video
 	auto source = this->streamManager.remoteVideos.begin()->second;
+	this->remoteVideoSources.clear(); // Limit it to only one source for now.
 	this->remoteVideoSources.push_back(source);
 }

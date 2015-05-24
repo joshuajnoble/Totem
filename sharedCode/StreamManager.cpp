@@ -79,7 +79,7 @@ void StreamManager::newData( DataPacket& _packet  )
             newConnection.videoPort = json["connection"]["videoPort"].asString();
             newConnection.clientID = json["connection"]["clientID"].asString();
             
-            if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress!= thisClient.ipAddress){
+			if (newConnection.ipAddress != thisClient.ipAddress && connections.find(newConnection.clientID) == connections.end()){
                 connections[newConnection.clientID] = newConnection;
                 
                 ofLog(OF_LOG_VERBOSE)<<"CLIENT ID "<<newConnection.clientID<<endl;
