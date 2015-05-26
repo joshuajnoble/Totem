@@ -38,14 +38,14 @@ void ofApp::setup()
 		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
 	}
 
-	streamManager.setup(640, 480);// this->processedVideo->getWidth(), this->processedVideo->getHeight());
+	streamManager.setup(this->processedVideo->getWidth(), this->processedVideo->getHeight());
 	remoteImage = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 
 	this->totemDisplay.initTotemDisplay(4, 800, 1280);
-	this->totemDisplay.setVideoSource(2, this->videoSource);
-	this->totemDisplay.setVideoSource(3, this->processedVideo);
+	//this->totemDisplay.setVideoSource(2, this->videoSource);
+	//this->totemDisplay.setVideoSource(3, this->processedVideo);
 	this->isInitialized = true;
 }
 
@@ -67,8 +67,8 @@ void ofApp::update()
 
 	if (this->processedVideo->isFrameNew())
 	{
-		auto pixels = this->processedVideo->getPixelsRef();
-		pixels.resize(640, 480);
+		//auto pixels = this->processedVideo->getPixelsRef();
+		//pixels.resize(640, 480);
 		remoteImage->setFromPixels(this->processedVideo->getPixelsRef());
 		streamManager.newFrame();
 	}
