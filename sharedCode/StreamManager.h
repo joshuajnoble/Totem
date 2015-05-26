@@ -27,6 +27,8 @@ public:
         string audioPortTwo;
         string videoPortTwo;
         string clientID;
+        int videoWidth;
+        int videoHeight;
     };
     
     // initialize everything
@@ -76,6 +78,7 @@ public:
     
     //    ofVideoPlayer player;
     map<string, ofPtr<ofFbo> > remoteVideos;
+    map<string, ofPtr<ofImage> > remotePixels;
     ofTexture mLoadingScreen;
     map<string,bool> bConnected;
     
@@ -84,8 +87,6 @@ public:
     ofPtr<ofImage> mImg;
     
     float lastSend;
-    
-    
     
     clientParameters thisClient;
     
