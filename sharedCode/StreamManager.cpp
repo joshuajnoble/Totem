@@ -60,18 +60,7 @@ void StreamManager::setup(int _width, int _height){
     commonTimeOsc->setEaseOffset( true );
     
     ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
-    
-    clientParameters newConnection;
-    newConnection.ipAddress = "127.0.0.1";
-    newConnection.audioPort = "1000";
-    newConnection.videoPort = "2000";
-    newConnection.clientID = "123124";
-    
-    
-    
-    newClient(newConnection);
-    newServer(newConnection);
-    
+        
 }
 
 int StreamManager::hash(const char * str)
