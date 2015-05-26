@@ -41,6 +41,8 @@ public:
 	bool showInput = false;
 	bool showUnwrapped = false;
 	ofPtr<ofBaseVideoDraws> videoSource;
+	float unwrapMultiplier = 1.5f;
+	float unwrapAspectRatio = 0.25f;
 
 	// Legacy stuff
 	ofImage image;

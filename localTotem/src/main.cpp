@@ -17,6 +17,9 @@ int main(int argc, const char** argv)
 			" -showUnwrapped              (Show the undistorted video stream instead of the normal UI)" << endl <<
 			" -sourceFile=<path>          (Uses a test file instead of the camera for inpput)" << endl <<
 			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
+			" -xMargin=<border size>      (Shifts the window left by this amount)" << endl <<
+			" -yMargin=<border size>      (Shifts the window up by this amount)" << endl <<
+			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
 			" -capWidth=<capture width>   (default=2048 pixels)" << endl <<
 			" -capHeight=<capture height> (default=2048 pixels)" << endl;
 		return 0;
@@ -49,6 +52,16 @@ int main(int argc, const char** argv)
 			std::cout << "The \"sourceFile\" param requires a video file path.  See -help for details.";
 			return -1;
 		}
+		if (ofxArgParser::hasKey("xMargin") && ofxArgParser::getValue("xMargin") == "")
+		{
+			std::cout << "The \"xMargin\" param requires a value.  See -help for details.";
+			return -1;
+		}
+		if (ofxArgParser::hasKey("yMargin") && ofxArgParser::getValue("yMargin") == "")
+		{
+			std::cout << "The \"yMargin\" param requires a value.  See -help for details.";
+			return -1;
+		}
 	}
 
 	auto webCamDeviceId = 0;
@@ -69,6 +82,18 @@ int main(int argc, const char** argv)
 		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
 	}
 
+	auto xMargin = 8;
+	auto yMargin = 31;
+	if (ofxArgParser::hasKey("xMargin"))
+	{
+		xMargin = ofToInt(ofxArgParser::getValue("xMargin"));
+	}
+
+	if (ofxArgParser::hasKey("yMargin"))
+	{
+		yMargin = ofToInt(ofxArgParser::getValue("yMargin"));
+	}
+
 	ofPtr<ofApp> app = ofPtr<ofApp>(new ofApp());
 
 	ofAppGlutWindow window;
@@ -86,7 +111,7 @@ int main(int argc, const char** argv)
 		}
 		else
 		{
-			ofSetupOpenGL(&window, 2048, 512, OF_WINDOW);
+			ofSetupOpenGL(&window, captureWidth * app->unwrapMultiplier, captureWidth * app->unwrapMultiplier * app->unwrapAspectRatio, OF_WINDOW);
 		}
 	}
 	else
@@ -94,10 +119,7 @@ int main(int argc, const char** argv)
 		ofSetupOpenGL(&window, 800 * 4, 1280, OF_WINDOW);
 	}
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-
+	// The capture device must be initialized after ofSetupOpenGL has been called, so it can allocate the proper internal buffers.
 	ofPtr<ofBaseVideoDraws> videoSource;
 	if (ofxArgParser::hasKey("sourceFile"))
 	{
@@ -120,6 +142,7 @@ int main(int argc, const char** argv)
 	app->passthroughVideo = ofxArgParser::hasKey("noUnwrap");
 	app->videoSource = videoSource;
 
+	//ofSetWindowPosition(-xMargin, -yMargin); // Position the window to not show the left and top window chrome.
 	ofSetWindowPosition(0, 0);
 
 	ofRunApp(app);

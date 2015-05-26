@@ -25,17 +25,15 @@ void ofApp::setup()
 	mainPosition.set(-100, 10);
 	mainScale.set(660, 660);
 
-
 	if (this->passthroughVideo)
 	{
 		this->processedVideo = this->videoSource;
 	}
 	else
 	{
-		double factor = 1.25;
 		auto unwrapper = new ThreeSixtyUnwrap();
 		this->processedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
-		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * factor, this->videoSource->getWidth() * factor / 5);
+		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * this->unwrapMultiplier, this->videoSource->getWidth() * this->unwrapMultiplier * this->unwrapAspectRatio);
 	}
 
 	streamManager.setup(this->processedVideo->getWidth(), this->processedVideo->getHeight());
@@ -67,8 +65,6 @@ void ofApp::update()
 
 	if (this->processedVideo->isFrameNew())
 	{
-		//auto pixels = this->processedVideo->getPixelsRef();
-		//pixels.resize(640, 480);
 		remoteImage->setFromPixels(this->processedVideo->getPixelsRef());
 		streamManager.newFrame();
 	}
