@@ -60,7 +60,7 @@ void StreamManager::setup(int _width, int _height){
     commonTimeOsc->setEaseOffset( true );
     
     ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
-        
+    
 }
 
 int StreamManager::hash(const char * str)
@@ -227,14 +227,14 @@ void StreamManager::newServer(clientParameters params){
         servers[params.clientID]->setup(params.ipAddress);
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-        servers[params.clientID]->videoBitrate = 1600;
+        servers[params.clientID]->videoBitrate = 4000;
         servers[params.clientID]->play();
     }else{
         servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
         servers[params.clientID]->setup(params.ipAddress);
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
-        servers[params.clientID]->videoBitrate = 1600;
+        servers[params.clientID]->videoBitrate = 4000;
         servers[params.clientID]->play();
     }
 }
