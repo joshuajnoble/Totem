@@ -81,7 +81,6 @@ public:
     map<string, ofPtr<ofxGstRTPServer> > servers;
     
     map<string, ofPtr<ofFbo> > remoteVideos;
-    map<string, ofPtr<ofImage> > remotePixels;
     ofTexture mLoadingScreen;
     map<string,bool> bConnected;
     

@@ -181,7 +181,6 @@ void StreamManager::update(){
     for(map<string, ofPtr<ofxGstRTPClient> >::iterator iter = clients.begin(); iter != clients.end(); iter++){
         iter->second->update();
         if(iter->second->isFrameNewVideo()){
-            remotePixels[iter->first]->setFromPixels(iter->second->getPixelsVideo());
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
             if(!bConnected[iter->first]){
                 bConnected[iter->first]= true;
