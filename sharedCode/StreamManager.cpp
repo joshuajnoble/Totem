@@ -191,16 +191,17 @@ void StreamManager::update(){
             // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();
-                remoteVideos[iter->first]->begin();
+				auto video = remoteVideos[iter->first];
+                video->begin();
                 ofClear(0, 0, 0);
                 ofSetColor(255, 255, 255, 75);
                 for(int i = 0; i < 6; i++){
                     ofPushMatrix();
-                    ofTranslate(width/2, height/2);
+                    ofTranslate(video->getWidth() / 2, video->getHeight() / 2);
                     ofCircle(15*cos(ofGetElapsedTimef()*2.5+i*PI/3), 15*sin(ofGetElapsedTimef()*2.5+i*PI/3), 5);
                     ofPopMatrix();
                 }
-                remoteVideos[iter->first]->end();
+                video->end();
                 ofDisableAlphaBlending();
             }
         }
