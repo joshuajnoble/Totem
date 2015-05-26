@@ -12,16 +12,18 @@ int main(int argc, const char** argv)
 	{
 		std::cout << "Usage:" << std::endl <<
 			" -listDevices" << endl <<
+			" -totem                      (This is the default and will use the totem display)" << endl <<
+			"    -noUnwrap                   (totem only, Send the raw video stream without unwarpping it)" << endl <<
+			"    -showUnwrapped              (totem only, Show the undistorted video stream instead of the normal UI)" << endl <<
+			" -remote                     (Don't use the totem display)" << endl <<
 			" -showInput                  (Show the input video stream instead of the normal UI)" << endl <<
-			" -noUnwrap                   (Send the raw video stream without unwarpping it)" << endl <<
-			" -showUnwrapped              (Show the undistorted video stream instead of the normal UI)" << endl <<
 			" -sourceFile=<path>          (Uses a test file instead of the camera for inpput)" << endl <<
 			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
 			" -xMargin=<border size>      (Shifts the window left by this amount)" << endl <<
 			" -yMargin=<border size>      (Shifts the window up by this amount)" << endl <<
 			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
-			" -capWidth=<capture width>   (default=2048 pixels)" << endl <<
-			" -capHeight=<capture height> (default=2048 pixels)" << endl;
+			" -capWidth=<capture width>   (default=2048(totem)/1920(remote) pixels)" << endl <<
+			" -capHeight=<capture height> (default=2048(totem)/1080(remote) pixels)" << endl;
 		return 0;
 	}
 	else if (ofxArgParser::hasKey("listDevices"))
@@ -32,6 +34,11 @@ int main(int argc, const char** argv)
 	}
 	else
 	{
+		if (ofxArgParser::hasKey("totem") && ofxArgParser::hasKey("remote"))
+		{
+			std::cout << "You must specify *either* -totem or -remote; not both.  See -help for details.";
+			return -1;
+		}
 		if (ofxArgParser::hasKey("device") && ofxArgParser::getValue("device") == "")
 		{
 			std::cout << "The \"device\" param requires a device number.  See -help for details.";
@@ -64,26 +71,28 @@ int main(int argc, const char** argv)
 		}
 	}
 
+	bool totemMode = !ofxArgParser::hasKey("remote");
+
 	auto webCamDeviceId = 0;
 	if (ofxArgParser::hasKey("device"))
 	{
 		webCamDeviceId = ofToInt(ofxArgParser::getValue("device"));
 	}
 
-	auto captureWidth = 2048;
+	auto captureWidth = totemMode ? 2048 : 1920;
 	if (ofxArgParser::hasKey("capWidth"))
 	{
 		captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
 	}
 
-	auto captureHeight = 2048;
+	auto captureHeight = totemMode ? 2048 : 1080;
 	if (ofxArgParser::hasKey("capHeight"))
 	{
 		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
 	}
 
-	auto xMargin = 8;
-	auto yMargin = 31;
+	auto xMargin = totemMode ? 8 : 0;
+	auto yMargin = totemMode ? 31 : 0;
 	if (ofxArgParser::hasKey("xMargin"))
 	{
 		xMargin = ofToInt(ofxArgParser::getValue("xMargin"));
@@ -139,11 +148,10 @@ int main(int argc, const char** argv)
 		videoSource = ofApp::InitializePlayerFromCamera(webCamDeviceId, captureWidth, captureHeight);
 	}
 
-	app->passthroughVideo = ofxArgParser::hasKey("noUnwrap");
+	app->passthroughVideo = !totemMode || ofxArgParser::hasKey("noUnwrap");
 	app->videoSource = videoSource;
 
-	//ofSetWindowPosition(-xMargin, -yMargin); // Position the window to not show the left and top window chrome.
-	ofSetWindowPosition(0, 0);
+	ofSetWindowPosition(-xMargin, -yMargin); // Position the window to not show the left and top window chrome.
 
 	ofRunApp(app);
 }
