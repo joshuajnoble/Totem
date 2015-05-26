@@ -37,7 +37,7 @@ void ofApp::setup(){
 
 	sender.setup("localhost", 8888);
 	
-	ofxSpout::init("", ofGetWidth(), ofGetHeight(), false);
+	//ofxSpout::init("", ofGetWidth(), ofGetHeight(), false);
 
     vector<ofVideoDevice> dd = grabber.listDevices();
 
@@ -268,11 +268,11 @@ void ofApp::draw(){
 	}
 
 	// init receiver if it's not already initialized
-	ofxSpout::initReceiver();
+	//ofxSpout::initReceiver();
 
 	// receive Spout texturen
-	ofxSpout::receiveTexture();
-	ofxSpout::draw( (ofGetWidth()/2) - 150, 0, 300, 210);
+	//ofxSpout::receiveTexture();
+	//ofxSpout::draw( (ofGetWidth()/2) - 150, 0, 300, 210);
 
 
 	if (showInstructions)
@@ -304,9 +304,6 @@ void ofApp::drawPlayer(){
 
 void ofApp::findLeftFace()
 {
-	finder.clear();
-
-
 #ifdef MIC_DEBUGGING
 
 	panoView.getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);

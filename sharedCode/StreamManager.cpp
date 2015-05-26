@@ -48,8 +48,6 @@ void StreamManager::setup(int _width, int _height){
     thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
     thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
     
-    
-    
     oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
     oscBroadcaster->init( settings.getValue<string>("//broadcastAddress"), 1234, 2345);
     oscReceiver =  ofPtr<ofxClientOSCManager>(new ofxClientOSCManager());
@@ -85,15 +83,14 @@ void StreamManager::newData( DataPacket& _packet  )
             newConnection.videoWidth = json["connection"]["videoWidth"].asInt();
             newConnection.videoHeight = json["connection"]["videoHeight"].asInt();
             
-            if(connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress!= thisClient.ipAddress){
-                ofNotifyEvent(newClientEvent, newConnection.clientID, this);
+			if (newConnection.ipAddress != thisClient.ipAddress && connections.find(newConnection.clientID) == connections.end()){
                 connections[newConnection.clientID] = newConnection;
                 
                 ofLog(OF_LOG_VERBOSE)<<"CLIENT ID "<<newConnection.clientID<<endl;
                 ofLog(OF_LOG_VERBOSE)<<"AudioPort "<<newConnection.audioPort<<endl;
                ofLog(OF_LOG_VERBOSE)<<"VideoPort "<<newConnection.videoPort<<endl;
                 ofLog(OF_LOG_VERBOSE)<<"IpAddress "<<newConnection.ipAddress<<endl;
-                
+
                 newClient(newConnection);
                 newServer(newConnection);
             }
@@ -140,11 +137,11 @@ void StreamManager::sendJSONData(ofxJSONElement sendJSON){
 }
 
 bool StreamManager::isFrameNew(){
-    if(bNewFrame){
-        bNewFrame = false;
-        return true;
-    }
+	auto rval = bNewFrame;
+	this->bNewFrame = false;
+	return rval;
 }
+
 void StreamManager::newFrame(){
     bNewFrame = true;
 }
@@ -154,7 +151,6 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 }
 
 void StreamManager::update(){
-    
     if(ofGetElapsedTimef() - lastSend > 1.5){
         ofxJSONElement sendJSON;
         ofxJSONElement connection;
@@ -251,4 +247,6 @@ void StreamManager::newClient(clientParameters params){
     
     bConnected[params.clientID] = (false);
     clients[params.clientID]->play();
+
+	ofNotifyEvent(newClientEvent, params.clientID, this);
 }

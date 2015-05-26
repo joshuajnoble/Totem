@@ -31,11 +31,11 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -59,19 +59,23 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxSpout\src;..\..\..\addons\ofxCv\libs;..\..\..\addons\ofxCv\libs\CLD;..\..\..\addons\ofxCv\libs\CLD\include;..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\addons\ofxCv\libs\CLD\src;..\..\..\addons\ofxCv\libs\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\src;..\..\..\addons\ofxCv\src;..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxPlaylist\src;..\..\..\addons\ofxPlaylist\src\Easings</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\kiss\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxSpout\src;$(OFDIR)\addons\ofxCv\libs;$(OFDIR)\addons\ofxCv\libs\CLD;$(OFDIR)\addons\ofxCv\libs\CLD\include;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\libs\CLD\src;$(OFDIR)\addons\ofxCv\libs\ofxCv;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\ofxCv\src;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs;$(OFDIR)\addons\ofxOpenCv\libs\opencv;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\core;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\video;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(OFDIR)\addons\ofxOpenCv\src;$(OFDIR)\addons\ofxGui\src;$(OFDIR)\addons\ofxPlaylist\src;$(OFDIR)\addons\ofxPlaylist\src\Easings</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>openframeworksLibDebug.lib;Spout32.lib;opencv_calib3d248d.lib;opencv_ml248d.lib;opencv_contrib248d.lib;opencv_nonfree248d.lib;opencv_core248d.lib;opencv_objdetect248d.lib;opencv_features2d248d.lib;opencv_photo248d.lib;opencv_flann248d.lib;opencv_stitching248d.lib;opencv_gpu248d.lib;opencv_superres248d.lib;opencv_haartraining_engined.lib;opencv_ts248d.lib;opencv_highgui248d.lib;opencv_video248d.lib;opencv_imgproc248d.lib;opencv_videostab248d.lib;opencv_legacy248d.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\libs\openFrameworksCompiled\lib\vs;..\..\..\addons\ofxSpout\libs\lib\vs;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_calib3d248d.lib;opencv_ml248d.lib;opencv_contrib248d.lib;opencv_nonfree248d.lib;opencv_core248d.lib;opencv_objdetect248d.lib;opencv_features2d248d.lib;opencv_photo248d.lib;opencv_flann248d.lib;opencv_stitching248d.lib;opencv_gpu248d.lib;opencv_superres248d.lib;opencv_haartraining_engined.lib;opencv_ts248d.lib;opencv_highgui248d.lib;opencv_video248d.lib;opencv_imgproc248d.lib;opencv_videostab248d.lib;opencv_legacy248d.lib;zlibd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\freetype\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\glut\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\glfw\poco\vs;$(OFDIR)\libs\poco\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>PocoNetmdd.lib;PocoFoundationdd.lib;atlthunk.lib;msvcrt;libcmt;LIBC;LIBCMTD</IgnoreSpecificDefaultLibraries>
     </Link>
     <ProjectReference>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -79,7 +83,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxSpout\src;..\..\..\addons\ofxCv\libs;..\..\..\addons\ofxCv\libs\CLD;..\..\..\addons\ofxCv\libs\CLD\include;..\..\..\addons\ofxCv\libs\CLD\include\CLD;..\..\..\addons\ofxCv\libs\CLD\src;..\..\..\addons\ofxCv\libs\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\include;..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv;..\..\..\addons\ofxCv\libs\ofxCv\src;..\..\..\addons\ofxCv\src;..\..\..\addons\ofxOpenCv\libs;..\..\..\addons\ofxOpenCv\libs\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\core;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;..\..\..\addons\ofxOpenCv\libs\opencv\include\opencv2\video;..\..\..\addons\ofxOpenCv\libs\opencv\lib;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;..\..\..\addons\ofxOpenCv\src;..\..\..\addons\ofxPlaylist\src;..\..\..\addons\ofxPlaylist\src\Easings;..\..\..\addons\ofxGui\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\kiss\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxSpout\src;$(OFDIR)\addons\ofxCv\libs;$(OFDIR)\addons\ofxCv\libs\CLD;$(OFDIR)\addons\ofxCv\libs\CLD\include;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\libs\CLD\src;$(OFDIR)\addons\ofxCv\libs\ofxCv;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\ofxCv\src;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs;$(OFDIR)\addons\ofxOpenCv\libs\opencv;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\calib3d;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\contrib;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\core;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\features2d;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\flann;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\gpu;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\highgui;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\imgproc;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\legacy;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\ml;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\objdetect;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\ts;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv2\video;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(OFDIR)\addons\ofxOpenCv\src;$(OFDIR)\addons\ofxPlaylist\src;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\ofxGui\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -89,144 +93,146 @@
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>opencv_calib3d248.lib;opencv_ml248.lib;opencv_contrib248.lib;opencv_nonfree248.lib;opencv_core248.lib;opencv_objdetect248.lib;opencv_features2d248.lib;opencv_photo248.lib;opencv_flann248.lib;opencv_stitching248.lib;opencv_gpu248.lib;opencv_superres248.lib;opencv_haartraining_engine.lib;opencv_ts248.lib;opencv_highgui248.lib;opencv_video248.lib;opencv_imgproc248.lib;opencv_videostab248.lib;opencv_legacy248.lib;zlib.lib;Spout32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\..\libs\openFrameworksCompiled\lib\vs;..\..\..\addons\ofxSpout\libs\lib\vs;..\..\..\addons\ofxOpenCv\libs\opencv\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opencv_calib3d248.lib;opencv_ml248.lib;opencv_contrib248.lib;opencv_nonfree248.lib;opencv_core248.lib;opencv_objdetect248.lib;opencv_features2d248.lib;opencv_photo248.lib;opencv_flann248.lib;opencv_stitching248.lib;opencv_gpu248.lib;opencv_superres248.lib;opencv_haartraining_engine.lib;opencv_ts248.lib;opencv_highgui248.lib;opencv_video248.lib;opencv_imgproc248.lib;opencv_videostab248.lib;opencv_legacy248.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\freetype\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\glut\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\glfw\poco\vs;$(OFDIR)\libs\poco\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>atlthunk.lib;LIBC.lib;LIBCMT</IgnoreSpecificDefaultLibraries>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Downloads\openFrameworks-VS2013\openFrameworks-VS2013\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Calibration.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Distance.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Flow.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Helpers.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Kalman.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Tracker.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Utilities.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvContourFinder.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvFloatImage.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxSpout\src\ofxSpout.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Calibration.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Distance.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Flow.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Helpers.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Kalman.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Tracker.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Utilities.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxBaseGui.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxButton.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxLabel.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxPanel.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSlider.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSliderGroup.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvContourFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvFloatImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Calibration.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\ContourFinder.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Distance.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Flow.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Helpers.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Kalman.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\ObjectFinder.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\RunningBackground.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Tracker.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Utilities.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h" />
-    <ClInclude Include="..\..\..\addons\ofxCv\src\ofxCv.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
-    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvBlob.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvColorImage.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvConstants.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvContourFinder.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvFloatImage.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvGrayscaleImage.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvHaarFinder.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvImage.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxCvShortImage.h" />
-    <ClInclude Include="..\..\..\addons\ofxOpenCv\src\ofxOpenCv.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscException.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOsc.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscArg.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h" />
-    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasing.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBack.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\Easings\ofxEasingSine.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxBaseKeyframe.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEasingExt.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxEventKeyframe.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxKeyframe.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylist.h" />
-    <ClInclude Include="..\..\..\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h" />
-    <ClInclude Include="..\..\..\addons\ofxSpout\src\ofxSpout.h" />
-    <ClInclude Include="..\..\..\addons\ofxSpout\src\Spout.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Calibration.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\ContourFinder.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Distance.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Flow.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Helpers.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Kalman.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\ObjectFinder.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\RunningBackground.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Tracker.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Utilities.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv\Wrappers.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxCv\src\ofxCv.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxBaseGui.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxButton.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxGui.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxLabel.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxPanel.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxSlider.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxSliderGroup.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvBlob.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvConstants.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvContourFinder.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvFloatImage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvGrayscaleImage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvHaarFinder.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvImage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvShortImage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOpenCv\src\ofxOpenCv.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscException.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOsc.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscArg.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxBaseKeyframe.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEasingExt.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxSpout\src\Spout.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+    <ProjectReference Include="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
       <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -234,6 +240,10 @@
     <ResourceCompile Include="icon.rc">
       <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icon-debug.ico" />
+    <Image Include="resources\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

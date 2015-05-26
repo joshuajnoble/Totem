@@ -8,11 +8,11 @@
 
 #pragma once
 #include "ofMain.h"
-#include "ofxOSCSync.h"
-#include "ofxGstRTPClient.h"
-#include "ofxGstRTPServer.h"
-#include "ofxGui.h"
-#include "ofxJSON.h"
+#include "ofxOSCSync/src/ofxOSCSync.h"
+#include "ofxGstRTP/src/ofxGstRTPClient.h"
+#include "ofxGstRTP/src/ofxGstRTPServer.h"
+#include "ofxGui/src/ofxGui.h"
+#include "ofxJSON/src/ofxJSON.h"
 
 class StreamManager{
 public:
@@ -45,10 +45,7 @@ public:
     void setImageSource(ofPtr<ofImage> cam_img);
     int hash(const char * str);
     
-    // add a new client
     void newClient(clientParameters params);
-    
-    // add a new server
     void newServer(clientParameters params);
     void newFrame();
     
@@ -72,11 +69,9 @@ public:
     float width;
     float height;
     
-    
     map<string, ofPtr<ofxGstRTPClient> > clients;
     map<string, ofPtr<ofxGstRTPServer> > servers;
     
-    //    ofVideoPlayer player;
     map<string, ofPtr<ofFbo> > remoteVideos;
     map<string, ofPtr<ofImage> > remotePixels;
     ofTexture mLoadingScreen;
@@ -96,5 +91,4 @@ public:
     int audioPort;
     
     map<string, clientParameters> connections;
-    
 };

@@ -36,6 +36,7 @@ Clone the following addons to ```OF_0.8.4_ROOT/addons/```
 - [ofxSnappy](https://github.com/studiostudio/ofxSnappy)
 - [ofxDepthStreamCompression](http://github.com/studiostudio/ofxDepthStreamCompression)
 - [ofxEchoCancel](http://github.com/studiostudio/ofxEchoCancel)
+- [ofxJSON](https://github.com/jefftimesten/ofxJSON)
 
 This addons requires the v0.8.4 branch that targets ofxOSC in openFrameworks v0.8.4
 - [ofxOSCSync](https://github.com/studiostudio/ofxOSCSync/tree/v0.8.4) 
