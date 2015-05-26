@@ -42,15 +42,18 @@ void ofApp::setup(){
     vector<ofVideoDevice> dd = grabber.listDevices();
 
 #ifndef MIC_DEBUGGING
-
+	auto deviceId = 0;
 	for (int i = 0; i < dd.size(); i++)
 	{
 		if (dd.at(i).deviceName.find("XI100DUSB") != string::npos)
 		{
-			grabber.setDeviceID(i);
-			grabber.initGrabber(1920, 1080, true);
+			deviceId = i;
+			break;
 		}
 	}
+
+	grabber.setDeviceID(deviceId);
+	grabber.initGrabber(1920, 1080, true);
 
 
 	if (!grabber.isInitialized())
