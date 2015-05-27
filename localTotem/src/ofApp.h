@@ -13,15 +13,16 @@ class ofApp : public ofBaseApp
 private:
 	bool isInitialized = false;
 
-	ofxPlaylist mainPlaylist;
 	ofVec2f remotePosition, remoteScale;
 	ofVec2f mainPosition, mainScale;
 	double doubleM = 2560;
-	//ThreeSixtyUnwrap unwrapper;
+	ofPtr<ofBaseVideoDraws> processedVideo;
 
 	TotemDisplay totemDisplay;
 	StreamManager streamManager;
 	ofPtr<ofImage> remoteImage;
+	std::vector<ofPtr<ofFbo>> remoteVideoSources;
+	
 	void newClient(string& args);
 
 public:
@@ -43,23 +44,21 @@ public:
 	ofPtr<ofBaseVideoDraws> videoSource;
 	float unwrapMultiplier = 1.5f;
 	float unwrapAspectRatio = 0.25f;
+	bool passthroughVideo = false;
 
 	// Legacy stuff
-	ofImage image;
-	ofPtr<ofBaseVideoDraws> player;
-	ofPtr<ofBaseVideoDraws> processedVideo;
-	ofImage small3, small1, small2;
-	std::vector<ofPtr<ofFbo>> remoteVideoSources;
+	//ofxPlaylist mainPlaylist;
+	//ofImage image;
+	//ofPtr<ofBaseVideoDraws> player;
+	//ofImage small3, small1, small2;
 
-	bool drawCylinder;
-	ofTrueTypeFont din;
-	bool pixelsLoaded;
-    
-	ofCylinderPrimitive cylinder;
+	//bool drawCylinder;
+	//ofTrueTypeFont din;
+	//bool pixelsLoaded;
+ //   
+	//ofCylinderPrimitive cylinder;
 
-	ofxOscReceiver rec;
-	ofFbo fbo;
-
-	bool passthroughVideo = false;
-	bool drawSecondRemote;
+	//ofxOscReceiver rec;
+	//ofFbo fbo;
+	//bool drawSecondRemote;
 };

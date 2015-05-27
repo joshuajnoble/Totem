@@ -1,4 +1,5 @@
 #include "TotemDisplay.h"
+#include "Utils.h"
 #include <unordered_set>
 
 void TotemDisplay::initTotemDisplay(int count, int width, int height)
@@ -57,19 +58,7 @@ void TotemDisplay::update()
 				else
 				{
 					// Crop the image to make it fit reasonably in the space we have available
-					ofImage i(source->getPixelsRef());
-					auto sourceWidth = source->getWidth();
-					auto sourceHeight = source->getHeight();
-					if (source->getWidth() > source->getHeight())
-					{
-						auto cropWidth = sourceHeight * this->displayRatio;
-						i.drawSubsection(0, 0, this->displayWidth, this->displayHeight, (sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
-					}
-					else
-					{
-						auto cropHeight = sourceWidth / this->displayRatio;
-						i.drawSubsection(0, 0, this->displayWidth, this->displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
-					}
+					Utils::DrawImageCroppedToFit(ofImage(source->getPixelsRef()), this->displayWidth, this->displayHeight);
 				}
 			}
 		}

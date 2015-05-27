@@ -272,6 +272,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
     <ClCompile Include="src\TotemDisplay.cpp" />
+    <ClCompile Include="src\Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h" />
@@ -353,6 +354,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\ThreeSixtyUnwrap.h" />
     <ClInclude Include="src\TotemDisplay.h" />
+    <ClInclude Include="src\Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc">

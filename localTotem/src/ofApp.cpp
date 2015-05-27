@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "Utils.h"
 
 using namespace ofxCv;
 using namespace cv;
@@ -13,17 +14,8 @@ namespace
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-	rec.setup(8888);	
-
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
-
-	fbo.allocate(800, 480, GL_RGB);
-	drawSecondRemote = false;
-	remotePosition.set(100, 670);
-	remoteScale.set(150, 120);
-	mainPosition.set(-100, 10);
-	mainScale.set(660, 660);
 
 	if (this->passthroughVideo)
 	{
@@ -43,7 +35,6 @@ void ofApp::setup()
 
 	this->totemDisplay.initTotemDisplay(4, 800, 1280);
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
-	//this->totemDisplay.setVideoSource(3, this->processedVideo);
 	this->isInitialized = true;
 }
 
@@ -71,101 +62,63 @@ void ofApp::update()
 
 	streamManager.update();
 
-	mainPlaylist.update();
+	//mainPlaylist.update();
 
 	this->totemDisplay.update();
-
-	if (drawSecondRemote)
-	{
-		player->update();
-	}
-
-	//fbo.begin();
-	//ofBackground(0, 0, 0);
-	//ofPushMatrix();
-	//ofTranslate(0, 480);
-	//ofRotate(rotation);
-
-	//if (drawSecondRemote)
-	//{
-
-	//	//ofxSpout::drawSubsection(0, 0, 400 * 1.33, 400, 100, 0, 960, 720);
-	//	//player.getTextureReference().drawSubsection(0, 400, 500, 400, 0, 400, player.getWidth(), 800);
-
-	//	//ofxSpout::drawSubsection(mainPosition.x, mainPosition.y, mainScale.x, mainScale.y, 0, 0, 960, 720);
-	//	//player->getTextureReference().drawSubsection(remotePosition.x, remotePosition.y, remoteScale.x, remoteScale.y, 0, 400, player->getWidth(), 800);
-
-	//	ofSetColor(0, 0, 0);
-	//	ofRect(0, remotePosition.y, 480, 10);
-	//	ofSetColor(255, 255, 255);
-	//}
-	//else
-	//{
-	//	//ofxSpout::drawSubsection(-150, 10, 960 * 0.90, 660, 0, 0, 960, 720);
-	//	//ofxSpout::draw(0, 0, 500, 500);
-	//	//small1.draw(100, 670, 150, 120);
-	//	//small2.draw(260, 670, 150, 120);
-	//	//small3.draw(325, 540, 150, 120);
-	//}
-
-	//ofPopMatrix();
-
-	//// draw other UI here
-
-	//fbo.end();
 
 	for (int i = 0; i < this->remoteVideoSources.size(); ++i)
 	{
 		auto output = this->totemDisplay.getDisplay(i);
 		output.begin();
-		this->remoteVideoSources[i]->draw(0, 0);
+		//this->remoteVideoSources[i]->draw(0, 0);
+		Utils::DrawImageCroppedToFit(*this->remoteVideoSources[i].get(), (int)output.getWidth(), (int)output.getHeight());
 		output.end();
 	}
 
 	// check for waiting messages
-	while (rec.hasWaitingMessages()){
-		// get the next message
-		ofxOscMessage m;
-		rec.getNextMessage(&m);
+	//while (rec.hasWaitingMessages()){
+	//	// get the next message
+	//	ofxOscMessage m;
+	//	rec.getNextMessage(&m);
 
-		// check for mouse moved message
-		if (m.getAddress() == "position"){
-			// both the arguments are int32's
-			selectedScreen = (m.getArgAsInt32(0) + 180) / 90;
-		}
+	//	// check for mouse moved message
+	//	if (m.getAddress() == "position"){
+	//		// both the arguments are int32's
+	//		selectedScreen = (m.getArgAsInt32(0) + 180) / 90;
+	//	}
 
-		if (m.getAddress() == "second_remote_on")
-		{
-			drawSecondRemote = true;
+	//	if (m.getAddress() == "second_remote_on")
+	//	{
+	//		drawSecondRemote = true;
 
-			mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &remotePosition.x, 0));
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remotePosition.y, 400));
+	//		mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &remotePosition.x, 0));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remotePosition.y, 400));
 
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.x, 500));
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.y, 400));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.x, 500));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.y, 400));
 
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.x, -24));
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.y, 0));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.x, -24));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.y, 0));
 
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.x, 528));
-			mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.y, 400));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.x, 528));
+	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.y, 400));
 
-			//player.play();
-		}
+	//		//player.play();
+	//	}
 
-		if (m.getAddress() == "second_remote_off")
-		{
-			drawSecondRemote = false;
+	//	if (m.getAddress() == "second_remote_off")
+	//	{
+	//		drawSecondRemote = false;
 
-			remotePosition.set(100, 670);
-			remoteScale.set(150, 120);
-			mainPosition.set(-150, 10);
-			mainScale.set(960 * 0.90, 660);
+	//		remotePosition.set(100, 670);
+	//		remoteScale.set(150, 120);
+	//		mainPosition.set(-150, 10);
+	//		mainScale.set(960 * 0.90, 660);
 
-			//player.stop();
-			//player.setPosition(0);
-		}
-	}
+	//		//player.stop();
+	//		//player.setPosition(0);
+	//	}
+	//}
 }
 
 
@@ -176,37 +129,6 @@ void ofApp::draw()
 	{
 		return;
 	}
-
-	// draw everything.
-	//ofBackground(64, 64, 64);
-
-	////grabber.draw(0, 0);
-
-	////fbo.draw(0, 0);
-
-	//ofPushMatrix();
-	////ofRotate(90);
-	//fbo.draw(0, 0);
-	//if (selectedScreen != 0 && selectedScreen != -1) {
-	//	//ofRect(0, 0, 480, 480);
-	//	ofSetColor(255, 255, 255, 255);
-	//}
-	//ofTranslate(800, 0);
-	//fbo.draw(0, 0);
-	//if (selectedScreen != 1 && selectedScreen != -1) {
-	//	ofSetColor(255, 255, 255, 255);
-	//}
-	//ofTranslate(800, 0);
-	//fbo.draw(0, 0);
-	//if (selectedScreen != 2 && selectedScreen != -1) {
-	//	ofSetColor(255, 255, 255, 255);
-	//}
-	//ofTranslate(800, 0);
-	//fbo.draw(0, 0);
-	//if (selectedScreen != 3 && selectedScreen != -1) {
-	//	ofSetColor(255, 255, 255, 255);
-	//}
-	//ofPopMatrix();
 
 	if (this->showInput)
 	{
