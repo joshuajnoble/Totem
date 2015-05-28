@@ -92,7 +92,8 @@ void TotemDisplay::draw()
 	for (int i = 0; i < this->displayCount; ++i)
 	{
 		auto fbo = this->_output[i];
-		fbo.draw(this->displayWidth * i, 0);
+		//fbo.draw(this->displayWidth * i, 0); // Horizontal
+		fbo.draw(0, this->displayHeight * i); // Vertical
 	}
 }
 

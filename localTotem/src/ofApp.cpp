@@ -4,13 +4,6 @@
 using namespace ofxCv;
 using namespace cv;
 
-namespace
-{
-	const int remoteVideoWidth = 480;
-	int rotation = -90;
-	int selectedScreen = -1;
-}
-
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -33,7 +26,7 @@ void ofApp::setup()
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 
-	this->totemDisplay.initTotemDisplay(4, 800, 1280);
+	this->totemDisplay.initTotemDisplay(4, 768, 1360);
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
 	this->isInitialized = true;
 }

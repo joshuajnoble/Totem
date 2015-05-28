@@ -12,18 +12,18 @@ int main(int argc, const char** argv)
 	{
 		std::cout << "Usage:" << std::endl <<
 			" -listDevices" << endl <<
-			" -totem                      (This is the default and will use the totem display)" << endl <<
-			"    -noUnwrap                   (totem only, Send the raw video stream without unwarpping it)" << endl <<
-			"    -showUnwrapped              (totem only, Show the undistorted video stream instead of the normal UI)" << endl <<
-			" -remote                     (Don't use the totem display)" << endl <<
-			" -showInput                  (Show the input video stream instead of the normal UI)" << endl <<
-			" -sourceFile=<path>          (Uses a test file instead of the camera for inpput)" << endl <<
-			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
-			" -xMargin=<border size>      (Shifts the window left by this amount)" << endl <<
-			" -yMargin=<border size>      (Shifts the window up by this amount)" << endl <<
-			" -device=<device number>     (Only needed when there are multiple input devices)" << endl <<
-			" -capWidth=<capture width>   (default=2048(totem)/1920(remote) pixels)" << endl <<
-			" -capHeight=<capture height> (default=2048(totem)/1080(remote) pixels)" << endl;
+			" -totem                     (This is the default and will use the totem display)" << endl <<
+			"    -noUnwrap               (totem only, Send the raw video stream without unwarpping it)" << endl <<
+			"    -showUnwrapped          (totem only, Show the undistorted video stream instead of the normal UI)" << endl <<
+			" -remote                    (Don't use the totem display)" << endl <<
+			" -showInput                 (Show the input video stream instead of the normal UI)" << endl <<
+			" -sourceFile=<path>         (Uses a test file instead of the camera for inpput)" << endl <<
+			" -device=<device number>    (Only needed when there are multiple input devices)" << endl <<
+			" -xMargin=<border size>     (Shifts the window left by this amount)" << endl <<
+			" -yMargin=<border size>     (Shifts the window up by this amount)" << endl <<
+			" -device=<device number>    (Only needed when there are multiple input devices)" << endl <<
+			" -capWidth=<capture width>  (default=2048(totem)/1920(remote) pixels)" << endl <<
+			" -capHeight=<capture height>(default=2048(totem)/1080(remote) pixels)" << endl;
 		return 0;
 	}
 	else if (ofxArgParser::hasKey("listDevices"))
@@ -125,7 +125,7 @@ int main(int argc, const char** argv)
 	}
 	else
 	{
-		ofSetupOpenGL(&window, 800 * 4, 1280, OF_WINDOW);
+		ofSetupOpenGL(&window, 768, 1360 * 4, OF_WINDOW);
 	}
 
 	// The capture device must be initialized after ofSetupOpenGL has been called, so it can allocate the proper internal buffers.
