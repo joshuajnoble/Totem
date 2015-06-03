@@ -4,6 +4,21 @@
 using namespace ofxCv;
 using namespace cv;
 
+void ofApp::earlyinit()
+{
+	this->totemDisplay.initTotemDisplay(4, 768, 1360);
+}
+
+int ofApp::displayWidth() const
+{
+	return this->totemDisplay.windowWidth();
+}
+
+int ofApp::displayHeight() const
+{
+	return this->totemDisplay.windowHeight();
+}
+
 //--------------------------------------------------------------
 void ofApp::setup()
 {
@@ -26,7 +41,7 @@ void ofApp::setup()
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
 
-	this->totemDisplay.initTotemDisplay(4, 768, 1360);
+	this->totemDisplay.allocateBuffers();
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
 	this->isInitialized = true;
 }

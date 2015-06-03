@@ -24,16 +24,19 @@ private:
 	std::vector<ofPtr<ofFbo>> remoteVideoSources;
 	
 	void newClient(string& args);
-
+	
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
+	void earlyinit();
 	void setup();
 	void update();
 	void draw();
 	void exit();
 	void keyPressed  (int key);
 	void onKeyframe(ofxPlaylistEventArgs& args);
+	int displayWidth() const;
+	int displayHeight() const;
 
 	static ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path);
 	static ofPtr<ofBaseVideoDraws> InitializePlayerFromCamera(int deviceId, int width, int height);

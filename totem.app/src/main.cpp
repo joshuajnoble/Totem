@@ -103,7 +103,10 @@ int main(int argc, const char** argv)
 		yMargin = ofToInt(ofxArgParser::getValue("yMargin"));
 	}
 
-	ofPtr<ofApp> app = ofPtr<ofApp>(new ofApp());
+	auto totemApp = new ofApp();
+	totemApp->earlyinit();
+	
+	auto app = ofPtr<ofApp>(totemApp);
 
 	ofAppGlutWindow window;
 	if (ofxArgParser::hasKey("showInput"))
@@ -125,7 +128,7 @@ int main(int argc, const char** argv)
 	}
 	else
 	{
-		ofSetupOpenGL(&window, 768, 1360 * 4, OF_WINDOW);
+		ofSetupOpenGL(&window, totemApp->displayWidth(), totemApp->displayHeight(), OF_WINDOW);
 	}
 
 	// The capture device must be initialized after ofSetupOpenGL has been called, so it can allocate the proper internal buffers.
