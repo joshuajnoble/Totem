@@ -1,26 +1,26 @@
-#include "ofApp.h"
+#include "ofTotemApp.h"
 #include "Utils.h"
 
 using namespace ofxCv;
 using namespace cv;
 
-void ofApp::earlyinit()
+void ofTotemApp::earlyinit()
 {
 	this->totemDisplay.initTotemDisplay(4, 768, 1360);
 }
 
-int ofApp::displayWidth() const
+int ofTotemApp::displayWidth() const
 {
 	return this->totemDisplay.windowWidth();
 }
 
-int ofApp::displayHeight() const
+int ofTotemApp::displayHeight() const
 {
 	return this->totemDisplay.windowHeight();
 }
 
 //--------------------------------------------------------------
-void ofApp::setup()
+void ofTotemApp::setup()
 {
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
@@ -39,7 +39,7 @@ void ofApp::setup()
 	streamManager.setup(this->processedVideo->getWidth(), this->processedVideo->getHeight());
 	remoteImage = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(remoteImage);
-	ofAddListener(streamManager.newClientEvent, this, &ofApp::newClient);
+	ofAddListener(streamManager.newClientEvent, this, &ofTotemApp::newClient);
 
 	this->totemDisplay.allocateBuffers();
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
@@ -47,13 +47,13 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::exit()
+void ofTotemApp::exit()
 {
 	streamManager.exit();
 }
 
 //--------------------------------------------------------------
-void ofApp::update()
+void ofTotemApp::update()
 {
 	if (!this->isInitialized)
 	{
@@ -131,7 +131,7 @@ void ofApp::update()
 
 
 //--------------------------------------------------------------
-void ofApp::draw()
+void ofTotemApp::draw()
 {
 	if (!this->isInitialized)
 	{
@@ -154,7 +154,7 @@ void ofApp::draw()
 
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
+void ofTotemApp::keyPressed(int key)
 {
 	if (!this->isInitialized)
 	{
@@ -162,38 +162,12 @@ void ofApp::keyPressed(int key)
 	}
 }
 
-void ofApp::onKeyframe(ofxPlaylistEventArgs& args)
+void ofTotemApp::onKeyframe(ofxPlaylistEventArgs& args)
 {
 	if (!this->isInitialized)
 	{
 		return;
 	}
-}
-
-ofPtr<ofBaseVideoDraws> ofApp::InitializeVideoPresenterFromFile(std::string path)
-{
-	ofVideoPlayer* player = new ofVideoPlayer();
-	ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
-	if (player->loadMovie(path))
-	{
-		player->setLoopState(OF_LOOP_NORMAL);
-		player->play();
-	}
-
-	return rval;
-}
-
-ofPtr<ofBaseVideoDraws> ofApp::InitializePlayerFromCamera(int deviceId, int width, int height)
-{
-	ofVideoGrabber *grabber = new ofVideoGrabber();
-	ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
-	if (deviceId != 0)
-	{
-		grabber->setDeviceID(deviceId);
-	}
-
-	grabber->initGrabber(width, height);
-	return rval;
 }
 
 class ofFboAsVideo : public ofFbo, public ofBaseUpdates
@@ -208,7 +182,7 @@ private:
 	ofFbo fbo;
 };
 
-void ofApp::newClient(string& args)
+void ofTotemApp::newClient(string& args)
 {
 	ofLog() << "new client" << endl;
 

@@ -1,14 +1,14 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ofxOsc\src\ofxOsc.h"
+#include "VideoCaptureAppBase.h"
 #include "ofxPlaylist\src\ofxPlaylist.h"
 #include "ofxCv\src\ofxCv.h"
 #include "ThreeSixtyUnwrap.h"
 #include "..\..\sharedCode\StreamManager.h"
 #include "TotemDisplay.h"
 
-class ofApp : public ofBaseApp
+class ofTotemApp : public VideoCaptureAppBase
 {
 private:
 	bool isInitialized = false;
@@ -35,16 +35,12 @@ public:
 	void exit();
 	void keyPressed  (int key);
 	void onKeyframe(ofxPlaylistEventArgs& args);
-	int displayWidth() const;
-	int displayHeight() const;
-
-	static ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path);
-	static ofPtr<ofBaseVideoDraws> InitializePlayerFromCamera(int deviceId, int width, int height);
+	virtual int displayWidth() const;
+	virtual int displayHeight() const;
 
 	// Public Config
 	bool showInput = false;
 	bool showUnwrapped = false;
-	ofPtr<ofBaseVideoDraws> videoSource;
 	float unwrapMultiplier = 1.5f;
 	float unwrapAspectRatio = 0.25f;
 	bool passthroughVideo = false;

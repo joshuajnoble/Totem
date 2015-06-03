@@ -269,7 +269,8 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="src\ofRemoteApp.cpp" />
+    <ClCompile Include="src\ofTotemApp.cpp" />
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
     <ClCompile Include="src\TotemDisplay.cpp" />
     <ClCompile Include="src\Utils.cpp" />
@@ -351,10 +352,12 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="..\sharedCode\StreamManager.h" />
-    <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="src\ofRemoteApp.h" />
+    <ClInclude Include="src\ofTotemApp.h" />
     <ClInclude Include="src\ThreeSixtyUnwrap.h" />
     <ClInclude Include="src\TotemDisplay.h" />
     <ClInclude Include="src\Utils.h" />
+    <ClInclude Include="src\VideoCaptureAppBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc">
