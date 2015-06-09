@@ -1,13 +1,21 @@
 #pragma once
 
 #include "ofMain.h"
-#include "VideoCaptureAppBase.h"
 #include "ofTexture.h"
 #include "ofxCv.h"
 #include "ofxOsc.h"
 #include "ofxGui\src\ofxGui.h"
 #include "ofxPlaylist\src\ofxPlaylist.h"
 #include "CylinderDisplay.h"
+#include "VideoCaptureAppBase.h"
+
+enum NAV_STATE {
+	USER_CONTROL, SYSTEM_CONTROL
+};
+
+enum USER_DISPLAY_STATE {
+	UDS_SHOW_FEED, UDS_SHOW_REMOTE_USER, UDS_SHOW_L_LOCAL_USER, UDS_SHOW_BOTH_LOCAL_USER
+};
 
 class ofRemoteApp : public VideoCaptureAppBase
 {

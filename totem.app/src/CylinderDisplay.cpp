@@ -7,6 +7,8 @@ namespace
 	const int CYLINDER_PIECE_HEIGHT = 2;
 	const int PIECE_TEXCOORD_WIDTH = 720;
 	const int NEO_PIXELS_COUNT = 45;
+
+	ofxPlaylist introPlaylist;
 }
 
 // ********************************************************************************************************************
@@ -50,12 +52,23 @@ void CylinderDisplay::allocateBuffers()
 void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
 {
 	this->totemVideoSource = videoSource;
+	this->doIntroRotation = true;
+	this->introRotationAngle = 0;
 }
 
 
 // ********************************************************************************************************************
 void CylinderDisplay::update()
 {
+	introPlaylist.update();
+
+	if (this->doIntroRotation)
+	{
+		this->doIntroRotation = false;
+		introPlaylist.addKeyFrame(Playlist::Action::pause(1000.0f));
+		introPlaylist.addKeyFrame(Playlist::Action::tween(5000.0f, &this->introRotationAngle, 360.0f));
+	}
+
 	this->fboOutput.begin();
 	if (this->totemVideoSource.get())
 	{
@@ -112,9 +125,8 @@ void CylinderDisplay::drawTexturedCylinder()
 	ofPushMatrix();
 
 	ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
-	//ofRotateY(rotateToPosition);
+	ofRotateY(this->introRotationAngle);
 	this->totemVideoSource->getTextureReference().bind();
-	//cylinder.rotate(0.75, 0.0, 1.0, 0.0);
 	cylinder.draw();
 	this->totemVideoSource->getTextureReference().unbind();
 

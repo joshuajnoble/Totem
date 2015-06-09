@@ -7,14 +7,6 @@
 #include "ofxGui\src\ofxGui.h"
 #include "ofxPlaylist\src\ofxPlaylist.h"
 
-enum NAV_STATE {
-	USER_CONTROL, SYSTEM_CONTROL
-};
-
-enum USER_DISPLAY_STATE {
-	UDS_SHOW_FEED, UDS_SHOW_REMOTE_USER, UDS_SHOW_L_LOCAL_USER, UDS_SHOW_BOTH_LOCAL_USER
-};
-
 class CylinderDisplay
 {
 private:
@@ -24,6 +16,8 @@ private:
 	int windowWidth;
 	int windowHeight;
 
+	bool doIntroRotation = false;
+	float introRotationAngle = 0;
 
 public:
 	virtual ~CylinderDisplay() {}
