@@ -22,13 +22,6 @@ void CylinderDisplay::initCylinderDisplay(int width, int height)
 // ********************************************************************************************************************
 void CylinderDisplay::allocateBuffers()
 {
-	ofFbo fbo;
-	fbo.allocate(this->windowWidth, this->windowHeight, GL_RGB);
-	this->fboOutput = fbo;
-	fbo.begin();
-	ofClear(0,64,64);
-	fbo.end();
-
 	this->warpedW = this->totemVideoSource->getWidth();
 	this->warpedH = this->totemVideoSource->getHeight();
 
@@ -65,21 +58,17 @@ void CylinderDisplay::update()
 	if (this->doIntroRotation)
 	{
 		this->doIntroRotation = false;
-		introPlaylist.addKeyFrame(Playlist::Action::pause(1000.0f));
-		introPlaylist.addKeyFrame(Playlist::Action::tween(5000.0f, &this->introRotationAngle, 360.0f));
+		introPlaylist.addKeyFrame(Playlist::Action::pause(2000.0f));
+		introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->introRotationAngle, 360.0f));
 	}
 
-	this->fboOutput.begin();
 	if (this->totemVideoSource.get())
 	{
 		this->totemVideoSource->update();
 		if (this->totemVideoSource->isFrameNew())
 		{
-			//this->totemVideoSource->draw(0, 0);
 		}
 	}
-
-	this->fboOutput.end();
 }
 
 

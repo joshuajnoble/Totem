@@ -10,7 +10,6 @@
 class CylinderDisplay
 {
 private:
-	ofFbo fboOutput;
 	ofPtr<ofBaseVideoDraws> totemVideoSource;
 	float scale = 1.0;
 	int windowWidth;
