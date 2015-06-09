@@ -25,18 +25,7 @@ void ofTotemApp::setup()
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
 
-	if (this->passthroughVideo)
-	{
-		this->processedVideo = this->videoSource;
-	}
-	else
-	{
-		auto unwrapper = new ThreeSixtyUnwrap();
-		this->processedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
-		unwrapper->initUnwrapper(this->videoSource, this->videoSource->getWidth() * this->unwrapMultiplier, this->videoSource->getWidth() * this->unwrapMultiplier * this->unwrapAspectRatio);
-	}
-
-	streamManager.setup(this->processedVideo->getWidth(), this->processedVideo->getHeight());
+	streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
 	remoteImage = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(remoteImage);
 	ofAddListener(streamManager.newClientEvent, this, &ofTotemApp::newClient);
@@ -60,11 +49,11 @@ void ofTotemApp::update()
 		return;
 	}
 
-	this->processedVideo->update();
+	this->videoSource->update();
 
-	if (this->processedVideo->isFrameNew())
+	if (this->videoSource->isFrameNew())
 	{
-		remoteImage->setFromPixels(this->processedVideo->getPixelsRef());
+		remoteImage->setFromPixels(this->videoSource->getPixelsRef());
 		streamManager.newFrame();
 	}
 
@@ -138,13 +127,13 @@ void ofTotemApp::draw()
 		return;
 	}
 
-	if (this->showInput)
+	if (this->rawSource)
 	{
-		this->videoSource->draw(0, 0);
+		this->rawSource->draw(0, 0);
 	}
 	else if (this->showUnwrapped)
 	{
-		this->processedVideo->draw(0, 0);
+		this->videoSource->draw(0, 0);
 	}
 	else
 	{

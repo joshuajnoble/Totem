@@ -286,6 +286,9 @@
     <ClCompile Include="src\ofRemoteApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\CylinderDisplay.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -480,6 +483,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ofRemoteApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CylinderDisplay.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

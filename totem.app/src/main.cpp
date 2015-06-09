@@ -6,6 +6,9 @@
 
 namespace
 {
+	float unwrapMultiplier = 1.5f;
+	float unwrapAspectRatio = 0.25f;
+
 	ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path)
 	{
 		ofVideoPlayer* player = new ofVideoPlayer();
@@ -59,7 +62,6 @@ namespace
 
 		if (ofxArgParser::hasKey("showInput"))
 		{
-			totemApp->showInput = true;
 			ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
 		}
 		else if (ofxArgParser::hasKey("showUnwrapped"))
@@ -71,7 +73,7 @@ namespace
 			}
 			else
 			{
-				ofSetupOpenGL(&window, captureWidth * totemApp->unwrapMultiplier, captureWidth * totemApp->unwrapMultiplier * totemApp->unwrapAspectRatio, OF_WINDOW);
+				ofSetupOpenGL(&window, captureWidth * unwrapMultiplier, captureWidth * unwrapMultiplier * unwrapAspectRatio, OF_WINDOW);
 			}
 		}
 		else
@@ -79,15 +81,32 @@ namespace
 			ofSetupOpenGL(&window, totemApp->displayWidth(), totemApp->displayHeight(), OF_WINDOW);
 		}
 
-		totemApp->passthroughVideo = ofxArgParser::hasKey("dontUnwrap");
-
 		return ofPtr<VideoCaptureAppBase>(totemApp);
 	}
 
 	ofPtr<VideoCaptureAppBase> CreateRemoteAppInstance(ofAppGlutWindow& window)
 	{
 		auto remoteApp = new ofRemoteApp();
+		remoteApp->earlyinit();
 		ofSetupOpenGL(&window, remoteApp->displayWidth(), remoteApp->displayHeight(), OF_WINDOW);
+
+		if (ofxArgParser::hasKey("netSource"))
+		{
+			auto filename = ofxArgParser::getValue("netSource");
+			auto fullPath = ofToDataPath(filename);
+			if (!ofFile::doesFileExist(fullPath))
+			{
+				cout << "The specified file, \"" << fullPath << "\" does not exist.";
+				ofExit();
+			}
+
+			auto videoSource = InitializeVideoPresenterFromFile(fullPath);
+
+			auto unwrapper = new ThreeSixtyUnwrap();
+			unwrapper->initUnwrapper(videoSource, videoSource->getWidth() * unwrapMultiplier, videoSource->getWidth() * unwrapMultiplier * unwrapAspectRatio);
+			remoteApp->RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws>(unwrapper));
+		}
+
 		return ofPtr<VideoCaptureAppBase>(remoteApp);
 	}
 }
@@ -104,14 +123,16 @@ int main(int argc, const char** argv)
 			"  -dontUnwrap    (Send the raw video stream without unwrapping it)" << endl <<
 			"  -showUnwrapped (Show the undistorted video stream instead of the normal UI)" << endl <<
 			"  -showInput     (Show the raw input video stream instead of the normal UI)" << endl <<
-			" -remote         (Don't use the totem display)" << endl <<
+
+			endl << " -remote             (Don't use the totem display)" << endl <<
+			"  -netSource=<path>  (Uses a test file instead of a remote network connection)" << endl <<
 
 			endl << " WINDOW SETTINGS" << endl <<
 			" -xMargin=<border size> (Shifts the window left by this amount)" << endl <<
 			" -yMargin=<border size> (Shifts the window up by this amount)" << endl <<
 
 			endl << " CAPTURE SETTINGS" << endl <<
-			"  -capSource=<path>           (Uses a test file instead of the camera for inpput)" << endl <<
+			"  -capSource=<path>           (Uses a test file instead of the camera for input)" << endl <<
 			"  -capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
 			"  -capDeviceList              (Shows all available capture devices)" << endl <<
 			"  -capWidth=<capture width>   (default=2048(totem)/1920(remote) pixels)" << endl <<
@@ -129,6 +150,11 @@ int main(int argc, const char** argv)
 		if (ofxArgParser::hasKey("totem") && ofxArgParser::hasKey("remote"))
 		{
 			std::cout << "You must specify *either* -totem or -remote; not both.  See -help for details.";
+			return -1;
+		}
+		if (ofxArgParser::hasKey("netSource") && ofxArgParser::getValue("netSource") == "")
+		{
+			std::cout << "The \"netSource\" param requires a video file path.  See -help for details.";
 			return -1;
 		}
 		if (ofxArgParser::hasKey("capDevice") && ofxArgParser::getValue("capDevice") == "")
@@ -197,7 +223,23 @@ int main(int argc, const char** argv)
 	ofAppGlutWindow window;
 	auto app = totemMode ? CreateTotemAppInstance(window, captureWidth, captureHeight) : CreateRemoteAppInstance(window);
 	auto videoSource = CreateVideoSource(webCamDeviceId, captureWidth, captureHeight);
-	app->videoSource = videoSource;
+	if (totemMode && ofxArgParser::hasKey("showInput"))
+	{
+		auto totemApp = (ofTotemApp*)app.get();
+		totemApp->rawSource = videoSource;
+	}
+
+	if (!totemMode || ofxArgParser::hasKey("dontUnwrap"))
+	{
+		app->videoSource = videoSource;
+	}
+	else
+	{
+		auto unwrapper = new ThreeSixtyUnwrap();
+		unwrapper->initUnwrapper(videoSource, videoSource->getWidth() * unwrapMultiplier, videoSource->getWidth() * unwrapMultiplier * unwrapAspectRatio);
+		app->videoSource = ofPtr<ofBaseVideoDraws>(unwrapper);
+	}
+
 	ofSetWindowPosition(-xMargin, -yMargin);
 	ofRunApp(app);
 }

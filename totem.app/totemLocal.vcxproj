@@ -268,6 +268,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofXml.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
+    <ClCompile Include="src\CylinderDisplay.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofRemoteApp.cpp" />
     <ClCompile Include="src\ofTotemApp.cpp" />
@@ -352,6 +353,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
     </ClInclude>
     <ClInclude Include="..\sharedCode\StreamManager.h" />
+    <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
     <ClInclude Include="src\ofTotemApp.h" />
     <ClInclude Include="src\ThreeSixtyUnwrap.h" />
