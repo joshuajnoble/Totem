@@ -15,7 +15,7 @@ namespace
 	const auto VIDEO2_EXIT_BEGIN = "VIDEO2_EXIT_BEGIN";
 	const auto VIDEO2_EXIT_END = "VIDEO2_EXIT_END";
 
-	const auto AnimationSpeed = 1250.0f;
+	const auto AnimationSpeed = 500.0f;
 }
 
 RemoteNetworkDisplay::RemoteNetworkDisplay()
@@ -85,11 +85,19 @@ bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<RemoteVideoInfo> remote)
 		// For the sake of animations, check which item is being removed
 		if (found == this->videoSources.begin())
 		{
-			// TODO: We don't have an animation for removing the top of two videos, yet.
-			//this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Top, 340));
-			//this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video1Height, SingleVideoSize.height));
-			this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_BEGIN));
-			this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_END));
+			if (this->videoSources.size() == 1)
+			{
+				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_BEGIN));
+				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->video1Left, viewport.width + 100));
+				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->video1Alpha, 0.0f));
+				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_END));
+			}
+			else
+			{
+				// TODO: We don't have an animation for removing the top of two videos, yet.
+				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_BEGIN));
+				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_END));
+			}
 		}
 		else
 		{
@@ -155,7 +163,6 @@ void RemoteNetworkDisplay::draw()
 
 bool RemoteNetworkDisplay::CanModify()
 {
-	//auto count = this->videoSources.size();
 	return !(this->animatingVideo1Entrance || this->animatingVideo1Exit || this->animatingVideo2Entrance || this->animatingVideo2Exit);
 }
 
@@ -183,8 +190,12 @@ void RemoteNetworkDisplay::onKeyframe(ofxPlaylistEventArgs& args)
 	}
 	else if (args.message == VIDEO1_EXIT_END)
 	{
+		if (this->videoSources.size() == 1)
+		{
+			auto erase = this->videoSources.begin();
+			this->videoSources.erase(erase);
+		}
 		this->animatingVideo1Exit = false;
-		this->videoSources.erase(this->toDelete);
 	}
 	else if (args.message == VIDEO2_EXIT_BEGIN)
 	{
@@ -192,7 +203,11 @@ void RemoteNetworkDisplay::onKeyframe(ofxPlaylistEventArgs& args)
 	}
 	else if (args.message == VIDEO2_EXIT_END)
 	{
+		if (this->videoSources.size() > 1)
+		{
+			auto erase = ++this->videoSources.begin();
+			this->videoSources.erase(erase);
+		}
 		this->animatingVideo2Exit = false;
-		this->videoSources.erase(this->toDelete);
 	}
 }

@@ -23,8 +23,6 @@ private:
 	bool animatingVideo1Exit = false;
 	bool animatingVideo2Exit = false;
 
-	std::vector<ofPtr<RemoteVideoInfo>>::iterator toDelete;
-
 public:
 	RemoteNetworkDisplay();
 	~RemoteNetworkDisplay();
