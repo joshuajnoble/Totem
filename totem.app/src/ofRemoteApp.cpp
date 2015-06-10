@@ -9,17 +9,22 @@ namespace
 {
 	float lastElapsed;
 	float lastSentMouseLocation;
+
+	//DEBUG
+	bool deleted = false;
+	ofPtr<RemoteVideoInfo> toDelete;
 }
 
-//--------------------------------------------------------------
+// ********************************************************************************************************************
 void ofRemoteApp::earlyinit()
 {
-	this->cylinderDisplay = CylinderDisplay();
 	this->cylinderDisplay.initCylinderDisplay(1920, 1080);
+	int margin = 70;
+	int remoteViewOffsetX = 1130 + margin;// (int)(1920 * .75);
+	this->networkDisplay.initializeRemoteNetworkDisplay(ofRectangle(remoteViewOffsetX, 70, 1920 - remoteViewOffsetX - margin, 1080 - margin * 2));
 }
 
-
-//--------------------------------------------------------------
+// ********************************************************************************************************************
 void ofRemoteApp::setup()
 {
 	this->cylinderDisplay.allocateBuffers();
@@ -114,14 +119,31 @@ void ofRemoteApp::setup()
 }
 
 
-//--------------------------------------------------------------
+// ********************************************************************************************************************
 void ofRemoteApp::update()
 {
+	// DEBUG: Show local video source in the remote space for testing.
+	if (this->remoteVideoSources.size() == 0)
+	{
+		auto reference1 = RegisterRemoteVideoSource(this->videoSource);
+		auto reference2 = RegisterRemoteVideoSource(this->videoSource);
+		toDelete = reference1;
+		//toDelete = reference2;
+	}
+
+	if (!deleted && this->networkDisplay.CanModify())
+	{
+		deleted = true;
+		this->networkDisplay.RemoveVideoSource(toDelete);
+	}
+
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
 	{
 		this->cylinderDisplay.update();
 	}
+
+	this->networkDisplay.update();
 
 	//mainPlaylist.update();
 	ofSetVerticalSync(false);
@@ -207,7 +229,7 @@ void ofRemoteApp::update()
 }
 
 
-//--------------------------------------------------------------
+// ********************************************************************************************************************
 void ofRemoteApp::draw()
 {
 	ofBackground(11,26,38);
@@ -293,6 +315,7 @@ void ofRemoteApp::draw()
 	//ofxSpout::draw( (ofGetWidth()/2) - 150, 0, 300, 210);
 
 	DrawSelfie();
+	this->networkDisplay.draw();
 
 	if (false)// showInstructions)
 	{
@@ -300,6 +323,8 @@ void ofRemoteApp::draw()
 	}
 }
 
+
+// ********************************************************************************************************************
 void ofRemoteApp::DrawSelfie()
 {
 	ofPushMatrix();
@@ -322,28 +347,41 @@ void ofRemoteApp::DrawSelfie()
 	ofPopMatrix();
 }
 
-//--------------------------------------------------------------
+
+// ********************************************************************************************************************
 void ofRemoteApp::exit()
 {
 }
 
 
-//--------------------------------------------------------------
+// ********************************************************************************************************************
 int ofRemoteApp::displayWidth() const
 {
 	return this->width * this->scale;
 }
 
 
-//--------------------------------------------------------------
+// ********************************************************************************************************************
 int ofRemoteApp::displayHeight() const
 {
 	return this->height * this->scale;
 }
 
 
+// ********************************************************************************************************************
 void ofRemoteApp::RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws> source)
 {
 	this->remoteTotemSource = source;
 	this->cylinderDisplay.setTotemVideoSource(this->remoteTotemSource);
+}
+
+
+// ********************************************************************************************************************
+ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(ofPtr<ofBaseVideoDraws> source)
+{
+	auto remote = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
+	remote->source = source;
+	this->remoteVideoSources.push_back(remote);
+	this->networkDisplay.AddVideoSource(remote);
+	return remote;
 }

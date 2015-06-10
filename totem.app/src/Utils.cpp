@@ -6,14 +6,13 @@ void Utils::DrawImageCroppedToFit(ofImage& source, int displayWidth, int display
 	ofImage i(source.getPixelsRef());
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
-	if (source.getWidth() > source.getHeight())
+	if (sourceHeight * displayRatio <= sourceWidth)
 	{
 		auto cropWidth = sourceHeight * displayRatio;
 		i.drawSubsection(0, 0, displayWidth, displayHeight, (sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
 	}
 	else
 	{
-		displayWidth / static_cast<float>(displayHeight);
 		auto cropHeight = sourceWidth / displayRatio;
 		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
 	}
@@ -28,15 +27,34 @@ void Utils::DrawImageCroppedToFit(ofFbo& source, int displayWidth, int displayHe
 	ofImage i(pixels);
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
-	if (source.getWidth() > source.getHeight())
+	if (sourceHeight * displayRatio <= sourceWidth)
 	{
 		auto cropWidth = sourceHeight * displayRatio;
 		i.drawSubsection(0, 0, displayWidth, displayHeight, (sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
 	}
 	else
 	{
-		displayWidth / static_cast<float>(displayHeight);
 		auto cropHeight = sourceWidth / displayRatio;
 		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
 	}
+}
+
+void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int displayWidth, int displayHeight)
+{
+	float displayRatio = displayWidth / static_cast<float>(displayHeight);
+	auto sourceWidth = source.getWidth();
+	auto sourceHeight = source.getHeight();
+	ofRectangle cropRegion;
+	if (sourceHeight * displayRatio <= sourceWidth)
+	{
+		auto cropWidth = sourceHeight * displayRatio;
+		cropRegion = ofRectangle((sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
+	}
+	else
+	{
+		auto cropHeight = sourceWidth / displayRatio;
+		cropRegion = ofRectangle((sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
+	}
+
+	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }

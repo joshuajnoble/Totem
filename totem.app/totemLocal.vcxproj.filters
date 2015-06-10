@@ -283,10 +283,16 @@
     <ClCompile Include="src\ofTotemApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ofRemoteApp.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\CylinderDisplay.cpp">
+      <Filter>remote</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofRemoteApp.cpp">
+      <Filter>remote</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RemoteNetworkDisplay.cpp">
+      <Filter>remote</Filter>
+    </ClCompile>
+    <ClCompile Include="src\StickyTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -344,6 +350,9 @@
     </Filter>
     <Filter Include="addons\ofxCv">
       <UniqueIdentifier>{a86c01d9-e008-401b-b54f-38ec962fc8a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="remote">
+      <UniqueIdentifier>{38f00ee8-5a85-4347-acf7-63e0a5b309cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -482,11 +491,20 @@
     <ClInclude Include="src\VideoCaptureAppBase.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\CylinderDisplay.h">
+      <Filter>remote</Filter>
+    </ClInclude>
     <ClInclude Include="src\ofRemoteApp.h">
+      <Filter>remote</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RemoteNetworkDisplay.h">
+      <Filter>remote</Filter>
+    </ClInclude>
+    <ClInclude Include="src\StickyTimer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\CylinderDisplay.h">
-      <Filter>src</Filter>
+    <ClInclude Include="src\RemoteVideoInfo.h">
+      <Filter>remote</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

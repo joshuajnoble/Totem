@@ -272,6 +272,8 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofRemoteApp.cpp" />
     <ClCompile Include="src\ofTotemApp.cpp" />
+    <ClCompile Include="src\RemoteNetworkDisplay.cpp" />
+    <ClCompile Include="src\StickyTimer.cpp" />
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
     <ClCompile Include="src\TotemDisplay.cpp" />
     <ClCompile Include="src\Utils.cpp" />
@@ -356,6 +358,9 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
     <ClInclude Include="src\ofTotemApp.h" />
+    <ClInclude Include="src\RemoteNetworkDisplay.h" />
+    <ClInclude Include="src\RemoteVideoInfo.h" />
+    <ClInclude Include="src\StickyTimer.h" />
     <ClInclude Include="src\ThreeSixtyUnwrap.h" />
     <ClInclude Include="src\TotemDisplay.h" />
     <ClInclude Include="src\Utils.h" />

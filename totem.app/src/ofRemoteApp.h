@@ -8,6 +8,9 @@
 #include "ofxPlaylist\src\ofxPlaylist.h"
 #include "CylinderDisplay.h"
 #include "VideoCaptureAppBase.h"
+#include "RemoteVideoInfo.h"
+#include "StickyTimer.h"
+#include "RemoteNetworkDisplay.h"
 
 enum NAV_STATE {
 	USER_CONTROL, SYSTEM_CONTROL
@@ -23,11 +26,16 @@ private:
 	float scale = 1.0f;
 	int width = 1920, height = 1080;
 
-	ofxPlaylist mainPlaylist;
-	float rotateToPosition;
-
 	void DrawSelfie();
+
+	ofxPlaylist mainPlaylist;
+
+	float rotateToPosition;
+	CylinderDisplay cylinderDisplay;
 	ofPtr<ofBaseVideoDraws> remoteTotemSource;
+
+	std::vector<ofPtr<RemoteVideoInfo>> remoteVideoSources;
+	RemoteNetworkDisplay networkDisplay;
 
 public:
 	//----------------------------------------
@@ -46,13 +54,13 @@ public:
 	//void windowResized(int w, int h);
 
 	void RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws> source);
+	ofPtr<RemoteVideoInfo> RegisterRemoteVideoSource(ofPtr<ofBaseVideoDraws> source);
 
 	virtual int displayWidth() const;
 	virtual int displayHeight() const;
 
 	//----------------------------------------
 	/* Panoramic unwarp stuff */
-	CylinderDisplay cylinderDisplay;
 
 	//ofVideoPlayer remotePlayer;
 	//ofImage image;
