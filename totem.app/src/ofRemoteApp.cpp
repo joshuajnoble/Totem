@@ -27,7 +27,6 @@ void ofRemoteApp::earlyinit()
 // ********************************************************************************************************************
 void ofRemoteApp::setup()
 {
-	this->cylinderDisplay.allocateBuffers();
 }
 
 

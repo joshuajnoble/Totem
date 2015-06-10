@@ -47,6 +47,8 @@ void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
 	this->totemVideoSource = videoSource;
 	this->doIntroRotation = true;
 	this->introRotationAngle = 0;
+
+	this->allocateBuffers();
 }
 
 
@@ -110,39 +112,48 @@ void CylinderDisplay::draw()
 
 void CylinderDisplay::drawTexturedCylinder()
 {
-	ofEnableDepthTest();
-	ofPushMatrix();
+	if (this->totemVideoSource)
+	{
+		ofEnableDepthTest();
+		ofPushMatrix();
 
-	ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
-	ofRotateY(this->introRotationAngle);
-	this->totemVideoSource->getTextureReference().bind();
-	cylinder.draw();
-	this->totemVideoSource->getTextureReference().unbind();
+		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
+		ofRotateY(this->introRotationAngle);
+		this->totemVideoSource->getTextureReference().bind();
+		cylinder.draw();
+		this->totemVideoSource->getTextureReference().unbind();
 
-	ofPopMatrix();
-	ofDisableDepthTest();
+		ofPopMatrix();
+		ofDisableDepthTest();
+	}
 }
 
 void CylinderDisplay::drawLeftCylinder()
 {
-	float A = 0.90;
-	float B = 1.0 - A;
-	currentLeftCylinder = A * currentLeftCylinder + B * targetLeftCylinder;
+	if (this->totemVideoSource)
+	{
+		float A = 0.90;
+		float B = 1.0 - A;
+		currentLeftCylinder = A * currentLeftCylinder + B * targetLeftCylinder;
 
-	this->totemVideoSource->getTextureReference().bind();
-	leftCylinderPiece.draw();
-	this->totemVideoSource->getTextureReference().unbind();
+		this->totemVideoSource->getTextureReference().bind();
+		leftCylinderPiece.draw();
+		this->totemVideoSource->getTextureReference().unbind();
+	}
 }
 
 void CylinderDisplay::drawRightCylinder()
 {
-	float A = 0.90;
-	float B = 1.0 - A;
-	currentRightCylinder = A * currentRightCylinder + B * targetRightCylinder;
+	if (this->totemVideoSource)
+	{
+		float A = 0.90;
+		float B = 1.0 - A;
+		currentRightCylinder = A * currentRightCylinder + B * targetRightCylinder;
 
-	this->totemVideoSource->getTextureReference().bind();
-	rightCylinderPiece.draw();
-	this->totemVideoSource->getTextureReference().unbind();
+		this->totemVideoSource->getTextureReference().bind();
+		rightCylinderPiece.draw();
+		this->totemVideoSource->getTextureReference().unbind();
+	}
 }
 
 void CylinderDisplay::createCylinderPiece(ofMesh &m, float radius, float height, float degrees)
