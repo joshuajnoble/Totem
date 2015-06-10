@@ -118,26 +118,27 @@ int main(int argc, const char** argv)
 
 	if (ofxArgParser::hasKey("help"))
 	{
-		std::cout << "Usage:" << std::endl <<
-			" -totem             (This is the default and will use the totem display)" << endl <<
+		std::cout << "PRIMARY SETTINGS" << std::endl <<
+			"-totem              (This is the default and will use the totem display)" << endl <<
 			"  -dontUnwrap       (Send the raw video stream without unwrapping it)" << endl <<
 			"  -showUnwrapped    (Show the undistorted video stream instead of the normal UI)" << endl <<
 			"  -showInput        (Show the raw input video stream instead of the normal UI)" << endl <<
 			"  -netSource=<path> (Use a test file instead of the remote network connection.)" << endl <<
 
-			endl << " -remote              (Don't use the totem display)" << endl <<
+			endl <<
+			"-remote               (Don't use the totem display)" << endl <<
 			"  -totemSource=<path> (Use a test file instead of a remote totem network connection)" << endl <<
 
-			endl << " WINDOW SETTINGS" << endl <<
-			" -xMargin=<border size> (Shift the window left by this amount)" << endl <<
-			" -yMargin=<border size> (Shift the window up by this amount)" << endl <<
+			endl << "WINDOW SETTINGS" << endl <<
+			"-xMargin=<border size> (Shift the window left by this amount)" << endl <<
+			"-yMargin=<border size> (Shift the window up by this amount)" << endl <<
 
-			endl << " CAPTURE SETTINGS" << endl <<
-			"  -capSource=<path>           (Use a test file instead of the camera for input)" << endl <<
-			"  -capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
-			"  -capDeviceList              (Show all available capture devices)" << endl <<
-			"  -capWidth=<capture width>   (default=2048(totem)/1920(remote) pixels)" << endl <<
-			"  -capHeight=<capture height> (default=2048(totem)/1080(remote) pixels)" << endl;
+			endl << "CAPTURE SETTINGS" << endl <<
+			"-capSource=<path>           (Use a test file instead of the camera for input)" << endl <<
+			"-capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
+			"-capDeviceList              (Show all available capture devices)" << endl <<
+			"-capWidth=<capture width>   (default=2048(totem)/1920(remote) pixels)" << endl <<
+			"-capHeight=<capture height> (default=2048(totem)/1080(remote) pixels)" << endl;
 		return 0;
 	}
 	else if (ofxArgParser::hasKey("capDeviceList"))
