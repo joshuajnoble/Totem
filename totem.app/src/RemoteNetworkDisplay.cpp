@@ -110,8 +110,6 @@ bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<RemoteVideoInfo> remote)
 			this->playlist.addToKeyFrame(Playlist::Action::event(this, VIDEO2_EXIT_BEGIN));
 			this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO2_EXIT_END));
 		}
-
-		this->toDelete = found;
 	}
 
 	return true;
