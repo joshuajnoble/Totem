@@ -9,6 +9,8 @@ namespace
 {
 	float lastElapsed;
 	float lastSentMouseLocation;
+	const float DEFAULT_ROTATION = 50.0f;
+	const float SHIFTED_OFFSET = 25.0f;
 
 	//DEBUG
 	ofPtr<RemoteVideoInfo> video1;
@@ -115,6 +117,7 @@ int ofRemoteApp::displayHeight() const
 void ofRemoteApp::RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws> source)
 {
 	this->remoteTotemSource = source;
+	this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION);
 	this->cylinderDisplay.setTotemVideoSource(this->remoteTotemSource);
 }
 
@@ -126,6 +129,9 @@ ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(ofPtr<ofBaseVideoD
 	remote->source = source;
 	this->remoteVideoSources.push_back(remote);
 	this->networkDisplay.AddVideoSource(remote);
+
+	this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+
 	return remote;
 }
 
@@ -147,6 +153,8 @@ void ofRemoteApp::keyPressed(int key)
 				video2->source = this->videoSource;
 				this->networkDisplay.AddVideoSource(video2);
 			}
+
+			this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 		}
 		else if (key == 'z')
 		{
@@ -163,6 +171,8 @@ void ofRemoteApp::keyPressed(int key)
 				{
 					video1.reset();
 				}
+
+				this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION);
 			}
 		}
 	}

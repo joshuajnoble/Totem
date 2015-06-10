@@ -45,24 +45,35 @@ void CylinderDisplay::allocateBuffers()
 void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
 {
 	this->totemVideoSource = videoSource;
-	this->doIntroRotation = true;
-	this->introRotationAngle = 0;
-
+	introPlaylist.addKeyFrame(Playlist::Action::pause(2000.0f));
+	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
 	this->allocateBuffers();
 }
 
+
+void CylinderDisplay::SetViewAngle(float angle)
+{
+	if (this->totemVideoSource.get())
+	{
+		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
+		while (this->viewRotationAngle >= 360)
+		{
+			this->viewRotationAngle -= 360;
+		}
+
+		float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
+		introPlaylist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
+	}
+	else
+	{
+		this->viewRotationAngle = angle;
+	}
+}
 
 // ********************************************************************************************************************
 void CylinderDisplay::update()
 {
 	introPlaylist.update();
-
-	if (this->doIntroRotation)
-	{
-		this->doIntroRotation = false;
-		introPlaylist.addKeyFrame(Playlist::Action::pause(2000.0f));
-		introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->introRotationAngle, 360.0f));
-	}
 
 	if (this->totemVideoSource.get())
 	{
@@ -118,7 +129,7 @@ void CylinderDisplay::drawTexturedCylinder()
 		ofPushMatrix();
 
 		ofTranslate(ofGetWidth() / 2, (ofGetHeight() / 2), 100);
-		ofRotateY(this->introRotationAngle);
+		ofRotateY(this->viewRotationAngle);
 		this->totemVideoSource->getTextureReference().bind();
 		cylinder.draw();
 		this->totemVideoSource->getTextureReference().unbind();

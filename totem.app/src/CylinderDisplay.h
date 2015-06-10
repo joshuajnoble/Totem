@@ -15,19 +15,7 @@ private:
 	int windowWidth;
 	int windowHeight;
 
-	bool doIntroRotation = false;
-	float introRotationAngle = 0;
-
-public:
-	virtual ~CylinderDisplay() {}
-
-	void initCylinderDisplay(int width, int height);
-	void allocateBuffers();
-	void update();
-	void draw();
-	void setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource);
-
-	ofVideoPlayer remotePlayer;
+	float viewRotationAngle = 0;
 
 	void drawTexturedCylinder();
 	void drawLeftCylinder();
@@ -47,13 +35,24 @@ public:
 	float *cylinderY;
 	float cylinderWedgeAngle;
 
-	bool isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
-
-	ofCylinderPrimitive cylinder;
-
 	ofMesh leftCylinderPiece, rightCylinderPiece;
 	ofVec4f prevTcoordLCP, prevTcoordRCP;
 	ofPixels cropped;
 
 	ofxCv::ObjectFinder finder;
+	ofCylinderPrimitive cylinder;
+
+public:
+	virtual ~CylinderDisplay() {}
+
+	void initCylinderDisplay(int width, int height);
+	void allocateBuffers();
+	void update();
+	void draw();
+	void setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource);
+
+	ofVideoPlayer remotePlayer;
+
+	bool isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
+	void SetViewAngle(float angle);
 };
