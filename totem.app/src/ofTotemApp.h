@@ -23,6 +23,7 @@ private:
 	std::vector<ofPtr<ofFbo>> remoteVideoSources;
 	
 	void newClient(string& args);
+	ofPtr<ofBaseVideoDraws> netImpersonate;
 	
 public:
 	//----------------------------------------
@@ -40,4 +41,6 @@ public:
 	// Public Config
 	ofPtr<ofBaseVideoDraws> rawSource;
 	bool showUnwrapped = false;
+
+	void ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source);
 };

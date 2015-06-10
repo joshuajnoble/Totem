@@ -90,9 +90,9 @@ namespace
 		remoteApp->earlyinit();
 		ofSetupOpenGL(&window, remoteApp->displayWidth(), remoteApp->displayHeight(), OF_WINDOW);
 
-		if (ofxArgParser::hasKey("netSource"))
+		if (ofxArgParser::hasKey("totemSource"))
 		{
-			auto filename = ofxArgParser::getValue("netSource");
+			auto filename = ofxArgParser::getValue("totemSource");
 			auto fullPath = ofToDataPath(filename);
 			if (!ofFile::doesFileExist(fullPath))
 			{
@@ -119,13 +119,14 @@ int main(int argc, const char** argv)
 	if (ofxArgParser::hasKey("help"))
 	{
 		std::cout << "Usage:" << std::endl <<
-			" -totem          (This is the default and will use the totem display)" << endl <<
-			"  -dontUnwrap    (Send the raw video stream without unwrapping it)" << endl <<
-			"  -showUnwrapped (Show the undistorted video stream instead of the normal UI)" << endl <<
-			"  -showInput     (Show the raw input video stream instead of the normal UI)" << endl <<
+			" -totem             (This is the default and will use the totem display)" << endl <<
+			"  -dontUnwrap       (Send the raw video stream without unwrapping it)" << endl <<
+			"  -showUnwrapped    (Show the undistorted video stream instead of the normal UI)" << endl <<
+			"  -showInput        (Show the raw input video stream instead of the normal UI)" << endl <<
+			"  -netSource=<path> (Uses a test file instead of the remote network connection.)" << endl <<
 
 			endl << " -remote             (Don't use the totem display)" << endl <<
-			"  -netSource=<path>  (Uses a test file instead of a remote network connection)" << endl <<
+			"  -totemSource=<path> (Uses a test file instead of a remote totem network connection)" << endl <<
 
 			endl << " WINDOW SETTINGS" << endl <<
 			" -xMargin=<border size> (Shifts the window left by this amount)" << endl <<
@@ -150,6 +151,11 @@ int main(int argc, const char** argv)
 		if (ofxArgParser::hasKey("totem") && ofxArgParser::hasKey("remote"))
 		{
 			std::cout << "You must specify *either* -totem or -remote; not both.  See -help for details.";
+			return -1;
+		}
+		if (ofxArgParser::hasKey("totemSource") && ofxArgParser::getValue("totemSource") == "")
+		{
+			std::cout << "The \"totemSource\" param requires a video file path.  See -help for details.";
 			return -1;
 		}
 		if (ofxArgParser::hasKey("netSource") && ofxArgParser::getValue("netSource") == "")
@@ -223,10 +229,27 @@ int main(int argc, const char** argv)
 	ofAppGlutWindow window;
 	auto app = totemMode ? CreateTotemAppInstance(window, captureWidth, captureHeight) : CreateRemoteAppInstance(window);
 	auto videoSource = CreateVideoSource(webCamDeviceId, captureWidth, captureHeight);
-	if (totemMode && ofxArgParser::hasKey("showInput"))
+	if (totemMode)
 	{
 		auto totemApp = (ofTotemApp*)app.get();
-		totemApp->rawSource = videoSource;
+		if (ofxArgParser::hasKey("showInput"))
+		{
+			totemApp->rawSource = videoSource;
+		}
+		else if (ofxArgParser::hasKey("netSource"))
+		{
+			// Use a file as a network video source
+			auto filename = ofxArgParser::getValue("netSource");
+			auto fullPath = ofToDataPath(filename);
+			if (!ofFile::doesFileExist(fullPath))
+			{
+				cout << "The specified file, \"" << fullPath << "\" does not exist.";
+				ofExit();
+			}
+
+			auto videoSource = InitializeVideoPresenterFromFile(fullPath);
+			totemApp->ImporsonateRemoteClient(videoSource);
+		}
 	}
 
 	if (!totemMode || ofxArgParser::hasKey("dontUnwrap"))

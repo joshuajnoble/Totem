@@ -16,6 +16,8 @@ public:
 	int windowWidth() const;
 	int windowHeight() const;
 
+	bool drawTestPattern = true;
+
 private:
 	bool isFirstTime = true;
 	std::vector<ofFbo> _output;

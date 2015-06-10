@@ -120,7 +120,7 @@ void TotemDisplay::update()
 				}
 			}
 		}
-		else
+		else if (this->drawTestPattern)
 		{
 			// Draw Debug Display
 			ofSetColor(0, 191 / (i + 1) + 64, 0);

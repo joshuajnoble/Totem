@@ -63,12 +63,24 @@ void ofTotemApp::update()
 
 	this->totemDisplay.update();
 
-	for (int i = 0; i < this->remoteVideoSources.size(); ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		auto output = this->totemDisplay.getDisplay(i);
 		output.begin();
-		//this->remoteVideoSources[i]->draw(0, 0);
-		Utils::DrawImageCroppedToFit(*this->remoteVideoSources[i].get(), (int)output.getWidth(), (int)output.getHeight());
+		if (this->netImpersonate.get())
+		{	// DEBUG
+			this->totemDisplay.drawTestPattern = false;
+			this->netImpersonate->update();
+			if (this->netImpersonate->isFrameNew())
+			{
+				Utils::DrawVideoCroppedToFit(*this->netImpersonate.get(), (int)output.getWidth(), (int)output.getHeight());
+			}
+		}
+		else if (this->remoteVideoSources.size())
+		{
+			Utils::DrawImageCroppedToFit(*this->remoteVideoSources[0].get(), (int)output.getWidth(), (int)output.getHeight());
+		}
+
 		output.end();
 	}
 
@@ -179,4 +191,9 @@ void ofTotemApp::newClient(string& args)
 	auto source = this->streamManager.remoteVideos.begin()->second;
 	this->remoteVideoSources.clear(); // Limit it to only one source for now.
 	this->remoteVideoSources.push_back(source);
+}
+
+void ofTotemApp::ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source)
+{
+	this->netImpersonate = source;
 }
