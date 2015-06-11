@@ -2,48 +2,31 @@
 
 void Utils::DrawImageCroppedToFit(ofImage& source, int displayWidth, int displayHeight)
 {
-	float displayRatio = displayWidth / static_cast<float>(displayHeight);
-	ofImage i(source.getPixelsRef());
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
-	if (sourceHeight * displayRatio <= sourceWidth)
-	{
-		auto cropWidth = sourceHeight * displayRatio;
-		i.drawSubsection(0, 0, displayWidth, displayHeight, (sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
-	}
-	else
-	{
-		auto cropHeight = sourceWidth / displayRatio;
-		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight);
-	}
+	auto cropRegion = Utils::DrawImageCroppedToFit(displayWidth, displayHeight, sourceWidth, sourceHeight);
+	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
 void Utils::DrawImageCroppedToFit(ofFbo& source, int displayWidth, int displayHeight)
 {
-	float displayRatio = displayWidth / static_cast<float>(displayHeight);
-	ofPixels pixels;
-	pixels.allocate(source.getWidth(), source.getHeight(), OF_IMAGE_COLOR);
-	source.readToPixels(pixels);
-	ofImage i(pixels);
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
-	if (sourceHeight * displayRatio <= sourceWidth)
-	{
-		auto cropWidth = sourceHeight * displayRatio;
-		i.drawSubsection(0, 0, displayWidth, displayHeight, (sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
-	}
-	else
-	{
-		auto cropHeight = sourceWidth / displayRatio;
-		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight);
-	}
+	auto cropRegion = Utils::DrawImageCroppedToFit(displayWidth, displayHeight, sourceWidth, sourceHeight);
+	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
 void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int displayWidth, int displayHeight)
 {
-	float displayRatio = displayWidth / static_cast<float>(displayHeight);
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
+	auto cropRegion = Utils::DrawImageCroppedToFit(displayWidth, displayHeight, sourceWidth, sourceHeight);
+	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
+}
+
+ofRectangle Utils::DrawImageCroppedToFit(int displayWidth, int displayHeight, int sourceWidth, int sourceHeight)
+{
+	float displayRatio = displayWidth / static_cast<float>(displayHeight);
 	ofRectangle cropRegion;
 	if (sourceHeight * displayRatio <= sourceWidth)
 	{
@@ -56,7 +39,7 @@ void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int displayWidth, in
 		cropRegion = ofRectangle(0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight);
 	}
 
-	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
+	return cropRegion;
 }
 
 ofPtr<ofBaseVideoDraws> Utils::CreateVideoSourceFromFile(std::string path)
