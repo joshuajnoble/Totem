@@ -6,8 +6,7 @@
 
 namespace
 {
-	float unwrapMultiplier = 1.5f;
-	float unwrapAspectRatio = 0.25f;
+	const ofVec2f UNWRAPPED_DISPLAYRATIO(4.0, 1.0);
 
 	ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path)
 	{
@@ -73,7 +72,8 @@ namespace
 			}
 			else
 			{
-				ofSetupOpenGL(&window, captureWidth * unwrapMultiplier, captureWidth * unwrapMultiplier * unwrapAspectRatio, OF_WINDOW);
+				auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(captureWidth, captureHeight), UNWRAPPED_DISPLAYRATIO);
+				ofSetupOpenGL(&window, outputSize.x, outputSize.y, OF_WINDOW);
 			}
 		}
 		else
@@ -101,9 +101,9 @@ namespace
 			}
 
 			auto videoSource = InitializeVideoPresenterFromFile(fullPath);
-
 			auto unwrapper = new ThreeSixtyUnwrap();
-			unwrapper->initUnwrapper(videoSource, videoSource->getWidth() * unwrapMultiplier, videoSource->getWidth() * unwrapMultiplier * unwrapAspectRatio);
+			auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getWidth(), videoSource->getHeight()), UNWRAPPED_DISPLAYRATIO);
+			unwrapper->initUnwrapper(videoSource, outputSize);
 			remoteApp->RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws>(unwrapper));
 		}
 
@@ -260,7 +260,8 @@ int main(int argc, const char** argv)
 	else
 	{
 		auto unwrapper = new ThreeSixtyUnwrap();
-		unwrapper->initUnwrapper(videoSource, videoSource->getWidth() * unwrapMultiplier, videoSource->getWidth() * unwrapMultiplier * unwrapAspectRatio);
+		auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getWidth(), videoSource->getHeight()), UNWRAPPED_DISPLAYRATIO);
+		unwrapper->initUnwrapper(videoSource, outputSize);
 		app->videoSource = ofPtr<ofBaseVideoDraws>(unwrapper);
 	}
 
