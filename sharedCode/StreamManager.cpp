@@ -226,21 +226,23 @@ void StreamManager::drawDebug(){
 
 void StreamManager::newServer(clientParameters params)
 {
-    if(servers.size() == 0){
-        servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
-        servers[params.clientID]->setup(params.ipAddress);
-        servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
-        servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-        servers[params.clientID]->videoBitrate = 16000;
-        servers[params.clientID]->play();
-    }else{
-        servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
-        servers[params.clientID]->setup(params.ipAddress);
-        servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
-        servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
-        servers[params.clientID]->videoBitrate = 16000;
-        servers[params.clientID]->play();
+	auto server = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
+	server->setup(params.ipAddress);
+	server->videoBitrate = 1024 * 16;
+
+	auto videoPort = thisClient.videoPort;
+	auto audioPort = thisClient.audioPort;
+	if (servers.size() != 0)
+	{
+		videoPort = thisClient.videoPortTwo;
+		audioPort = thisClient.audioPortTwo;
     }
+
+	server->addVideoChannel(ofToInt(videoPort), width, height, 30);
+	server->addAudioChannel(ofToInt(audioPort));
+	server->play();
+
+	servers[params.clientID] = server;
 }
 
 void StreamManager::newClient(clientParameters params){
