@@ -195,12 +195,17 @@ void StreamManager::update(){
 				auto video = remoteVideos[iter->first];
                 video->begin();
                 ofClear(0, 0, 0);
-                ofSetColor(255, 255, 255, 75);
                 for(int i = 0; i < 6; i++){
                     ofPushMatrix();
-                    ofTranslate(video->getWidth() / 2, video->getHeight() / 2);
+					ofSetColor(255, 0, 0);
+					ofCircle(15 * cos(ofGetElapsedTimef()*2.5 + i*PI / 3), 15 * sin(ofGetElapsedTimef()*2.5 + i*PI / 3), 5);
+					ofSetColor(255);
+
+					ofSetColor(255, 255, 255, 75);
+					ofTranslate(video->getWidth() / 2, video->getHeight() / 2);
                     ofCircle(15*cos(ofGetElapsedTimef()*2.5+i*PI/3), 15*sin(ofGetElapsedTimef()*2.5+i*PI/3), 5);
-                    ofPopMatrix();
+
+					ofPopMatrix();
                 }
                 video->end();
                 ofDisableAlphaBlending();
@@ -219,20 +224,21 @@ void StreamManager::drawDebug(){
 }
 
 
-void StreamManager::newServer(clientParameters params){
+void StreamManager::newServer(clientParameters params)
+{
     if(servers.size() == 0){
         servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
         servers[params.clientID]->setup(params.ipAddress);
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-        servers[params.clientID]->videoBitrate = 4000;
+        servers[params.clientID]->videoBitrate = 16000;
         servers[params.clientID]->play();
     }else{
         servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
         servers[params.clientID]->setup(params.ipAddress);
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
-        servers[params.clientID]->videoBitrate = 4000;
+        servers[params.clientID]->videoBitrate = 16000;
         servers[params.clientID]->play();
     }
 }
