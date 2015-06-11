@@ -14,7 +14,7 @@ void Utils::DrawImageCroppedToFit(ofImage& source, int displayWidth, int display
 	else
 	{
 		auto cropHeight = sourceWidth / displayRatio;
-		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
+		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight);
 	}
 }
 
@@ -35,7 +35,7 @@ void Utils::DrawImageCroppedToFit(ofFbo& source, int displayWidth, int displayHe
 	else
 	{
 		auto cropHeight = sourceWidth / displayRatio;
-		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
+		i.drawSubsection(0, 0, displayWidth, displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight);
 	}
 }
 
@@ -53,7 +53,7 @@ void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int displayWidth, in
 	else
 	{
 		auto cropHeight = sourceWidth / displayRatio;
-		cropRegion = ofRectangle((sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
+		cropRegion = ofRectangle(0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight);
 	}
 
 	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);

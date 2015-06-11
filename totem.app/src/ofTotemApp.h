@@ -22,7 +22,7 @@ private:
 	
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 
-	virtual void Handle_ClientConnected(string &args);
+	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo);
 
 public:
 	//----------------------------------------

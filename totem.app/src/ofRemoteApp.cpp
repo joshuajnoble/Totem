@@ -186,14 +186,44 @@ void ofRemoteApp::keyPressed(int key)
 	}
 }
 
+class VideoNetworkWrapper : public ofBaseVideoDraws
+{
+public:
+	ofPtr<ofFbo> rtpClient;
+	ofPixels placeholder;
+
+	VideoNetworkWrapper(ofPtr<ofFbo> client) : rtpClient(client)
+	{
+	}
+
+	void update() {};
+	void close() { rtpClient.reset(); }
+
+	// ofBaseHasPixles implementation
+	unsigned char* getPixels() { return nullptr; }
+	ofPixelsRef getPixelsRef() { return placeholder; }
+	void draw(float x, float y, float w, float h) { this->rtpClient->draw(x, y, w, h); }
+	void draw(float x, float y) { this->rtpClient->draw(x, y); }
+
+	// ofBaseVideoDraws implementation
+	float getHeight() { return this->rtpClient->getHeight(); }
+	float getWidth() { return this->rtpClient->getWidth(); }
+	bool isFrameNew() { return true; }
+	ofTexture & getTextureReference() { return this->rtpClient->getTextureReference(); }
+	void setUseTexture(bool bUseTex) { this->rtpClient->setUseTexture(bUseTex); }
+};
 
 // ********************************************************************************************************************
-void ofRemoteApp::Handle_ClientConnected(string &args)
+void ofRemoteApp::Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
 {
-	ofLog() << "new client" << endl;
-
-	// Show the client video
-	//auto source = this->streamManager.remoteVideos.begin()->second;
-	//this->remoteVideoSources.clear(); // Limit it to only one source for now.
-	//this->remoteVideoSources.push_back(source);
+	if (clientVideo->getHeight() / clientVideo->getWidth() < 2)
+	{
+		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
+		RegisterRemoteVideoSource(wrapped);
+	}
+	else
+	{
+		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
+		RegisterTotemVideoSource(wrapped);
+	}
 }

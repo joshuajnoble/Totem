@@ -32,14 +32,16 @@ public:
 private:
 	void newClient(string& args)
 	{
-		Handle_ClientConnected(args);
+		auto client = this->streamManager.clients[args];
+		auto video = this->streamManager.remoteVideos[args];
+		Handle_ClientConnected(args, client, video);
 	}
 
 protected:
 	StreamManager streamManager;
 	ofPtr<ofImage> remoteImage;
 
-	virtual void Handle_ClientConnected(string &args) = 0;
+	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo) = 0;
 
 	void setupSteamManager()
 	{

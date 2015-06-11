@@ -35,7 +35,7 @@ private:
 	std::vector<ofPtr<RemoteVideoInfo>> remoteVideoSources;
 	RemoteNetworkDisplay networkDisplay;
 
-	virtual void Handle_ClientConnected(string &args);
+	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo);
 
 public:
 	//----------------------------------------

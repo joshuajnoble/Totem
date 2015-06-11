@@ -57,9 +57,9 @@ void ofTotemApp::update()
 	{
 		auto output = this->totemDisplay.getDisplay(i);
 		output.begin();
+
 		if (this->netImpersonate.get())
 		{	// DEBUG
-			this->totemDisplay.drawTestPattern = false;
 			this->netImpersonate->update();
 			if (this->netImpersonate->isFrameNew())
 			{
@@ -68,7 +68,8 @@ void ofTotemApp::update()
 		}
 		else if (this->remoteVideoSources.size())
 		{
-			Utils::DrawImageCroppedToFit(*this->remoteVideoSources[0].get(), (int)output.getWidth(), (int)output.getHeight());
+			auto videoSource = *this->remoteVideoSources[0].get();
+			Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
 		}
 
 		output.end();
@@ -173,17 +174,19 @@ private:
 	ofFbo fbo;
 };
 
-void ofTotemApp::Handle_ClientConnected(string &args)
+void ofTotemApp::Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
 {
+	this->totemDisplay.drawTestPattern = false;
+
 	ofLog() << "new client" << endl;
 
 	// Show the client video
-	auto source = this->streamManager.remoteVideos.begin()->second;
 	this->remoteVideoSources.clear(); // Limit it to only one source for now.
-	this->remoteVideoSources.push_back(source);
+	this->remoteVideoSources.push_back(clientVideo);
 }
 
 void ofTotemApp::ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source)
 {
+	this->totemDisplay.drawTestPattern = false;
 	this->netImpersonate = source;
 }
