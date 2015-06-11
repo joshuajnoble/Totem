@@ -5,8 +5,9 @@
 class RemoteVideoInfo
 {
 public:
-	StickyTimer activityTimer;
+	std::string clientId;
 	ofPtr<ofBaseVideoDraws> source;
+	StickyTimer activityTimer;
 
 	RemoteVideoInfo() : activityTimer(10.0f)
 	{

@@ -56,7 +56,7 @@ public:
     void newClient(clientParameters params);
     void newServer(clientParameters params);
     void newFrame();
-    
+	void ClientDisconnected(string clientId);
     
     void sendRotation(float rotation);
     
@@ -66,6 +66,7 @@ public:
     bool bNewFrame;
     
     ofEvent<string> newClientEvent;
+	ofEvent<string> clientDisconnectedEvent;
     ofEvent<float> newRotationEvent;
     
     ofxJSONElement json;

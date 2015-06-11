@@ -106,6 +106,8 @@ void StreamManager::newData( DataPacket& _packet  )
                 remoteVideos.erase(name);
                 bConnected.erase(name);
                 connections.erase(name);
+
+				ClientDisconnected(name);
             }
         }
         
@@ -249,4 +251,9 @@ void StreamManager::newClient(clientParameters params){
     clients[params.clientID]->play();
 
 	ofNotifyEvent(newClientEvent, params.clientID, this);
+}
+
+void StreamManager::ClientDisconnected(string clientId)
+{
+	ofNotifyEvent(clientDisconnectedEvent, clientId, this);
 }

@@ -178,11 +178,20 @@ void ofTotemApp::Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClie
 {
 	this->totemDisplay.drawTestPattern = false;
 
-	ofLog() << "new client" << endl;
+	ofLog() << "Network client connected " << connectionId << endl;
 
 	// Show the client video
 	this->remoteVideoSources.clear(); // Limit it to only one source for now.
 	this->remoteVideoSources.push_back(clientVideo);
+}
+
+void ofTotemApp::Handle_ClientDisconnected(string connectionId)
+{
+	ofLog() << "Network client disconnected " << connectionId << endl;
+
+	// Show the client video
+	this->remoteVideoSources.clear(); // Limit it to only one source for now.
+	this->totemDisplay.drawTestPattern = true;
 }
 
 void ofTotemApp::ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source)

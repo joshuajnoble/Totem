@@ -120,8 +120,9 @@ int ofRemoteApp::displayHeight() const
 
 
 // ********************************************************************************************************************
-void ofRemoteApp::RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws> source)
+void ofRemoteApp::RegisterTotemVideoSource(string clientId, ofPtr<ofBaseVideoDraws> source)
 {
+	this->remoteTotemClientId = clientId;
 	this->remoteTotemSource = source;
 	this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION);
 	this->cylinderDisplay.setTotemVideoSource(this->remoteTotemSource);
@@ -129,9 +130,10 @@ void ofRemoteApp::RegisterTotemVideoSource(ofPtr<ofBaseVideoDraws> source)
 
 
 // ********************************************************************************************************************
-ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(ofPtr<ofBaseVideoDraws> source)
+ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(string clientId, ofPtr<ofBaseVideoDraws> source)
 {
 	auto remote = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
+	remote->clientId = clientId;
 	remote->source = source;
 	this->remoteVideoSources.push_back(remote);
 	this->networkDisplay.AddVideoSource(remote);
@@ -213,17 +215,53 @@ public:
 	void setUseTexture(bool bUseTex) { this->rtpClient->setUseTexture(bUseTex); }
 };
 
+
 // ********************************************************************************************************************
-void ofRemoteApp::Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
+void ofRemoteApp::Handle_ClientConnected(string clientId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
 {
 	if (clientVideo->getHeight() / clientVideo->getWidth() < 2)
 	{
 		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
-		RegisterRemoteVideoSource(wrapped);
+		RegisterRemoteVideoSource(clientId,wrapped);
 	}
 	else
 	{
 		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
-		RegisterTotemVideoSource(wrapped);
+		RegisterTotemVideoSource(clientId, wrapped);
+	}
+}
+
+// ********************************************************************************************************************
+void ofRemoteApp::Handle_ClientDisconnected(string connectionId)
+{
+	if (this->remoteTotemClientId == connectionId)
+	{
+		this->remoteTotemClientId = "";
+		this->remoteTotemSource.reset();
+	}
+	else
+	{
+		for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
+		{
+			auto client = *iter;
+			if (client->clientId == connectionId)
+			{
+				if (client == video1)
+				{
+					// TODO: This could fail (if it is already animating), so we should queue this up or something.
+					this->networkDisplay.RemoveVideoSource(video1);
+					video1.reset();
+				}
+				else if (client == video2)
+				{
+					// TODO: This could fail (if it is already animating), so we should queue this up or something.
+					this->networkDisplay.RemoveVideoSource(video2);
+					video2.reset();
+				}
+
+				this->remoteVideoSources.erase(iter);
+				break;
+			}
+		}
 	}
 }
