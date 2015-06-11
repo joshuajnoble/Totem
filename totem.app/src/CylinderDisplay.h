@@ -50,9 +50,10 @@ public:
 	void update();
 	void draw();
 	void setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource);
+	void DoWelcome();;
 
 	ofVideoPlayer remotePlayer;
 
 	bool isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
-	void SetViewAngle(float angle);
+	void SetViewAngle(float angle, bool animate = true);
 };

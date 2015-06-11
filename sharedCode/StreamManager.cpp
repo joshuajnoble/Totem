@@ -185,10 +185,10 @@ void StreamManager::update(){
         if(iter->second->isFrameNewVideo()){
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
             if(!bConnected[iter->first]){
-                bConnected[iter->first]= true;
+                bConnected[iter->first] = true;
+				ofNotifyEvent(clientStreamAvailableEvent, const_cast<string&>(iter->first), this);
             }
         }else{
-            
             // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();

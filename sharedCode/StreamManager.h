@@ -67,6 +67,7 @@ public:
     
     ofEvent<string> newClientEvent;
 	ofEvent<string> clientDisconnectedEvent;
+	ofEvent<string> clientStreamAvailableEvent;
     ofEvent<float> newRotationEvent;
     
     ofxJSONElement json;

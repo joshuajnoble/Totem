@@ -42,12 +42,18 @@ private:
 		Handle_ClientDisconnected(clientId);
 	}
 
+	void clientStreamAvailable(string& clientId)
+	{
+		Handle_ClientStreamAvailable(clientId);
+	}
+
 protected:
 	StreamManager streamManager;
 	ofPtr<ofImage> remoteImage;
 
 	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo) = 0;
 	virtual void Handle_ClientDisconnected(string connectionId) = 0;
+	virtual void Handle_ClientStreamAvailable(string connectionId) {};
 
 	void setupSteamManager()
 	{
@@ -56,5 +62,6 @@ protected:
 		streamManager.setImageSource(this->remoteImage);
 		ofAddListener(streamManager.newClientEvent, this, &VideoCaptureAppBase::newClient);
 		ofAddListener(streamManager.clientDisconnectedEvent, this, &VideoCaptureAppBase::clientDisconnected);
+		ofAddListener(streamManager.clientStreamAvailableEvent, this, &VideoCaptureAppBase::clientStreamAvailable);
 	}
 };

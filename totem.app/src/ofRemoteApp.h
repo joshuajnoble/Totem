@@ -38,6 +38,7 @@ private:
 
 	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo);
 	virtual void Handle_ClientDisconnected(string connectionId);
+	virtual void Handle_ClientStreamAvailable(string connectionId);
 
 public:
 	//----------------------------------------
