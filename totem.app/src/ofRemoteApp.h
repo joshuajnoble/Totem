@@ -29,7 +29,7 @@ private:
 	void DrawSelfie();
 
 	float rotateToPosition;
-	CylinderDisplay cylinderDisplay;
+	ofPtr<CylinderDisplay> cylinderDisplay;
 	std::string remoteTotemClientId;
 	ofPtr<ofBaseVideoDraws> remoteTotemSource;
 

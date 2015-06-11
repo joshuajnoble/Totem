@@ -21,7 +21,6 @@ namespace
 // ********************************************************************************************************************
 void ofRemoteApp::earlyinit()
 {
-	this->cylinderDisplay.initCylinderDisplay(1920, 1080);
 	int margin = 70;
 	int remoteViewOffsetX = 1130 + margin;// (int)(1920 * .75);
 	this->networkDisplay.initializeRemoteNetworkDisplay(ofRectangle(remoteViewOffsetX, 70, 1920 - remoteViewOffsetX - margin, 1080 - margin * 2));
@@ -44,7 +43,7 @@ void ofRemoteApp::update()
 		this->remoteTotemSource->update();
 		if (this->remoteTotemSource->isFrameNew())
 		{
-			this->cylinderDisplay.update();
+			this->cylinderDisplay->update();
 		}
 	}
 
@@ -59,7 +58,10 @@ void ofRemoteApp::draw()
 {
 	ofBackground(11,26,38);
 
-	this->cylinderDisplay.draw();
+	if (this->remoteTotemSource.get())
+	{
+		this->cylinderDisplay->draw();
+	}
 
 	DrawSelfie();
 
@@ -125,8 +127,10 @@ void ofRemoteApp::RegisterTotemVideoSource(string clientId, ofPtr<ofBaseVideoDra
 {
 	this->remoteTotemClientId = clientId;
 	this->remoteTotemSource = source;
-	this->cylinderDisplay.SetViewAngle(WAITING_ROTATION);
-	this->cylinderDisplay.setTotemVideoSource(this->remoteTotemSource);
+	this->cylinderDisplay.reset(new CylinderDisplay());
+	this->cylinderDisplay->initCylinderDisplay(1920, 1080);
+	this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
+	this->cylinderDisplay->setTotemVideoSource(this->remoteTotemSource);
 }
 
 
@@ -139,7 +143,7 @@ ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(string clientId, o
 	this->remoteVideoSources.push_back(remote);
 	this->networkDisplay.AddVideoSource(remote);
 
-	this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+	this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 
 	return remote;
 }
@@ -165,7 +169,7 @@ void ofRemoteApp::keyPressed(int key)
 				this->networkDisplay.AddVideoSource(video2);
 			}
 
-			this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 		}
 		else if (key == 'z')
 		{
@@ -183,7 +187,7 @@ void ofRemoteApp::keyPressed(int key)
 					video1.reset();
 				}
 
-				this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION);
+				this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
 			}
 		}
 	}
@@ -261,6 +265,7 @@ void ofRemoteApp::Handle_ClientDisconnected(string connectionId)
 				}
 
 				this->remoteVideoSources.erase(iter);
+				this->cylinderDisplay.reset();
 				break;
 			}
 		}
@@ -273,7 +278,7 @@ void ofRemoteApp::Handle_ClientStreamAvailable(string connectionId)
 {
 	if (this->remoteTotemClientId == connectionId)
 	{
-		this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION, false);
-		this->cylinderDisplay.DoWelcome();
+		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
+		this->cylinderDisplay->DoWelcome();
 	}
 }

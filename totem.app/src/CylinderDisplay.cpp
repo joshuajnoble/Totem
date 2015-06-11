@@ -7,8 +7,6 @@ namespace
 	const int CYLINDER_PIECE_HEIGHT = 2;
 	const int PIECE_TEXCOORD_WIDTH = 720;
 	const int NEO_PIXELS_COUNT = 45;
-
-	ofxPlaylist introPlaylist;
 }
 
 // ********************************************************************************************************************

@@ -41,6 +41,7 @@ private:
 
 	ofxCv::ObjectFinder finder;
 	ofCylinderPrimitive cylinder;
+	ofxPlaylist introPlaylist;
 
 public:
 	virtual ~CylinderDisplay() {}
