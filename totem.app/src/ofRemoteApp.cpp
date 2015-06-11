@@ -219,7 +219,7 @@ public:
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientConnected(string clientId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
 {
-	if (clientVideo->getHeight() / clientVideo->getWidth() < 2)
+	if (clientVideo->getWidth() / clientVideo->getHeight() < 2)
 	{
 		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
 		RegisterRemoteVideoSource(clientId,wrapped);
