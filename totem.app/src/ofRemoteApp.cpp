@@ -9,6 +9,7 @@ namespace
 {
 	float lastElapsed;
 	float lastSentMouseLocation;
+	const float WAITING_ROTATION = 270.0f; // TODO: Why is the "centered" spin icon at 270 deg and not 180 deg?
 	const float DEFAULT_ROTATION = 50.0f;
 	const float SHIFTED_OFFSET = 25.0f;
 
@@ -124,7 +125,7 @@ void ofRemoteApp::RegisterTotemVideoSource(string clientId, ofPtr<ofBaseVideoDra
 {
 	this->remoteTotemClientId = clientId;
 	this->remoteTotemSource = source;
-	this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION);
+	this->cylinderDisplay.SetViewAngle(WAITING_ROTATION);
 	this->cylinderDisplay.setTotemVideoSource(this->remoteTotemSource);
 }
 
@@ -263,5 +264,16 @@ void ofRemoteApp::Handle_ClientDisconnected(string connectionId)
 				break;
 			}
 		}
+	}
+}
+
+
+// ********************************************************************************************************************
+void ofRemoteApp::Handle_ClientStreamAvailable(string connectionId)
+{
+	if (this->remoteTotemClientId == connectionId)
+	{
+		this->cylinderDisplay.SetViewAngle(DEFAULT_ROTATION, false);
+		this->cylinderDisplay.DoWelcome();
 	}
 }

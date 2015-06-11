@@ -45,15 +45,19 @@ void CylinderDisplay::allocateBuffers()
 void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
 {
 	this->totemVideoSource = videoSource;
-	introPlaylist.addKeyFrame(Playlist::Action::pause(2000.0f));
-	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
 	this->allocateBuffers();
 }
 
-
-void CylinderDisplay::SetViewAngle(float angle)
+void CylinderDisplay::DoWelcome()
 {
-	if (this->totemVideoSource.get())
+	introPlaylist.addKeyFrame(Playlist::Action::pause(2000.0f));
+	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
+}
+
+
+void CylinderDisplay::SetViewAngle(float angle, bool animate)
+{
+	if (this->totemVideoSource.get() && animate)
 	{
 		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
 		while (this->viewRotationAngle >= 360)
