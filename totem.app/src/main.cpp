@@ -3,36 +3,11 @@
 #include "ofTotemApp.h"
 #include "ofRemoteApp.h"
 #include "ofAppGlutWindow.h"
+#include "Utils.h"
 
 namespace
 {
 	const ofVec2f UNWRAPPED_DISPLAYRATIO(4.0, 1.0);
-
-	ofPtr<ofBaseVideoDraws> InitializeVideoPresenterFromFile(std::string path)
-	{
-		ofVideoPlayer* player = new ofVideoPlayer();
-		ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
-		if (player->loadMovie(path))
-		{
-			player->setLoopState(OF_LOOP_NORMAL);
-			player->play();
-		}
-
-		return rval;
-	}
-
-	ofPtr<ofBaseVideoDraws> InitializePlayerFromCamera(int deviceId, int width, int height)
-	{
-		ofVideoGrabber *grabber = new ofVideoGrabber();
-		ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
-		if (deviceId != 0)
-		{
-			grabber->setDeviceID(deviceId);
-		}
-
-		grabber->initGrabber(width, height);
-		return rval;
-	}
 
 	ofPtr<ofBaseVideoDraws> CreateVideoSource(int webCamDeviceId, int captureWidth, int captureHeight)
 	{
@@ -46,11 +21,11 @@ namespace
 				ofExit();
 			}
 
-			return InitializeVideoPresenterFromFile(fullPath);
+			return Utils::CreateVideoSourceFromFile(fullPath);
 		}
 		else
 		{
-			return InitializePlayerFromCamera(webCamDeviceId, captureWidth, captureHeight);
+			return Utils::CreateVideoSourceFromCamera(webCamDeviceId, captureWidth, captureHeight);
 		}
 	}
 
@@ -100,7 +75,7 @@ namespace
 				ofExit();
 			}
 
-			auto videoSource = InitializeVideoPresenterFromFile(fullPath);
+			auto videoSource = Utils::CreateVideoSourceFromFile(fullPath);
 			auto unwrapper = new ThreeSixtyUnwrap();
 			auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getWidth(), videoSource->getHeight()), UNWRAPPED_DISPLAYRATIO);
 			unwrapper->initUnwrapper(videoSource, outputSize);
@@ -248,7 +223,7 @@ int main(int argc, const char** argv)
 				ofExit();
 			}
 
-			auto videoSource = InitializeVideoPresenterFromFile(fullPath);
+			auto videoSource = Utils::CreateVideoSourceFromFile(fullPath);
 			totemApp->ImporsonateRemoteClient(videoSource);
 		}
 	}

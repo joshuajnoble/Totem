@@ -18,21 +18,20 @@ private:
 	double doubleM = 2560;
 
 	TotemDisplay totemDisplay;
-	StreamManager streamManager;
-	ofPtr<ofImage> remoteImage;
 	std::vector<ofPtr<ofFbo>> remoteVideoSources;
 	
-	void newClient(string& args);
 	ofPtr<ofBaseVideoDraws> netImpersonate;
-	
+
+	virtual void Handle_ClientConnected(string &args);
+
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
 	void earlyinit();
 	void setup();
-	void update();
+	virtual void update();
 	void draw();
-	void exit();
+	virtual void exit();
 	void keyPressed  (int key);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 	virtual int displayWidth() const;

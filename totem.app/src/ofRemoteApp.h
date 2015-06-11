@@ -28,8 +28,6 @@ private:
 
 	void DrawSelfie();
 
-	ofxPlaylist mainPlaylist;
-
 	float rotateToPosition;
 	CylinderDisplay cylinderDisplay;
 	ofPtr<ofBaseVideoDraws> remoteTotemSource;
@@ -37,14 +35,16 @@ private:
 	std::vector<ofPtr<RemoteVideoInfo>> remoteVideoSources;
 	RemoteNetworkDisplay networkDisplay;
 
+	virtual void Handle_ClientConnected(string &args);
+
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
 	void earlyinit();
 	void setup();
-	void update();
+	virtual void update();
 	void draw();
-	void exit();
+	virtual void exit();
 	void keyPressed(int key);
 	//void keyReleased(int key);
 	//void mouseMoved(int x, int y);

@@ -29,21 +29,26 @@ void ofRemoteApp::earlyinit()
 // ********************************************************************************************************************
 void ofRemoteApp::setup()
 {
+	VideoCaptureAppBase::setupSteamManager();
 }
 
 
 // ********************************************************************************************************************
 void ofRemoteApp::update()
 {
-	this->videoSource->update();
-	if (this->videoSource->isFrameNew())
+	VideoCaptureAppBase::update();
+
+	if (this->remoteTotemSource.get())
 	{
-		this->cylinderDisplay.update();
+		this->remoteTotemSource->update();
+		if (this->remoteTotemSource->isFrameNew())
+		{
+			this->cylinderDisplay.update();
+		}
 	}
 
 	this->networkDisplay.update();
 
-	//mainPlaylist.update();
 	ofSetVerticalSync(false);
 }
 
@@ -96,6 +101,7 @@ void ofRemoteApp::DrawSelfie()
 // ********************************************************************************************************************
 void ofRemoteApp::exit()
 {
+	VideoCaptureAppBase::exit();
 }
 
 
@@ -135,6 +141,8 @@ ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(ofPtr<ofBaseVideoD
 	return remote;
 }
 
+
+// ********************************************************************************************************************
 void ofRemoteApp::keyPressed(int key)
 {
 	if (this->networkDisplay.CanModify())
@@ -176,4 +184,16 @@ void ofRemoteApp::keyPressed(int key)
 			}
 		}
 	}
+}
+
+
+// ********************************************************************************************************************
+void ofRemoteApp::Handle_ClientConnected(string &args)
+{
+	ofLog() << "new client" << endl;
+
+	// Show the client video
+	//auto source = this->streamManager.remoteVideos.begin()->second;
+	//this->remoteVideoSources.clear(); // Limit it to only one source for now.
+	//this->remoteVideoSources.push_back(source);
 }

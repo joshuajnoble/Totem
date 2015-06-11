@@ -22,13 +22,11 @@ int ofTotemApp::displayHeight() const
 //--------------------------------------------------------------
 void ofTotemApp::setup()
 {
+
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
 
-	streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
-	remoteImage = ofPtr<ofImage>(new ofImage());
-	streamManager.setImageSource(remoteImage);
-	ofAddListener(streamManager.newClientEvent, this, &ofTotemApp::newClient);
+	this->setupSteamManager();
 
 	this->totemDisplay.allocateBuffers();
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
@@ -49,15 +47,7 @@ void ofTotemApp::update()
 		return;
 	}
 
-	this->videoSource->update();
-
-	if (this->videoSource->isFrameNew())
-	{
-		remoteImage->setFromPixels(this->videoSource->getPixelsRef());
-		streamManager.newFrame();
-	}
-
-	streamManager.update();
+	VideoCaptureAppBase::update();
 
 	//mainPlaylist.update();
 
@@ -183,7 +173,7 @@ private:
 	ofFbo fbo;
 };
 
-void ofTotemApp::newClient(string& args)
+void ofTotemApp::Handle_ClientConnected(string &args)
 {
 	ofLog() << "new client" << endl;
 

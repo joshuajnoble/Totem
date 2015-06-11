@@ -58,3 +58,29 @@ void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int displayWidth, in
 
 	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
+
+ofPtr<ofBaseVideoDraws> Utils::CreateVideoSourceFromFile(std::string path)
+{
+	ofVideoPlayer* player = new ofVideoPlayer();
+	ofPtr<ofBaseVideoDraws> rval = ofPtr<ofBaseVideoDraws>(player);
+	if (player->loadMovie(path))
+	{
+		player->setLoopState(OF_LOOP_NORMAL);
+		player->play();
+	}
+
+	return rval;
+}
+
+ofPtr<ofBaseVideoDraws> Utils::CreateVideoSourceFromCamera(int deviceId, int width, int height)
+{
+	ofVideoGrabber *grabber = new ofVideoGrabber();
+	ofPtr<ofVideoGrabber> rval = ofPtr<ofVideoGrabber>(grabber);
+	if (deviceId != 0)
+	{
+		grabber->setDeviceID(deviceId);
+	}
+
+	grabber->initGrabber(width, height);
+	return rval;
+}
