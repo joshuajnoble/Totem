@@ -35,14 +35,14 @@ void RemoteNetworkDisplay::initializeRemoteNetworkDisplay(ofRectangle v)
 }
 
 
-bool RemoteNetworkDisplay::AddVideoSource(ofPtr<RemoteVideoInfo> remote)
+bool RemoteNetworkDisplay::AddVideoSource(ofPtr<ofFbo> source)
 {
 	if (!this->CanModify())
 	{
 		return false;
 	}
 
-	this->videoSources.push_back(remote);
+	this->videoSources.push_back(source);
 	if (this->videoSources.size() == 1)
 	{
 		// Slide the video in from the right
@@ -72,14 +72,14 @@ bool RemoteNetworkDisplay::AddVideoSource(ofPtr<RemoteVideoInfo> remote)
 }
 
 
-bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<RemoteVideoInfo> remote)
+bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<ofFbo> source)
 {
 	if (!this->CanModify())
 	{
 		return false;
 	}
 
-	auto found = std::find(this->videoSources.begin(), this->videoSources.end(), remote);
+	auto found = std::find(this->videoSources.begin(), this->videoSources.end(), source);
 	if (found != this->videoSources.end())
 	{
 		// For the sake of animations, check which item is being removed
@@ -137,7 +137,7 @@ void RemoteNetworkDisplay::draw()
 			ofPushMatrix();
 			ofTranslate(region.x + this->video1Left, region.y);
 			ofSetColor(255, 255, 255, 255 * this->video1Alpha);
-			Utils::DrawVideoCroppedToFit(*source->source, (int)region.width, (int)this->video1Height);
+			Utils::DrawImageCroppedToFit(*source, (int)region.width, (int)this->video1Height);
 			ofPopMatrix();
 		}
 
@@ -151,7 +151,7 @@ void RemoteNetworkDisplay::draw()
 			ofPushMatrix();
 			ofSetColor(255, 255, 255, 255 * this->video2Alpha);
 			ofTranslate(region.x, region.y + this->video2Top);
-			Utils::DrawVideoCroppedToFit(*source->source, (int)region.width, (int)region.height);
+			Utils::DrawImageCroppedToFit(*source, (int)region.width, (int)region.height);
 			ofPopMatrix();
 		}
 

@@ -1,13 +1,18 @@
 #pragma once
 #include <vector>
 #include "StickyTimer.h"
+#include "ofxGstRTP/src/ofxGstRTPClient.h"
 
 class RemoteVideoInfo
 {
 public:
-	std::string clientId;
-	ofPtr<ofBaseVideoDraws> source;
+	std::string clientId = "";
+	ofPtr<ofFbo> source;
+	//ofPtr<ofBaseVideoDraws> source;
 	StickyTimer activityTimer;
+	ofPtr<ofxGstRTPClient> netClient;
+
+	bool isTotem = false;
 
 	RemoteVideoInfo() : activityTimer(10.0f)
 	{

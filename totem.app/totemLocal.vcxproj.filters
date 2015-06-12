@@ -295,6 +295,9 @@
     <ClCompile Include="src\StickyTimer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\VideoCaptureAppBase.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -505,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="src\RemoteVideoInfo.h">
       <Filter>remote</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WrapFboAsVideo.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,5 @@
 #include "ofRemoteApp.h"
+#include "WrapFboAsVideo.h"
 
 #define CYLINDER_PIECE_WIDTH 44
 #define CYLINDER_PIECE_HEIGHT 2
@@ -38,13 +39,9 @@ void ofRemoteApp::update()
 {
 	VideoCaptureAppBase::update();
 
-	if (this->remoteTotemSource.get())
+	if (this->remoteTotem && this->remoteTotem->netClient->isFrameNewVideo())
 	{
-		this->remoteTotemSource->update();
-		if (this->remoteTotemSource->isFrameNew())
-		{
-			this->cylinderDisplay->update();
-		}
+		this->cylinderDisplay->update();
 	}
 
 	this->networkDisplay.update();
@@ -58,7 +55,7 @@ void ofRemoteApp::draw()
 {
 	ofBackground(11,26,38);
 
-	if (this->remoteTotemSource.get())
+	if (this->remoteTotem)
 	{
 		this->cylinderDisplay->draw();
 	}
@@ -121,31 +118,22 @@ int ofRemoteApp::displayHeight() const
 	return this->height * this->scale;
 }
 
-
 // ********************************************************************************************************************
-void ofRemoteApp::RegisterTotemVideoSource(string clientId, ofPtr<ofBaseVideoDraws> source)
+void ofRemoteApp::RegisterRemoteVideoSource(RemoteVideoInfo& remote)
 {
-	this->remoteTotemClientId = clientId;
-	this->remoteTotemSource = source;
-	this->cylinderDisplay.reset(new CylinderDisplay());
-	this->cylinderDisplay->initCylinderDisplay(1920, 1080);
-	this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
-	this->cylinderDisplay->setTotemVideoSource(this->remoteTotemSource);
+	//this->networkDisplay.AddVideoSource(remote.source);
+	//this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 }
 
-
 // ********************************************************************************************************************
-ofPtr<RemoteVideoInfo> ofRemoteApp::RegisterRemoteVideoSource(string clientId, ofPtr<ofBaseVideoDraws> source)
+void ofRemoteApp::RegisterTotemVideoSource(RemoteVideoInfo& remote)
 {
-	auto remote = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
-	remote->clientId = clientId;
-	remote->source = source;
-	this->remoteVideoSources.push_back(remote);
-	this->networkDisplay.AddVideoSource(remote);
-
-	this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
-
-	return remote;
+	//this->remoteTotemClientId = remote.clientId;
+	//this->remoteTotemSource = remote.source;
+	//this->cylinderDisplay.reset(new CylinderDisplay());
+	//this->cylinderDisplay->initCylinderDisplay(1920, 1080);
+	//this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
+	//this->cylinderDisplay->setTotemVideoSource(this->remoteTotemSource);
 }
 
 
@@ -154,129 +142,89 @@ void ofRemoteApp::keyPressed(int key)
 {
 	if (this->networkDisplay.CanModify())
 	{
-		if (key == 'a')
-		{
-			if (!video1.get())
-			{
-				video1 = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
-				video1->source = this->videoSource;
-				this->networkDisplay.AddVideoSource(video1);
-			}
-			else if (!video2.get())
-			{
-				video2 = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
-				video2->source = this->videoSource;
-				this->networkDisplay.AddVideoSource(video2);
-			}
+		//if (key == 'a')
+		//{
+		//	if (!video1.get())
+		//	{
+		//		video1 = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
+		//		video1->source = this->videoSource;
+		//		this->networkDisplay.AddVideoSource(video1);
+		//	}
+		//	else if (!video2.get())
+		//	{
+		//		video2 = ofPtr<RemoteVideoInfo>(new RemoteVideoInfo());
+		//		video2->source = this->videoSource;
+		//		this->networkDisplay.AddVideoSource(video2);
+		//	}
 
-			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
-		}
-		else if (key == 'z')
-		{
-			if (video2.get())
-			{
-				if (this->networkDisplay.RemoveVideoSource(video2))
-				{
-					video2.reset();
-				}
-			}
-			else if (video1.get())
-			{
-				if (this->networkDisplay.RemoveVideoSource(video1))
-				{
-					video1.reset();
-				}
+		//	this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+		//}
+		//else if (key == 'z')
+		//{
+		//	if (video2.get())
+		//	{
+		//		if (this->networkDisplay.RemoveVideoSource(video2))
+		//		{
+		//			video2.reset();
+		//		}
+		//	}
+		//	else if (video1.get())
+		//	{
+		//		if (this->networkDisplay.RemoveVideoSource(video1))
+		//		{
+		//			video1.reset();
+		//		}
 
-				this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
-			}
-		}
+		//		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
+		//	}
+		//}
 	}
 }
 
-class VideoNetworkWrapper : public ofBaseVideoDraws
-{
-public:
-	ofPtr<ofFbo> rtpClient;
-	ofPixels placeholder;
-
-	VideoNetworkWrapper(ofPtr<ofFbo> client) : rtpClient(client)
-	{
-	}
-
-	void update() {};
-	void close() { rtpClient.reset(); }
-
-	// ofBaseHasPixles implementation
-	unsigned char* getPixels() { return nullptr; }
-	ofPixelsRef getPixelsRef() { return placeholder; }
-	void draw(float x, float y, float w, float h) { this->rtpClient->draw(x, y, w, h); }
-	void draw(float x, float y) { this->rtpClient->draw(x, y); }
-
-	// ofBaseVideoDraws implementation
-	float getHeight() { return this->rtpClient->getHeight(); }
-	float getWidth() { return this->rtpClient->getWidth(); }
-	bool isFrameNew() { return true; }
-	ofTexture & getTextureReference() { return this->rtpClient->getTextureReference(); }
-	void setUseTexture(bool bUseTex) { this->rtpClient->setUseTexture(bUseTex); }
-};
-
 
 // ********************************************************************************************************************
-void ofRemoteApp::Handle_ClientConnected(string clientId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
+void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
-	if (clientVideo->getWidth() / clientVideo->getHeight() < 2)
+	if (remote.isTotem)
 	{
-		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
-		RegisterRemoteVideoSource(clientId,wrapped);
+		this->remoteTotem = &remote;
+
+		//auto wrapped = ofPtr<ofBaseVideoDraws>(new WrapFboAsVideo(remote.source));
+		this->remoteTotemClientId = remote.clientId;
+		this->cylinderDisplay.reset(new CylinderDisplay());
+		this->cylinderDisplay->initCylinderDisplay(1920, 1080);
+		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
+		this->cylinderDisplay->setTotemVideoSource(ofPtr<ofBaseVideoDraws>(new WrapFboAsVideo(remote.source)));
 	}
 	else
 	{
-		auto wrapped = ofPtr<ofBaseVideoDraws>(new VideoNetworkWrapper(clientVideo));
-		RegisterTotemVideoSource(clientId, wrapped);
+		//auto wrapped = ofPtr<ofBaseVideoDraws>(new WrapFboAsVideo(remote.source));
+		this->networkDisplay.AddVideoSource(remote.source);
+		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 	}
 }
 
 // ********************************************************************************************************************
-void ofRemoteApp::Handle_ClientDisconnected(string connectionId)
+void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
-	if (this->remoteTotemClientId == connectionId)
+	if (remote.isTotem)
 	{
 		this->remoteTotemClientId = "";
-		this->remoteTotemSource.reset();
+		this->remoteTotem = 0;
 	}
 	else
 	{
-		for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
-		{
-			auto client = *iter;
-			if (client->clientId == connectionId)
-			{
-				if (client == video1)
-				{
-					// TODO: This could fail (if it is already animating), so we should queue this up or something.
-					this->networkDisplay.RemoveVideoSource(video1);
-					video1.reset();
-				}
-				else if (client == video2)
-				{
-					// TODO: This could fail (if it is already animating), so we should queue this up or something.
-					this->networkDisplay.RemoveVideoSource(video2);
-					video2.reset();
-				}
-
-				this->remoteVideoSources.erase(iter);
-				this->cylinderDisplay.reset();
-				break;
-			}
-		}
+		// TODO: This could fail (if it is already animating), so we should queue this up or something.
+		this->networkDisplay.RemoveVideoSource(remote.source);
+		this->cylinderDisplay.reset();
 	}
 }
 
 
 // ********************************************************************************************************************
-void ofRemoteApp::Handle_ClientStreamAvailable(string connectionId)
+void ofRemoteApp::Handle_ClientStreamAvailable(RemoteVideoInfo& remote)
 {
-	if (this->remoteTotemClientId == connectionId)
+	if (remote.isTotem)
 	{
 		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
 		this->cylinderDisplay->DoWelcome();

@@ -29,14 +29,14 @@ public:
     
     // this is the config for the manager
     struct clientParameters{
+		const static int PORT_SKIP = 5;
         string ipAddress;
-        string audioPort;
-        string videoPort;
-        string audioPortTwo;
-        string videoPortTwo;
-        string clientID;
+		string clientID;
+		int audioPort;
+        int videoPort;
         int videoWidth;
         int videoHeight;
+		int portOffset;
     };
     
     // initialize everything

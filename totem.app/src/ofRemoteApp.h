@@ -31,14 +31,13 @@ private:
 	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;
 	std::string remoteTotemClientId;
-	ofPtr<ofBaseVideoDraws> remoteTotemSource;
+	RemoteVideoInfo* remoteTotem = 0;
 
-	std::vector<ofPtr<RemoteVideoInfo>> remoteVideoSources;
 	RemoteNetworkDisplay networkDisplay;
 
-	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo);
-	virtual void Handle_ClientDisconnected(string connectionId);
-	virtual void Handle_ClientStreamAvailable(string connectionId);
+	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
+	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
+	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 
 public:
 	//----------------------------------------
@@ -56,8 +55,8 @@ public:
 	//void mouseReleased(int x, int y, int button);
 	//void windowResized(int w, int h);
 
-	void RegisterTotemVideoSource(std::string clientId, ofPtr<ofBaseVideoDraws> source);
-	ofPtr<RemoteVideoInfo> RegisterRemoteVideoSource(std::string clientId, ofPtr<ofBaseVideoDraws> source);
+	void RegisterTotemVideoSource(RemoteVideoInfo& remote);
+	void RegisterRemoteVideoSource(RemoteVideoInfo& remote);
 
 	virtual int displayWidth() const;
 	virtual int displayHeight() const;

@@ -174,22 +174,20 @@ private:
 	ofFbo fbo;
 };
 
-void ofTotemApp::Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo)
+void ofTotemApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
 	this->totemDisplay.drawTestPattern = false;
 
-	ofLog() << "Network client connected " << connectionId << endl;
+	ofLog() << "Network client connected " << remote.clientId << endl;
 
 	// Show the client video
-	this->remoteVideoSources.clear(); // Limit it to only one source for now.
-	this->remoteVideoSources.push_back(clientVideo);
+	this->remoteVideoSources.push_back(remote.source);
 }
 
-void ofTotemApp::Handle_ClientDisconnected(string connectionId)
+void ofTotemApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
-	ofLog() << "Network client disconnected " << connectionId << endl;
+	ofLog() << "Network client disconnected " << remote.clientId << endl;
 
-	// Show the client video
 	this->remoteVideoSources.clear(); // Limit it to only one source for now.
 	this->totemDisplay.drawTestPattern = true;
 }

@@ -22,8 +22,8 @@ private:
 	
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 
-	virtual void Handle_ClientConnected(string connectionId, ofPtr<ofxGstRTPClient> client, ofPtr<ofFbo> clientVideo);
-	virtual void Handle_ClientDisconnected(string connectionId);
+	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
+	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 
 public:
 	//----------------------------------------
