@@ -55,7 +55,7 @@ void CylinderDisplay::DoWelcome()
 
 void CylinderDisplay::SetViewAngle(float angle, bool animate)
 {
-	if (this->totemVideoSource.get() && animate)
+	if (this->totemVideoSource && animate)
 	{
 		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
 		while (this->viewRotationAngle >= 360)
@@ -77,7 +77,7 @@ void CylinderDisplay::update()
 {
 	introPlaylist.update();
 
-	if (this->totemVideoSource.get())
+	if (this->totemVideoSource)
 	{
 		this->totemVideoSource->update();
 		if (this->totemVideoSource->isFrameNew())

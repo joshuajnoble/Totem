@@ -200,7 +200,10 @@ void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 	{
 		//auto wrapped = ofPtr<ofBaseVideoDraws>(new WrapFboAsVideo(remote.source));
 		this->networkDisplay.AddVideoSource(remote.source);
-		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+		if (this->remoteTotem)
+		{
+			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+		}
 	}
 }
 
