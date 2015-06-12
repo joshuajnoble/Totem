@@ -1,0 +1,367 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>emptyExample</RootNamespace>
+    <ProjectName>simpleChat</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>src;..\sharedCode;$(GSTREAMER_1_0_ROOT_X86)\include\gstreamer-1.0;$(GSTREAMER_1_0_ROOT_X86)\include\glib-2.0;$(GSTREAMER_1_0_ROOT_X86)\lib\glib-2.0\include;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOscSync\src\Client;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxGui\src;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxJSON\libs\jsoncpp\include;$(OFDIR)\addons\ofxXmlSettings\src;$(OFDIR)\addons\ofxDepthStreamCompression\src;$(OFDIR)\addons\ofxSnappy\libs\snappy\src;$(OFDIR)\addons\ofxSync\src\Client;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>opencv_calib3d248d.lib;opencv_contrib248d.lib;opencv_core248d.lib;opencv_features2d248d.lib;opencv_flann248d.lib;opencv_gpu248d.lib;opencv_haartraining_engined.lib;opencv_highgui248d.lib;opencv_imgproc248d.lib;opencv_legacy248d.lib;opencv_ml248d.lib;opencv_nonfree248d.lib;opencv_objdetect248d.lib;opencv_photo248d.lib;opencv_stitching248d.lib;opencv_superres248d.lib;opencv_ts248d.lib;opencv_video248d.lib;opencv_videostab248d.lib;zlibd.lib;gstreamer-1.0.lib;gstapp-1.0.lib;gstvideo-1.0.lib;gstbase-1.0.lib;gstnet-1.0.lib;gstaudio-1.0.lib;gio-2.0.lib;pangowin32-1.0.lib;gdi32.lib;pangocairo-1.0.lib;gdk_pixbuf-2.0.lib;pango-1.0.lib;cairo.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;ffi.lib;ws2_32.lib;ole32.lib;winmm.lib;shlwapi.lib;intl.lib;glib-2.0.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(GSTREAMER_1_0_ROOT_X86)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>Spout32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxSpout\libs\lib\vs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>src;..\sharedCode;$(GSTREAMER_1_0_ROOT_X86)\include\gstreamer-1.0;$(GSTREAMER_1_0_ROOT_X86)\include\glib-2.0;$(GSTREAMER_1_0_ROOT_X86)\lib\glib-2.0\include;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOscSync\src\Client;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxGui\src;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxJSON\libs\jsoncpp\include;$(OFDIR)\addons\ofxXmlSettings\src;$(OFDIR)\addons\ofxDepthStreamCompression\src;$(OFDIR)\addons\ofxSnappy\libs\snappy\src;$(OFDIR)\addons\ofxSync\src\Client;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>opencv_calib3d248.lib;opencv_contrib248.lib;opencv_core248.lib;opencv_features2d248.lib;opencv_flann248.lib;opencv_gpu248.lib;opencv_haartraining_engine.lib;opencv_highgui248.lib;opencv_imgproc248.lib;opencv_legacy248.lib;opencv_ml248.lib;opencv_nonfree248.lib;opencv_objdetect248.lib;opencv_photo248.lib;opencv_stitching248.lib;opencv_superres248.lib;opencv_ts248.lib;opencv_video248.lib;opencv_videostab248.lib;zlib.lib;gstreamer-1.0.lib;gstapp-1.0.lib;gstvideo-1.0.lib;gstbase-1.0.lib;gstnet-1.0.lib;gstaudio-1.0.lib;gio-2.0.lib;pangowin32-1.0.lib;gdi32.lib;pangocairo-1.0.lib;gdk_pixbuf-2.0.lib;pango-1.0.lib;cairo.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;ffi.lib;ws2_32.lib;ole32.lib;winmm.lib;shlwapi.lib;intl.lib;glib-2.0.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(GSTREAMER_1_0_ROOT_X86)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>src;$(OFDIR)\addons;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\openCv\libs\opencv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>Spout32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxSpout\libs\lib\vs\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.cpp">
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">fg</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">fg</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Calibration.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ContourFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Distance.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Flow.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Helpers.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Kalman.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\ObjectFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\RunningBackground.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Tracker.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Utilities.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxCv\libs\ofxCv\src\Wrappers.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.cpp">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvContourFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvFloatImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvGrayscaleImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvHaarFinder.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvShortImage.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthCompressedFrame.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthOctree.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthStreamCompression.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstOscDoubleBuffer.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPClient.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPServer.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPUtils.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstXMPPRTP.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxOscPacketPool.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxWebRTCAudioPool.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxBaseGui.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxButton.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxLabel.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxPanel.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSlider.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSliderGroup.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxJSON\libs\jsoncpp\src\jsoncpp.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxJSON\src\ofxJSONElement.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOSCSync\src\Client\ofxClientOSCManager.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOSCSync\src\CommonTime\ofxCommonTimeBase.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOSCSync\src\CommonTime\ofxCommonTimeOsc.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxOSCSync\src\Server\ofxServerOscManager.cpp" />
+    <ClCompile Include="$(OFDIR)\addons\ofxSnappy\libs\snappy\src\snappy-sinksource.cc" />
+    <ClCompile Include="$(OFDIR)\addons\ofxSnappy\libs\snappy\src\snappy-stubs-internal.cc" />
+    <ClCompile Include="$(OFDIR)\addons\ofxSnappy\libs\snappy\src\snappy.cc" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofFileUtils.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofLog.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofMatrixStack.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofSystemUtils.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofThread.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofURLFileLoader.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofUtils.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofXml.cpp" />
+    <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp" />
+    <ClCompile Include="..\gstStreamManager\src\main.cpp" />
+    <ClCompile Include="..\gstStreamManager\src\ofApp.cpp" />
+    <ClCompile Include="..\sharedCode\StreamManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscException.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOsc.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscArg.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscBundle.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscMessage.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscParameterSync.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscReceiver.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxOsc\src\ofxOscSender.h" />
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasing.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBack.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingBounce.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCirc.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingCubic.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingElastic.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingExpo.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingLinear.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuad.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuart.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingQuint.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\ofxEasingSine.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxBaseKeyframe.h">
+      <DeploymentContent>true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEasingExt.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxEventKeyframe.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxKeyframe.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylist.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPlaylist\src\ofxPlaylistAEHelper.h">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="..\gstStreamManager\src\ofApp.h" />
+    <ClInclude Include="..\sharedCode\StreamManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\easing_terms_of_use.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenFrameworks\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+      <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>
