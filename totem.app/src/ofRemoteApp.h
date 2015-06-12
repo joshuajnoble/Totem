@@ -12,17 +12,11 @@
 #include "StickyTimer.h"
 #include "RemoteNetworkDisplay.h"
 
-enum NAV_STATE {
-	USER_CONTROL, SYSTEM_CONTROL
-};
-
-enum USER_DISPLAY_STATE {
-	UDS_SHOW_FEED, UDS_SHOW_REMOTE_USER, UDS_SHOW_L_LOCAL_USER, UDS_SHOW_BOTH_LOCAL_USER
-};
-
 class ofRemoteApp : public VideoCaptureAppBase
 {
 private:
+	enum UISTATE { UISTATE_STARTUP, UISTATE_INTRO };
+
 	float scale = 1.0f;
 	int width = 1920, height = 1080;
 
@@ -34,6 +28,7 @@ private:
 	ofPtr<RemoteVideoInfo> remoteTotem;
 
 	RemoteNetworkDisplay networkDisplay;
+	UISTATE state = UISTATE_STARTUP;
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);

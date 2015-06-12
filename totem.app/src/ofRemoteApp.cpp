@@ -53,7 +53,19 @@ void ofRemoteApp::update()
 // ********************************************************************************************************************
 void ofRemoteApp::draw()
 {
-	ofBackground(11,26,38);
+	ofBackground(0x09,0x22,0x36);
+
+	if (this->state == UISTATE_STARTUP)
+	{
+		if (this->videoSource)
+		{
+			this->state == UISTATE_INTRO;
+		}
+		else
+		{
+			return;
+		}
+	}
 
 	if (this->remoteTotem)
 	{
