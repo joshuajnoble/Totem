@@ -31,7 +31,7 @@ private:
 	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;
 	std::string remoteTotemClientId;
-	RemoteVideoInfo* remoteTotem = 0;
+	ofPtr<RemoteVideoInfo> remoteTotem;
 
 	RemoteNetworkDisplay networkDisplay;
 

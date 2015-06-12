@@ -39,7 +39,7 @@ void ofRemoteApp::update()
 {
 	VideoCaptureAppBase::update();
 
-	if (this->remoteTotem && this->remoteTotem->netClient->isFrameNewVideo())
+	if (this->remoteTotem)
 	{
 		this->cylinderDisplay->update();
 	}
@@ -187,7 +187,7 @@ void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
 	if (remote.isTotem)
 	{
-		this->remoteTotem = &remote;
+		this->remoteTotem.reset(new RemoteVideoInfo(remote));
 
 		//auto wrapped = ofPtr<ofBaseVideoDraws>(new WrapFboAsVideo(remote.source));
 		this->remoteTotemClientId = remote.clientId;
@@ -210,7 +210,7 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 	if (remote.isTotem)
 	{
 		this->remoteTotemClientId = "";
-		this->remoteTotem = 0;
+		this->remoteTotem.reset();
 	}
 	else
 	{

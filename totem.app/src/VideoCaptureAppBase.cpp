@@ -33,8 +33,9 @@ void VideoCaptureAppBase::clientDisconnected(string& clientId)
 	auto found = GetRemoteFromClientId(clientId);
 	if (found != this->remoteVideoSources.end())
 	{
+		auto remote = *found;
 		this->remoteVideoSources.erase(found);
-		Handle_ClientDisconnected(*found);
+		Handle_ClientDisconnected(remote);
 	}
 }
 
