@@ -192,9 +192,6 @@ void StreamManager::update(){
                 ofClear(0, 0, 0);
                 for(int i = 0; i < 6; i++){
                     ofPushMatrix();
-					ofSetColor(255, 0, 0);
-					ofCircle(15 * cos(ofGetElapsedTimef()*2.5 + i*PI / 3), 15 * sin(ofGetElapsedTimef()*2.5 + i*PI / 3), 5);
-					ofSetColor(255);
 
 					ofSetColor(255, 255, 255, 75);
 					ofTranslate(video->getWidth() / 2, video->getHeight() / 2);
