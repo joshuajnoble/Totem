@@ -45,7 +45,11 @@ void ofApp::draw(){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 
-    
+	if (key == 'x')
+	{
+		auto path = ofToDataPath("client_settings.xml");
+		ShellExecuteA(0, "open", "C:\\WINDOWS\\System32\\notepad.exe", const_cast<char*>(path.c_str()), 0, SW_SHOW);
+	}
 }
 
 //--------------------------------------------------------------
