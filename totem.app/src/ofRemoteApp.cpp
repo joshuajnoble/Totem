@@ -14,10 +14,14 @@ namespace
 	const float DEFAULT_ROTATION = 50.0f;
 	const float SHIFTED_OFFSET = 25.0f;
 	
+	const float TIME_INTRO_TRANSITION = 750.0f;
+	const float TIME_INTRO_ICONS_APPEAR = 250.0f;
+
 	const int INTRO_SELFIE_TOP_MARGIN = 88;
 	const int MINI_SELFIE_TOP_MARGIN = 40;
 	const int MINI_SELFIE_WIDTH = 320;
 	const int SELFIE_FRAME_MARGIN = 10;
+	const int ICON_MARGIN = 35;
 
 	const string INTRO_TRANSITION_COMPLETE_EVENT = "INTRO_TRANSITION_COMPLETE_EVENT";
 	//DEBUG
@@ -25,13 +29,17 @@ namespace
 	//ofPtr<RemoteVideoInfo> video2;
 }
 
+
 // ********************************************************************************************************************
 void ofRemoteApp::earlyinit()
 {
 	int margin = 70;
 	int remoteViewOffsetX = 1130 + margin;// (int)(1920 * .75);
 	this->networkDisplay.initializeRemoteNetworkDisplay(ofRectangle(remoteViewOffsetX, 70, 1920 - remoteViewOffsetX - margin, 1080 - margin * 2));
+	this->currentConnectIconAlpha = 0;
+	this->state = UISTATE_STARTUP;
 }
+
 
 // ********************************************************************************************************************
 void ofRemoteApp::setup()
@@ -55,8 +63,8 @@ void ofRemoteApp::update()
 	{
 		if (this->videoSource)
 		{
+			this->currentHangupMuteIconAlpha = 0;
 			this->currentConnectIconAlpha = 1;
-			this->drawSelfieFrame = false;
 			this->currentSelfieYPosition = INTRO_SELFIE_TOP_MARGIN;
 			this->currentSelfieWidth = (int)(this->width * 0.75f);
 
@@ -86,9 +94,18 @@ void ofRemoteApp::draw()
 
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
+
+		// Draw icons first so they animate out from behind the selfie
+		ofSetColor(255, 255, 255, (int)(255 * currentHangupMuteIconAlpha));
+		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + this->muteIcon.getHeight() / 2);
+		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + this->hangupIcon.getHeight() / 2);
+
+		//Now draw the bottom icon
 		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
 		connectIcon.draw(this->width / 2, this->height - this->connectIcon.height / 2 - 0);
+
 		ofPopStyle();
+
 	}
 	else
 	{
@@ -96,6 +113,12 @@ void ofRemoteApp::draw()
 		{
 			this->cylinderDisplay->draw();
 		}
+
+		ofPushStyle();
+		ofSetRectMode(OF_RECTMODE_CENTER);
+		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + this->muteIcon.getHeight() / 2);
+		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + this->hangupIcon.getHeight() / 2);
+		ofPopStyle();
 
 		DrawSelfie();
 
@@ -222,10 +245,18 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 	{
 		if (button == 0)
 		{
-			const float tween_time = 750;
-			this->playlist.addKeyFrame(Action::tween(tween_time, &this->currentConnectIconAlpha, 0));
-			this->playlist.addToKeyFrame(Action::tween(tween_time, &this->currentSelfieYPosition, MINI_SELFIE_TOP_MARGIN));
-			this->playlist.addToKeyFrame(Action::tween(tween_time, &this->currentSelfieWidth, MINI_SELFIE_WIDTH));
+			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieYPosition, MINI_SELFIE_TOP_MARGIN));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieWidth, MINI_SELFIE_WIDTH));
+
+			auto iconOffsetStart = MINI_SELFIE_WIDTH / 2 - this->muteIcon.getWidth() / 2;
+			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + this->muteIcon.getWidth() / 2;
+			this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
+			this->muteIconCenterX = this->width / 2 + iconOffsetStart;
+			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
+
 			this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
 		}
 	}

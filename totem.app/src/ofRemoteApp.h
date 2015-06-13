@@ -20,12 +20,13 @@ private:
 
 	float scale = 1.0f;
 	int width = 1920, height = 1080;
+	
 	float currentSelfieWidth;
 	float currentSelfieYPosition;
 	float currentConnectIconAlpha;
-	bool drawSelfieFrame;
-
-	void DrawSelfie();
+	float muteIconCenterX;
+	float hangupIconCenterX;
+	float currentHangupMuteIconAlpha;
 
 	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;
@@ -36,8 +37,9 @@ private:
 	ofImage hangupIcon;
 
 	RemoteNetworkDisplay networkDisplay;
-	UISTATE state = UISTATE_STARTUP;
+	UISTATE state;
 
+	void DrawSelfie();
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
