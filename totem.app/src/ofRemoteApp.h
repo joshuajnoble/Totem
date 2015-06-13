@@ -15,10 +15,15 @@
 class ofRemoteApp : public VideoCaptureAppBase
 {
 private:
-	enum UISTATE { UISTATE_STARTUP, UISTATE_INTRO };
+	ofxPlaylist playlist;
+	enum UISTATE { UISTATE_STARTUP, UISTATE_INTRO, UISTATE_MAIN };
 
 	float scale = 1.0f;
 	int width = 1920, height = 1080;
+	float currentSelfieWidth;
+	float currentSelfieYPosition;
+	float currentConnectIconAlpha;
+	bool drawSelfieFrame;
 
 	void DrawSelfie();
 
@@ -26,6 +31,9 @@ private:
 	ofPtr<CylinderDisplay> cylinderDisplay;
 	std::string remoteTotemClientId;
 	ofPtr<RemoteVideoInfo> remoteTotem;
+	ofImage connectIcon;
+	ofImage muteIcon;
+	ofImage hangupIcon;
 
 	RemoteNetworkDisplay networkDisplay;
 	UISTATE state = UISTATE_STARTUP;
@@ -46,9 +54,10 @@ public:
 	//void keyReleased(int key);
 	//void mouseMoved(int x, int y);
 	//void mouseDragged(int x, int y, int button);
-	//void mousePressed(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
 	//void mouseReleased(int x, int y, int button);
 	//void windowResized(int w, int h);
+	void onKeyframe(ofxPlaylistEventArgs& args);
 
 	void RegisterTotemVideoSource(RemoteVideoInfo& remote);
 	void RegisterRemoteVideoSource(RemoteVideoInfo& remote);

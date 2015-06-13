@@ -6,17 +6,23 @@
 #define PIECE_TEXCOORD_WIDTH 720
 #define NEO_PIXELS_COUNT 45
 
+using namespace Playlist;
+
 namespace
 {
-	float lastElapsed;
-	float lastSentMouseLocation;
 	const float WAITING_ROTATION = 270.0f; // TODO: Why is the "centered" spin icon at 270 deg and not 180 deg?
 	const float DEFAULT_ROTATION = 50.0f;
 	const float SHIFTED_OFFSET = 25.0f;
+	
+	const int INTRO_SELFIE_TOP_MARGIN = 88;
+	const int MINI_SELFIE_TOP_MARGIN = 40;
+	const int MINI_SELFIE_WIDTH = 320;
+	const int SELFIE_FRAME_MARGIN = 10;
 
+	const string INTRO_TRANSITION_COMPLETE_EVENT = "INTRO_TRANSITION_COMPLETE_EVENT";
 	//DEBUG
-	ofPtr<RemoteVideoInfo> video1;
-	ofPtr<RemoteVideoInfo> video2;
+	//ofPtr<RemoteVideoInfo> video1;
+	//ofPtr<RemoteVideoInfo> video2;
 }
 
 // ********************************************************************************************************************
@@ -30,14 +36,33 @@ void ofRemoteApp::earlyinit()
 // ********************************************************************************************************************
 void ofRemoteApp::setup()
 {
+	ofxKeyframeAnimRegisterEvents(this);
 	VideoCaptureAppBase::setupSteamManager();
+	connectIcon.loadImage("icon_connect.png");
+	hangupIcon.loadImage("icon_hangup.png");
+	muteIcon.loadImage("icon_mute.png");
 }
 
 
 // ********************************************************************************************************************
 void ofRemoteApp::update()
 {
+	this->playlist.update();
+
 	VideoCaptureAppBase::update();
+
+	if (this->state == UISTATE_STARTUP)
+	{
+		if (this->videoSource)
+		{
+			this->currentConnectIconAlpha = 1;
+			this->drawSelfieFrame = false;
+			this->currentSelfieYPosition = INTRO_SELFIE_TOP_MARGIN;
+			this->currentSelfieWidth = (int)(this->width * 0.75f);
+
+			this->state = UISTATE_INTRO;
+		}
+	}
 
 	if (this->remoteTotem)
 	{
@@ -55,30 +80,26 @@ void ofRemoteApp::draw()
 {
 	ofBackground(0x09,0x22,0x36);
 
-	if (this->state == UISTATE_STARTUP)
+	if (this->state == UISTATE_INTRO)
 	{
-		if (this->videoSource)
-		{
-			this->state == UISTATE_INTRO;
-		}
-		else
-		{
-			return;
-		}
+		DrawSelfie();
+
+		ofPushStyle();
+		ofSetRectMode(OF_RECTMODE_CENTER);
+		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
+		connectIcon.draw(this->width / 2, this->height - this->connectIcon.height / 2 - 0);
+		ofPopStyle();
 	}
-
-	if (this->remoteTotem)
+	else
 	{
-		this->cylinderDisplay->draw();
-	}
+		if (this->remoteTotem)
+		{
+			this->cylinderDisplay->draw();
+		}
 
-	DrawSelfie();
+		DrawSelfie();
 
-	this->networkDisplay.draw();
-
-	if (false)// showInstructions)
-	{
-		//ofDrawBitmapString(" ?: show instructions \n z: show remote caller \n m: turn on directional mics \n l: look for the left-most participant \n r: look for the right most participant \n space: show the raw v360 feed", 50, 50);
+		this->networkDisplay.draw();
 	}
 }
 
@@ -94,16 +115,16 @@ void ofRemoteApp::DrawSelfie()
 	
 	// Draw the source video in a small window
 	auto ratio = this->videoSource->getWidth() / this->videoSource->getHeight();
-	int selfieWidth = 320;
+	int selfieWidth = (int)(this->currentSelfieWidth);
 	int selfieHeight = selfieWidth / ratio;
 	int selfieX = (this->width - selfieWidth) / 2;
-	int selfieY = 40;
-	int margin = 15;
+	int selfieY = (int)(this->currentSelfieYPosition);
 
-	ofSetColor(32); // Selfie margin color
-	ofRect(-(selfieX + margin + selfieWidth), selfieY - margin, selfieWidth + margin * 2, selfieHeight + margin * 2);
+	ofPushStyle();
+	ofSetColor(0x09, 0x22, 0x36, 255 * (1.0 - currentConnectIconAlpha)); // Selfie margin color with alpha for animations
+	ofRect(-(selfieX + SELFIE_FRAME_MARGIN + selfieWidth), selfieY - SELFIE_FRAME_MARGIN, selfieWidth + SELFIE_FRAME_MARGIN * 2, selfieHeight + SELFIE_FRAME_MARGIN * 2);
+	ofPopStyle();
 
-	ofSetColor(255);
 	this->videoSource->draw(-(selfieX + selfieWidth), selfieY, selfieWidth, selfieHeight);
 
 	ofPopMatrix();
@@ -195,6 +216,22 @@ void ofRemoteApp::keyPressed(int key)
 
 
 // ********************************************************************************************************************
+void ofRemoteApp::mousePressed(int x, int y, int button)
+{
+	if (this->state == UISTATE_INTRO)
+	{
+		if (button == 0)
+		{
+			const float tween_time = 750;
+			this->playlist.addKeyFrame(Action::tween(tween_time, &this->currentConnectIconAlpha, 0));
+			this->playlist.addToKeyFrame(Action::tween(tween_time, &this->currentSelfieYPosition, MINI_SELFIE_TOP_MARGIN));
+			this->playlist.addToKeyFrame(Action::tween(tween_time, &this->currentSelfieWidth, MINI_SELFIE_WIDTH));
+			this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
+		}
+	}
+}
+
+// ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
 	if (remote.isTotem)
@@ -243,5 +280,14 @@ void ofRemoteApp::Handle_ClientStreamAvailable(RemoteVideoInfo& remote)
 	{
 		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
 		this->cylinderDisplay->DoWelcome();
+	}
+}
+
+// ********************************************************************************************************************
+void ofRemoteApp::onKeyframe(ofxPlaylistEventArgs& args)
+{
+	if (args.message == INTRO_TRANSITION_COMPLETE_EVENT)
+	{
+		this->state = UISTATE_MAIN;
 	}
 }
