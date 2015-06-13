@@ -52,7 +52,7 @@ This addons requires the v0.8.4 branch that targets ofxOSC in openFrameworks v0.
 ##GStreamer install
 To Install GStreamer on Windows do the following:
 
-Download GStreamer v1.0. To install it under windows use the 1.2.2 packages located http://gstreamer.freedesktop.org/data/pkg/windows/1.2.2/ any later version from http://gstreamer.freedesktop.org/data/pkg/windows should work but haven't been tested yet. It is important to install the complete version when prompted by the installer.  It will isntall all nessicary files for development and all extra packages. 
+Download GStreamer v1.0. To install it under windows use the 1.2.2 packages located http://gstreamer.freedesktop.org/data/pkg/windows/1.2.2/ any later version from http://gstreamer.freedesktop.org/data/pkg/windows should work but haven't been tested yet. It is important to install the complete version when prompted by the installer.  It will install all nessicary files for development and all extra packages. 
 gstreamer-1.0-x86-1.2.2.msi installs the necessary libraries for applications to run.
 gstreamer-1.0-devel-x86-1.2.2.msi installs the development files needed to compile gst applications.
 
