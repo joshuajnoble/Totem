@@ -73,12 +73,12 @@ void StreamManager::setup(int _width, int _height){
         clientParameters newConnection;
         newConnection.clientID = ofToString(i);
         newConnection.ipAddress = xml.getValue<string>("//ipAddress");
-        newConnection.audioPort = xml.getValue<string>("//videoPort");
-        newConnection.videoPort = xml.getValue<string>("//audioPort");
-        newConnection.videoWidth = xml.getValue<int>("//width");
-        newConnection.videoHeight = xml.getValue<int>("//height");
+        newConnection.videoPort = xml.getValue<string>("//videoPort");
+        newConnection.audioPort = xml.getValue<string>("//audioPort");
 		newConnection.remoteVideoPort = xml.getValue<string>("//remoteVideoPort");
 		newConnection.remoteAudioPort = xml.getValue<string>("//remoteAudioPort");
+        newConnection.videoWidth = xml.getValue<int>("//width");
+        newConnection.videoHeight = xml.getValue<int>("//height");
         
 		newClient(newConnection);
         newServer(newConnection);
@@ -256,8 +256,8 @@ void StreamManager::drawDebug(){
 void StreamManager::newServer(clientParameters params){
     servers[params.clientID] = new ofxGstRTPServer();
     servers[params.clientID]->setup(params.ipAddress);
-	servers[params.clientID]->addVideoChannel(ofToInt(params.videoPort),width,height,30);
-    servers[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
+	servers[params.clientID]->addVideoChannel(ofToInt(params.remoteVideoPort),width,height,30);
+    servers[params.clientID]->addAudioChannel(ofToInt(params.remoteAudioPort));
     servers[params.clientID]->play();
 }
 
