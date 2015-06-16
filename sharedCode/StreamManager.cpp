@@ -193,6 +193,7 @@ void StreamManager::update(){
     if(isFrameNew()){
         for(map<string, ofxGstRTPServer* >::iterator iter = servers.begin(); iter != servers.end(); ++iter){
             iter->second->newFrame(mImg->getPixelsRef());
+            iter->second->videoBitrate = 6000;
         }
     }
     for(map<string, ofxGstRTPClient*>::iterator iter = clients.begin(); iter != clients.end(); ++iter){
@@ -235,13 +236,15 @@ void StreamManager::drawDebug(){
 void StreamManager::newServer(clientParameters params){
     servers[params.clientID] = new ofxGstRTPServer();
     servers[params.clientID]->setup(params.ipAddress);
-    if(connections.size() == 0){
+    if(params.clientID == "one"){
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-    }else if(connections.size() == 1){
+    }
+    if(params.clientID == "two"){
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
-    }else{
+    }
+    if(params.clientID == "three"){
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortThree),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortThree));
     }
@@ -252,13 +255,15 @@ void StreamManager::newClient(clientParameters params){
     
     clients[params.clientID] = new ofxGstRTPClient();
     clients[params.clientID]->setup(params.ipAddress, 0);
-    if(connections.size() == 0){
+    if(params.clientID == "one"){
         clients[params.clientID]->addVideoChannel(ofToInt(params.videoPort));
         clients[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
-    }else if(connections.size() == 1){
+    }
+    if(params.clientID == "two"){
         clients[params.clientID]->addVideoChannel(ofToInt(params.videoPortTwo));
         clients[params.clientID]->addAudioChannel(ofToInt(params.audioPortTwo));
-    }else{
+    }
+    if(params.clientID == "three"){
         clients[params.clientID]->addVideoChannel(ofToInt(params.videoPortThree));
         clients[params.clientID]->addAudioChannel(ofToInt(params.audioPortThree));
     }
