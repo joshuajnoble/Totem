@@ -44,10 +44,6 @@ void StreamManager::setup(int _width, int _height){
     thisClient.clientID = settings.getValue<string>("//clientID");
     thisClient.videoPort = settings.getValue<string>("//videoPort");
     thisClient.audioPort = settings.getValue<string>("//audioPort");
-    thisClient.videoPortTwo = settings.getValue<string>("//videoPortTwo");
-    thisClient.audioPortTwo = settings.getValue<string>("//audioPortTwo");
-    thisClient.videoPortThree = settings.getValue<string>("//videoPortThree");
-    thisClient.audioPortThree = settings.getValue<string>("//audioPortThree");
     
     isServer = ofToBool(settings.getValue<string>("//isServer"));
     
@@ -77,12 +73,12 @@ void StreamManager::setup(int _width, int _height){
         clientParameters newConnection;
         newConnection.clientID = ofToString(i);
         newConnection.ipAddress = xml.getValue<string>("//ipAddress");
-        newConnection.audioPort = xml.getValue<string>("//videoPort");
-        newConnection.videoPort = xml.getValue<string>("//audioPort");
-        newConnection.videoWidth = xml.getValue<int>("//width");
-        newConnection.videoHeight = xml.getValue<int>("//height");
+        newConnection.videoPort = xml.getValue<string>("//videoPort");
+        newConnection.audioPort = xml.getValue<string>("//audioPort");
 		newConnection.remoteVideoPort = xml.getValue<string>("//remoteVideoPort");
 		newConnection.remoteAudioPort = xml.getValue<string>("//remoteAudioPort");
+        newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
+        newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
         
 		newClient(newConnection);
         newServer(newConnection);
@@ -110,10 +106,8 @@ void StreamManager::newData( DataPacket& _packet  )
             newConnection.ipAddress = json["connection"]["ipAddress"].asString();
             newConnection.audioPort = json["connection"]["audioPort"].asString();
             newConnection.videoPort = json["connection"]["videoPort"].asString();
-            newConnection.audioPortTwo = json["connection"]["audioPortTwo"].asString();
-            newConnection.videoPortTwo = json["connection"]["videoPortTwo"].asString();
-            newConnection.audioPortThree = json["connection"]["audioPortThree"].asString();
-            newConnection.videoPortThree = json["connection"]["videoPortThree"].asString();
+            newConnection.remoteAudioPort = json["connection"]["remoteAudioPort"].asString();
+            newConnection.remoteVideoPort = json["connection"]["remoteVideoPort"].asString();
             newConnection.clientID = json["connection"]["clientID"].asString();
             newConnection.videoWidth = json["connection"]["videoWidth"].asInt();
             newConnection.videoHeight = json["connection"]["videoHeight"].asInt();
@@ -123,10 +117,6 @@ void StreamManager::newData( DataPacket& _packet  )
             ofLog(OF_LOG_NOTICE)<<"IpAddress "<<newConnection.ipAddress<<endl;
             ofLog(OF_LOG_NOTICE)<<"AudioPort "<<newConnection.audioPort<<endl;
             ofLog(OF_LOG_NOTICE)<<"VideoPort "<<newConnection.videoPort<<endl;
-            ofLog(OF_LOG_NOTICE)<<"AudioPort 2 "<<newConnection.audioPortTwo<<endl;
-            ofLog(OF_LOG_NOTICE)<<"VideoPort 2 "<<newConnection.videoPortTwo<<endl;
-            ofLog(OF_LOG_NOTICE)<<"AudioPort 3 "<<newConnection.audioPortThree<<endl;
-            ofLog(OF_LOG_NOTICE)<<"VideoPort 3 "<<newConnection.videoPortThree<<endl;
             
             
             
@@ -266,8 +256,8 @@ void StreamManager::drawDebug(){
 void StreamManager::newServer(clientParameters params){
     servers[params.clientID] = new ofxGstRTPServer();
     servers[params.clientID]->setup(params.ipAddress);
-	servers[params.clientID]->addVideoChannel(ofToInt(params.videoPort),width,height,30);
-    servers[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
+	servers[params.clientID]->addVideoChannel(ofToInt(params.remoteVideoPort),width,height,30);
+    servers[params.clientID]->addAudioChannel(ofToInt(params.remoteAudioPort));
     servers[params.clientID]->play();
 }
 
