@@ -64,8 +64,9 @@ void StreamManager::setup(int _width, int _height){
     
     if(isServer){
         ofAddListener(oscBroadcaster->newDataEvent, this, &StreamManager::newData );
+    }else{
+        ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
     }
-    ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
 }
 
 int StreamManager::hash(const char * str)
@@ -108,8 +109,8 @@ void StreamManager::newData( DataPacket& _packet  )
             
             if (connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
                 
-                newServer(newConnection);
                 newClient(newConnection);
+                newServer(newConnection);
                 connections[newConnection.clientID] = newConnection;
             }
         }
@@ -185,8 +186,8 @@ void StreamManager::update(){
         connection["videoPort"] = thisClient.videoPort;
         connection["audioPortTwo"] = thisClient.audioPortTwo;
         connection["videoPortTwo"] = thisClient.videoPortTwo;
-        connection["audioPortTwo"] = thisClient.audioPortThree;
-        connection["videoPortTwo"] = thisClient.videoPortThree;
+        connection["audioPortThree"] = thisClient.audioPortThree;
+        connection["videoPortThree"] = thisClient.videoPortThree;
         connection["videoWidth"] = width;
         connection["videoHeight"] = height;
         
@@ -245,15 +246,11 @@ void StreamManager::newServer(clientParameters params){
     if(params.clientID == "one"){
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPort),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPort));
-    }
-    if(params.clientID == "two"){
+    }else{
         servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortTwo),width,height,30);
         servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortTwo));
     }
-    if(params.clientID == "three"){
-        servers[params.clientID]->addVideoChannel(ofToInt(thisClient.videoPortThree),width,height,30);
-        servers[params.clientID]->addAudioChannel(ofToInt(thisClient.audioPortThree));
-    }
+
     servers[params.clientID]->play();
 }
 
@@ -264,15 +261,11 @@ void StreamManager::newClient(clientParameters params){
     if(params.clientID == "one"){
         clients[params.clientID]->addVideoChannel(ofToInt(params.videoPort));
         clients[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
-    }
-    if(params.clientID == "two"){
+    }else{
         clients[params.clientID]->addVideoChannel(ofToInt(params.videoPortTwo));
         clients[params.clientID]->addAudioChannel(ofToInt(params.audioPortTwo));
     }
-    if(params.clientID == "three"){
-        clients[params.clientID]->addVideoChannel(ofToInt(params.videoPortThree));
-        clients[params.clientID]->addAudioChannel(ofToInt(params.audioPortThree));
-    }
+
     remoteVideos[params.clientID] = ofPtr<ofFbo>(new ofFbo());
     remoteVideos[params.clientID]->allocate(params.videoWidth,params.videoHeight, GL_RGB);
     remotePixels[params.clientID] = ofPtr<ofImage>(new ofImage());
