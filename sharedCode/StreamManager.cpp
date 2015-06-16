@@ -38,7 +38,7 @@ void StreamManager::setup(int _width, int _height){
     
     
     ofXml settings;
-    settings.load(ofToDataPath("client_settings.xml"));
+    settings.load(ofToDataPath("settings.xml"));
     
     thisClient.ipAddress = settings.getValue<string>("//ipAddress");
     thisClient.clientID = settings.getValue<string>("//clientID");
@@ -62,9 +62,9 @@ void StreamManager::setup(int _width, int _height){
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
     commonTimeOsc->setEaseOffset( true );
     
-#ifdef SERVER
-    //ofAddListener(oscBroadcaster->newDataEvent, this, &StreamManager::newData );
-#endif
+    if(isServer){
+        ofAddListener(oscBroadcaster->newDataEvent, this, &StreamManager::newData );
+    }
     ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
 }
 
@@ -88,15 +88,22 @@ void StreamManager::newData( DataPacket& _packet  )
             newConnection.videoPort = json["connection"]["videoPort"].asString();
             newConnection.audioPortTwo = json["connection"]["audioPortTwo"].asString();
             newConnection.videoPortTwo = json["connection"]["videoPortTwo"].asString();
+            newConnection.audioPortThree = json["connection"]["audioPortThree"].asString();
+            newConnection.videoPortThree = json["connection"]["videoPortThree"].asString();
             newConnection.clientID = json["connection"]["clientID"].asString();
             newConnection.videoWidth = json["connection"]["videoWidth"].asInt();
             newConnection.videoHeight = json["connection"]["videoHeight"].asInt();
             
             
             ofLog(OF_LOG_NOTICE)<<"CLIENT ID "<<newConnection.clientID<<endl;
+            ofLog(OF_LOG_NOTICE)<<"IpAddress "<<newConnection.ipAddress<<endl;
             ofLog(OF_LOG_NOTICE)<<"AudioPort "<<newConnection.audioPort<<endl;
             ofLog(OF_LOG_NOTICE)<<"VideoPort "<<newConnection.videoPort<<endl;
-            ofLog(OF_LOG_NOTICE)<<"IpAddress "<<newConnection.ipAddress<<endl;
+            ofLog(OF_LOG_NOTICE)<<"AudioPort 2 "<<newConnection.audioPortTwo<<endl;
+            ofLog(OF_LOG_NOTICE)<<"VideoPort 2 "<<newConnection.videoPortTwo<<endl;
+            ofLog(OF_LOG_NOTICE)<<"AudioPort 3 "<<newConnection.audioPortThree<<endl;
+            ofLog(OF_LOG_NOTICE)<<"VideoPort 3 "<<newConnection.videoPortThree<<endl;
+            
             
             
             if (connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
@@ -174,13 +181,12 @@ void StreamManager::update(){
         
         connection["clientID"] = thisClient.clientID;
         connection["ipAddress"] = thisClient.ipAddress;
-        //if(connections.size() == 0){
         connection["audioPort"] = thisClient.audioPort;
         connection["videoPort"] = thisClient.videoPort;
-        //}else{
         connection["audioPortTwo"] = thisClient.audioPortTwo;
         connection["videoPortTwo"] = thisClient.videoPortTwo;
-        //}
+        connection["audioPortTwo"] = thisClient.audioPortThree;
+        connection["videoPortTwo"] = thisClient.videoPortThree;
         connection["videoWidth"] = width;
         connection["videoHeight"] = height;
         
