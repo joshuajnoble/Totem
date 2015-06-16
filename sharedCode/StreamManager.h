@@ -33,8 +33,8 @@ public:
         string ipAddress;
         string audioPort;
         string videoPort;
-        string audioPortTwo;
-        string videoPortTwo;
+        string remoteAudioPort;
+        string remoteVideoPort;
 		string audioPortThree;
         string videoPortThree;
         string clientID;
