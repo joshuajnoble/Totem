@@ -33,8 +33,8 @@ public:
         string ipAddress;
         string audioPort;
         string videoPort;
-        string audioPortTwo;
-        string videoPortTwo;
+        string remoteAudioPort;
+        string remoteVideoPort;
 		string audioPortThree;
         string videoPortThree;
         string clientID;
@@ -60,6 +60,7 @@ public:
     void newServer(clientParameters params);
     void newFrame();
     
+    bool isServer;
     
     void sendRotation(float rotation);
     
@@ -74,9 +75,8 @@ public:
     ofxJSONElement json;
     
     ofxCommonTimeOSC* commonTimeOsc;
-#ifdef SERVER
+
     ofPtr<ofxServerOscManager> oscBroadcaster;
-#endif
     ofPtr<ofxClientOSCManager> oscReceiver;
 
     

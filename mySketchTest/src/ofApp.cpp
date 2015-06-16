@@ -3,10 +3,12 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	ofSetLogLevel(OF_LOG_VERBOSE);
-	ofSetVerticalSync(true);
-    grabber.initGrabber(1280,720);
-    streaming.setup(1280, 720);
+	ofSetFrameRate(60);
+
+    grabber.initGrabber(640,480);
+    streaming.setup(640, 480);
     sharedImg = ofPtr<ofImage>(new ofImage());
+	sharedImg->allocate(640, 480, OF_IMAGE_COLOR);
     streaming.setImageSource(sharedImg);
     
 
