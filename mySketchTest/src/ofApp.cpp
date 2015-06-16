@@ -2,10 +2,10 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-	ofSetLogLevel(OF_LOG_SILENT);
+	ofSetLogLevel(OF_LOG_VERBOSE);
 	ofSetVerticalSync(true);
-    grabber.initGrabber(1920,1080);
-    streaming.setup(1920, 1080);
+    grabber.initGrabber(1280,720);
+    streaming.setup(1280, 720);
     sharedImg = ofPtr<ofImage>(new ofImage());
     streaming.setImageSource(sharedImg);
     

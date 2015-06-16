@@ -21,8 +21,7 @@
 #include "ofxGui/src/ofxGui.h"
 #include "ofxJSON/src/ofxJSON.h"
 #endif
-
-#define SERVER
+//#define SERVER
 
 class StreamManager{
 public:
@@ -36,6 +35,8 @@ public:
         string videoPort;
         string audioPortTwo;
         string videoPortTwo;
+		string audioPortThree;
+        string videoPortThree;
         string clientID;
         int videoWidth;
         int videoHeight;
