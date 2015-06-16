@@ -30,15 +30,15 @@
 		<key>0ACD328CC81B0F6FD7AA37A2E7F0C19463D3A213</key>
 		<string>../../..</string>
 		<key>2FF29A599C1B99A3BF67771ACFD2920D4283BD26</key>
-		<string>../../../../../addons/ofxNice</string>
+		<string>../../../../addons/ofxNice</string>
 		<key>313442C702E505E76A72770690E1B04EAB122AA9</key>
-		<string>../../../../../addons/ofxEchoCancel</string>
+		<string>../../../../addons/ofxEchoCancel</string>
 		<key>76FA968CA334FB7BB92E03957D3EF6E86E0F8D32</key>
-		<string>../../../../../addons/ofxDepthStreamCompression</string>
+		<string>../../../../addons/ofxDepthStreamCompression</string>
 		<key>89AEA15953FADA42468C343CB60A9B1BA364E9AB</key>
-		<string>../../../../../addons/ofxGstRTP</string>
+		<string>../../../../addons/ofxGstRTP</string>
 		<key>D4A8235900F0DA7D1A8E5C34D695212FBCCAAA99</key>
-		<string>../../../../../addons/ofxXMPP</string>
+		<string>../../../../addons/ofxXMPP</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/joshuajnoble/Totem.git</string>

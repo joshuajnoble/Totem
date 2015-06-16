@@ -143,15 +143,15 @@ void ofApp::keyPressed(int key){
             
             servers.push_back(new ofxGstRTPServer());
             servers.back()->setup("127.0.0.1");
-            servers.back()->addVideoChannel(6000+10*(servers.size()),grabber.getWidth(),grabber.getHeight(),30);
-            servers.back()->addAudioChannel(5000+10*(servers.size()));
-            servers.back()->videoBitrate = 6000;
+            servers.back()->addVideoChannel(6000,grabber.getWidth(),grabber.getHeight(),30);
+            servers.back()->addAudioChannel(5000);
+            servers.back()->videoBitrate = 1000;
             servers.back()->play();
             
             clients.push_back(new ofxGstRTPClient());
             clients.back()->setup("127.0.0.1", 0);
-            clients.back()->addVideoChannel(6000+10*clients.size());
-            clients.back()->addAudioChannel(5000+10*clients.size());
+            clients.back()->addVideoChannel(6000);
+            clients.back()->addAudioChannel(5000);
             clients.back()->play();
             
             //            clientGui.add(clients.back()->parameters);

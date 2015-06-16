@@ -34,11 +34,11 @@
 		<key>0ACD328CC81B0F6FD7AA37A2E7F0C19463D3A213</key>
 		<string>../../..</string>
 		<key>2DE9C8846D9375EAACFABA8963120E8E7719BAF5</key>
-		<string>../../../../../../openFrameworks</string>
+		<string>../../../../openFrameworks</string>
 		<key>2F750D68E75345E71C71DBA69B734ED42BF924D1</key>
 		<string>../../../../addons/ofxGStreamer</string>
 		<key>5DB7C332A3A89035E93556A2A38BF414005BA671</key>
-		<string>../../../../../../openFrameworks/addons/ofxJSON</string>
+		<string>../../../../openFrameworks/addons/ofxJSON</string>
 		<key>62AD38A853790DF3EC11E6F04E12E51471859353</key>
 		<string>../../../../addons/ofxSnappy</string>
 		<key>76FA968CA334FB7BB92E03957D3EF6E86E0F8D32</key>

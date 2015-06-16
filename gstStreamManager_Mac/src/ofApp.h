@@ -28,9 +28,9 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
-    
     void newClient(string & args);
     
+    ofVideoPlayer player;
     ofVideoGrabber grabber;
     ofPtr<ofImage> sharedImg;
     StreamManager streaming;

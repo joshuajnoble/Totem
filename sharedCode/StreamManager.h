@@ -22,6 +22,8 @@
 #include "ofxJSON/src/ofxJSON.h"
 #endif
 
+#define SERVER
+
 class StreamManager{
 public:
     StreamManager();
@@ -71,14 +73,17 @@ public:
     ofxJSONElement json;
     
     ofxCommonTimeOSC* commonTimeOsc;
+#ifdef SERVER
     ofPtr<ofxServerOscManager> oscBroadcaster;
+#endif
     ofPtr<ofxClientOSCManager> oscReceiver;
+
     
     float width;
     float height;
     
-    map<string, ofPtr<ofxGstRTPClient> > clients;
-    map<string, ofPtr<ofxGstRTPServer> > servers;
+    map<string, ofxGstRTPClient* > clients;
+    map<string, ofxGstRTPServer* > servers;
     
     map<string, ofPtr<ofFbo> > remoteVideos;
     map<string, ofPtr<ofImage> > remotePixels;
