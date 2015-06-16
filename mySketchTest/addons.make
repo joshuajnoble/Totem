@@ -1,0 +1,9 @@
+ofxGui
+ofxOsc
+ofxXmlSettings
+ofxDepthStreamCompression
+ofxGStreamer
+ofxGstRTP
+ofxJSON
+ofxOSCSync
+ofxSnappy
