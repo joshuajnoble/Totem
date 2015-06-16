@@ -42,8 +42,6 @@ void StreamManager::setup(int _width, int _height){
     
     thisClient.ipAddress = settings.getValue<string>("//ipAddress");
     thisClient.clientID = settings.getValue<string>("//clientID");
-    thisClient.videoPort = settings.getValue<string>("//videoPort");
-    thisClient.audioPort = settings.getValue<string>("//audioPort");
     
     isServer = ofToBool(settings.getValue<string>("//isServer"));
     
