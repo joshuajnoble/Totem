@@ -1,8 +1,24 @@
 #include "ThreeSixtyUnwrap.h"
 
-void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, int outputWidth, int outputHeight)
+ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
+{
+	float div = displayRatio.x * displayRatio.y;
+	float area = inputSize.x * inputSize.y;
+	auto height = std::sqrtf(area / div);
+	auto width = height * (displayRatio.x / displayRatio.y);
+
+	// Reduce the output size assuming that we crop/lose some of the image.
+	auto scaled = ofVec2f(width, height) * 0.5f;
+	return ofVec2f(std::roundf(scaled.x), std::roundf(scaled.y));
+}
+
+void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, ofVec2f outputSize)
 {
 	this->videoSource = videoSource;
+
+	// Calculate the output based on ending with the same number of pixels as we started with.
+	unwarpedW = outputSize.x;
+	unwarpedH = outputSize.y;
 
 	if (XML.loadFile("UnwarperSettings.xml")){
 		//printf("UnwarperSettings.xml loaded!\n");
@@ -16,8 +32,6 @@ void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, int ou
 	maxR_factor = XML.getValue("MAXR_FACTOR", 0.95);
 	minR_factor = XML.getValue("MINR_FACTOR", 0.45);
 	angularOffset = XML.getValue("ROTATION_DEGREES", 0.0);
-	unwarpedW = outputWidth;
-	unwarpedH = outputHeight;
 
 	// Interpolation method: 
 	// 0 = CV_INTER_NN, 1 = CV_INTER_LINEAR, 2 = CV_INTER_CUBIC.

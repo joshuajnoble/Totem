@@ -1,13 +1,44 @@
 #include "TotemDisplay.h"
+#include "Utils.h"
 #include <unordered_set>
 
+// ********************************************************************************************************************
 void TotemDisplay::initTotemDisplay(int count, int width, int height)
 {
 	this->displayCount = count;
 	this->displayWidth = width;
 	this->displayHeight = height;
-	this->displayRatio = this->displayWidth / static_cast<float>(this->displayHeight);
 
+	this->LoadXmlOverrideSettings();
+
+	this->displayRatio = this->displayWidth / static_cast<float>(this->displayHeight);
+}
+
+
+// ********************************************************************************************************************
+void TotemDisplay::LoadXmlOverrideSettings()
+{
+	ofXml xml;
+	xml.load(ofToDataPath("totemdisplays.xml"));
+	xml.setTo("totemDisplay");
+	auto xmlScale = xml.getAttribute("scale");
+	if (xmlScale.length() > 0)
+	{
+		this->scale = ofToFloat(xmlScale);
+	}
+
+	auto xmlOrientation = ofToLower(xml.getAttribute("orientation"));
+	if (xmlOrientation.length() > 0)
+	{
+		if (xmlOrientation == "horizontal") this->displayVertical = false;
+		else if (xmlOrientation == "vertical") this->displayVertical = true;
+	}
+}
+
+
+// ********************************************************************************************************************
+void TotemDisplay::allocateBuffers()
+{
 	for (int i = 0; i < this->displayCount; ++i)
 	{
 		ofFbo fbo;
@@ -21,6 +52,32 @@ void TotemDisplay::initTotemDisplay(int count, int width, int height)
 	}
 }
 
+
+// ********************************************************************************************************************
+int TotemDisplay::windowWidth() const
+{
+	if (this->displayVertical)
+	{
+		return this->displayWidth * this->scale;
+	}
+
+	return this->displayWidth * this->displayCount * this->scale;
+}
+
+
+// ********************************************************************************************************************
+int TotemDisplay::windowHeight() const
+{
+	if (this->displayVertical)
+	{
+		return this->displayHeight * this->displayCount * this->scale;
+	}
+
+	return this->displayHeight * this->scale;
+}
+
+
+// ********************************************************************************************************************
 void TotemDisplay::setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> videoSource)
 {
 	if (totemDisplayId <= this->displayCount)
@@ -30,6 +87,8 @@ void TotemDisplay::setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> vi
 	}
 }
 
+
+// ********************************************************************************************************************
 void TotemDisplay::update()
 {
 	// If the same source is provided on multiple displays, then the first will get updated, but the second one won't (since it's isFrameNew flas will be reset)
@@ -57,23 +116,11 @@ void TotemDisplay::update()
 				else
 				{
 					// Crop the image to make it fit reasonably in the space we have available
-					ofImage i(source->getPixelsRef());
-					auto sourceWidth = source->getWidth();
-					auto sourceHeight = source->getHeight();
-					if (source->getWidth() > source->getHeight())
-					{
-						auto cropWidth = sourceHeight * this->displayRatio;
-						i.drawSubsection(0, 0, this->displayWidth, this->displayHeight, (sourceWidth - cropWidth) / 2, 0, cropWidth, sourceHeight);
-					}
-					else
-					{
-						auto cropHeight = sourceWidth / this->displayRatio;
-						i.drawSubsection(0, 0, this->displayWidth, this->displayHeight, 0, (sourceHeight - cropHeight) / 2, sourceWidth, cropHeight, sourceWidth);
-					}
+					Utils::DrawImageCroppedToFit(ofImage(source->getPixelsRef()), this->displayWidth, this->displayHeight);
 				}
 			}
 		}
-		else
+		else if (this->drawTestPattern)
 		{
 			// Draw Debug Display
 			ofSetColor(0, 191 / (i + 1) + 64, 0);
@@ -87,7 +134,7 @@ void TotemDisplay::update()
 			{
 				ofCircle(this->displayWidth / 2, yOff, circleSize, circleSize);
 				yOff += circleSize * 2 + circleSpacing;
-				
+
 				//Intentionally overdraw the fbo (width) to prove that the fbo automatically crops output without any problems.
 				//ofRect(this->displayWidth / 2, this->displayHeight / (this->displayCount - 1) * i - 25, this->displayWidth, 50);
 			}
@@ -98,15 +145,37 @@ void TotemDisplay::update()
 	}
 }
 
+
+// ********************************************************************************************************************
 void TotemDisplay::draw()
 {
+	if (this->scale != 1.0)
+	{
+		ofPushMatrix();
+		ofScale(this->scale, this->scale);
+	}
+
 	for (int i = 0; i < this->displayCount; ++i)
 	{
 		auto fbo = this->_output[i];
-		fbo.draw(this->displayWidth * i, 0);
+		if (this->displayVertical)
+		{
+			fbo.draw(0, this->displayHeight * i); // Vertical
+		}
+		else
+		{
+			fbo.draw(this->displayWidth * i, 0); // Horizontal
+		}
+	}
+
+	if (this->scale != 1.0)
+	{
+		ofPopMatrix();
 	}
 }
 
+
+// ********************************************************************************************************************
 ofFbo& TotemDisplay::getDisplay(int totemDisplayId)
 {
 	return this->_output[totemDisplayId];

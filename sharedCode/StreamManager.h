@@ -30,16 +30,18 @@ public:
     
     // this is the config for the manager
     struct clientParameters{
+		const static int PORT_SKIP = 5;
         string ipAddress;
-        string audioPort;
-        string videoPort;
-        string remoteAudioPort;
-        string remoteVideoPort;
-		string audioPortThree;
-        string videoPortThree;
+        int audioPort;
+        int videoPort;
+        int remoteAudioPort;
+        int remoteVideoPort;
+
         string clientID;
+
         int videoWidth;
         int videoHeight;
+		int portOffset;
     };
     
     // initialize everything
@@ -59,8 +61,11 @@ public:
     void newClient(clientParameters params);
     void newServer(clientParameters params);
     void newFrame();
-    
+
     bool isServer;
+
+	void ClientDisconnected(string clientId);
+
     
     void sendRotation(float rotation);
     
@@ -70,6 +75,8 @@ public:
     bool bNewFrame;
     
     ofEvent<string> newClientEvent;
+	ofEvent<string> clientDisconnectedEvent;
+	ofEvent<string> clientStreamAvailableEvent;
     ofEvent<float> newRotationEvent;
     
     ofxJSONElement json;
@@ -87,7 +94,6 @@ public:
     map<string, ofxGstRTPServer* > servers;
     
     map<string, ofPtr<ofFbo> > remoteVideos;
-    map<string, ofPtr<ofImage> > remotePixels;
     ofTexture mLoadingScreen;
     map<string,bool> bConnected;
     

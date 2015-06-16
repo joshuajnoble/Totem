@@ -42,6 +42,7 @@ void StreamManager::setup(int _width, int _height){
     
     thisClient.ipAddress = settings.getValue<string>("//ipAddress");
     thisClient.clientID = settings.getValue<string>("//clientID");
+
     
     isServer = ofToBool(settings.getValue<string>("//isServer"));
     
@@ -71,10 +72,10 @@ void StreamManager::setup(int _width, int _height){
         clientParameters newConnection;
         newConnection.clientID = ofToString(i);
         newConnection.ipAddress = xml.getValue<string>("//ipAddress");
-        newConnection.videoPort = xml.getValue<string>("//videoPort");
-        newConnection.audioPort = xml.getValue<string>("//audioPort");
-		newConnection.remoteVideoPort = xml.getValue<string>("//remoteVideoPort");
-		newConnection.remoteAudioPort = xml.getValue<string>("//remoteAudioPort");
+        newConnection.videoPort = xml.getValue<int>("//videoPort");
+        newConnection.audioPort = xml.getValue<int>("//audioPort");
+		newConnection.remoteVideoPort = xml.getValue<int>("//remoteVideoPort");
+		newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
         newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
         newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
         
@@ -102,10 +103,10 @@ void StreamManager::newData( DataPacket& _packet  )
         if(json.isMember("connection")){
             clientParameters newConnection;
             newConnection.ipAddress = json["connection"]["ipAddress"].asString();
-            newConnection.audioPort = json["connection"]["audioPort"].asString();
-            newConnection.videoPort = json["connection"]["videoPort"].asString();
-            newConnection.remoteAudioPort = json["connection"]["remoteAudioPort"].asString();
-            newConnection.remoteVideoPort = json["connection"]["remoteVideoPort"].asString();
+            newConnection.audioPort = json["connection"]["audioPort"].asInt();
+            newConnection.videoPort = json["connection"]["videoPort"].asInt();
+            newConnection.remoteAudioPort = json["connection"]["remoteAudioPort"].asInt();
+            newConnection.remoteVideoPort = json["connection"]["remoteVideoPort"].asInt();
             newConnection.clientID = json["connection"]["clientID"].asString();
             newConnection.videoWidth = json["connection"]["videoWidth"].asInt();
             newConnection.videoHeight = json["connection"]["videoHeight"].asInt();
@@ -119,7 +120,7 @@ void StreamManager::newData( DataPacket& _packet  )
             
             
             if (connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
-                
+            
                 newClient(newConnection);
                 newServer(newConnection);
                 connections[newConnection.clientID] = newConnection;
@@ -134,9 +135,10 @@ void StreamManager::newData( DataPacket& _packet  )
                 clients.erase(name);
                 servers.erase(name);
                 remoteVideos.erase(name);
-                remotePixels.erase(name);
                 bConnected.erase(name);
                 connections.erase(name);
+
+				ClientDisconnected(name);
             }
         }
         
@@ -186,26 +188,25 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 }
 
 void StreamManager::update(){
-    //    if(ofGetElapsedTimef() - lastSend > 1.5){
-    //        ofxJSONElement sendJSON;
-    //        ofxJSONElement connection;
-    //
-    //
-    //        connection["clientID"] = thisClient.clientID;
-    //        connection["ipAddress"] = thisClient.ipAddress;
-    //        connection["audioPort"] = thisClient.audioPort;
-    //        connection["videoPort"] = thisClient.videoPort;
-    //        connection["audioPortTwo"] = thisClient.audioPortTwo;
-    //        connection["videoPortTwo"] = thisClient.videoPortTwo;
-    //        connection["audioPortThree"] = thisClient.audioPortThree;
-    //        connection["videoPortThree"] = thisClient.videoPortThree;
-    //        connection["videoWidth"] = width;
-    //        connection["videoHeight"] = height;
-    //
-    //        sendJSON["connection"] = connection;
-    //        sendJSONData(sendJSON);
-    //        lastSend = ofGetElapsedTimef();
-    //    }
+
+        if(ofGetElapsedTimef() - lastSend > 1.5){
+            ofxJSONElement sendJSON;
+            ofxJSONElement connection;
+    
+    
+            connection["clientID"] = thisClient.clientID;
+            connection["ipAddress"] = thisClient.ipAddress;
+            connection["audioPort"] = thisClient.audioPort;
+            connection["videoPort"] = thisClient.videoPort;
+            connection["remoteAudioPort"] = thisClient.remoteAudioPort;
+            connection["remoteAudioPort"] = thisClient.remoteVideoPort;
+            connection["videoWidth"] = width;
+            connection["videoHeight"] = height;
+    
+            sendJSON["connection"] = connection;
+            sendJSONData(sendJSON);
+            lastSend = ofGetElapsedTimef();
+        }
     
     
     if(isFrameNew()){
@@ -219,23 +220,24 @@ void StreamManager::update(){
         if(iter->second->isFrameNewVideo()){
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
             if(!bConnected[iter->first]){
-                bConnected[iter->first]= true;
+                bConnected[iter->first] = true;
+				ofNotifyEvent(clientStreamAvailableEvent, const_cast<string&>(iter->first), this);
             }
         }else{
-            
             // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();
-                remoteVideos[iter->first]->begin();
+				auto video = remoteVideos[iter->first];
+                video->begin();
                 ofClear(0, 0, 0);
-                ofSetColor(255, 255, 255, 75);
                 for(int i = 0; i < 6; i++){
                     ofPushMatrix();
                     ofTranslate(remoteVideos[iter->first]->getWidth()/2, remoteVideos[iter->first]->getHeight()/2);
                     ofCircle(15*cos(ofGetElapsedTimef()*2.5+i*PI/3), 15*sin(ofGetElapsedTimef()*2.5+i*PI/3), 5);
-                    ofPopMatrix();
+
+					ofPopMatrix();
                 }
-                remoteVideos[iter->first]->end();
+                video->end();
                 ofDisableAlphaBlending();
             }
         }
@@ -250,12 +252,11 @@ void StreamManager::drawDebug(){
     }
 }
 
-
 void StreamManager::newServer(clientParameters params){
     servers[params.clientID] = new ofxGstRTPServer();
     servers[params.clientID]->setup(params.ipAddress);
-	servers[params.clientID]->addVideoChannel(ofToInt(params.remoteVideoPort),width,height,30);
-    servers[params.clientID]->addAudioChannel(ofToInt(params.remoteAudioPort));
+	servers[params.clientID]->addVideoChannel(params.remoteVideoPort,width,height,30);
+    servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
     servers[params.clientID]->play();
 }
 
@@ -263,16 +264,21 @@ void StreamManager::newClient(clientParameters params){
     
     clients[params.clientID] = new ofxGstRTPClient();
     clients[params.clientID]->setup(params.ipAddress, 0);
-    clients[params.clientID]->addVideoChannel(ofToInt(params.videoPort));
-    clients[params.clientID]->addAudioChannel(ofToInt(params.audioPort));
+    clients[params.clientID]->addVideoChannel(params.videoPort);
+    clients[params.clientID]->addAudioChannel(params.audioPort);
     
     
     remoteVideos[params.clientID] = ofPtr<ofFbo>(new ofFbo());
     remoteVideos[params.clientID]->allocate(params.videoWidth,params.videoHeight, GL_RGB);
-    remotePixels[params.clientID] = ofPtr<ofImage>(new ofImage());
     
     bConnected[params.clientID] = (false);
     clients[params.clientID]->play();
-    
-    ofNotifyEvent(newClientEvent, params.clientID, this);
+
+	ofNotifyEvent(newClientEvent, params.clientID, this);
+}
+
+void StreamManager::ClientDisconnected(string clientId)
+{
+	ofNotifyEvent(clientDisconnectedEvent, clientId, this);
+
 }

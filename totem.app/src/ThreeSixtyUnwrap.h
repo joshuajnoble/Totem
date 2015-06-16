@@ -10,8 +10,9 @@ class ThreeSixtyUnwrap : public ofBaseVideoDraws
 {
 public:
 	virtual ~ThreeSixtyUnwrap(){}
-	
-	void initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, int outputWidth, int outputHeight);
+
+	static ofVec2f CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio);
+	void initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, ofVec2f outputSize);
 
 	void update();
 	void close();
