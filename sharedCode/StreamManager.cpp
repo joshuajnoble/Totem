@@ -187,24 +187,24 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 
 void StreamManager::update(){
 
-        if(ofGetElapsedTimef() - lastSend > 1.5){
-            ofxJSONElement sendJSON;
-            ofxJSONElement connection;
-    
-    
-            connection["clientID"] = thisClient.clientID;
-            connection["ipAddress"] = thisClient.ipAddress;
-            connection["audioPort"] = thisClient.audioPort;
-            connection["videoPort"] = thisClient.videoPort;
-            connection["remoteAudioPort"] = thisClient.remoteAudioPort;
-            connection["remoteAudioPort"] = thisClient.remoteVideoPort;
-            connection["videoWidth"] = width;
-            connection["videoHeight"] = height;
-    
-            sendJSON["connection"] = connection;
-            sendJSONData(sendJSON);
-            lastSend = ofGetElapsedTimef();
-        }
+//        if(ofGetElapsedTimef() - lastSend > 1.5){
+//            ofxJSONElement sendJSON;
+//            ofxJSONElement connection;
+//    
+//    
+//            connection["clientID"] = thisClient.clientID;
+//            connection["ipAddress"] = thisClient.ipAddress;
+//            connection["audioPort"] = thisClient.audioPort;
+//            connection["videoPort"] = thisClient.videoPort;
+//            connection["remoteAudioPort"] = thisClient.remoteAudioPort;
+//            connection["remoteAudioPort"] = thisClient.remoteVideoPort;
+//            connection["videoWidth"] = width;
+//            connection["videoHeight"] = height;
+//    
+//            sendJSON["connection"] = connection;
+//            sendJSONData(sendJSON);
+//            lastSend = ofGetElapsedTimef();
+//        }
     
     
     if(isFrameNew()){
