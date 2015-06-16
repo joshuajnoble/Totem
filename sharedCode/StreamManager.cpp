@@ -210,12 +210,12 @@ void StreamManager::update(){
     
     
     if(isFrameNew()){
-        for(map<string, ofxGstRTPServer* >::iterator iter = servers.begin(); iter != servers.end(); ++iter){
+        for(map<string, ofPtr<ofxGstRTPServer> >::iterator iter = servers.begin(); iter != servers.end(); ++iter){
             iter->second->newFrame(mImg->getPixelsRef());
             iter->second->videoBitrate = 6000;
         }
     }
-    for(map<string, ofxGstRTPClient*>::iterator iter = clients.begin(); iter != clients.end(); ++iter){
+    for(map<string, ofPtr<ofxGstRTPClient> >::iterator iter = clients.begin(); iter != clients.end(); ++iter){
         iter->second->update();
         if(iter->second->isFrameNewVideo()){
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
@@ -253,7 +253,7 @@ void StreamManager::drawDebug(){
 }
 
 void StreamManager::newServer(clientParameters params){
-    servers[params.clientID] = new ofxGstRTPServer();
+    servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
     servers[params.clientID]->setup(params.ipAddress);
 	servers[params.clientID]->addVideoChannel(params.remoteVideoPort,width,height,30);
     servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
@@ -262,7 +262,7 @@ void StreamManager::newServer(clientParameters params){
 
 void StreamManager::newClient(clientParameters params){
     
-    clients[params.clientID] = new ofxGstRTPClient();
+    clients[params.clientID] = ofPtr<ofxGstRTPClient>(new ofxGstRTPClient());
     clients[params.clientID]->setup(params.ipAddress, 0);
     clients[params.clientID]->addVideoChannel(params.videoPort);
     clients[params.clientID]->addAudioChannel(params.audioPort);

@@ -90,8 +90,8 @@ public:
     float width;
     float height;
     
-    map<string, ofxGstRTPClient* > clients;
-    map<string, ofxGstRTPServer* > servers;
+    map<string, ofPtr<ofxGstRTPClient> > clients;
+    map<string, ofPtr<ofxGstRTPServer> > servers;
     
     map<string, ofPtr<ofFbo> > remoteVideos;
     ofTexture mLoadingScreen;
