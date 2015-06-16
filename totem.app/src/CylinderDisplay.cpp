@@ -281,7 +281,6 @@ void CylinderDisplay::findLeftFace()
 
 	ofRectangle leftMost(1920, 0, 1920, 0);
 
-
 	for (int i = 0; i < finder.size(); i++) {
 		ofRectangle object = finder.getObjectSmoothed(i);
 		if (object.getTopLeft().x < leftMost.getTopLeft().x && object.x > 0) {
@@ -294,6 +293,7 @@ void CylinderDisplay::findLeftFace()
 	if (leftMost.x > 1920) {
 		leftMost.x = 1920;
 	}
+
 	//mapTexCoords(leftCylinderPiece, leftMost.x + 100, 380, leftMost.x + PIECE_TEXCOORD_WIDTH - 100, 700);
 	mapTexCoords(leftCylinderPiece, max(400, min(1920, (int)leftMost.x + 200)), 380, 0, 700);
 }
@@ -314,9 +314,10 @@ void CylinderDisplay::findRightFace()
 
 		}
 	}
+
 	if (rightMost.x < 700) {
 		rightMost.x = 700;
 	}
-	mapTexCoords(rightCylinderPiece, min(1920, max(500, (int)rightMost.x + 200)), 380, 0, 700);
 
+	mapTexCoords(rightCylinderPiece, min(1920, max(500, (int)rightMost.x + 200)), 380, 0, 700);
 }

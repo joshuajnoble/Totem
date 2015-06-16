@@ -509,7 +509,7 @@
     <ClInclude Include="src\RemoteVideoInfo.h">
       <Filter>remote</Filter>
     </ClInclude>
-    <ClInclude Include="src\WrapFboAsVideo.h">
+    <ClInclude Include="src\ofxGstRTPClientAsVideoSource.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

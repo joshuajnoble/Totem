@@ -8,7 +8,7 @@ class RemoteVideoInfo
 public:
 	std::string clientId = "";
 	ofPtr<ofFbo> source;
-	//ofPtr<ofBaseVideoDraws> source;
+	ofPtr<ofBaseVideoDraws> videoSource;
 	StickyTimer activityTimer;
 	ofPtr<ofxGstRTPClient> netClient;
 
