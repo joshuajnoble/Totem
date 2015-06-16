@@ -41,11 +41,8 @@ void StreamManager::setup(int _width, int _height){
     settings.load(ofToDataPath("settings.xml"));
     
     thisClient.ipAddress = settings.getValue<string>("//ipAddress");
-    thisClient.clientID = settings.getValue<string>("//clientID");
-    thisClient.videoPort = settings.getValue<string>("//videoPort");
-    thisClient.audioPort = settings.getValue<string>("//audioPort");
-    
-    isServer = ofToBool(settings.getValue<string>("//isServer"));
+	thisClient.clientID = settings.getValue<string>("//clientID");
+	isServer = ofToBool(settings.getValue<string>("//isServer"));
     
     if(isServer){
         oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());

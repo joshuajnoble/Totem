@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<settings>
-    <ipAddress>192.168.1.130</ipAddress>
-    <clientID>CLIENT_PC</clientID>
-    <videoPort>7000</videoPort>
-    <audioPort>8000</audioPort>
-    <broadcastAddress>192.168.1.255</broadcastAddress>
-</settings>

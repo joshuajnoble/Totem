@@ -77,8 +77,8 @@ void StreamManager::setup(int _width, int _height){
         newConnection.audioPort = xml.getValue<string>("//audioPort");
 		newConnection.remoteVideoPort = xml.getValue<string>("//remoteVideoPort");
 		newConnection.remoteAudioPort = xml.getValue<string>("//remoteAudioPort");
-        newConnection.videoWidth = xml.getValue<int>("//width");
-        newConnection.videoHeight = xml.getValue<int>("//height");
+        newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
+        newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
         
 		newClient(newConnection);
         newServer(newConnection);
