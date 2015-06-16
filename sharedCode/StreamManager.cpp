@@ -38,12 +38,10 @@ void StreamManager::setup(int _width, int _height){
     
     
     ofXml settings;
-    settings.load(ofToDataPath("settings.xml"));
+    settings.load(ofToDataPath("client_settings.xml"));
     
     thisClient.ipAddress = settings.getValue<string>("//ipAddress");
     thisClient.clientID = settings.getValue<string>("//clientID");
-
-    
     isServer = ofToBool(settings.getValue<string>("//isServer"));
     
     if(isServer){
