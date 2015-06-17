@@ -6,7 +6,7 @@ using namespace cv;
 
 void ofTotemApp::earlyinit()
 {
-	this->totemDisplay.initTotemDisplay(4, 768, 1360);
+	this->totemDisplay.initTotemDisplay(4, 800, 1280);
 }
 
 int ofTotemApp::displayWidth() const

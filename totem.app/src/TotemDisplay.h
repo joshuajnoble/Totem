@@ -25,7 +25,7 @@ private:
 	float displayRatio;
 	int displayWidth, displayHeight, displayCount;
 	float scale = 1.0;
-	bool displayVertical = true;
+	bool displayVertical;
 
 	void LoadXmlOverrideSettings();
 };

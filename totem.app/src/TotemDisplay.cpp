@@ -8,6 +8,7 @@ void TotemDisplay::initTotemDisplay(int count, int width, int height)
 	this->displayCount = count;
 	this->displayWidth = width;
 	this->displayHeight = height;
+	this->displayVertical = false;
 
 	this->LoadXmlOverrideSettings();
 
