@@ -40,6 +40,7 @@ void ofRemoteApp::earlyinit()
 	this->networkDisplay.initializeRemoteNetworkDisplay(ofRectangle(remoteViewOffsetX, 70, 1920 - remoteViewOffsetX - margin, 1080 - margin * 2));
 	this->currentConnectIconAlpha = 0;
 	this->state = UISTATE_STARTUP;
+	this->isTotemInitialized = false;
 }
 
 
@@ -73,6 +74,43 @@ void ofRemoteApp::update()
 			this->currentSelfieWidth = (int)(this->width * 0.75f);
 
 			this->state = UISTATE_INTRO;
+		}
+	}
+
+	if (this->state == UISTATE_MAIN)
+	{
+		// TODO: This is a hack for the current state of the networking system, since we don't get any connect/disconnect events
+		if (!this->isTotemInitialized && !this->remoteTotem)
+		{
+			// Look for a totem stream and use it if it exists
+			for (auto iter = this->streamManager.clients.begin(); iter != this->streamManager.clients.end(); ++iter)
+			{
+				auto clientId = iter->first;
+				auto client = iter->second;
+				auto video = this->streamManager.remoteVideos[clientId];
+
+				if (video->getWidth() / video->getHeight() >= 2)
+				{
+					auto videoSource = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(client, video->getWidth(), video->getHeight()));
+
+					RemoteVideoInfo remote;
+					remote.clientId = clientId;
+					remote.source = video;
+					remote.videoSource = videoSource;
+					remote.isTotem = true;
+					this->remoteVideoSources.push_back(remote);
+
+					this->remoteTotem.reset(new RemoteVideoInfo(remote));
+					this->remoteTotemClientId = remote.clientId;
+
+					this->cylinderDisplay.reset(new CylinderDisplay());
+					this->cylinderDisplay->initCylinderDisplay(1920, 1080);
+					this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
+					this->cylinderDisplay->setTotemVideoSource(videoSource);
+
+					this->isTotemInitialized = true;
+				}
+			}
 		}
 	}
 
@@ -185,7 +223,7 @@ void ofRemoteApp::ImpesonateRemoteConnection(const string& clientId, ofPtr<ofBas
 	RemoteVideoInfo remote;
 	remote.clientId = clientId;
 	remote.videoSource = video;
-	remote.isTotem = video->getWidth() / video->getHeight() >= 3;
+	remote.isTotem = video->getWidth() / video->getHeight() >= 2;
 	this->remoteVideoSources.push_back(remote);
 
 	if (remote.isTotem)

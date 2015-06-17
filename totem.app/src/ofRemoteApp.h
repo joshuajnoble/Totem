@@ -44,6 +44,7 @@ private:
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 
+	bool isTotemInitialized;
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
