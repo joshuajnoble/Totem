@@ -16,7 +16,7 @@ namespace
 	const float SHIFTED_OFFSET = 25.0f;
 	
 	const float TIME_INTRO_TRANSITION = 750.0f;
-	const float TIME_INTRO_ICONS_APPEAR = 250.0f;
+	const float TIME_INTRO_ICONS_APPEAR = 500.0f;
 	const ofColor BACKGROUND_COLOR = ofColor(23, 38, 44);
 
 	const int INTRO_SELFIE_TOP_MARGIN = 88;
@@ -51,6 +51,8 @@ void ofRemoteApp::setup()
 	connectIcon.loadImage("icon_connect.png");
 	hangupIcon.loadImage("icon_hangup.png");
 	muteIcon.loadImage("icon_mute.png");
+
+	ofSetVerticalSync(false);
 }
 
 
@@ -80,8 +82,6 @@ void ofRemoteApp::update()
 	}
 
 	this->networkDisplay.update();
-
-	ofSetVerticalSync(false);
 }
 
 
@@ -92,19 +92,21 @@ void ofRemoteApp::draw()
 
 	if (this->state == UISTATE_INTRO)
 	{
-		DrawSelfie();
-
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
+		ofEnableAlphaBlending();
 
 		// Draw icons first so they animate out from behind the selfie
-		ofSetColor(255, 255, 255, (int)(255 * currentHangupMuteIconAlpha));
+		ofSetColor(255, 255, 255, (int)(255 * this->currentHangupMuteIconAlpha));
 		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + this->muteIcon.getHeight() / 2);
 		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + this->hangupIcon.getHeight() / 2);
 
 		//Now draw the bottom icon
 		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
 		connectIcon.draw(this->width / 2, this->height - this->connectIcon.height / 2 - 0);
+
+		ofSetRectMode(OF_RECTMODE_CORNER);
+		DrawSelfie();
 
 		ofPopStyle();
 
@@ -150,6 +152,7 @@ void ofRemoteApp::DrawSelfie()
 	ofRect(-(selfieX + SELFIE_FRAME_MARGIN + selfieWidth), selfieY - SELFIE_FRAME_MARGIN, selfieWidth + SELFIE_FRAME_MARGIN * 2, selfieHeight + SELFIE_FRAME_MARGIN * 2);
 	ofPopStyle();
 
+	ofSetColor(255);
 	this->videoSource->draw(-(selfieX + selfieWidth), selfieY, selfieWidth, selfieHeight);
 
 	ofPopMatrix();
@@ -266,7 +269,7 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + this->muteIcon.getWidth() / 2;
 			this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
 			this->muteIconCenterX = this->width / 2 + iconOffsetStart;
-			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1));
+			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
 			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
 			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
 
