@@ -190,13 +190,13 @@ int main(int argc, const char** argv)
 		webCamDeviceId = ofToInt(ofxArgParser::getValue("capDevice"));
 	}
 
-	auto captureWidth = totemMode ? 2048 : 1280;
+	auto captureWidth = totemMode ? 2160 : 1280;
 	if (ofxArgParser::hasKey("capWidth"))
 	{
 		captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
 	}
 
-	auto captureHeight = totemMode ? 2048 : 720;
+	auto captureHeight = totemMode ? 2160 : 720;
 	if (ofxArgParser::hasKey("capHeight"))
 	{
 		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
