@@ -45,6 +45,15 @@ void StreamManager::setup(int _width, int _height){
 
     
     isServer = ofToBool(settings.getValue<string>("//isServer"));
+    thisClient.videoPort = settings.getValue<int>("//videoPort");
+    thisClient.audioPort = settings.getValue<int>("//audioPort");
+    thisClient.remoteVideoPort = settings.getValue<int>("//remoteVideoPort");
+    thisClient.remoteAudioPort = settings.getValue<int>("//remoteAudioPort");
+    thisClient.videoWidth = settings.getValue<int>("//videoWidth");
+    thisClient.videoHeight = settings.getValue<int>("//videoHeight");
+    
+    connections.clear();
+    
     
     if(isServer){
         oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
@@ -56,34 +65,35 @@ void StreamManager::setup(int _width, int _height){
     
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
     commonTimeOsc->setEaseOffset( true );
+
     
     if(isServer){
         ofAddListener(oscBroadcaster->newDataEvent, this, &StreamManager::newData );
-    }else{
-        ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
     }
+    ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
     
     
-    ofDirectory dir;
-    dir.listDir(ofToDataPath("connections"));
-    for(int i = 0; i < dir.size(); i++){
-        ofXml xml;
-        xml.load(dir.getPath(i));
-        clientParameters newConnection;
-        newConnection.clientID = ofToString(i);
-        newConnection.ipAddress = xml.getValue<string>("//ipAddress");
-        newConnection.videoPort = xml.getValue<int>("//videoPort");
-        newConnection.audioPort = xml.getValue<int>("//audioPort");
-		newConnection.remoteVideoPort = xml.getValue<int>("//remoteVideoPort");
-		newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
-        newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
-        newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
-        
-		newClient(newConnection);
-        newServer(newConnection);
-
-		connections[newConnection.clientID] = newConnection;
-    }
+    
+    //    ofDirectory dir;
+    //    dir.listDir(ofToDataPath("connections"));
+    //    for(int i = 0; i < dir.size(); i++){
+    //        ofXml xml;
+    //        xml.load(dir.getPath(i));
+    //        clientParameters newConnection;
+    //        newConnection.clientID = ofToString(i);
+    //        newConnection.ipAddress = xml.getValue<string>("//ipAddress");
+    //        newConnection.videoPort = xml.getValue<int>("//videoPort");
+    //        newConnection.audioPort = xml.getValue<int>("//audioPort");
+    //		newConnection.remoteVideoPort = xml.getValue<int>("//remoteVideoPort");
+    //		newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
+    //        newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
+    //        newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
+    //
+    //		newClient(newConnection);
+    //        newServer(newConnection);
+    //
+    //		connections[newConnection.clientID] = newConnection;
+    //    }
     
 }
 
@@ -105,25 +115,26 @@ void StreamManager::newData( DataPacket& _packet  )
             newConnection.ipAddress = json["connection"]["ipAddress"].asString();
             newConnection.audioPort = json["connection"]["audioPort"].asInt();
             newConnection.videoPort = json["connection"]["videoPort"].asInt();
-            newConnection.remoteAudioPort = json["connection"]["remoteAudioPort"].asInt();
-            newConnection.remoteVideoPort = json["connection"]["remoteVideoPort"].asInt();
+//            newConnection.remoteAudioPort = json["connection"]["remoteAudioPort"].asInt();
+//            newConnection.remoteVideoPort = json["connection"]["remoteVideoPort"].asInt();
             newConnection.clientID = json["connection"]["clientID"].asString();
             newConnection.videoWidth = json["connection"]["videoWidth"].asInt();
             newConnection.videoHeight = json["connection"]["videoHeight"].asInt();
             
-            
-            ofLog(OF_LOG_NOTICE)<<"CLIENT ID "<<newConnection.clientID<<endl;
-            ofLog(OF_LOG_NOTICE)<<"IpAddress "<<newConnection.ipAddress<<endl;
-            ofLog(OF_LOG_NOTICE)<<"AudioPort "<<newConnection.audioPort<<endl;
-            ofLog(OF_LOG_NOTICE)<<"VideoPort "<<newConnection.videoPort<<endl;
+           
             
             
             
-            if (connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
-            
-                newClient(newConnection);
-                newServer(newConnection);
+            if (connections.find(newConnection.clientID) == connections.end()){
+                
+                ofLog(OF_LOG_NOTICE)<<"CLIENT ID "<<newConnection.clientID<<endl;
+                ofLog(OF_LOG_NOTICE)<<"IpAddress "<<newConnection.ipAddress<<endl;
+                ofLog(OF_LOG_NOTICE)<<"AudioPort "<<newConnection.audioPort<<endl;
+                ofLog(OF_LOG_NOTICE)<<"VideoPort "<<newConnection.videoPort<<endl;
                 connections[newConnection.clientID] = newConnection;
+                newServer(newConnection);
+                newClient(newConnection);
+   
             }
         }
         
@@ -137,8 +148,8 @@ void StreamManager::newData( DataPacket& _packet  )
                 remoteVideos.erase(name);
                 bConnected.erase(name);
                 connections.erase(name);
-
-				ClientDisconnected(name);
+                
+                ClientDisconnected(name);
             }
         }
         
@@ -189,24 +200,24 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 
 void StreamManager::update(){
 
-        if(ofGetElapsedTimef() - lastSend > 1.5){
-            ofxJSONElement sendJSON;
-            ofxJSONElement connection;
-    
-    
-            connection["clientID"] = thisClient.clientID;
-            connection["ipAddress"] = thisClient.ipAddress;
-            connection["audioPort"] = thisClient.audioPort;
-            connection["videoPort"] = thisClient.videoPort;
-            connection["remoteAudioPort"] = thisClient.remoteAudioPort;
-            connection["remoteAudioPort"] = thisClient.remoteVideoPort;
-            connection["videoWidth"] = width;
-            connection["videoHeight"] = height;
-    
-            sendJSON["connection"] = connection;
-            sendJSONData(sendJSON);
-            lastSend = ofGetElapsedTimef();
-        }
+    if(ofGetElapsedTimef() - lastSend > 3){
+        ofxJSONElement sendJSON;
+        ofxJSONElement connection;
+        
+        int nextAudioPort = thisClient.audioPort+connections.size()*5;
+        int nextVideoPort = thisClient.videoPort+connections.size()*5;
+        connection["clientID"] = thisClient.clientID;
+        connection["ipAddress"] = thisClient.ipAddress;
+        connection["audioPort"] = nextAudioPort;
+        connection["videoPort"] = nextVideoPort;
+        connection["videoWidth"] = width;
+        connection["videoHeight"] = height;
+        
+        sendJSON["connection"] = connection;
+        sendJSONData(sendJSON);
+        lastSend = ofGetElapsedTimef();
+    }
+
     
     
     if(isFrameNew()){
@@ -215,27 +226,28 @@ void StreamManager::update(){
             iter->second->videoBitrate = 6000;
         }
     }
+
     for(map<string, ofxGstRTPClient*>::iterator iter = clients.begin(); iter != clients.end(); ++iter){
         iter->second->update();
         if(iter->second->isFrameNewVideo()){
             remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
             if(!bConnected[iter->first]){
                 bConnected[iter->first] = true;
-				ofNotifyEvent(clientStreamAvailableEvent, const_cast<string&>(iter->first), this);
+                ofNotifyEvent(clientStreamAvailableEvent, const_cast<string&>(iter->first), this);
             }
         }else{
             // draw a spinner for a loading screen if we're not connected yet
             if(!bConnected[iter->first]){
                 ofEnableAlphaBlending();
-				auto video = remoteVideos[iter->first];
+                auto video = remoteVideos[iter->first];
                 video->begin();
                 ofClear(0, 0, 0);
                 for(int i = 0; i < 6; i++){
                     ofPushMatrix();
                     ofTranslate(remoteVideos[iter->first]->getWidth()/2, remoteVideos[iter->first]->getHeight()/2);
                     ofCircle(15*cos(ofGetElapsedTimef()*2.5+i*PI/3), 15*sin(ofGetElapsedTimef()*2.5+i*PI/3), 5);
-
-					ofPopMatrix();
+                    
+                    ofPopMatrix();
                 }
                 video->end();
                 ofDisableAlphaBlending();
@@ -253,15 +265,28 @@ void StreamManager::drawDebug(){
 }
 
 void StreamManager::newServer(clientParameters params){
+
+    
+    
+    int currentVideoPort = thisClient.videoPort+(connections.size()-1)*5;
+    int currentAudioPort = thisClient.audioPort+(connections.size()-1)*5;
+    
+    ofLog()<<"AUDIO PORT"<<currentAudioPort<<endl;
+    ofLog()<<"VIDEO PORT"<<currentVideoPort<<endl;
+
+
     servers[params.clientID] = new ofxGstRTPServer();
     servers[params.clientID]->setup(params.ipAddress);
-	servers[params.clientID]->addVideoChannel(params.remoteVideoPort,width,height,30);
-    servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
+    servers[params.clientID]->addVideoChannel(currentVideoPort,width,height,30);
+    servers[params.clientID]->addAudioChannel(currentAudioPort);
     servers[params.clientID]->play();
 }
 
 void StreamManager::newClient(clientParameters params){
-    
+
+    ofLog()<<"AUDIO PORT"<<params.audioPort<<endl;
+    ofLog()<<"VIDEO PORT"<<params.videoPort<<endl;
+
     clients[params.clientID] = new ofxGstRTPClient();
     clients[params.clientID]->setup(params.ipAddress, 0);
     clients[params.clientID]->addVideoChannel(params.videoPort);
@@ -273,12 +298,12 @@ void StreamManager::newClient(clientParameters params){
     
     bConnected[params.clientID] = (false);
     clients[params.clientID]->play();
-
-	ofNotifyEvent(newClientEvent, params.clientID, this);
+    
+    ofNotifyEvent(newClientEvent, params.clientID, this);
 }
 
 void StreamManager::ClientDisconnected(string clientId)
 {
-	ofNotifyEvent(clientDisconnectedEvent, clientId, this);
-
+    ofNotifyEvent(clientDisconnectedEvent, clientId, this);
+    
 }

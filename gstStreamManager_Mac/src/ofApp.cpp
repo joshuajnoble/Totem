@@ -2,7 +2,7 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    ofSetLogLevel(OF_LOG_NOTICE);
+    ofSetLogLevel(OF_LOG_VERBOSE);
     grabber.setDeviceID(0);
     grabber.initGrabber(640,480, true);
     streaming.setup(640, 480);

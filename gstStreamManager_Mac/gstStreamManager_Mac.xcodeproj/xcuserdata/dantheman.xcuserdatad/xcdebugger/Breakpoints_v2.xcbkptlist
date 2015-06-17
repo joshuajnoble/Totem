@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            timestampString = "456190084.799952"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "48"
-            endingLineNumber = "48"
+            startingLineNumber = "54"
+            endingLineNumber = "54"
             landmarkName = "StreamManager::setup(int _width, int _height)"
             landmarkType = "5">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            timestampString = "456191922.373153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "124"
-            endingLineNumber = "124"
+            startingLineNumber = "132"
+            endingLineNumber = "132"
             landmarkName = "StreamManager::newData( DataPacket&amp; _packet )"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            timestampString = "456191922.373153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "112"
-            endingLineNumber = "112"
+            startingLineNumber = "120"
+            endingLineNumber = "120"
+            landmarkName = "StreamManager::newData( DataPacket&amp; _packet )"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../sharedCode/StreamManager.cpp"
+            timestampString = "456192356.327765"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "272"
+            endingLineNumber = "272"
+            landmarkName = "StreamManager::newServer(clientParameters params)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../sharedCode/StreamManager.cpp"
+            timestampString = "456191922.373153"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "117"
+            endingLineNumber = "117"
             landmarkName = "StreamManager::newData( DataPacket&amp; _packet )"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,7 +122,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            timestampString = "456191922.373153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "115"
@@ -106,44 +138,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            timestampString = "456191922.373153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
-            landmarkName = "StreamManager::setup(int _width, int _height)"
+            startingLineNumber = "134"
+            endingLineNumber = "134"
+            landmarkName = "StreamManager::newData( DataPacket&amp; _packet )"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            timestampString = "456191922.373153"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "76"
-            endingLineNumber = "76"
-            landmarkName = "StreamManager::setup(int _width, int _height)"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
+            landmarkName = "StreamManager::newData( DataPacket&amp; _packet )"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "../sharedCode/StreamManager.cpp"
-            timestampString = "456182694.640567"
+            filePath = "src/ofApp.cpp"
+            timestampString = "456190551.243746"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "282"
-            endingLineNumber = "282"
-            landmarkName = "StreamManager::ClientDisconnected(string clientId)"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "ofApp::update()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
