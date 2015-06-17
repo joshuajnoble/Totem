@@ -25,6 +25,8 @@ private:
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 
+	bool isRemoteSource1Initialized;
+
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */

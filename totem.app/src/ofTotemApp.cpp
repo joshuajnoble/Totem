@@ -30,6 +30,7 @@ void ofTotemApp::setup()
 
 	this->totemDisplay.allocateBuffers();
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
+	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 }
 
@@ -45,6 +46,20 @@ void ofTotemApp::update()
 	if (!this->isInitialized)
 	{
 		return;
+	}
+
+	// TODO: This is a hack for the current state of the networking system, since we don't get any connect/disconnect events
+	if (!this->isRemoteSource1Initialized && !this->netImpersonate.get())
+	{
+		for (auto iter = this->streamManager.clients.begin(); iter != this->streamManager.clients.end(); ++iter)
+		{
+			auto clientId = iter->first;
+			auto client = iter->second;
+			auto video = this->streamManager.remoteVideos[clientId];
+
+			this->isRemoteSource1Initialized = true;
+			this->remoteVideoSources.push_back(video);
+		}
 	}
 
 	VideoCaptureAppBase::update();
