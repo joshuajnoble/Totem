@@ -156,13 +156,29 @@ void ofRemoteApp::draw()
 		{
 			this->cylinderDisplay->draw();
 
-			// Draw the animated "barn doors" that reveal the cylinder
-			ofPushStyle();
-			ofSetRectMode(OF_RECTMODE_CENTER);
-			ofSetColor(127, 127, 0);
-			auto barndoorWidth = (int)(this->displayWidth() * 0.66f);
-			ofRect(0, 0, barndoorWidth, 400);
-			ofPopStyle();
+			// TODO: remove this line and setup keyframe animations.
+			// currentCylinderBarnDoorPosition, 1 is fully closed while 0 is fully open
+			// The animation should start with 1/3 of the screen revealed and then follow open
+			// That means animating from .66 to 0
+			this->currentCylinderBarnDoorPosition = 0.00f;
+
+			// Only draw the doors if they are on-screen.
+			if (this->currentCylinderBarnDoorPosition != 0)
+			{
+				// Draw the animated "barn doors" that reveal the cylinder
+				ofPushStyle();
+				ofSetRectMode(OF_RECTMODE_CORNER);
+				int barndoorWidth = this->displayWidth() / 2;
+
+				// currentCylinderBarnDoorPosition, 1 is fully closed while 0 is fully open
+				int barndoorOffsetX = (int)(this->currentCylinderBarnDoorPosition * barndoorWidth);
+
+				ofSetColor(127, 127, 0); // TODO: should be the background color
+				ofRect(-barndoorOffsetX, 0, barndoorWidth, this->displayHeight());
+				ofSetColor(127, 0, 127); // TODO: this should be removed and just use the same color as set above
+				ofRect(this->displayWidth() / 2 + barndoorOffsetX, 0, barndoorWidth, this->displayHeight());
+				ofPopStyle();
+			}
 		}
 
 		ofPushStyle();
