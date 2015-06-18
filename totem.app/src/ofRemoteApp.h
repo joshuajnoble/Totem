@@ -27,6 +27,7 @@ private:
 	float muteIconCenterX;
 	float hangupIconCenterX;
 	float currentHangupMuteIconAlpha;
+	float currentCylinderBarnDoorPosition;
 
 	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;

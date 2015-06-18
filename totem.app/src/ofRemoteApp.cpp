@@ -109,6 +109,7 @@ void ofRemoteApp::update()
 					this->cylinderDisplay->setTotemVideoSource(videoSource);
 
 					this->isTotemInitialized = true;
+					break;
 				}
 			}
 		}
@@ -154,6 +155,14 @@ void ofRemoteApp::draw()
 		if (this->remoteTotem)
 		{
 			this->cylinderDisplay->draw();
+
+			// Draw the animated "barn doors" that reveal the cylinder
+			ofPushStyle();
+			ofSetRectMode(OF_RECTMODE_CENTER);
+			ofSetColor(127, 127, 0);
+			auto barndoorWidth = (int)(this->displayWidth() * 0.66f);
+			ofRect(0, 0, barndoorWidth, 400);
+			ofPopStyle();
 		}
 
 		ofPushStyle();
