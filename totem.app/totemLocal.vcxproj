@@ -72,7 +72,8 @@
     <PostBuildEvent>
       <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
-xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"</Command>
+xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,7 +121,8 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <PostBuildEvent>
       <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
-xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"</Command>
+xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
+xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
