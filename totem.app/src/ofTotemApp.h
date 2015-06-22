@@ -42,7 +42,7 @@ public:
 
 	// Public Config
 	ofPtr<ofBaseVideoDraws> rawSource;
-	bool showUnwrapped = false;
+	bool showOutput= false;
 
 	void ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source);
 };

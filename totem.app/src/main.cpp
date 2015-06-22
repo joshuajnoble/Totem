@@ -4,10 +4,11 @@
 #include "ofRemoteApp.h"
 #include "ofAppGlutWindow.h"
 #include "Utils.h"
+#include "ofxPGR\\src\PGRCamera.h"
 
 namespace
 {
-	const ofVec2f UNWRAPPED_DISPLAYRATIO(4.0, 1.0);
+	const ofVec2f UNWRAPPED_DISPLAYRATIO(4.85, 1.0);
 
 	ofPtr<ofBaseVideoDraws> CreateVideoSource(int webCamDeviceId, int captureWidth, int captureHeight)
 	{
@@ -38,9 +39,9 @@ namespace
 		{
 			ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
 		}
-		else if (ofxArgParser::hasKey("showUnwrapped"))
+		else if (ofxArgParser::hasKey("showOutput"))
 		{
-			totemApp->showUnwrapped = true;
+			totemApp->showOutput = true;
 			if (ofxArgParser::hasKey("dontUnwrap"))
 			{
 				ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
@@ -96,7 +97,7 @@ int main(int argc, const char** argv)
 		std::cout << "PRIMARY SETTINGS" << std::endl <<
 			"-totem              (This is the default and will use the totem display)" << endl <<
 			"  -dontUnwrap       (Send the raw video stream without unwrapping it)" << endl <<
-			"  -showUnwrapped    (Show the undistorted video stream instead of the normal UI)" << endl <<
+			"  -showOutput       (Show the undistorted video stream instead of the normal UI)" << endl <<
 			"  -showInput        (Show the raw input video stream instead of the normal UI)" << endl <<
 			"  -netSource=<path> (Use a test file instead of the remote network connection.)" << endl <<
 
@@ -204,7 +205,23 @@ int main(int argc, const char** argv)
 
 	ofAppGlutWindow window;
 	auto app = totemMode ? CreateTotemAppInstance(window, captureWidth, captureHeight) : CreateRemoteAppInstance(window);
-	auto videoSource = CreateVideoSource(webCamDeviceId, captureWidth, captureHeight);
+	ofPtr<ofBaseVideoDraws> videoSource;
+	if (!totemMode || ofxArgParser::hasKey("capDevice") || ofxArgParser::hasKey("capSource") || ofxArgParser::hasKey("capWidth") || ofxArgParser::hasKey("capHeight"))
+	{
+		videoSource = CreateVideoSource(webCamDeviceId, captureWidth, captureHeight);
+	}
+	else
+	{
+		auto camera = new PGRCamera();
+		if (!camera->setup())
+		{
+			cout << "There was an error initializing the PointGrey camera.";
+			ofExit();
+		}
+
+		videoSource = ofPtr<ofBaseVideoDraws>(camera);
+	}
+
 	if (totemMode)
 	{
 		auto totemApp = (ofTotemApp*)app.get();
@@ -235,7 +252,7 @@ int main(int argc, const char** argv)
 	else
 	{
 		auto unwrapper = new ThreeSixtyUnwrap();
-		auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getWidth(), videoSource->getHeight()), UNWRAPPED_DISPLAYRATIO);
+		auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getPixelsRef().getWidth(), videoSource->getPixelsRef().getHeight()), UNWRAPPED_DISPLAYRATIO);
 		unwrapper->initUnwrapper(videoSource, outputSize);
 		app->videoSource = ofPtr<ofBaseVideoDraws>(unwrapper);
 	}

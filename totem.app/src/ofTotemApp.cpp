@@ -149,7 +149,7 @@ void ofTotemApp::draw()
 	{
 		this->rawSource->draw(0, 0);
 	}
-	else if (this->showUnwrapped)
+	else if (this->showOutput)
 	{
 		this->videoSource->draw(0, 0);
 	}

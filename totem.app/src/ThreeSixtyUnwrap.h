@@ -12,7 +12,7 @@ public:
 	virtual ~ThreeSixtyUnwrap(){}
 
 	static ofVec2f CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio);
-	void initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, ofVec2f outputSize);
+	void initUnwrapper(ofPtr<ofBaseVideo> videoSource, ofVec2f outputSize);
 
 	void update();
 	void close();
@@ -30,8 +30,8 @@ public:
 	ofTexture & getTextureReference() { return this->unwrappedImage.getTextureReference(); }
 	void setUseTexture(bool bUseTex) { this->unwrappedImage.setUseTexture(bUseTex); }
 
-	void setVideoSource(ofPtr<ofBaseVideoDraws> videoSource) { this->videoSource = videoSource; }
-	ofPtr<ofBaseVideoDraws> getVideoSource() { return this->videoSource; }
+	void setVideoSource(ofPtr<ofBaseVideo> videoSource) { this->videoSource = videoSource; }
+	ofPtr<ofBaseVideo> getVideoSource() { return this->videoSource; }
 
 private:
 	void computePanoramaProperties();
@@ -80,6 +80,6 @@ private:
 	bool _bCenterChanged = false;
 	bool _bAngularOffsetChanged = false;
 
-	ofPtr<ofBaseVideoDraws> videoSource;
+	ofPtr<ofBaseVideo> videoSource;
 	ofImage unwrappedImage;
 };

@@ -357,6 +357,24 @@
     <Filter Include="remote">
       <UniqueIdentifier>{38f00ee8-5a85-4347-acf7-63e0a5b309cd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="addons\ofxPGR">
+      <UniqueIdentifier>{65bb6b24-6314-4953-8abe-03493a9b8c08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPGR\src">
+      <UniqueIdentifier>{9bada23a-fc7f-443e-a7c6-adff237e5e6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPGR\libs">
+      <UniqueIdentifier>{41afe1d1-e033-4d78-9a79-b859ba1349ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPGR\libs\FlyCapture2">
+      <UniqueIdentifier>{0735d592-17dc-44d1-9289-cc916d4087c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPGR\libs\FlyCapture2\include">
+      <UniqueIdentifier>{38d7090e-0e34-4fff-813d-8fc37f36355d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxPGR\libs\FlyCapture2\lib">
+      <UniqueIdentifier>{a9096fce-c441-4486-8747-b4af18972fb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThreeSixtyUnwrap.h">
@@ -511,6 +529,54 @@
     </ClInclude>
     <ClInclude Include="src\ofxGstRTPClientAsVideoSource.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\src\PGRCamera.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\AVIRecorder.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\BusManager.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Camera.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\CameraBase.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Error.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\FlyCapture2.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\FlyCapture2Defs.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\FlyCapture2GUI.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\FlyCapture2Platform.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\GigECamera.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Image.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\ImageStatistics.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\PGRDirectShow.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\TopologyNode.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Utilities.h">
+      <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

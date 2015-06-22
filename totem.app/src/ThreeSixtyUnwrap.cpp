@@ -3,16 +3,18 @@
 ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
 {
 	float div = displayRatio.x * displayRatio.y;
-	float area = inputSize.x * inputSize.y;
+	float area = inputSize.x * inputSize.y * 0.4; // Reduce the output size assuming that we crop/lose some of the image.
+
 	auto height = std::sqrtf(area / div);
 	auto width = height * (displayRatio.x / displayRatio.y);
 
-	// Reduce the output size assuming that we crop/lose some of the image.
-	auto scaled = ofVec2f(width, height) * 0.5f;
-	return ofVec2f(std::roundf(scaled.x), std::roundf(scaled.y));
+	int w = (int)(width / 4) * 4; // Round to even mutiple of 4 for display
+	int h = w / (displayRatio.x / displayRatio.y);
+
+	return ofVec2f(w, h);
 }
 
-void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, ofVec2f outputSize)
+void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideo> videoSource, ofVec2f outputSize)
 {
 	this->videoSource = videoSource;
 
@@ -43,8 +45,8 @@ void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideoDraws> videoSource, ofVec2
 	//======================================
 	// create data structures for unwarping
 	blackOpenCV = cvScalarAll(0);
-	warpedW = this->videoSource->getWidth();
-	warpedH = this->videoSource->getHeight();
+	warpedW = this->videoSource->getPixelsRef().getWidth();
+	warpedH = this->videoSource->getPixelsRef().getHeight();
 
 	int nWarpedBytes = warpedW * warpedH * 3;
 
