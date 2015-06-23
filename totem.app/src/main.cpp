@@ -2,7 +2,6 @@
 #include "ofxArgParser\src\ofxArgParser.h"
 #include "ofTotemApp.h"
 #include "ofRemoteApp.h"
-#include "ofAppGlutWindow.h"
 #include "Utils.h"
 #include "ofxPGR\\src\PGRCamera.h"
 
@@ -30,41 +29,41 @@ namespace
 		}
 	}
 
-	ofPtr<VideoCaptureAppBase> CreateTotemAppInstance(ofAppGlutWindow& window, int captureWidth, int captureHeight)
+	ofPtr<VideoCaptureAppBase> CreateTotemAppInstance(int captureWidth, int captureHeight)
 	{
 		auto totemApp = new ofTotemApp();
 		totemApp->earlyinit();
 
 		if (ofxArgParser::hasKey("showInput"))
 		{
-			ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
+			ofSetupOpenGL(captureWidth, captureHeight, OF_WINDOW);
 		}
 		else if (ofxArgParser::hasKey("showOutput"))
 		{
 			totemApp->showOutput = true;
 			if (ofxArgParser::hasKey("dontUnwrap"))
 			{
-				ofSetupOpenGL(&window, captureWidth, captureHeight, OF_WINDOW);
+				ofSetupOpenGL(captureWidth, captureHeight, OF_WINDOW);
 			}
 			else
 			{
 				auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(captureWidth, captureHeight), UNWRAPPED_DISPLAYRATIO);
-				ofSetupOpenGL(&window, outputSize.x, outputSize.y, OF_WINDOW);
+				ofSetupOpenGL(outputSize.x, outputSize.y, OF_WINDOW);
 			}
 		}
 		else
 		{
-			ofSetupOpenGL(&window, totemApp->displayWidth(), totemApp->displayHeight(), OF_WINDOW);
+			ofSetupOpenGL(totemApp->displayWidth(), totemApp->displayHeight(), OF_WINDOW);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(totemApp);
 	}
 
-	ofPtr<VideoCaptureAppBase> CreateRemoteAppInstance(ofAppGlutWindow& window)
+	ofPtr<VideoCaptureAppBase> CreateRemoteAppInstance()
 	{
 		auto remoteApp = new ofRemoteApp();
 		remoteApp->earlyinit();
-		ofSetupOpenGL(&window, remoteApp->displayWidth(), remoteApp->displayHeight(), OF_WINDOW);
+		ofSetupOpenGL(remoteApp->displayWidth(), remoteApp->displayHeight(), OF_WINDOW);
 
 		if (ofxArgParser::hasKey("totemSource"))
 		{
@@ -90,6 +89,9 @@ namespace
 //========================================================================
 int main(int argc, const char** argv)
 {
+	ofSetLogLevel(OF_LOG_VERBOSE);
+	ofLogToFile("logfile-mempool.txt", true);
+
 	ofxArgParser::init(argc, argv);
 
 	if (ofxArgParser::hasKey("help"))
@@ -203,8 +205,7 @@ int main(int argc, const char** argv)
 		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
 	}
 
-	ofAppGlutWindow window;
-	auto app = totemMode ? CreateTotemAppInstance(window, captureWidth, captureHeight) : CreateRemoteAppInstance(window);
+	auto app = totemMode ? CreateTotemAppInstance(captureWidth, captureHeight) : CreateRemoteAppInstance();
 	ofPtr<ofBaseVideoDraws> videoSource;
 	if (!totemMode || ofxArgParser::hasKey("capDevice") || ofxArgParser::hasKey("capSource") || ofxArgParser::hasKey("capWidth") || ofxArgParser::hasKey("capHeight"))
 	{
