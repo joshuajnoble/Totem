@@ -12,7 +12,7 @@ using namespace Playlist;
 namespace
 {
 	const float WAITING_ROTATION = 270.0f; // TODO: Why is the "centered" spin icon at 270 deg and not 180 deg?
-	const float DEFAULT_ROTATION = 50.0f;
+	const float DEFAULT_ROTATION = 0.0f;
 	const float SHIFTED_OFFSET = 25.0f;
 	
 	const float TIME_INTRO_TRANSITION = 750.0f;
