@@ -76,13 +76,15 @@ void StreamManager::setup(int _width, int _height){
 		newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
         newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
         newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
-        
-		newClient(newConnection);
-        newServer(newConnection);
-
-		connections[newConnection.clientID] = newConnection;
+		CreateNewConnection(newConnection);
     }
-    
+}
+
+void StreamManager::CreateNewConnection(const clientParameters& newConnection)
+{
+	newClient(newConnection);
+	newServer(newConnection);
+	connections[newConnection.clientID] = newConnection;
 }
 
 int StreamManager::hash(const char * str)
@@ -118,10 +120,7 @@ void StreamManager::newData( DataPacket& _packet  )
             
             
             if (connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
-            
-                newClient(newConnection);
-                newServer(newConnection);
-                connections[newConnection.clientID] = newConnection;
+				CreateNewConnection(newConnection);
             }
         }
         

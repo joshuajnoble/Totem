@@ -23,6 +23,9 @@ private:
 	void clientDisconnected(string& clientId);
 	void clientStreamAvailable(string& clientId);
 
+	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
+
 protected:
 	StreamManager streamManager;
 	ofPtr<ofImage> imageToBroadcast;

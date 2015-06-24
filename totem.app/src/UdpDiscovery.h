@@ -6,7 +6,7 @@
 
 class UdpDiscovery
 {
-private:
+public:
 	struct RemotePeerStatus
 	{
 		std::string id;
@@ -17,6 +17,7 @@ private:
 		int videoHeight;
 	};
 
+private:
 	const string version = string("1.0");
 	Poco::Mutex portmutex;
 
@@ -33,7 +34,7 @@ private:
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
 	int myNextPort = 5000;
-	const int portIncrement = 5;
+	const int portIncrement = 10;
 
 	ofxJSONElement GetNetworkPayload(const std::string& action);
 	void SendJsonPayload(const ofxJSONElement& jsonPayload);
@@ -43,6 +44,9 @@ private:
 
 public:
 	virtual ~UdpDiscovery();
+
+	ofEvent<RemotePeerStatus> peerArrivedEvent;
+	ofEvent<RemotePeerStatus> peerLeftEvent;
 
 	void setup(int videoWidth, int videoHeight);
 	void update();

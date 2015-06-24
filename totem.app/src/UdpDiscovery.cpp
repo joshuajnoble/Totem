@@ -149,6 +149,8 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	this->remoteClientMap[peer.id] = peer;
 	this->myNextPort += this->portIncrement;
 
+	ofNotifyEvent(this->peerArrivedEvent, peer, this);
+
 #ifdef _DEBUG
 	std::stringstream debug;
 	debug << "Discovered " << peer.id << " at " << peer.ipAddress << std::endl;
@@ -165,6 +167,8 @@ void UdpDiscovery::HandleDisconnect(const string& remoteId, bool isTimeout)
 	{
 		auto peer = peerIter->second;
 		this->remoteClientMap.erase(peerIter);
+
+		ofNotifyEvent(this->peerLeftEvent, peer, this);
 
 #ifdef _DEBUG
 		std::stringstream debug;

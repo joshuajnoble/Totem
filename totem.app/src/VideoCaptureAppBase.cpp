@@ -56,11 +56,34 @@ void VideoCaptureAppBase::clientStreamAvailable(string& clientId)
 	}
 }
 
+void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
+{
+	StreamManager::clientParameters connection;
+	connection.clientID = peer.id;
+	connection.ipAddress = peer.ipAddress;
+	connection.videoWidth = peer.videoWidth;
+	connection.videoHeight = peer.videoHeight;
+	connection.videoPort = peer.assignedLocalPort;
+	connection.audioPort = peer.assignedLocalPort + 5;
+	connection.remoteVideoPort= peer.assignedLocalPort;
+	connection.remoteAudioPort = peer.assignedLocalPort + 5;
+	this->streamManager.CreateNewConnection(connection);
+}
+
+void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
+{
+
+}
+
 void VideoCaptureAppBase::setupSteamManager()
 {
 	streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
 	this->imageToBroadcast = ofPtr<ofImage>(new ofImage());
 	streamManager.setImageSource(this->imageToBroadcast);
+
+	ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
+	ofAddListener(udpDiscovery.peerLeftEvent, this, &VideoCaptureAppBase::PeerLeft);
+
 	ofAddListener(streamManager.newClientEvent, this, &VideoCaptureAppBase::newClient);
 	ofAddListener(streamManager.clientDisconnectedEvent, this, &VideoCaptureAppBase::clientDisconnected);
 	ofAddListener(streamManager.clientStreamAvailableEvent, this, &VideoCaptureAppBase::clientStreamAvailable);

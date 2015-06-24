@@ -28,7 +28,7 @@ public:
     StreamManager();
     ~StreamManager();
     
-    // this is the config for the manager
+	// this is the config for the manager
     struct clientParameters{
 		const static int PORT_SKIP = 5;
         string ipAddress;
@@ -44,6 +44,8 @@ public:
 		int portOffset;
     };
     
+	void CreateNewConnection(const clientParameters& newConnection);
+
     // initialize everything
     void setup(int _width = 640, int _height = 480);
     
