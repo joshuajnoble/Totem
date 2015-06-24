@@ -8,6 +8,14 @@ void Utils::DrawImageCroppedToFit(ofImage& source, int displayWidth, int display
 	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
+void Utils::DrawImageCroppedToFit(ofFbo& source, int x, int y, int displayWidth, int displayHeight)
+{
+	auto sourceWidth = source.getWidth();
+	auto sourceHeight = source.getHeight();
+	auto cropRegion = Utils::DrawImageCroppedToFit(displayWidth, displayHeight, sourceWidth, sourceHeight);
+	source.getTextureReference().drawSubsection(x, y, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
+}
+
 void Utils::DrawImageCroppedToFit(ofFbo& source, int displayWidth, int displayHeight)
 {
 	auto sourceWidth = source.getWidth();

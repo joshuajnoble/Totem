@@ -76,13 +76,15 @@ void StreamManager::setup(int _width, int _height){
 		newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
         newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
         newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
-        
-		newClient(newConnection);
-        newServer(newConnection);
-
-		connections[newConnection.clientID] = newConnection;
+		CreateNewConnection(newConnection);
     }
-    
+}
+
+void StreamManager::CreateNewConnection(const clientParameters& newConnection)
+{
+	newClient(newConnection);
+	newServer(newConnection);
+	connections[newConnection.clientID] = newConnection;
 }
 
 int StreamManager::hash(const char * str)
@@ -118,10 +120,7 @@ void StreamManager::newData( DataPacket& _packet  )
             
             
             if (connections.find(newConnection.clientID) == connections.end() && newConnection.ipAddress != thisClient.ipAddress){
-            
-                newClient(newConnection);
-                newServer(newConnection);
-                connections[newConnection.clientID] = newConnection;
+				CreateNewConnection(newConnection);
             }
         }
         
@@ -210,7 +209,7 @@ void StreamManager::update(){
     if(isFrameNew()){
         for(map<string, ofPtr<ofxGstRTPServer> >::iterator iter = servers.begin(); iter != servers.end(); ++iter){
             iter->second->newFrame(mImg->getPixelsRef());
-            iter->second->videoBitrate = 6000;
+			iter->second->videoBitrate = this->broadcastVideoBitrate;
         }
     }
     for(map<string, ofPtr<ofxGstRTPClient> >::iterator iter = clients.begin(); iter != clients.end(); ++iter){
@@ -255,7 +254,7 @@ void StreamManager::newServer(clientParameters params){
     servers[params.clientID]->setup(params.ipAddress);
 	servers[params.clientID]->addVideoChannel(params.remoteVideoPort,width,height,30);
     servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
-    servers[params.clientID]->play();
+	servers[params.clientID]->play();
 }
 
 void StreamManager::newClient(clientParameters params){

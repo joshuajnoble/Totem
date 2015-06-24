@@ -298,6 +298,21 @@
     <ClCompile Include="src\VideoCaptureAppBase.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UdpDiscovery.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -374,6 +389,12 @@
     </Filter>
     <Filter Include="addons\ofxPGR\libs\FlyCapture2\lib">
       <UniqueIdentifier>{a9096fce-c441-4486-8747-b4af18972fb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxNetwork">
+      <UniqueIdentifier>{e73716eb-54d8-4175-9131-f0a4cd31a1e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{b00b2400-ed6f-4c9f-bf9b-3a80a6433c5b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -578,6 +599,27 @@
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Utilities.h">
       <Filter>addons\ofxPGR\libs\FlyCapture2\include</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxNetwork.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxNetworkUtils.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h">
+      <Filter>addons\ofxNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="src\UdpDiscovery.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
@@ -586,5 +628,28 @@
     <None Include="$(OFDIR)\addons\ofxPlaylist\src\Easings\easing_terms_of_use.html">
       <Filter>addons\ofxPlaylist</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\close.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\hangup.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\hub.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\mute.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\unmute.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\call.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\camera.png">
+      <Filter>data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

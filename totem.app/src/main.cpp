@@ -89,8 +89,8 @@ namespace
 //========================================================================
 int main(int argc, const char** argv)
 {
-	ofSetLogLevel(OF_LOG_VERBOSE);
-	ofLogToFile("logfile-mempool.txt", true);
+	//ofSetLogLevel(OF_LOG_VERBOSE);
+	//ofLogToFile("logfile-mempool.txt", true);
 
 	ofxArgParser::init(argc, argv);
 

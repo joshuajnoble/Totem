@@ -73,7 +73,9 @@
       <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
-xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"</Command>
+xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"
+md "$(ProjectDir)bin\data"
+xcopy /d "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -122,7 +124,9 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
       <Command>xcopy /e /i /y "$(OFDIR)\export\vs\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
-xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"</Command>
+xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"
+md "$(ProjectDir)bin\data"
+xcopy /d "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -271,6 +275,10 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofUtils.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofXml.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
     <ClCompile Include="src\CylinderDisplay.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -280,6 +288,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="src\StickyTimer.cpp" />
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
     <ClCompile Include="src\TotemDisplay.cpp" />
+    <ClCompile Include="src\UdpDiscovery.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\VideoCaptureAppBase.cpp" />
   </ItemGroup>
@@ -375,6 +384,12 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\TopologyNode.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Utilities.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\src\PGRCamera.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxNetwork.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxNetworkUtils.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\sharedCode\StreamManager.h" />
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
@@ -384,6 +399,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="src\StickyTimer.h" />
     <ClInclude Include="src\ThreeSixtyUnwrap.h" />
     <ClInclude Include="src\TotemDisplay.h" />
+    <ClInclude Include="src\UdpDiscovery.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\VideoCaptureAppBase.h" />
     <ClInclude Include="src\ofxGstRTPClientAsVideoSource.h" />
@@ -400,6 +416,15 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ProjectReference Include="$(OFDIR)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
       <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\call.png" />
+    <Image Include="data\camera.png" />
+    <Image Include="data\close.png" />
+    <Image Include="data\hangup.png" />
+    <Image Include="data\hub.png" />
+    <Image Include="data\mute.png" />
+    <Image Include="data\unmute.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
