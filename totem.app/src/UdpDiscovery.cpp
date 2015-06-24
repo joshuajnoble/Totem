@@ -118,8 +118,14 @@ void UdpDiscovery::update()
 
 					peerIter->second.disconnectTime = currentTime + this->broadcastMissingDuration;
 
-					// This won't be here the first time, so keep watching for it
-					if (peerIter->second.assignedRemotePort == 0 && jsonPayload.isMember(this->myid))
+					// The remote port won't be here the first time, so keep watching for it.
+					// Once the remote peer gets one of our dns packets, it will update it's dns packet with a port for us.
+#ifdef _DEBUG
+					auto currentRemotePort = peerIter->second.assignedRemotePort;
+					auto hasMyId = jsonPayload.isMember(this->myid);
+#endif
+					auto newRemotePort = jsonPayload[this->myid].asString();
+					if (currentRemotePort == 0 && hasMyId)
 					{
 						peerIter->second.assignedRemotePort = jsonPayload[this->myid].asInt();
 						ofNotifyEvent(this->peerReadyEvent, peerIter->second, this);
@@ -152,7 +158,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.ipAddress = remoteAddress;
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
-	peer.assignedRemotePort = jsonPayload[this->myid].asInt();
+	peer.assignedRemotePort = 0;
 
 	this->remoteClientMap[peer.id] = peer;
 	this->myNextPort += this->portIncrement;
