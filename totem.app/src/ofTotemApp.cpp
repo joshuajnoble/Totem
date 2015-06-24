@@ -51,20 +51,6 @@ void ofTotemApp::update()
 		return;
 	}
 
-	// TODO: This is a hack for the current state of the networking system, since we don't get any connect/disconnect events
-	if (!this->isRemoteSource1Initialized && !this->netImpersonate.get())
-	{
-		for (auto iter = this->streamManager.clients.begin(); iter != this->streamManager.clients.end(); ++iter)
-		{
-			auto clientId = iter->first;
-			auto client = iter->second;
-			auto video = this->streamManager.remoteVideos[clientId];
-
-			this->isRemoteSource1Initialized = true;
-			this->remoteVideoSources.push_back(video);
-		}
-	}
-
 	VideoCaptureAppBase::update();
 
 	//mainPlaylist.update();
@@ -86,8 +72,28 @@ void ofTotemApp::update()
 		}
 		else if (this->remoteVideoSources.size())
 		{
-			auto videoSource = *this->remoteVideoSources[0].get();
-			Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+			auto remoteSourceCount = this->remoteVideoSources.size();
+			if (remoteSourceCount == 1)
+			{
+				auto videoSource = *this->remoteVideoSources[0].get();
+				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+			}
+			else if (remoteSourceCount == 2)
+			{
+				auto videoSource = *this->remoteVideoSources[0].get();
+				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight() / 2);
+				videoSource = *this->remoteVideoSources[1].get();
+				Utils::DrawImageCroppedToFit(videoSource, 0, (int)output.getHeight() / 2, (int)output.getWidth(), (int)output.getHeight() / 2);
+			}
+			else if (remoteSourceCount == 3)
+			{
+				auto videoSource = *this->remoteVideoSources[0].get();
+				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight() / 2);
+				videoSource = *this->remoteVideoSources[1].get();
+				Utils::DrawImageCroppedToFit(videoSource, 0, (int)output.getHeight() / 2, (int)output.getWidth() / 2, (int)output.getHeight() / 2);
+				videoSource = *this->remoteVideoSources[2].get();
+				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth() / 2, (int)output.getHeight() / 2, (int)output.getWidth() / 2, (int)output.getHeight() / 2);
+			}
 		}
 
 		output.end();
