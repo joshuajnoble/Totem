@@ -1,6 +1,7 @@
 #include "ofRemoteApp.h"
 //#include "WrapFboAsVideo.h"
 #include "ofxGstRTPClientAsVideoSource.h"
+#include "Utils.h"
 
 #define CYLINDER_PIECE_WIDTH 44
 #define CYLINDER_PIECE_HEIGHT 2
@@ -17,13 +18,16 @@ namespace
 	
 	const float TIME_INTRO_TRANSITION = 750.0f;
 	const float TIME_INTRO_ICONS_APPEAR = 500.0f;
-	const ofColor BACKGROUND_COLOR = ofColor(23, 38, 44);
+	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
 
-	const int INTRO_SELFIE_TOP_MARGIN = 88;
-	const int MINI_SELFIE_TOP_MARGIN = 40;
-	const int MINI_SELFIE_WIDTH = 320;
-	const int SELFIE_FRAME_MARGIN = 10;
-	const int ICON_MARGIN = 35;
+	int INTRO_SELFIE_TOP_MARGIN = 90;
+	int MINI_SELFIE_TOP_MARGIN = 44;
+	int MINI_SELFIE_WIDTH = 152;
+	int MINI_SELFIE_HEIGHT = 240;
+	int SELFIE_FRAME_MARGIN = 6;
+
+	int ICON_MARGIN = 25;
+	int ICON_SIZE = 70;
 
 	const string INTRO_TRANSITION_COMPLETE_EVENT = "INTRO_TRANSITION_COMPLETE_EVENT";
 	//DEBUG
@@ -55,6 +59,15 @@ void ofRemoteApp::setup()
 	hangupIcon.loadImage("hangup.png");
 	muteIcon.loadImage("mute.png");
 
+	INTRO_SELFIE_TOP_MARGIN = (int)roundf(this->displayHeight() * (.5 - .41667));
+	MINI_SELFIE_TOP_MARGIN = (int)roundf(this->displayHeight() * (.5 - .4593));
+	MINI_SELFIE_WIDTH = (int)roundf(this->displayWidth() * 0.0791f);
+	MINI_SELFIE_HEIGHT = (int)roundf(this->displayWidth() * 0.125f);
+	SELFIE_FRAME_MARGIN = (int)roundf(this->displayHeight() * 0.0052f);
+
+	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
+	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
+
 	ofSetVerticalSync(false);
 
 	this->streamManager.broadcastVideoBitrate = 4000;
@@ -75,7 +88,8 @@ void ofRemoteApp::update()
 			this->currentHangupMuteIconAlpha = 0;
 			this->currentConnectIconAlpha = 1;
 			this->currentSelfieYPosition = INTRO_SELFIE_TOP_MARGIN;
-			this->currentSelfieWidth = (int)(this->width * 0.75f);
+			this->currentSelfieWidth = (int)roundf(this->width * 0.2708f);
+			this->currentSelfieHeight = (int)roundf(this->height * 0.7703f);
 
 			this->state = UISTATE_INTRO;
 		}
@@ -133,8 +147,6 @@ void ofRemoteApp::draw()
 {
 	ofBackground(BACKGROUND_COLOR);
 
-	auto iconSize = 72; /// this->muteIcon.getHeight();
-
 	if (this->state == UISTATE_INTRO)
 	{
 		ofPushStyle();
@@ -143,12 +155,13 @@ void ofRemoteApp::draw()
 
 		// Draw icons first so they animate out from behind the selfie
 		ofSetColor(255, 255, 255, (int)(255 * this->currentHangupMuteIconAlpha));
-		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
-		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
+		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 
 		//Now draw the bottom icon
 		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
-		connectIcon.draw(this->width / 2, this->height - iconSize / 2 - 55, 72, 72);
+		auto bottomPadding = (int)roundf(this->height * (0.50f - 0.3944f)) - ICON_SIZE;
+		connectIcon.draw(this->width / 2, this->height - ICON_SIZE / 2 - bottomPadding, ICON_SIZE, ICON_SIZE);
 
 		ofSetRectMode(OF_RECTMODE_CORNER);
 		DrawSelfie();
@@ -189,8 +202,8 @@ void ofRemoteApp::draw()
 
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
-		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
-		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
+		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 		ofPopStyle();
 
 		DrawSelfie();
@@ -210,9 +223,10 @@ void ofRemoteApp::DrawSelfie()
 	ofScale(-this->scale, this->scale);
 	
 	// Draw the source video in a small window
-	auto ratio = this->videoSource->getWidth() / this->videoSource->getHeight();
+	//auto ratio = this->videoSource->getWidth() / this->videoSource->getHeight();
 	int selfieWidth = (int)(this->currentSelfieWidth);
-	int selfieHeight = selfieWidth / ratio;
+	int selfieHeight = (int)(this->currentSelfieHeight);
+	//int selfieHeight = selfieWidth / ratio;
 	int selfieX = (this->width - selfieWidth) / 2;
 	int selfieY = (int)(this->currentSelfieYPosition);
 
@@ -222,7 +236,8 @@ void ofRemoteApp::DrawSelfie()
 	ofPopStyle();
 
 	ofSetColor(255);
-	this->videoSource->draw(-(selfieX + selfieWidth), selfieY, selfieWidth, selfieHeight);
+	
+	Utils::DrawVideoCroppedToFit(*this->videoSource, -(selfieX + selfieWidth), selfieY, selfieWidth, selfieHeight);
 
 	ofPopMatrix();
 }
@@ -333,10 +348,10 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
 			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieYPosition, MINI_SELFIE_TOP_MARGIN));
 			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieWidth, MINI_SELFIE_WIDTH));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieHeight, MINI_SELFIE_HEIGHT));
 
-			auto iconSize = 72;
-			auto iconOffsetStart = MINI_SELFIE_WIDTH / 2 - iconSize / 2;
-			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + iconSize / 2;
+			auto iconOffsetStart = MINI_SELFIE_WIDTH / 2 - ICON_SIZE / 2;
+			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + ICON_SIZE / 2;
 			this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
 			this->muteIconCenterX = this->width / 2 + iconOffsetStart;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));

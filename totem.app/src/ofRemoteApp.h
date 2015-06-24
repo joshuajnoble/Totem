@@ -22,6 +22,7 @@ private:
 	int width = 1920, height = 1080;
 	
 	float currentSelfieWidth;
+	float currentSelfieHeight;
 	float currentSelfieYPosition;
 	float currentConnectIconAlpha;
 	float muteIconCenterX;
