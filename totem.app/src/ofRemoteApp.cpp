@@ -51,9 +51,9 @@ void ofRemoteApp::setup()
 
 	VideoCaptureAppBase::setup();
 
-	connectIcon.loadImage("icon_connect.png");
-	hangupIcon.loadImage("icon_hangup.png");
-	muteIcon.loadImage("icon_mute.png");
+	connectIcon.loadImage("call.png");
+	hangupIcon.loadImage("hangup.png");
+	muteIcon.loadImage("mute.png");
 
 	ofSetVerticalSync(false);
 
@@ -133,6 +133,8 @@ void ofRemoteApp::draw()
 {
 	ofBackground(BACKGROUND_COLOR);
 
+	auto iconSize = 72; /// this->muteIcon.getHeight();
+
 	if (this->state == UISTATE_INTRO)
 	{
 		ofPushStyle();
@@ -141,12 +143,12 @@ void ofRemoteApp::draw()
 
 		// Draw icons first so they animate out from behind the selfie
 		ofSetColor(255, 255, 255, (int)(255 * this->currentHangupMuteIconAlpha));
-		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + this->muteIcon.getHeight() / 2);
-		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + this->hangupIcon.getHeight() / 2);
+		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
+		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
 
 		//Now draw the bottom icon
 		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
-		connectIcon.draw(this->width / 2, this->height - this->connectIcon.height / 2 - 0);
+		connectIcon.draw(this->width / 2, this->height - iconSize / 2 - 55, 72, 72);
 
 		ofSetRectMode(OF_RECTMODE_CORNER);
 		DrawSelfie();
@@ -187,8 +189,8 @@ void ofRemoteApp::draw()
 
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
-		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + this->muteIcon.getHeight() / 2);
-		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + this->hangupIcon.getHeight() / 2);
+		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
+		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + iconSize / 2, iconSize, iconSize);
 		ofPopStyle();
 
 		DrawSelfie();
@@ -332,8 +334,9 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieYPosition, MINI_SELFIE_TOP_MARGIN));
 			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieWidth, MINI_SELFIE_WIDTH));
 
-			auto iconOffsetStart = MINI_SELFIE_WIDTH / 2 - this->muteIcon.getWidth() / 2;
-			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + this->muteIcon.getWidth() / 2;
+			auto iconSize = 72;
+			auto iconOffsetStart = MINI_SELFIE_WIDTH / 2 - iconSize / 2;
+			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + iconSize / 2;
 			this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
 			this->muteIconCenterX = this->width / 2 + iconOffsetStart;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
