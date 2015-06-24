@@ -89,6 +89,7 @@ public:
     ofPtr<ofxClientOSCManager> oscReceiver;
 
     
+	int broadcastVideoBitrate;
     float width;
     float height;
     

@@ -56,6 +56,8 @@ void ofRemoteApp::setup()
 	muteIcon.loadImage("icon_mute.png");
 
 	ofSetVerticalSync(false);
+
+	this->streamManager.broadcastVideoBitrate = 4000;
 }
 
 

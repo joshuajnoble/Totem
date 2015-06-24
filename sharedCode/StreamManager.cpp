@@ -209,7 +209,7 @@ void StreamManager::update(){
     if(isFrameNew()){
         for(map<string, ofPtr<ofxGstRTPServer> >::iterator iter = servers.begin(); iter != servers.end(); ++iter){
             iter->second->newFrame(mImg->getPixelsRef());
-            iter->second->videoBitrate = 6000;
+			iter->second->videoBitrate = this->broadcastVideoBitrate;
         }
     }
     for(map<string, ofPtr<ofxGstRTPClient> >::iterator iter = clients.begin(); iter != clients.end(); ++iter){
@@ -254,7 +254,7 @@ void StreamManager::newServer(clientParameters params){
     servers[params.clientID]->setup(params.ipAddress);
 	servers[params.clientID]->addVideoChannel(params.remoteVideoPort,width,height,30);
     servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
-    servers[params.clientID]->play();
+	servers[params.clientID]->play();
 }
 
 void StreamManager::newClient(clientParameters params){

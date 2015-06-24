@@ -33,6 +33,8 @@ void ofTotemApp::setup()
 	//this->totemDisplay.setVideoSource(2, this->videoSource);
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
+
+	this->streamManager.broadcastVideoBitrate = 8000;
 }
 
 //--------------------------------------------------------------
