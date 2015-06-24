@@ -13,6 +13,8 @@ private:
 		std::string ipAddress;
 		int assignedLocalPort;
 		float disconnectTime;
+		int videoWidth;
+		int videoHeight;
 	};
 
 	const string version = string("1.0");
@@ -27,6 +29,7 @@ private:
 	float broadcastMissingDuration = 10.0f;
 	char incomingMessage[1024];
 	string myid;
+	int videoWidth, videoHeight;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
 	int myNextPort = 5000;
@@ -41,6 +44,6 @@ private:
 public:
 	virtual ~UdpDiscovery();
 
-	void setup();
+	void setup(int videoWidth, int videoHeight);
 	void update();
 };

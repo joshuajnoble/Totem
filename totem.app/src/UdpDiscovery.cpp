@@ -2,8 +2,10 @@
 #include <Poco/Mutex.h>
 #include <Poco/URI.h>
 
-void UdpDiscovery::setup()
+void UdpDiscovery::setup(int w, int h)
 {
+	this->videoWidth = w;
+	this->videoHeight = h;
 	this->sender.Create();
 	this->sender.Connect(this->broadcastAddress, this->broadcastPort);
 	this->sender.SetNonBlocking(true);
@@ -54,8 +56,8 @@ void UdpDiscovery::update()
 		auto jsonPayload = GetNetworkPayload("dns");
 		jsonPayload["version"] = this->version;
 		jsonPayload["timestamp"] = ofGetSystemTime();
-		jsonPayload["videoWidth"] = 1280;
-		jsonPayload["videoHeight"] = 720;
+		jsonPayload["videoWidth"] = this->videoWidth;
+		jsonPayload["videoHeight"] = this->videoHeight;
 		
 		// Publish all of our port mappings to the other clients
 		for (auto iter = this->remoteClientMap.begin(); iter != this->remoteClientMap.end(); ++iter)
@@ -134,6 +136,8 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.id = jsonPayload["id"].asString();
 	peer.assignedLocalPort = this->myNextPort;
 	peer.ipAddress = remoteAddress;
+	peer.videoWidth = jsonPayload["videoWidth"].asInt();
+	peer.videoHeight = jsonPayload["videoHeight"].asInt();
 
 	this->remoteClientMap[peer.id] = peer;
 	this->myNextPort += this->portIncrement;

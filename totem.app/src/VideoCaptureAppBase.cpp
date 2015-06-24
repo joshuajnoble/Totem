@@ -2,7 +2,7 @@
 
 void VideoCaptureAppBase::setup()
 {
-	this->udpDiscovery.setup();
+	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
 	this->setupSteamManager();
 }
 
