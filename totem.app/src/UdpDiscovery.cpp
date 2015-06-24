@@ -18,6 +18,13 @@ void UdpDiscovery::setup(int w, int h)
 	this->nextSendTime = 0;
 	this->myid = ofToString(ofRandomf());
 	memset(this->incomingMessage, 0, sizeof(this->incomingMessage));
+
+#ifdef TARGET_WIN32
+	if (IsDebuggerPresent())
+	{
+		this->broadcastMissingDuration = 90.0f; // When debugging don't auto disconnect as aggressively
+	}
+#endif
 }
 
 UdpDiscovery::~UdpDiscovery()
