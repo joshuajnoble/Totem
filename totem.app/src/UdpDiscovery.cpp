@@ -117,6 +117,13 @@ void UdpDiscovery::update()
 					}
 
 					peerIter->second.disconnectTime = currentTime + this->broadcastMissingDuration;
+
+					// This won't be here the first time, so keep watching for it
+					if (peerIter->second.assignedRemotePort == 0 && jsonPayload.isMember(this->myid))
+					{
+						peerIter->second.assignedRemotePort = jsonPayload[this->myid].asInt();
+						ofNotifyEvent(this->peerReadyEvent, peerIter->second, this);
+					}
 				}
 				else if (jsonPayload["action"] == "disconnect")
 				{
@@ -145,6 +152,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.ipAddress = remoteAddress;
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
+	peer.assignedRemotePort = jsonPayload[this->myid].asInt();
 
 	this->remoteClientMap[peer.id] = peer;
 	this->myNextPort += this->portIncrement;

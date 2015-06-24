@@ -25,7 +25,8 @@ private:
 
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
-
+	void peerReady(UdpDiscovery::RemotePeerStatus& peer);
+	
 protected:
 	StreamManager streamManager;
 	ofPtr<ofImage> imageToBroadcast;

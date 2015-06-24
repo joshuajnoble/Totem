@@ -12,6 +12,7 @@ public:
 		std::string id;
 		std::string ipAddress;
 		int assignedLocalPort;
+		int assignedRemotePort;
 		float disconnectTime;
 		int videoWidth;
 		int videoHeight;
@@ -46,6 +47,7 @@ public:
 	virtual ~UdpDiscovery();
 
 	ofEvent<RemotePeerStatus> peerArrivedEvent;
+	ofEvent<RemotePeerStatus> peerReadyEvent;
 	ofEvent<RemotePeerStatus> peerLeftEvent;
 
 	void setup(int videoWidth, int videoHeight);
