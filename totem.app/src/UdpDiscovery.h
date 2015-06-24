@@ -36,7 +36,7 @@ private:
 	void SendJsonPayload(const ofxJSONElement& jsonPayload);
 
 	void HandleDiscovery(const ofxJSONElement& jsonPayload, const string& remoteAddress);
-	void HandleDisconnect(const string& remoteId);
+	void HandleDisconnect(const string& remoteId, bool isTimeout = false);
 
 public:
 	virtual ~UdpDiscovery();

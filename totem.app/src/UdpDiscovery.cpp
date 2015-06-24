@@ -43,11 +43,12 @@ void UdpDiscovery::SendJsonPayload(const ofxJSONElement& jsonPayload)
 
 void UdpDiscovery::update()
 {
+	// This is locking myNextPort, remoteClientMap and incomingMessage.  That is why it is at function scope right now.
+	Poco::Mutex::ScopedLock lock(this->portmutex);
 
 	auto currentTime = ofGetElapsedTimef();
 	if (currentTime >= this->nextSendTime)
 	{
-		Poco::Mutex::ScopedLock lock(this->portmutex);
 		this->nextSendTime = currentTime + this->broadcastDelay;
 
 		auto jsonPayload = GetNetworkPayload("dns");
@@ -76,7 +77,7 @@ void UdpDiscovery::update()
 
 		for (auto iter = peersToRemove.begin(); iter != peersToRemove.end(); ++iter)
 		{
-			HandleDisconnect(*iter);
+			HandleDisconnect(*iter, true);
 		}
 	}
 
@@ -93,7 +94,6 @@ void UdpDiscovery::update()
 		{
 			if (jsonPayload.isMember("id") && jsonPayload.isMember("version") && jsonPayload["version"].asString() == this->version && jsonPayload["id"] != this->myid)
 			{
-				Poco::Mutex::ScopedLock lock(this->portmutex);
 				auto remoteId = jsonPayload["id"].asString();
 
 				if (jsonPayload["action"].asString() == "dns")
@@ -103,7 +103,7 @@ void UdpDiscovery::update()
 					{
 						HandleDiscovery(jsonPayload, sender);
 
-						// peerIter should be in the list now, if it wasn't already
+						// peerIter should be in the map now, if it wasn't already
 						peerIter = this->remoteClientMap.find(remoteId);
 					}
 
@@ -115,11 +115,11 @@ void UdpDiscovery::update()
 				}
 			}
 
-#ifdef _DEBUG
-			//std::stringstream debug;
-			//debug << "Received packet from " << sender << " -- " << decodedJson << std::endl;
-			//OutputDebugStringA(debug.str().c_str());
-			//ofLogNotice("UdpDiscovery") << debug.str().c_str();
+#ifdef _DEBUGX
+			std::stringstream debug;
+			debug << "Received packet from " << sender << " -- " << decodedJson << std::endl;
+			OutputDebugStringA(debug.str().c_str());
+			ofLogNotice("UdpDiscovery") << debug.str().c_str();
 #endif
 		}
 
@@ -147,7 +147,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 }
 
 
-void UdpDiscovery::HandleDisconnect(const string& remoteId)
+void UdpDiscovery::HandleDisconnect(const string& remoteId, bool isTimeout)
 {
 	auto peerIter = this->remoteClientMap.find(remoteId);
 	if (peerIter != this->remoteClientMap.end())
@@ -157,7 +157,7 @@ void UdpDiscovery::HandleDisconnect(const string& remoteId)
 
 #ifdef _DEBUG
 		std::stringstream debug;
-		debug << "Disconnect sent from " << peer.id << " at " << peer.ipAddress << std::endl;
+		debug << "Disconnect " << (isTimeout ? "due to timeout" : "sent") << " from " << peer.id << " at " << peer.ipAddress << std::endl;
 		OutputDebugStringA(debug.str().c_str());
 		ofLogNotice("UdpDiscovery") << debug.str().c_str();
 #endif
