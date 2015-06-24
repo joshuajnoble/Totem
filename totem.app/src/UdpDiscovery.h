@@ -34,7 +34,7 @@ private:
 	int videoWidth, videoHeight;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
-	int myNextPort = 5000;
+	int myNextPort = 12000;
 	const int portIncrement = 10;
 
 	ofxJSONElement GetNetworkPayload(const std::string& action);
