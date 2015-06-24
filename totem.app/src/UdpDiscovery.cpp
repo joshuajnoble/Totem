@@ -60,8 +60,9 @@ void UdpDiscovery::update()
 		for (auto iter = this->remoteClientMap.begin(); iter != this->remoteClientMap.end(); ++iter)
 		{
 			jsonPayload[iter->second.id] = iter->second.assignedLocalPort;
-			SendJsonPayload(jsonPayload);
 		}
+
+		SendJsonPayload(jsonPayload);
 
 		// Check for expired remote peers and handle "disconnect" from timeout
 		std::vector<string> peersToRemove;
