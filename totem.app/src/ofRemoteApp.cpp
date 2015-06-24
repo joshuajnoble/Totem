@@ -48,7 +48,9 @@ void ofRemoteApp::earlyinit()
 void ofRemoteApp::setup()
 {
 	ofxKeyframeAnimRegisterEvents(this);
-	VideoCaptureAppBase::setupSteamManager();
+
+	VideoCaptureAppBase::setup();
+
 	connectIcon.loadImage("icon_connect.png");
 	hangupIcon.loadImage("icon_hangup.png");
 	muteIcon.loadImage("icon_mute.png");

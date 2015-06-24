@@ -22,11 +22,12 @@ int ofTotemApp::displayHeight() const
 //--------------------------------------------------------------
 void ofTotemApp::setup()
 {
+	VideoCaptureAppBase::setup();
 
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
 
-	this->setupSteamManager();
+	//this->setupSteamManager();
 
 	this->totemDisplay.allocateBuffers();
 	//this->totemDisplay.setVideoSource(2, this->videoSource);

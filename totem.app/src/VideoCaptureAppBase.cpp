@@ -1,7 +1,15 @@
 #include "VideoCaptureAppBase.h"
 
+void VideoCaptureAppBase::setup()
+{
+	this->udpDiscovery.setup();
+	this->setupSteamManager();
+}
+
 void VideoCaptureAppBase::update()
 {
+	this->udpDiscovery.update();
+
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
 	{

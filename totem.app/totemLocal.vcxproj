@@ -271,6 +271,10 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofUtils.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofXml.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp" />
+    <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
     <ClCompile Include="src\CylinderDisplay.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -280,6 +284,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="src\StickyTimer.cpp" />
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp" />
     <ClCompile Include="src\TotemDisplay.cpp" />
+    <ClCompile Include="src\UdpDiscovery.cpp" />
     <ClCompile Include="src\Utils.cpp" />
     <ClCompile Include="src\VideoCaptureAppBase.cpp" />
   </ItemGroup>
@@ -375,6 +380,12 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\TopologyNode.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include\Utilities.h" />
     <ClInclude Include="$(OFDIR)\addons\ofxPGR\src\PGRCamera.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxNetwork.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxNetworkUtils.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.h" />
+    <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\sharedCode\StreamManager.h" />
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
@@ -384,6 +395,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="src\StickyTimer.h" />
     <ClInclude Include="src\ThreeSixtyUnwrap.h" />
     <ClInclude Include="src\TotemDisplay.h" />
+    <ClInclude Include="src\UdpDiscovery.h" />
     <ClInclude Include="src\Utils.h" />
     <ClInclude Include="src\VideoCaptureAppBase.h" />
     <ClInclude Include="src\ofxGstRTPClientAsVideoSource.h" />

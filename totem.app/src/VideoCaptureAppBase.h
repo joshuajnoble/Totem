@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "RemoteVideoInfo.h"
 #include "..\..\SharedCode\StreamManager.h"
+#include "UdpDiscovery.h"
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -13,6 +14,7 @@ public:
 	virtual int displayHeight() const = 0;
 	ofPtr<ofBaseVideoDraws> videoSource;
 
+	virtual void setup();
 	virtual void update();
 	virtual void exit();
 
@@ -25,6 +27,7 @@ protected:
 	StreamManager streamManager;
 	ofPtr<ofImage> imageToBroadcast;
 	std::vector<RemoteVideoInfo> remoteVideoSources;
+	UdpDiscovery udpDiscovery;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 
