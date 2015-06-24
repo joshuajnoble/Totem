@@ -3,7 +3,7 @@
 #include "ofTotemApp.h"
 #include "ofRemoteApp.h"
 #include "Utils.h"
-#include "ofxPGR\\src\PGRCamera.h"
+#include "ofxPGR\src\PGRCamera.h"
 
 namespace
 {
@@ -29,10 +29,10 @@ namespace
 		}
 	}
 
-	ofPtr<VideoCaptureAppBase> CreateTotemAppInstance(int captureWidth, int captureHeight)
+	ofPtr<VideoCaptureAppBase> CreateTotemAppInstance(int captureWidth, int captureHeight, int networkInterfaceId)
 	{
 		auto totemApp = new ofTotemApp();
-		totemApp->earlyinit();
+		totemApp->earlyinit(networkInterfaceId);
 
 		if (ofxArgParser::hasKey("showInput"))
 		{
@@ -59,10 +59,10 @@ namespace
 		return ofPtr<VideoCaptureAppBase>(totemApp);
 	}
 
-	ofPtr<VideoCaptureAppBase> CreateRemoteAppInstance()
+	ofPtr<VideoCaptureAppBase> CreateRemoteAppInstance(int networkInterfaceId)
 	{
 		auto remoteApp = new ofRemoteApp();
-		remoteApp->earlyinit();
+		remoteApp->earlyinit(networkInterfaceId);
 		ofSetupOpenGL(remoteApp->displayWidth(), remoteApp->displayHeight(), OF_WINDOW);
 
 		if (ofxArgParser::hasKey("totemSource"))
@@ -111,6 +111,10 @@ int main(int argc, const char** argv)
 			"-xMargin=<border size> (Shift the window left by this amount)" << endl <<
 			"-yMargin=<border size> (Shift the window up by this amount)" << endl <<
 
+			endl << "NETWORK SETTINGS" << endl <<
+			"-netList                     (Show all network interfaces)" << endl <<
+			"-netInterface=<interface id> (Select a specific network interface)" << endl <<
+
 			endl << "CAPTURE SETTINGS" << endl <<
 			"-capSource=<path>           (Use a test file instead of the camera for input)" << endl <<
 			"-capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
@@ -132,46 +136,36 @@ int main(int argc, const char** argv)
 			std::cout << "You must specify *either* -totem or -remote; not both.  See -help for details.";
 			return -1;
 		}
-		if (ofxArgParser::hasKey("totemSource") && ofxArgParser::getValue("totemSource") == "")
+
+		vector<string> requireParams = { "totemSource", "netSource", "capDevice", "capWidth", "capHeight", "capSource", "xMargin", "yMargin", "netInterface" };
+		for (auto i = requireParams.begin(); i != requireParams.end(); ++i)
 		{
-			std::cout << "The \"totemSource\" param requires a video file path.  See -help for details.";
-			return -1;
+			if (ofxArgParser::hasKey(*i) && ofxArgParser::getValue(*i) == "")
+			{
+				std::cout << "The \"" << *i << "\" param requires a value to be provided.  See -help for details.";
+				return -1;
+			}
 		}
-		if (ofxArgParser::hasKey("netSource") && ofxArgParser::getValue("netSource") == "")
+	}
+
+	auto interfaces = UdpDiscovery::GetAllNetworkInterfaces();
+	if (!interfaces.size())
+	{
+		cout << "There are no network interfaces available on this computer.";
+		return -1;
+	}
+
+	if (ofxArgParser::hasKey("netList"))
+	{
+		std::cout << left << setw(4) << "ID" << setw(40) << "Interface Name" << setw(3 * 4 + 3 + 1) << "IP Address" << "MAC Address" << std::endl;
+		for (auto iter = interfaces.begin(); iter != interfaces.end(); ++iter)
 		{
-			std::cout << "The \"netSource\" param requires a video file path.  See -help for details.";
-			return -1;
+			auto i = *iter;
+			auto mac = i.macAddress();
+			std::cout << left << setw(4) << i.index() << setw(40) << i.displayName() << setw(3*4+3+1) << i.address().toString() << UdpDiscovery::MACtoString(i.macAddress()) << std::endl;
 		}
-		if (ofxArgParser::hasKey("capDevice") && ofxArgParser::getValue("capDevice") == "")
-		{
-			std::cout << "The \"capDevice\" param requires a device number.  See -help for details.";
-			return -1;
-		}
-		if (ofxArgParser::hasKey("capWidth") && ofxArgParser::getValue("capWidth") == "")
-		{
-			std::cout << "The \"capWidth\" param requires a width.  See -help for details.";
-			return -1;
-		}
-		if (ofxArgParser::hasKey("capHeight") && ofxArgParser::getValue("capHeight") == "")
-		{
-			std::cout << "The \"capHeight\" param requires a height.  See -help for details.";
-			return -1;
-		}
-		if (ofxArgParser::hasKey("capSource") && ofxArgParser::getValue("capSource") == "")
-		{
-			std::cout << "The \"capSource\" param requires a video file path.  See -help for details.";
-			return -1;
-		}
-		if (ofxArgParser::hasKey("xMargin") && ofxArgParser::getValue("xMargin") == "")
-		{
-			std::cout << "The \"xMargin\" param requires a value.  See -help for details.";
-			return -1;
-		}
-		if (ofxArgParser::hasKey("yMargin") && ofxArgParser::getValue("yMargin") == "")
-		{
-			std::cout << "The \"yMargin\" param requires a value.  See -help for details.";
-			return -1;
-		}
+
+		return 0;
 	}
 
 	bool totemMode = !ofxArgParser::hasKey("remote");
@@ -205,7 +199,13 @@ int main(int argc, const char** argv)
 		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
 	}
 
-	auto app = totemMode ? CreateTotemAppInstance(captureWidth, captureHeight) : CreateRemoteAppInstance();
+	auto networkId = -1;
+	if (ofxArgParser::hasKey("netInterface"))
+	{
+		networkId = ofToInt(ofxArgParser::getValue("netInterface"));
+	}
+
+	auto app = totemMode ? CreateTotemAppInstance(captureWidth, captureHeight, networkId) : CreateRemoteAppInstance(networkId);
 	ofPtr<ofBaseVideoDraws> videoSource;
 	if (!totemMode || ofxArgParser::hasKey("capDevice") || ofxArgParser::hasKey("capSource") || ofxArgParser::hasKey("capWidth") || ofxArgParser::hasKey("capHeight"))
 	{

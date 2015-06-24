@@ -2,12 +2,41 @@
 #include <Poco/Mutex.h>
 #include <Poco/URI.h>
 
-void UdpDiscovery::setup(int w, int h)
+void UdpDiscovery::setup(int w, int h, int networkInterfaceId)
 {
+	bool found = false;
+	auto interfaces = GetAllNetworkInterfaces();
+	if (networkInterfaceId == -1) // Use default network interface
+	{
+		interfaces = GetAllNetworkInterfaces();
+		networkInterfaceId = interfaces[0].index();
+	}
+
+	Poco::Net::NetworkInterface interface;
+	for (auto iter = interfaces.begin(); !found && iter != interfaces.end(); ++iter)
+	{
+		if (iter->index() == networkInterfaceId)
+		{
+			interface = *iter;
+			found = true;
+		}
+	}
+
+	if (!found)
+	{
+		cout << "The specified network interface id (" << networkInterfaceId << ") was not found." << std::endl;
+		ofExit();
+	}
+
+	this->broadcastAddress = GetBroadcastAddress(interface).toString();
+	this->myid = MACtoString(interface.macAddress());
+	this->myid += "/";
+	this->myid += ofToString((int)roundf(ofRandomf() * 0xFFFFFF));
+
 	this->videoWidth = w;
 	this->videoHeight = h;
 	this->sender.Create();
-	this->sender.Connect(this->broadcastAddress, this->broadcastPort);
+	this->sender.Connect(this->broadcastAddress.c_str(), this->broadcastPort);
 	this->sender.SetNonBlocking(true);
 	this->sender.SetEnableBroadcast(true);
 
@@ -16,7 +45,6 @@ void UdpDiscovery::setup(int w, int h)
 	this->receiver.SetNonBlocking(true);
 
 	this->nextSendTime = 0;
-	this->myid = ofToString(ofRandomf());
 	memset(this->incomingMessage, 0, sizeof(this->incomingMessage));
 
 #ifdef TARGET_WIN32
@@ -191,4 +219,53 @@ void UdpDiscovery::HandleDisconnect(const string& remoteId, bool isTimeout)
 		ofLogNotice("UdpDiscovery") << debug.str().c_str();
 #endif
 	}
+}
+
+
+Poco::Net::NetworkInterface::List UdpDiscovery::GetAllNetworkInterfaces()
+{
+	auto interfaces = Poco::Net::NetworkInterface::list();
+
+	Poco::Net::NetworkInterface::List rval;
+	for (auto iter = interfaces.begin(); iter != interfaces.end(); ++iter)
+	{
+		auto interface = *iter;
+		if (interface.macAddress().size() && !interface.isLoopback() && interface.supportsIPv4() && interface.macAddress().size())
+		{
+			rval.push_back(interface);
+		}
+	}
+
+	return rval;
+}
+
+std::string UdpDiscovery::MACtoString(const std::vector<unsigned char>& mac, char delimter)
+{
+	string macString;
+	macString.reserve(mac.size() * 3 - 1);
+
+	char s[4]; // Temp buffer
+
+	// Get the first segment
+	auto i = mac.begin();
+	sprintf(s, "%02X", *i++);
+	macString.append(s);
+
+	// Add all the rest with a delimter
+	for (; i != mac.end(); ++i)
+	{
+		sprintf(s, "%c%02X", delimter, *i);
+		macString.append(s);
+	}
+
+	return macString;
+}
+
+Poco::Net::IPAddress UdpDiscovery::GetBroadcastAddress(Poco::Net::NetworkInterface interface)
+{
+	auto bytes = (unsigned long *)interface.address().addr();
+	auto mask = (unsigned long *)(~interface.subnetMask()).addr();
+	long broadcastBytes = (*bytes | *mask);
+	auto broadcastAddress = Poco::Net::IPAddress(&broadcastBytes, 4);
+	return broadcastAddress;
 }

@@ -9,8 +9,9 @@ namespace
 	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
 }
 
-void ofTotemApp::earlyinit()
+void ofTotemApp::earlyinit(int netid)
 {
+	this->networkInterfaceId = netid;
 	this->totemDisplay.initTotemDisplay(4, 800, 1280);
 }
 
@@ -27,7 +28,7 @@ int ofTotemApp::displayHeight() const
 //--------------------------------------------------------------
 void ofTotemApp::setup()
 {
-	VideoCaptureAppBase::setup();
+	VideoCaptureAppBase::setup(this->networkInterfaceId);
 
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");

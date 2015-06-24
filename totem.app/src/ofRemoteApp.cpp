@@ -37,8 +37,9 @@ namespace
 
 
 // ********************************************************************************************************************
-void ofRemoteApp::earlyinit()
+void ofRemoteApp::earlyinit(int netid)
 {
+	this->networkInterfaceId = netid;
 	int margin = 70;
 	int remoteViewOffsetX = 1130 + margin;// (int)(1920 * .75);
 	this->networkDisplay.initializeRemoteNetworkDisplay(ofRectangle(remoteViewOffsetX, 70, 1920 - remoteViewOffsetX - margin, 1080 - margin * 2));
@@ -53,7 +54,7 @@ void ofRemoteApp::setup()
 {
 	ofxKeyframeAnimRegisterEvents(this);
 
-	VideoCaptureAppBase::setup();
+	VideoCaptureAppBase::setup(this->networkInterfaceId);
 
 	connectIcon.loadImage("call.png");
 	hangupIcon.loadImage("hangup.png");

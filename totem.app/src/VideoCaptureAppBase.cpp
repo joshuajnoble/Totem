@@ -1,8 +1,8 @@
 #include "VideoCaptureAppBase.h"
 
-void VideoCaptureAppBase::setup()
+void VideoCaptureAppBase::setup(int networkInterfaceId)
 {
-	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
+	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight(), networkInterfaceId);
 	this->setupSteamManager();
 }
 

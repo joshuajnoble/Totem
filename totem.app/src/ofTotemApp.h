@@ -26,11 +26,12 @@ private:
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 
 	bool isRemoteSource1Initialized;
+	int networkInterfaceId;
 
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
-	void earlyinit();
+	void earlyinit(int networkInterfaceId);
 	void setup();
 	virtual void update();
 	void draw();

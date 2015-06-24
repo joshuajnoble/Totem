@@ -47,10 +47,12 @@ private:
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 
 	bool isTotemInitialized;
+	int networkInterfaceId;
+
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
-	void earlyinit();
+	void earlyinit(int networkInterfaceId);
 	void setup();
 	virtual void update();
 	void draw();
