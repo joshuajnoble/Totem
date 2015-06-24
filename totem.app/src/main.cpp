@@ -119,8 +119,8 @@ int main(int argc, const char** argv)
 			"-capSource=<path>           (Use a test file instead of the camera for input)" << endl <<
 			"-capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
 			"-capDeviceList              (Show all available capture devices)" << endl <<
-			"-capWidth=<capture width>   (default=2048(totem)/1920(remote) pixels)" << endl <<
-			"-capHeight=<capture height> (default=2048(totem)/1080(remote) pixels)" << endl;
+			"-capWidth=<capture width>   (default=2160(totem)/1280(remote) pixels)" << endl <<
+			"-capHeight=<capture height> (default=2160(totem)/720(remote) pixels)" << endl;
 		return 0;
 	}
 	else if (ofxArgParser::hasKey("capDeviceList"))
