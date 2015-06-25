@@ -66,7 +66,7 @@ public:
 	//void windowResized(int w, int h);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
-	void ImpesonateRemoteConnection(const string& clientId, ofPtr<ofBaseVideoDraws> source);
+	void ImpersonateRemoteConnection(const string& clientId, ofPtr<ofBaseVideoDraws> source);
 
 	virtual int displayWidth() const;
 	virtual int displayHeight() const;

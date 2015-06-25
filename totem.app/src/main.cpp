@@ -116,7 +116,7 @@ namespace
 			auto unwrapper = new ThreeSixtyUnwrap();
 			auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getWidth(), videoSource->getHeight()), UNWRAPPED_DISPLAYRATIO);
 			unwrapper->initUnwrapper(videoSource, outputSize);
-			remoteApp->ImpesonateRemoteConnection("localTotemImpersonator", ofPtr<ofBaseVideoDraws>(unwrapper));
+			remoteApp->ImpersonateRemoteConnection("localTotemImpersonator", ofPtr<ofBaseVideoDraws>(unwrapper));
 		}
 
 		return ofPtr<VideoCaptureAppBase>(remoteApp);

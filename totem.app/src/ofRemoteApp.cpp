@@ -272,7 +272,7 @@ int ofRemoteApp::displayHeight() const
 }
 
 // ********************************************************************************************************************
-void ofRemoteApp::ImpesonateRemoteConnection(const string& clientId, ofPtr<ofBaseVideoDraws> video)
+void ofRemoteApp::ImpersonateRemoteConnection(const string& clientId, ofPtr<ofBaseVideoDraws> video)
 {
 	RemoteVideoInfo remote;
 	remote.clientId = clientId;
@@ -309,19 +309,33 @@ void ofRemoteApp::keyPressed(int key)
 {
 	if (this->networkDisplay.CanModify())
 	{
-		if (key == 'a')
+		int videoCount = 0;
+		for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
 		{
-			if (this->remoteVideoSources.size() < 2)
-			{
-				ImpesonateRemoteConnection(ofToString(remoteVideoSources.size() + 1), this->videoSource);
-				if (this->cylinderDisplay) this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
-			}
+			if (!iter->isTotem) ++videoCount;
 		}
-		else if (key == 'z')
+
+		if (key == 'a' && videoCount < 2)
 		{
-			this->networkDisplay.RemoveVideoSource(this->remoteVideoSources.back().source);
-			this->remoteVideoSources.pop_back();
-			if (this->cylinderDisplay) this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
+			ImpersonateRemoteConnection(ofToString(remoteVideoSources.size() + 1), this->videoSource);
+			if (this->cylinderDisplay) this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
+		}
+		else if (key == 'z' && videoCount > 0)
+		{
+			auto iter = this->remoteVideoSources.rbegin();
+			for (; iter != this->remoteVideoSources.rend(); ++iter)
+			{
+				if (!iter->isTotem) break;
+			}
+
+			auto video = *iter;
+			this->networkDisplay.RemoveVideoSource(video.source);
+			this->remoteVideoSources.erase(--(iter.base()));
+
+			if (videoCount == 1 && this->cylinderDisplay)
+			{
+				this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
+			}
 		}
 	}
 }
