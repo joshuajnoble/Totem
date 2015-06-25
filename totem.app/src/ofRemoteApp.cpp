@@ -37,8 +37,11 @@ namespace
 
 
 // ********************************************************************************************************************
-void ofRemoteApp::earlyinit(int netid)
+void ofRemoteApp::earlyinit(int netid, int w, int h)
 {
+	this->width = w;
+	this->height = h;
+
 	this->networkInterfaceId = netid;
 	int margin = 70;
 	int remoteViewOffsetX = 1130 + margin;// (int)(1920 * .75);

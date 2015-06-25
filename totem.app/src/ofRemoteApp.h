@@ -19,8 +19,8 @@ private:
 	enum UISTATE { UISTATE_STARTUP, UISTATE_INTRO, UISTATE_MAIN };
 
 	float scale = 1.0f;
-	int width = 1920, height = 1080;
-	
+	int width, height;
+
 	float currentSelfieWidth;
 	float currentSelfieHeight;
 	float currentSelfieYPosition;
@@ -52,7 +52,7 @@ private:
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
-	void earlyinit(int networkInterfaceId);
+	void earlyinit(int networkInterfaceId, int width, int height);
 	void setup();
 	virtual void update();
 	void draw();

@@ -40,6 +40,8 @@ void ofTotemApp::setup()
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 
+	ofSetWindowShape(this->totemDisplay.windowWidth(), this->totemDisplay.windowHeight());
+
 	this->streamManager.broadcastVideoBitrate = 8000;
 }
 

@@ -29,6 +29,20 @@ namespace
 		}
 	}
 
+	void ForceDisplayToBestFitOf(int num, int den, int &width, int&height)
+	{
+		//float displayRatio = width / static_cast<float>(height);
+		float displayRatio = num / static_cast<float>(den);
+		if (height * displayRatio <= width)
+		{
+			width = height * displayRatio;
+		}
+		else
+		{
+			height = width / displayRatio;
+		}
+	}
+
 	ofPtr<VideoCaptureAppBase> CreateTotemAppInstance(int captureWidth, int captureHeight, int networkInterfaceId)
 	{
 		auto totemApp = new ofTotemApp();
@@ -53,7 +67,7 @@ namespace
 		}
 		else
 		{
-			ofSetupOpenGL(totemApp->displayWidth(), totemApp->displayHeight(), OF_WINDOW);
+			ofSetupOpenGL(10, 10, OF_WINDOW);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(totemApp);
@@ -62,8 +76,31 @@ namespace
 	ofPtr<VideoCaptureAppBase> CreateRemoteAppInstance(int networkInterfaceId)
 	{
 		auto remoteApp = new ofRemoteApp();
-		remoteApp->earlyinit(networkInterfaceId);
-		ofSetupOpenGL(remoteApp->displayWidth(), remoteApp->displayHeight(), OF_WINDOW);
+
+		ofSetupOpenGL(10, 10, OF_WINDOW);
+		auto screenWidth = min(2160, ofGetScreenWidth());
+		auto screenHeight = min(1440, ofGetScreenHeight());
+
+		int windowWidth = screenWidth;
+		int windowHeight = screenHeight;
+
+		if (ofxArgParser::hasKey("display16by9"))
+		{
+			ForceDisplayToBestFitOf(16, 9, windowWidth, windowHeight);
+		}
+		else if (ofxArgParser::hasKey("display16by10"))
+		{
+			ForceDisplayToBestFitOf(16, 10, windowWidth, windowHeight);
+		}
+		else if (ofxArgParser::hasKey("display3by2"))
+		{
+			ForceDisplayToBestFitOf(3, 2, windowWidth, windowHeight);
+		}
+
+		ofSetWindowShape(windowWidth, windowHeight);
+
+		remoteApp->earlyinit(networkInterfaceId, windowWidth, windowHeight);
+		//ofSetupOpenGL(windowWidth, windowHeight, OF_WINDOW);
 
 		if (ofxArgParser::hasKey("totemSource"))
 		{
@@ -101,11 +138,14 @@ int main(int argc, const char** argv)
 			"  -dontUnwrap       (Send the raw video stream without unwrapping it)" << endl <<
 			"  -showOutput       (Show the undistorted video stream instead of the normal UI)" << endl <<
 			"  -showInput        (Show the raw input video stream instead of the normal UI)" << endl <<
-			"  -netSource=<path> (Use a test file instead of the remote network connection.)" << endl <<
+			"  -netSource=<path> (Use a test file instead of the remote network connection)" << endl <<
 
 			endl <<
 			"-remote               (Don't use the totem display)" << endl <<
 			"  -totemSource=<path> (Use a test file instead of a remote totem network connection)" << endl <<
+			"  -display16by10      (Force the window to a 16:9 aspect ratio)" << endl <<
+			"  -display16by9       (Force the window to a 16:9 aspect ratio)" << endl <<
+			"  -display3by2        (Force the window to a 16:9 aspect ratio)" << endl <<
 
 			endl << "WINDOW SETTINGS" << endl <<
 			"-xMargin=<border size> (Shift the window left by this amount)" << endl <<
@@ -169,8 +209,8 @@ int main(int argc, const char** argv)
 	}
 
 	bool totemMode = !ofxArgParser::hasKey("remote");
-	auto xMargin = totemMode ? 8 : 0;
-	auto yMargin = totemMode ? 31 : 0;
+	auto xMargin = totemMode ? 0 : 0;
+	auto yMargin = totemMode ? 0 : 0;
 	if (ofxArgParser::hasKey("xMargin"))
 	{
 		xMargin = ofToInt(ofxArgParser::getValue("xMargin"));
@@ -206,6 +246,7 @@ int main(int argc, const char** argv)
 	}
 
 	auto app = totemMode ? CreateTotemAppInstance(captureWidth, captureHeight, networkId) : CreateRemoteAppInstance(networkId);
+
 	ofPtr<ofBaseVideoDraws> videoSource;
 	if (!totemMode || ofxArgParser::hasKey("capDevice") || ofxArgParser::hasKey("capSource") || ofxArgParser::hasKey("capWidth") || ofxArgParser::hasKey("capHeight"))
 	{
@@ -217,7 +258,7 @@ int main(int argc, const char** argv)
 		if (!camera->setup())
 		{
 			cout << "There was an error initializing the PointGrey camera.";
-			ofExit();
+			return -1;
 		}
 
 		videoSource = ofPtr<ofBaseVideoDraws>(camera);
@@ -238,7 +279,7 @@ int main(int argc, const char** argv)
 			if (!ofFile::doesFileExist(fullPath))
 			{
 				cout << "The specified file, \"" << fullPath << "\" does not exist.";
-				ofExit();
+				return -1;
 			}
 
 			auto videoSource = Utils::CreateVideoSourceFromFile(fullPath);
