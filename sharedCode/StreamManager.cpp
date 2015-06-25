@@ -19,7 +19,8 @@ StreamManager::~StreamManager(){
 void StreamManager::setup(int _width, int _height){
     width = _width;
     height = _height;
-    
+
+#ifdef USE_DISCOVERY
     //
     //  All Client Settings are in /data/client_settings.xml
     //
@@ -36,21 +37,19 @@ void StreamManager::setup(int _width, int _height){
     // of the network state through rctp, so if we set 5000 for video internally it'll use
     // also 5001 and 5003
     
-    
+
     ofXml settings;
     settings.load(ofToDataPath("client_settings.xml"));
-    
     thisClient.ipAddress = settings.getValue<string>("//ipAddress");
     thisClient.clientID = settings.getValue<string>("//clientID");
     isServer = ofToBool(settings.getValue<string>("//isServer"));
-    
     if(isServer){
         oscBroadcaster = ofPtr<ofxServerOscManager>(new ofxServerOscManager());
         oscBroadcaster->init( settings.getValue<string>("//broadcastAddress"), 1234, 2345);
     }
+
     oscReceiver =  ofPtr<ofxClientOSCManager>(new ofxClientOSCManager());
     oscReceiver->init(hash(thisClient.clientID.c_str()), 1234);
-    
     
     commonTimeOsc = oscReceiver->getCommonTimeOscObj();
     commonTimeOsc->setEaseOffset( true );
@@ -61,8 +60,10 @@ void StreamManager::setup(int _width, int _height){
         ofAddListener(oscReceiver->newDataEvent, this, &StreamManager::newData );
     }
     
-    
-    ofDirectory dir;
+#endif
+
+#ifdef READ_NETWORK_SETTINGS_FROM_FILE
+	ofDirectory dir;
     dir.listDir(ofToDataPath("connections"));
     for(int i = 0; i < dir.size(); i++){
         ofXml xml;
@@ -78,6 +79,7 @@ void StreamManager::setup(int _width, int _height){
         newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
 		CreateNewConnection(newConnection);
     }
+#endif    
 }
 
 void StreamManager::CreateNewConnection(const clientParameters& newConnection)
@@ -147,19 +149,24 @@ void StreamManager::newData( DataPacket& _packet  )
 }
 
 void StreamManager::sendRotation(float rotation){
+#ifdef USE_DISCOVERY
     ofxJSONElement sendJSON;
     sendJSON["rotation"] = rotation;
     sendJSONData(sendJSON);
+#endif
 }
 
 void StreamManager::exit(){
+#ifdef USE_DISCOVERY
     ofxJSONElement sendJSON;
     sendJSON["disconnect"] = thisClient.clientID;
     sendJSONData(sendJSON);
+#endif
 }
 
 void StreamManager::sendJSONData(ofxJSONElement sendJSON){
-    DataPacket p;
+#ifdef USE_DISCOVERY
+	DataPacket p;
     string sendString;
     Poco::URI::encode(sendJSON.getRawString(false), "/", sendString);
     p.valuesString.push_back(sendString);
@@ -168,6 +175,7 @@ void StreamManager::sendJSONData(ofxJSONElement sendJSON){
     }else{
         oscReceiver->sendData(p);
     }
+#endif
 }
 
 bool StreamManager::isFrameNew(){
@@ -185,7 +193,6 @@ void StreamManager::setImageSource(ofPtr<ofImage> cam_img){
 }
 
 void StreamManager::update(){
-
 //        if(ofGetElapsedTimef() - lastSend > 1.5){
 //            ofxJSONElement sendJSON;
 //            ofxJSONElement connection;
