@@ -67,7 +67,7 @@ namespace
 		}
 		else
 		{
-			ofSetupOpenGL(10, 10, OF_WINDOW);
+			ofSetupOpenGL((int)totemApp->displayWidth(), (int)totemApp->displayHeight(), OF_WINDOW);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(totemApp);
