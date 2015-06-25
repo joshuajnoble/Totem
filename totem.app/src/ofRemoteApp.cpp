@@ -147,12 +147,12 @@ void ofRemoteApp::update()
 void ofRemoteApp::draw()
 {
 	ofBackground(BACKGROUND_COLOR);
+	ofEnableAlphaBlending();
 
 	if (this->state == UISTATE_INTRO)
 	{
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
-		ofEnableAlphaBlending();
 
 		// Draw icons first so they animate out from behind the selfie
 		ofSetColor(255, 255, 255, (int)(255 * this->currentHangupMuteIconAlpha));
