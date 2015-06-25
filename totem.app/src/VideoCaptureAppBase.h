@@ -39,5 +39,5 @@ protected:
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote) = 0;
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote) {};
 
-	void setupSteamManager();
+	void setupStreamManager();
 };

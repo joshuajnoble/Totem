@@ -11,17 +11,17 @@ public:
 	void allocateBuffers();
 	void update();
 	void draw();
-	void setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> videoSource);
+	//void setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> videoSource);
 	ofFbo& getDisplay(int totemDisplayId);
 	int windowWidth() const;
 	int windowHeight() const;
 
-	bool drawTestPattern = true;
+	bool drawTestPattern;
 
 private:
-	bool isFirstTime = true;
+	//bool isFirstTime = true;
 	std::vector<ofFbo> _output;
-	std::vector<ofPtr<ofBaseVideoDraws>> videoSources;
+	//std::vector<ofPtr<ofBaseVideoDraws>> videoSources;
 	float displayRatio;
 	int displayWidth, displayHeight, displayCount;
 	float scale = 1.0;

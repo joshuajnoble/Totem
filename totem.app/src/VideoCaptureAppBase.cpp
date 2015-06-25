@@ -3,7 +3,7 @@
 void VideoCaptureAppBase::setup(int networkInterfaceId)
 {
 	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight(), networkInterfaceId);
-	this->setupSteamManager();
+	this->setupStreamManager();
 }
 
 void VideoCaptureAppBase::update()
@@ -83,7 +83,7 @@ void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 
 }
 
-void VideoCaptureAppBase::setupSteamManager()
+void VideoCaptureAppBase::setupStreamManager()
 {
 	streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
 	this->imageToBroadcast = ofPtr<ofImage>(new ofImage());

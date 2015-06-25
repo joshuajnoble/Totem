@@ -33,10 +33,7 @@ void ofTotemApp::setup()
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");
 
-	//this->setupSteamManager();
-
 	this->totemDisplay.allocateBuffers();
-	//this->totemDisplay.setVideoSource(2, this->videoSource);
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 
@@ -227,7 +224,6 @@ void ofTotemApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 	ofLog() << "Network client disconnected " << remote.clientId << endl;
 
 	this->remoteVideoSources.clear(); // Limit it to only one source for now.
-	this->totemDisplay.drawTestPattern = true;
 }
 
 void ofTotemApp::ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source)
