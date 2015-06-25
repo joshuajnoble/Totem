@@ -1,11 +1,20 @@
 #include "utils.h"
 
-void Utils::DrawImageCroppedToFit(ofImage& source, int displayWidth, int displayHeight)
+template <class T>
+void Utils::DrawCroppedToFit(T& source, int displayWidth, int displayHeight)
 {
-	Utils::DrawImageCroppedToFit(source, 0, 0, displayWidth, displayHeight);
+	auto sourceWidth = source.getWidth();
+	auto sourceHeight = source.getHeight();
+	auto cropRegion = Utils::CalculateCroppedRegion(displayWidth, displayHeight, sourceWidth, sourceHeight);
+	source.getTextureReference().drawSubsection(0, 0, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
-void Utils::DrawImageCroppedToFit(ofImage& source, int x, int y, int displayWidth, int displayHeight)
+void Utils::DrawCroppedToFit(ofImage& source, int displayWidth, int displayHeight)
+{
+	Utils::DrawCroppedToFit(source, 0, 0, displayWidth, displayHeight);
+}
+
+void Utils::DrawCroppedToFit(ofImage& source, int x, int y, int displayWidth, int displayHeight)
 {
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
@@ -13,12 +22,12 @@ void Utils::DrawImageCroppedToFit(ofImage& source, int x, int y, int displayWidt
 	source.getTextureReference().drawSubsection(x, y, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
-void Utils::DrawImageCroppedToFit(ofFbo& source, int displayWidth, int displayHeight)
+void Utils::DrawCroppedToFit(ofFbo& source, int displayWidth, int displayHeight)
 {
-	Utils::DrawImageCroppedToFit(source, 0, 0, displayWidth, displayHeight);
+	Utils::DrawCroppedToFit(source, 0, 0, displayWidth, displayHeight);
 }
 
-void Utils::DrawImageCroppedToFit(ofFbo& source, int x, int y, int displayWidth, int displayHeight)
+void Utils::DrawCroppedToFit(ofFbo& source, int x, int y, int displayWidth, int displayHeight)
 {
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();
@@ -26,12 +35,12 @@ void Utils::DrawImageCroppedToFit(ofFbo& source, int x, int y, int displayWidth,
 	source.getTextureReference().drawSubsection(x, y, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
-void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int displayWidth, int displayHeight)
+void Utils::DrawCroppedToFit(ofBaseVideoDraws& source, int displayWidth, int displayHeight)
 {
-	Utils::DrawVideoCroppedToFit(source, 0, 0, displayWidth, displayHeight);
+	Utils::DrawCroppedToFit(source, 0, 0, displayWidth, displayHeight);
 }
 
-void Utils::DrawVideoCroppedToFit(ofBaseVideoDraws& source, int x, int y, int displayWidth, int displayHeight)
+void Utils::DrawCroppedToFit(ofBaseVideoDraws& source, int x, int y, int displayWidth, int displayHeight)
 {
 	auto sourceWidth = source.getWidth();
 	auto sourceHeight = source.getHeight();

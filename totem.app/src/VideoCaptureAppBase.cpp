@@ -29,9 +29,13 @@ void VideoCaptureAppBase::newClient(string& args)
 {
 	RemoteVideoInfo remote;
 	remote.clientId = args;
-	remote.source = this->streamManager.remoteVideos[args];
 	remote.netClient = this->streamManager.clients[args];
-	remote.isTotem = remote.source->getWidth() / remote.source->getHeight() >= 3;
+	auto video = this->streamManager.remoteVideos[args];
+	remote.width = video->getWidth();
+	remote.height = video->getHeight();
+	auto wrapped = new CroppedDrawableFbo(this->streamManager.remoteVideos[args]);
+	remote.source = ofPtr<CroppedDrawable>(wrapped);
+	remote.isTotem = remote.width / remote.height >= 3;
 	this->remoteVideoSources.push_back(remote);
 	Handle_ClientConnected(remote);
 }

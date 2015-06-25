@@ -72,7 +72,7 @@ void ofTotemApp::update()
 			this->netImpersonate->update();
 			if (this->netImpersonate->isFrameNew())
 			{
-				Utils::DrawVideoCroppedToFit(*this->netImpersonate.get(), (int)output.getWidth(), (int)output.getHeight());
+				Utils::DrawCroppedToFit(*this->netImpersonate.get(), (int)output.getWidth(), (int)output.getHeight());
 			}
 		}
 		else if (this->remoteVideoSources.size())
@@ -86,24 +86,38 @@ void ofTotemApp::update()
 			ofBackground(BACKGROUND_COLOR);
 			if (remoteSourceCount == 1)
 			{
-				auto videoSource = *this->remoteVideoSources[0].get();
-				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+				auto videoSource = this->remoteVideoSources[0];
+				videoSource->DrawCropped((int)output.getWidth(), (int)output.getHeight());
 			}
 			else if (remoteSourceCount == 2)
 			{
-				auto videoSource = *this->remoteVideoSources[0].get();
-				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
-				videoSource = *this->remoteVideoSources[1].get();
-				Utils::DrawImageCroppedToFit(videoSource, 0, halfHeight + halfMargin, (int)output.getWidth(), halfHeight - halfMargin);
+				auto videoSource = this->remoteVideoSources[0];
+				videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
+
+				ofPushMatrix();
+
+				videoSource = this->remoteVideoSources[1];
+				ofTranslate(0, halfHeight + halfMargin);
+				videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
+
+				ofPopMatrix();
 			}
 			else if (remoteSourceCount == 3)
 			{
-				auto videoSource = *this->remoteVideoSources[0].get();
-				Utils::DrawImageCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
-				videoSource = *this->remoteVideoSources[1].get();
-				Utils::DrawImageCroppedToFit(videoSource, 0, halfHeight + halfMargin, halfWidth - halfMargin, halfHeight - halfMargin);
-				videoSource = *this->remoteVideoSources[2].get();
-				Utils::DrawImageCroppedToFit(videoSource, halfWidth + halfMargin, halfHeight + halfMargin, halfWidth - halfMargin, halfHeight - halfMargin);
+				auto videoSource = this->remoteVideoSources[0];
+				videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
+
+				ofPushMatrix();
+
+				videoSource = this->remoteVideoSources[1];
+				ofTranslate(0, halfHeight + halfMargin);
+				videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
+				
+				videoSource = this->remoteVideoSources[2];
+				ofTranslate(halfWidth + halfMargin, 0);
+				videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
+
+				ofPopMatrix();
 			}
 		}
 
@@ -196,18 +210,6 @@ void ofTotemApp::onKeyframe(ofxPlaylistEventArgs& args)
 		return;
 	}
 }
-
-class ofFboAsVideo : public ofFbo, public ofBaseUpdates
-{
-public:
-	ofFboAsVideo(ofFbo input)
-	{
-		this->fbo = input;
-	}
-
-private:
-	ofFbo fbo;
-};
 
 void ofTotemApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {

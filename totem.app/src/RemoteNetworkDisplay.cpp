@@ -3,9 +3,6 @@
 
 namespace
 {
-	const auto SingleVideoSize = ofRectangle(0, 0, 650, 750);
-	const auto DoubleVideoSize = ofRectangle(0, 0, 650, 420);
-
 	const auto VIDEO1_ENTRANCE_BEGIN = "VIDEO1_ENTRANCE_BEGIN";
 	const auto VIDEO1_ENTRANCE_END = "VIDEO1_ENTRANCE_END";
 	const auto VIDEO2_ENTRANCE_BEGIN = "VIDEO2_ENTRANCE_BEGIN";
@@ -16,6 +13,7 @@ namespace
 	const auto VIDEO2_EXIT_END = "VIDEO2_EXIT_END";
 
 	const auto AnimationSpeed = 500.0f;
+	const int VIDEO_DIVIDER_SIZE = 10;
 }
 
 RemoteNetworkDisplay::RemoteNetworkDisplay()
@@ -31,11 +29,20 @@ RemoteNetworkDisplay::~RemoteNetworkDisplay()
 void RemoteNetworkDisplay::initializeRemoteNetworkDisplay(ofRectangle v)
 {
 	this->viewport = v;
+	this->drawRegion.setFromCenter(
+		this->viewport.x + this->viewport.width / 2,
+		this->viewport.y + this->viewport.height / 2,
+		roundf(this->viewport.width * 0.82f),
+		roundf(this->viewport.height * 0.7703f));
+
+	this->SingleVideoSize = ofRectangle(0, 0, this->drawRegion.width, this->drawRegion.height);
+	this->DoubleVideoSize = ofRectangle(0, 0, this->drawRegion.width, this->drawRegion.height / 2 - VIDEO_DIVIDER_SIZE / 2);
+
 	ofxKeyframeAnimRegisterEvents(this);
 }
 
 
-bool RemoteNetworkDisplay::AddVideoSource(ofPtr<ofFbo> source)
+bool RemoteNetworkDisplay::AddVideoSource(ofPtr<CroppedDrawable> source)
 {
 	if (!this->CanModify())
 	{
@@ -46,33 +53,43 @@ bool RemoteNetworkDisplay::AddVideoSource(ofPtr<ofFbo> source)
 	if (this->videoSources.size() == 1)
 	{
 		// Slide the video in from the right
-		this->video1Height = SingleVideoSize.height;
-		this->video1Left = viewport.width + 100;
+		this->currentVideoPosition1 = ofRectangle(SingleVideoSize);
+		this->currentVideoPosition1.translate(this->drawRegion.getPosition());
 		this->video1Alpha = 0.0f;
-		this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->video1Left, 0.0f));
+		this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_ENTRANCE_BEGIN));
+		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->currentVideoPosition1.x, this->currentVideoPosition1.x));
 		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->video1Alpha, 1.0f));
-		this->playlist.addToKeyFrame(Playlist::Action::event(this, VIDEO1_ENTRANCE_BEGIN));
 		this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_ENTRANCE_END));
+
+		this->currentVideoPosition1.x = this->drawRegion.getRight();
+		return true;
 	}
 	else if (this->videoSources.size() == 2)
 	{
-		// Slide the new video in from the bottom (and make some room)
-		this->video2Top = 570;
-		this->video2Alpha = 0.0f;
-		this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Top, 340));
-		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Alpha, 1.0f));
-
-		this->video1Height = SingleVideoSize.height;
-		this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video1Height, DoubleVideoSize.height));
-		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Top, 0));
-		this->playlist.addToKeyFrame(Playlist::Action::event(this, VIDEO2_ENTRANCE_BEGIN));
-		this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO2_ENTRANCE_END));
 		this->animatingVideo2Entrance = true;
+
+		// Shrink the first video
+		this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO2_ENTRANCE_BEGIN));
+		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition1.height, DoubleVideoSize.height));
+
+		// Slide in the second video
+		this->currentVideoPosition2 = ofRectangle(DoubleVideoSize);
+		this->currentVideoPosition2.translate(this->drawRegion.getPosition());
+		this->currentVideoPosition2.translateY(this->drawRegion.height / 2 + VIDEO_DIVIDER_SIZE / 2);
+		this->video2Alpha = 0.0f;
+		this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition2.x, this->currentVideoPosition2.x));
+		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Alpha, 1.0f));
+		this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO2_ENTRANCE_END));
+
+		this->currentVideoPosition2.x = this->drawRegion.getRight();
+		return true;
 	}
+
+	return false;
 }
 
 
-bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<ofFbo> source)
+bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<CroppedDrawable> source)
 {
 	if (!this->CanModify())
 	{
@@ -88,26 +105,30 @@ bool RemoteNetworkDisplay::RemoveVideoSource(ofPtr<ofFbo> source)
 			if (this->videoSources.size() == 1)
 			{
 				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_BEGIN));
-				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->video1Left, viewport.width + 100));
+				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->currentVideoPosition1.x, this->viewport.getRight()));
 				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &this->video1Alpha, 0.0f));
 				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_END));
 			}
 			else
 			{
-				// TODO: We don't have an animation for removing the top of two videos, yet.
+				// TODO: We have to swap which video is video 1 and which is video 2 after (or maybe during) the animation.
 				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_BEGIN));
+				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition1.x, this->viewport.getRight()));
+				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video1Alpha, 1.0f));
+
+				this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition2.height, SingleVideoSize.height));
+				this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition2.y, this->drawRegion.y));
 				this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO1_EXIT_END));
 			}
 		}
 		else
 		{
 			// Just undo the transition we did above if we are removing the second video source
-			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Top, 340));
-			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video1Height, SingleVideoSize.height));
+			this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO2_EXIT_BEGIN));
+			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition2.x, this->viewport.getRight()));
+			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Alpha, 1.0f));
 
-			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Top, 570));
-			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->video2Alpha, 0.0f));
-			this->playlist.addToKeyFrame(Playlist::Action::event(this, VIDEO2_EXIT_BEGIN));
+			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->currentVideoPosition1.height, SingleVideoSize.height));
 			this->playlist.addKeyFrame(Playlist::Action::event(this, VIDEO2_EXIT_END));
 		}
 	}
@@ -127,17 +148,17 @@ void RemoteNetworkDisplay::draw()
 	if (this->videoSources.size())
 	{
 		ofPushStyle();
-		
+
+		ofSetColor(0x02, 0x49, 0x70);
+		ofRect(this->viewport);
+
 		if (this->videoSources.size() >= 1)
 		{
-			auto region = SingleVideoSize; 
-			region.translate(this->viewport.getPosition());
-			
 			auto source = this->videoSources[0];
 			ofPushMatrix();
-			ofTranslate(region.x + this->video1Left, region.y);
+			ofTranslate(this->currentVideoPosition1.x, this->currentVideoPosition1.y);
 			ofSetColor(255, 255, 255, 255 * this->video1Alpha);
-			Utils::DrawImageCroppedToFit(*source, (int)region.width, (int)this->video1Height);
+			source->DrawCropped((int)this->currentVideoPosition1.width, (int)this->currentVideoPosition1.height);
 			ofPopMatrix();
 		}
 
@@ -147,11 +168,12 @@ void RemoteNetworkDisplay::draw()
 			region.translate(this->viewport.getPosition());
 			
 			region.translate(0, region.getHeight() + 20);
+
 			auto source = this->videoSources[1];
 			ofPushMatrix();
 			ofSetColor(255, 255, 255, 255 * this->video2Alpha);
-			ofTranslate(region.x, region.y + this->video2Top);
-			Utils::DrawImageCroppedToFit(*source, (int)region.width, (int)region.height);
+			ofTranslate(this->currentVideoPosition2.x, this->currentVideoPosition2.y);
+			source->DrawCropped((int)this->currentVideoPosition2.width, (int)this->currentVideoPosition2.height);
 			ofPopMatrix();
 		}
 

@@ -18,7 +18,7 @@ private:
 	double doubleM = 2560;
 
 	TotemDisplay totemDisplay;
-	std::vector<ofPtr<ofFbo>> remoteVideoSources;
+	std::vector<ofPtr<CroppedDrawable>> remoteVideoSources;
 	
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 

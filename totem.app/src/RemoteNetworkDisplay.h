@@ -8,13 +8,15 @@ class RemoteNetworkDisplay
 {
 private:
 	ofRectangle viewport;
-	std::vector<ofPtr<ofFbo>> videoSources;
+	ofRectangle drawRegion;
+	ofRectangle SingleVideoSize;
+	ofRectangle DoubleVideoSize;
 
-	float video1Left;
-	float video1Height;
+	std::vector<ofPtr<CroppedDrawable>> videoSources;
+
+	ofRectangle currentVideoPosition1;
+	ofRectangle currentVideoPosition2;
 	float video1Alpha;
-
-	float video2Top;
 	float video2Alpha;
 
 	ofxPlaylist playlist;
@@ -31,8 +33,8 @@ public:
 	void update();
 	void draw();
 
-	bool AddVideoSource(ofPtr<ofFbo> source);
-	bool RemoveVideoSource(ofPtr<ofFbo> source);
+	bool AddVideoSource(ofPtr<CroppedDrawable> source);
+	bool RemoveVideoSource(ofPtr<CroppedDrawable> source);
 
 	void onKeyframe(ofxPlaylistEventArgs& args);
 	bool CanModify();
