@@ -126,6 +126,8 @@ namespace
 //========================================================================
 int main(int argc, const char** argv)
 {
+	ofSetWorkingDirectoryToDefault();
+
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	//ofLogToFile("logfile-mempool.txt", true);
 
