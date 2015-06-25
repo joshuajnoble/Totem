@@ -197,12 +197,19 @@ int main(int argc, const char** argv)
 
 	if (ofxArgParser::hasKey("netList"))
 	{
-		std::cout << left << setw(4) << "ID" << setw(40) << "Interface Name" << setw(3 * 4 + 3 + 1) << "IP Address" << "MAC Address" << std::endl;
+		const int displayNameLengthMax = 39;
+		std::cout << left << setw(4) << "ID" << setw(displayNameLengthMax + 1) << "Interface Name" << setw(3 * 4 + 3 + 1) << "IP Address" << "MAC Address" << std::endl;
 		for (auto iter = interfaces.begin(); iter != interfaces.end(); ++iter)
 		{
 			auto i = *iter;
 			auto mac = i.macAddress();
-			std::cout << left << setw(4) << i.index() << setw(40) << i.displayName() << setw(3*4+3+1) << i.address().toString() << UdpDiscovery::MACtoString(i.macAddress()) << std::endl;
+			auto displayName = string(i.displayName());
+			if (displayName.length() > displayNameLengthMax)
+			{
+				displayName.resize(displayNameLengthMax);
+			}
+
+			std::cout << left << setw(4) << i.index() << setw(displayNameLengthMax + 1) << displayName << setw(3 * 4 + 3 + 1) << i.address().toString() << UdpDiscovery::MACtoString(i.macAddress()) << std::endl;
 		}
 
 		return 0;
