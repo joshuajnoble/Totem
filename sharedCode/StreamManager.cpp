@@ -63,22 +63,26 @@ void StreamManager::setup(int _width, int _height){
 #endif
 
 #ifdef READ_NETWORK_SETTINGS_FROM_FILE
-	ofDirectory dir;
-    dir.listDir(ofToDataPath("connections"));
-    for(int i = 0; i < dir.size(); i++){
-        ofXml xml;
-        xml.load(dir.getPath(i));
-        clientParameters newConnection;
-        newConnection.clientID = ofToString(i);
-        newConnection.ipAddress = xml.getValue<string>("//ipAddress");
-        newConnection.videoPort = xml.getValue<int>("//videoPort");
-        newConnection.audioPort = xml.getValue<int>("//audioPort");
-		newConnection.remoteVideoPort = xml.getValue<int>("//remoteVideoPort");
-		newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
-        newConnection.videoWidth = xml.getValue<int>("//videoWidth", 640);
-        newConnection.videoHeight = xml.getValue<int>("//videoHeight", 480);
-		CreateNewConnection(newConnection);
-    }
+	auto path = ofToDataPath("connections");
+	ofDirectory dir(path);
+	if (dir.exists())
+	{
+		dir.listDir();
+		for (int i = 0; i < dir.size(); i++){
+			ofXml xml;
+			xml.load(dir.getPath(i));
+			clientParameters newConnection;
+			newConnection.clientID = ofToString(i);
+			newConnection.ipAddress = xml.getValue<string>("//ipAddress");
+			newConnection.videoPort = xml.getValue<int>("//videoPort");
+			newConnection.audioPort = xml.getValue<int>("//audioPort");
+			newConnection.remoteVideoPort = xml.getValue<int>("//remoteVideoPort");
+			newConnection.remoteAudioPort = xml.getValue<int>("//remoteAudioPort");
+			newConnection.videoWidth = xml.getValue<int>("//videoWidth", 1280);
+			newConnection.videoHeight = xml.getValue<int>("//videoHeight", 720);
+			CreateNewConnection(newConnection);
+		}
+	}
 #endif    
 }
 
@@ -250,8 +254,11 @@ void StreamManager::update(){
 
 void StreamManager::drawDebug(){
     int i = 0;
+	int xOffset = 0;
     for(map<string,  ofPtr<ofFbo> >::iterator iter = remoteVideos.begin(); iter != remoteVideos.end(); ++iter){
-        iter->second->draw(0+i*width/2, 0, width/2, height/2);
+		auto connection = this->connections[iter->first];
+		iter->second->draw(xOffset, 0, connection.videoWidth, connection.videoHeight);
+		xOffset += connection.videoWidth + 10;
         i++;
     }
 }

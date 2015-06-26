@@ -268,11 +268,9 @@
     <ClCompile Include="..\gstStreamManager\src\main.cpp" />
     <ClCompile Include="..\gstStreamManager\src\ofApp.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
+    <ClCompile Include="..\totem.app\src\ThreeSixtyUnwrap.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="src">
-      <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="addons">
       <UniqueIdentifier>{bec41f44-83c9-4d4e-bc97-ace6c7977e0a}</UniqueIdentifier>
     </Filter>
@@ -445,6 +443,7 @@
     </ClInclude>
     <ClInclude Include="..\gstStreamManager\src\ofApp.h" />
     <ClInclude Include="..\sharedCode\StreamManager.h" />
+    <ClInclude Include="..\totem.app\src\ThreeSixtyUnwrap.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

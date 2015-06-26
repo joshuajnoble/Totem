@@ -2,16 +2,8 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-
-    grabber.setDeviceID(0);
-    grabber.initGrabber(640,480, true);
-    streaming.setup();
-    sharedImg = ofPtr<ofImage>(new ofImage());
-    streaming.setImageSource(sharedImg);
-    
-
     ofBackground(255);
-    
+	//InitWebcam();
     ofAddListener(streaming.newClientEvent, this, &ofApp::newClient);
 }
 
@@ -27,29 +19,106 @@ void ofApp::newClient(string &args){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    grabber.update();
-    if(grabber.isFrameNew()){
-        sharedImg->setFromPixels(grabber.getPixelsRef());
-        streaming.newFrame();
-    }
-    
-    streaming.update();
+	if (grabber.isInitialized())
+	{
+		grabber.update();
+		if (grabber.isFrameNew()){
+			sharedImg->setFromPixels(grabber.getPixelsRef());
+			streaming.newFrame();
+		}
+
+		streaming.update();
+	}
+	else if (unwrapper)
+	{
+		unwrapper->update();
+		if (unwrapper->isFrameNew()){
+			sharedImg->setFromPixels(unwrapper->getPixelsRef());
+			streaming.newFrame();
+		}
+		streaming.update();
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    grabber.draw(0, 0);
-    streaming.drawDebug();
+	if (grabber.isInitialized())
+	{
+		auto scale = 0.25f;
+		ofPushMatrix();
+		ofScale(scale, scale);
+		grabber.draw(0, 0);
+
+		ofTranslate(0, grabber.getHeight() + 10);
+		streaming.drawDebug();
+		ofPopMatrix();
+	}
+	else if (unwrapper)
+	{
+		auto scale = 0.25f;
+		ofPushMatrix();
+		ofScale(scale, scale);
+		unwrapper->draw(0, 0);
+		ofTranslate(0, unwrapper->getHeight() + 10);
+		streaming.drawDebug();
+		ofPopMatrix();
+	}
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+	if (key == '1' && !grabber.isInitialized())
+	{
+		if (player)
+		{
+			player->close();
+			unwrapper->close();
+		}
 
-	if (key == 'x')
+		InitWebcam();
+	}
+	else if (key == '2')
+	{
+		if (grabber.isInitialized())
+		{
+			grabber.close();
+		}
+
+		player = ofPtr<ofVideoPlayer>(new ofVideoPlayer());
+		videoDraws = ofPtr<ofBaseVideoDraws>(player);
+		auto fullPath = ofToDataPath("totem.mp4");
+		if (player->loadMovie(fullPath))
+		{
+			player->setLoopState(OF_LOOP_NORMAL);
+			player->play();
+		}
+
+		unwrapper = ofPtr<ThreeSixtyUnwrap>(new ThreeSixtyUnwrap());
+		const ofVec2f UNWRAPPED_DISPLAYRATIO(4.85, 1.0);
+		auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoDraws->getWidth(), videoDraws->getHeight()), UNWRAPPED_DISPLAYRATIO);
+		unwrapper->initUnwrapper(videoDraws, outputSize);
+
+		sharedImg = ofPtr<ofImage>(new ofImage());
+
+		streaming.setup(outputSize.x, outputSize.y);
+		streaming.broadcastVideoBitrate = 8000;
+		streaming.setImageSource(sharedImg);
+	}
+	else if (key == 'x')
 	{
 		auto path = ofToDataPath("client_settings.xml");
 		ShellExecuteA(0, "open", "C:\\WINDOWS\\System32\\notepad.exe", const_cast<char*>(path.c_str()), 0, SW_SHOW);
 	}
+}
+
+void ofApp::InitWebcam()
+{
+	grabber.setDeviceID(0);
+	grabber.initGrabber(1280, 720, true);
+	sharedImg = ofPtr<ofImage>(new ofImage());
+	streaming.setup(1280, 720);
+	streaming.broadcastVideoBitrate = 4000;
+	streaming.setImageSource(sharedImg);
 }
 
 //--------------------------------------------------------------

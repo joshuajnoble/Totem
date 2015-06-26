@@ -10,9 +10,10 @@
 #include "ofMain.h"
 #include "StreamManager.h"
 #include "ofxGui.h"
+#include "..\totem.app\src\ThreeSixtyUnwrap.h"
 
 class ofApp : public ofBaseApp{
-    
+	void InitWebcam();
 public:
     void setup();
     void update();
@@ -34,4 +35,8 @@ public:
     ofVideoGrabber grabber;
     ofPtr<ofImage> sharedImg;
     StreamManager streaming;
+
+	ofPtr<ThreeSixtyUnwrap> unwrapper;
+	ofPtr<ofBaseVideoDraws> videoDraws;
+	ofPtr<ofVideoPlayer> player;
 };
