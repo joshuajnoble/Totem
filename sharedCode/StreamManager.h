@@ -57,12 +57,12 @@ public:
     void exit();
     
     void drawDebug();
-    void setImageSource(ofPtr<ofImage> cam_img);
+//    void setImageSource(ofPtr<ofImage> cam_img);
     int hash(const char * str);
     
     void newClient(clientParameters params);
     void newServer(clientParameters params);
-    void newFrame();
+    void newFrame(ofPixelsRef ref);
 
     bool isServer;
 
