@@ -29,6 +29,7 @@ private:
 
 	ofRectangle introSelfieRegion;
 	ofRectangle miniSelfieRegion;
+	ofRectangle connectIconRegion;
 	ofRectangle currentSelfieRegion;
 
 	float rotateToPosition;

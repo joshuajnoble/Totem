@@ -72,6 +72,9 @@ void ofRemoteApp::setup()
 		(int)roundf(this->height * (0.4 * 2) * (10.0 / 16.0)),
 		(int)roundf(this->height * (0.4 * 2)));
 
+	auto bottomCenterY = this->introSelfieRegion.getBottom() + (this->height - this->introSelfieRegion.getBottom()) / 2;
+	connectIconRegion.setFromCenter(this->width / 2, bottomCenterY, ICON_SIZE, ICON_SIZE);
+
 	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
 	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
 
@@ -165,9 +168,9 @@ void ofRemoteApp::draw()
 		this->hangupIcon.draw(this->hangupIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 
 		//Now draw the bottom icon
+		ofSetRectMode(OF_RECTMODE_CORNER);
 		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
-		auto bottomCenterY = this->introSelfieRegion.getBottom() + (this->height - this->introSelfieRegion.getBottom()) / 2;
-		connectIcon.draw(this->width / 2, bottomCenterY, ICON_SIZE, ICON_SIZE);
+		connectIcon.draw(this->connectIconRegion);
 
 		ofPopStyle();
 
@@ -345,21 +348,25 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 	{
 		if (button == 0)
 		{
-			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
+			// Did they click on the connect icon?
+			if (this->connectIconRegion.inside(x, y))
+			{
+				this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
+				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
+				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
+				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
+				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
 
-			auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
-			auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
-			this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
-			this->muteIconCenterX = this->width / 2 + iconOffsetStart;
-			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
+				auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
+				auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
+				this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
+				this->muteIconCenterX = this->width / 2 + iconOffsetStart;
+				this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
+				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
+				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
 
-			this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
+				this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
+			}
 		}
 	}
 }
