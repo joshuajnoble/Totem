@@ -35,6 +35,11 @@ void Utils::DrawCroppedToFit(ofFbo& source, int x, int y, int displayWidth, int 
 	source.getTextureReference().drawSubsection(x, y, displayWidth, displayHeight, cropRegion.x, cropRegion.y, cropRegion.width, cropRegion.height);
 }
 
+void Utils::DrawCroppedToFit(ofBaseVideoDraws& source, ofRectangle area)
+{
+	Utils::DrawCroppedToFit(source, area.x, area.y, area.width, area.height);
+}
+
 void Utils::DrawCroppedToFit(ofBaseVideoDraws& source, int displayWidth, int displayHeight)
 {
 	Utils::DrawCroppedToFit(source, 0, 0, displayWidth, displayHeight);

@@ -21,14 +21,15 @@ private:
 	float scale = 1.0f;
 	int width, height;
 
-	float currentSelfieWidth;
-	float currentSelfieHeight;
-	float currentSelfieYPosition;
 	float currentConnectIconAlpha;
 	float muteIconCenterX;
 	float hangupIconCenterX;
 	float currentHangupMuteIconAlpha;
 	float currentCylinderBarnDoorPosition;
+
+	ofRectangle introSelfieRegion;
+	ofRectangle miniSelfieRegion;
+	ofRectangle currentSelfieRegion;
 
 	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;

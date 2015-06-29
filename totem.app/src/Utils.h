@@ -14,6 +14,7 @@ public:
 	static void DrawCroppedToFit(ofFbo& source, int displayWidth, int displayHeight);
 	static void DrawCroppedToFit(ofFbo& source, int x, int y, int displayWidth, int displayHeight);
 
+	static void DrawCroppedToFit(ofBaseVideoDraws& source, ofRectangle area);
 	static void DrawCroppedToFit(ofBaseVideoDraws& source, int displayWidth, int displayHeight);
 	static void DrawCroppedToFit(ofBaseVideoDraws& source, int x, int y, int displayWidth, int displayHeight);
 

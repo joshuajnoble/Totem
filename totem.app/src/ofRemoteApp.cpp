@@ -19,19 +19,12 @@ namespace
 	const float TIME_INTRO_ICONS_APPEAR = 500.0f;
 	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
 
-	int INTRO_SELFIE_TOP_MARGIN = 90;
-	int MINI_SELFIE_TOP_MARGIN = 44;
-	int MINI_SELFIE_WIDTH = 152;
-	int MINI_SELFIE_HEIGHT = 240;
 	int SELFIE_FRAME_MARGIN = 6;
 
 	int ICON_MARGIN = 25;
 	int ICON_SIZE = 70;
 
 	const string INTRO_TRANSITION_COMPLETE_EVENT = "INTRO_TRANSITION_COMPLETE_EVENT";
-	//DEBUG
-	//ofPtr<RemoteVideoInfo> video1;
-	//ofPtr<RemoteVideoInfo> video2;
 }
 
 
@@ -65,11 +58,19 @@ void ofRemoteApp::setup()
 	hangupIcon.loadImage("hangup.png");
 	muteIcon.loadImage("mute.png");
 
-	INTRO_SELFIE_TOP_MARGIN = (int)roundf(this->displayHeight() * (.5 - .41667));
-	MINI_SELFIE_TOP_MARGIN = (int)roundf(this->displayHeight() * (.5 - .4593));
-	MINI_SELFIE_WIDTH = (int)roundf(this->displayWidth() * 0.0791f);
-	MINI_SELFIE_HEIGHT = (int)roundf(this->displayWidth() * 0.125f);
 	SELFIE_FRAME_MARGIN = (int)roundf(this->displayHeight() * 0.0052f);
+	this->miniSelfieRegion.setFromCenter(
+		this->width / 2,
+		roundf(this->height * 0.025f),
+		(int)roundf(this->height * (0.12 * 2) * (10.0 / 16.0)),
+		(int)roundf(this->height * (0.12 * 2)));
+	this->miniSelfieRegion.y = 0 + (int)roundf(this->height * 0.03);
+
+	this->introSelfieRegion.setFromCenter(
+		this->width / 2,
+		this->height / 2,
+		(int)roundf(this->height * (0.4 * 2) * (10.0 / 16.0)),
+		(int)roundf(this->height * (0.4 * 2)));
 
 	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
 	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
@@ -93,10 +94,7 @@ void ofRemoteApp::update()
 		{
 			this->currentHangupMuteIconAlpha = 0;
 			this->currentConnectIconAlpha = 1;
-			this->currentSelfieYPosition = INTRO_SELFIE_TOP_MARGIN;
-			this->currentSelfieWidth = (int)roundf(this->width * 0.2708f);
-			this->currentSelfieHeight = (int)roundf(this->height * 0.7703f);
-
+			this->currentSelfieRegion = this->introSelfieRegion;
 			this->state = UISTATE_INTRO;
 		}
 	}
@@ -163,19 +161,17 @@ void ofRemoteApp::draw()
 
 		// Draw icons first so they animate out from behind the selfie
 		ofSetColor(255, 255, 255, (int)(255 * this->currentHangupMuteIconAlpha));
-		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
-		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+		this->muteIcon.draw(this->muteIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+		this->hangupIcon.draw(this->hangupIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 
 		//Now draw the bottom icon
 		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
-		auto bottomPadding = (int)roundf(this->height * (0.50f - 0.3944f)) - ICON_SIZE;
-		connectIcon.draw(this->width / 2, this->height - ICON_SIZE / 2 - bottomPadding, ICON_SIZE, ICON_SIZE);
-
-		ofSetRectMode(OF_RECTMODE_CORNER);
-		DrawSelfie();
+		auto bottomCenterY = this->introSelfieRegion.getBottom() + (this->height - this->introSelfieRegion.getBottom()) / 2;
+		connectIcon.draw(this->width / 2, bottomCenterY, ICON_SIZE, ICON_SIZE);
 
 		ofPopStyle();
 
+		DrawSelfie();
 	}
 	else
 	{
@@ -210,8 +206,8 @@ void ofRemoteApp::draw()
 
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
-		this->muteIcon.draw(this->muteIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
-		this->hangupIcon.draw(this->hangupIconCenterX, MINI_SELFIE_TOP_MARGIN + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+		this->muteIcon.draw(this->muteIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+		this->hangupIcon.draw(this->hangupIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 		ofPopStyle();
 
 		DrawSelfie();
@@ -224,30 +220,31 @@ void ofRemoteApp::draw()
 // ********************************************************************************************************************
 void ofRemoteApp::DrawSelfie()
 {
+	// Draw the source video in a small window
+	ofPushStyle();
+
+	ofSetColor(BACKGROUND_COLOR, 255 * (1.0 - currentConnectIconAlpha)); // Selfie margin color with alpha for animations
+	ofRectangle borderRect;
+	borderRect.setFromCenter(
+		this->currentSelfieRegion.getCenter(),
+		this->currentSelfieRegion.width + SELFIE_FRAME_MARGIN * 2,
+		this->currentSelfieRegion.height + SELFIE_FRAME_MARGIN * 2);
+
+	ofSetRectMode(OF_RECTMODE_CORNER);
+	ofRect(borderRect);
+
 	ofPushMatrix();
 
-	// Scale the video, but also flip the X axis, so we see it mirrored.
+	// Flip the X axis, so we see it mirrored.
 	// This means all of the following x values need to be negated and offset.
-	ofScale(-this->scale, this->scale);
-	
-	// Draw the source video in a small window
-	//auto ratio = this->videoSource->getWidth() / this->videoSource->getHeight();
-	int selfieWidth = (int)(this->currentSelfieWidth);
-	int selfieHeight = (int)(this->currentSelfieHeight);
-	//int selfieHeight = selfieWidth / ratio;
-	int selfieX = (this->width - selfieWidth) / 2;
-	int selfieY = (int)(this->currentSelfieYPosition);
-
-	ofPushStyle();
-	ofSetColor(BACKGROUND_COLOR, 255 * (1.0 - currentConnectIconAlpha)); // Selfie margin color with alpha for animations
-	ofRect(-(selfieX + SELFIE_FRAME_MARGIN + selfieWidth), selfieY - SELFIE_FRAME_MARGIN, selfieWidth + SELFIE_FRAME_MARGIN * 2, selfieHeight + SELFIE_FRAME_MARGIN * 2);
-	ofPopStyle();
+	ofScale(-1.0, 1.0);
+	ofTranslate(-this->width, 0); // This deals with the negated x + offset issue.
 
 	ofSetColor(255);
-	
-	Utils::DrawCroppedToFit(*this->videoSource, -(selfieX + selfieWidth), selfieY, selfieWidth, selfieHeight);
+	Utils::DrawCroppedToFit(*this->videoSource, this->currentSelfieRegion);
 
 	ofPopMatrix();
+	ofPopStyle();
 }
 
 
@@ -349,12 +346,13 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 		if (button == 0)
 		{
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieYPosition, MINI_SELFIE_TOP_MARGIN));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieWidth, MINI_SELFIE_WIDTH));
-			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieHeight, MINI_SELFIE_HEIGHT));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
+			this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
 
-			auto iconOffsetStart = MINI_SELFIE_WIDTH / 2 - ICON_SIZE / 2;
-			auto iconOffsetEnd = MINI_SELFIE_WIDTH / 2 + ICON_MARGIN + ICON_SIZE / 2;
+			auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
+			auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
 			this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
 			this->muteIconCenterX = this->width / 2 + iconOffsetStart;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));

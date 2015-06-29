@@ -32,8 +32,8 @@ void RemoteNetworkDisplay::initializeRemoteNetworkDisplay(ofRectangle v)
 	this->drawRegion.setFromCenter(
 		this->viewport.x + this->viewport.width / 2,
 		this->viewport.y + this->viewport.height / 2,
-		roundf(this->viewport.width * 0.82f),
-		roundf(this->viewport.height * 0.7703f));
+		roundf(this->viewport.height * 0.7 * (10.0 / 16.0)),
+		roundf(this->viewport.height * 0.7));
 
 	this->SingleVideoSize = ofRectangle(0, 0, this->drawRegion.width, this->drawRegion.height);
 	this->DoubleVideoSize = ofRectangle(0, 0, this->drawRegion.width, this->drawRegion.height / 2 - VIDEO_DIVIDER_SIZE / 2);
