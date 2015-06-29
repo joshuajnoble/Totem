@@ -6,12 +6,7 @@ void ofApp::setup(){
     grabber.setDeviceID(0);
     grabber.initGrabber(640,480, true);
     streaming.setup(640, 480);
-    sharedImg = ofPtr<ofImage>(new ofImage());
-    sharedImg->allocate(640, 480, OF_IMAGE_COLOR);
-    streaming.setImageSource(sharedImg);
-//    player.loadMovie("test.mp4");
-//    player.setLoopState(OF_LOOP_NORMAL);
-//    player.play();
+
 
     ofBackground(255);
     
@@ -32,9 +27,7 @@ void ofApp::newClient(string &args){
 void ofApp::update(){
     grabber.update();
     if(grabber.isFrameNew()){
-        sharedImg->setFromPixels(grabber.getPixelsRef());
-        sharedImg->update();
-        streaming.newFrame();
+        streaming.newFrame(grabber.getPixelsRef());
     }
     
     streaming.update();
