@@ -16,7 +16,7 @@ class ofRemoteApp : public VideoCaptureAppBase
 {
 private:
 	ofxPlaylist playlist;
-	enum UISTATE { UISTATE_STARTUP, UISTATE_INTRO, UISTATE_MAIN };
+	enum UISTATE { UISTATE_STARTUP, UISTATE_INTRO, UISTATE_INTRO_TO_MAIN, UISTATE_MAIN };
 
 	float scale = 1.0f;
 	int width, height;

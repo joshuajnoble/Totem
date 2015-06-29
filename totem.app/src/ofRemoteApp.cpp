@@ -157,7 +157,7 @@ void ofRemoteApp::draw()
 	ofBackground(BACKGROUND_COLOR);
 	ofEnableAlphaBlending();
 
-	if (this->state == UISTATE_INTRO)
+	if (this->state == UISTATE_INTRO || this->state == UISTATE_INTRO_TO_MAIN)
 	{
 		ofPushStyle();
 		ofSetRectMode(OF_RECTMODE_CENTER);
@@ -167,10 +167,13 @@ void ofRemoteApp::draw()
 		this->muteIcon.draw(this->muteIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 		this->hangupIcon.draw(this->hangupIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 
-		//Now draw the bottom icon
-		ofSetRectMode(OF_RECTMODE_CORNER);
-		ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
-		connectIcon.draw(this->connectIconRegion);
+		//Now draw the connection item once we have a totem source
+		if (this->remoteTotem)
+		{
+			ofSetRectMode(OF_RECTMODE_CORNER);
+			ofSetColor(255, 255, 255, (int)(255 * this->currentConnectIconAlpha));
+			connectIcon.draw(this->connectIconRegion);
+		}
 
 		ofPopStyle();
 
@@ -349,8 +352,10 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 		if (button == 0)
 		{
 			// Did they click on the connect icon?
-			if (this->connectIconRegion.inside(x, y))
+			if (this->remoteTotem && this->connectIconRegion.inside(x, y))
 			{
+				this->state = UISTATE_INTRO_TO_MAIN;
+
 				this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
 				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
 				this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
