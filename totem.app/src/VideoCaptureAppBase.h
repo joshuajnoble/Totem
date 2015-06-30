@@ -29,7 +29,6 @@ private:
 	
 protected:
 	StreamManager streamManager;
-	ofPtr<ofImage> imageToBroadcast;
 	std::vector<RemoteVideoInfo> remoteVideoSources;
 	UdpDiscovery udpDiscovery;
 

@@ -13,8 +13,7 @@ void VideoCaptureAppBase::update()
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
 	{
-		this->imageToBroadcast->setFromPixels(this->videoSource->getPixelsRef());
-		this->streamManager.newFrame();
+		this->streamManager.newFrame(this->videoSource->getPixelsRef());
 	}
 
 	this->streamManager.update();
@@ -90,8 +89,6 @@ void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 void VideoCaptureAppBase::setupStreamManager()
 {
 	streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
-	this->imageToBroadcast = ofPtr<ofImage>(new ofImage());
-	streamManager.setImageSource(this->imageToBroadcast);
 
 	ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
 	ofAddListener(udpDiscovery.peerReadyEvent, this, &VideoCaptureAppBase::peerReady);
