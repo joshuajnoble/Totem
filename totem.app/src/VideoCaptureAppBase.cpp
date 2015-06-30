@@ -83,7 +83,7 @@ void VideoCaptureAppBase::peerReady(UdpDiscovery::RemotePeerStatus& peer)
 
 void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 {
-
+	this->streamManager.ClientDisconnected(peer.id);
 }
 
 void VideoCaptureAppBase::setupStreamManager()

@@ -132,24 +132,14 @@ void StreamManager::newData( DataPacket& _packet  )
         
         if(json.isMember("disconnect")){
             string name = json["disconnect"].asString();
-            if(connections.find(name) != connections.end()){
-                clients[name]->close();
-                servers[name]->close();
-                clients.erase(name);
-                servers.erase(name);
-                remoteVideos.erase(name);
-                bConnected.erase(name);
-                connections.erase(name);
-                
-                ClientDisconnected(name);
-            }
+			ClientDisconnected(name);
         }
         
         if(json.isMember("rotation")){
             rotation =json["rotation"].asFloat();
         }
     }
-    
+   
 }
 
 void StreamManager::sendRotation(float rotation){
@@ -282,6 +272,15 @@ void StreamManager::newClient(clientParameters params){
 
 void StreamManager::ClientDisconnected(string clientId)
 {
-    ofNotifyEvent(clientDisconnectedEvent, clientId, this);
-    
+	if (connections.find(clientId) != connections.end()){
+		clients[clientId]->close();
+		servers[clientId]->close();
+		clients.erase(clientId);
+		servers.erase(clientId);
+		remoteVideos.erase(clientId);
+		bConnected.erase(clientId);
+		connections.erase(clientId);
+
+		ofNotifyEvent(clientDisconnectedEvent, clientId, this);
+	}
 }
