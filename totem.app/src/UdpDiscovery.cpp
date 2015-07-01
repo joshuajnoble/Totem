@@ -2,7 +2,7 @@
 #include <Poco/Mutex.h>
 #include <Poco/URI.h>
 
-void UdpDiscovery::setup(int w, int h, int networkInterfaceId)
+void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSource)
 {
 	bool found = false;
 	auto interfaces = GetAllNetworkInterfaces();
@@ -11,6 +11,8 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId)
 		interfaces = GetAllNetworkInterfaces();
 		networkInterfaceId = interfaces[0].index();
 	}
+
+	this->isTotem = isTotemSource;
 
 	Poco::Net::NetworkInterface interface;
 	for (auto iter = interfaces.begin(); !found && iter != interfaces.end(); ++iter)
@@ -62,6 +64,11 @@ UdpDiscovery::~UdpDiscovery()
 	SendJsonPayload(jsonPayload);
 }
 
+UdpDiscovery::RemotePeerStatus UdpDiscovery::GetPeerStatus(const std::string& peerId)
+{
+	return this->remoteClientMap[peerId];
+}
+
 ofxJSONElement UdpDiscovery::GetNetworkPayload(const std::string& action)
 {
 	ofxJSONElement jsonPayload;
@@ -93,6 +100,7 @@ void UdpDiscovery::update()
 		jsonPayload["timestamp"] = ofGetSystemTime();
 		jsonPayload["videoWidth"] = this->videoWidth;
 		jsonPayload["videoHeight"] = this->videoHeight;
+		jsonPayload["totem"] = this->isTotem;
 		
 		// Publish all of our port mappings to the other clients
 		for (auto iter = this->remoteClientMap.begin(); iter != this->remoteClientMap.end(); ++iter)
@@ -184,6 +192,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
 	peer.assignedRemotePort = 0;
+	peer.isTotem = jsonPayload["totem"].asBool();
 
 	this->remoteClientMap[peer.id] = peer;
 	this->myNextPort += this->portIncrement;

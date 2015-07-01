@@ -28,7 +28,7 @@ int ofTotemApp::displayHeight() const
 //--------------------------------------------------------------
 void ofTotemApp::setup()
 {
-	VideoCaptureAppBase::setup(this->networkInterfaceId);
+	VideoCaptureAppBase::setup(this->networkInterfaceId, true);
 
 	//small1.loadImage("meg.png");
 	//small2.loadImage("matt.png");

@@ -1,8 +1,8 @@
 #include "VideoCaptureAppBase.h"
 
-void VideoCaptureAppBase::setup(int networkInterfaceId)
+void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
-	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight(), networkInterfaceId);
+	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight(), networkInterfaceId, isTotemSource);
 	this->setupStreamManager();
 }
 
@@ -34,7 +34,7 @@ void VideoCaptureAppBase::newClient(string& args)
 	remote.height = video->getHeight();
 	auto wrapped = new CroppedDrawableFbo(this->streamManager.remoteVideos[args]);
 	remote.source = ofPtr<CroppedDrawable>(wrapped);
-	remote.isTotem = remote.width / remote.height >= 3;
+	remote.isTotem = this->udpDiscovery.GetPeerStatus(args).isTotem;
 	this->remoteVideoSources.push_back(remote);
 	Handle_ClientConnected(remote);
 }

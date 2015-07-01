@@ -14,7 +14,7 @@ public:
 	virtual int displayHeight() const = 0;
 	ofPtr<ofBaseVideoDraws> videoSource;
 
-	virtual void setup(int networkInterfaceId);
+	virtual void setup(int networkInterfaceId, bool isTotem = false);
 	virtual void update();
 	virtual void exit();
 

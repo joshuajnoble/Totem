@@ -17,6 +17,7 @@ public:
 		float disconnectTime;
 		int videoWidth;
 		int videoHeight;
+		bool isTotem;
 	};
 
 private:
@@ -33,6 +34,7 @@ private:
 	float broadcastMissingDuration = 10.0f;
 	char incomingMessage[1024];
 	int videoWidth, videoHeight;
+	bool isTotem;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
 	int myNextPort = 12000;
@@ -51,8 +53,9 @@ public:
 	ofEvent<RemotePeerStatus> peerReadyEvent;
 	ofEvent<RemotePeerStatus> peerLeftEvent;
 
-	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1);
+	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
 	void update();
+	RemotePeerStatus GetPeerStatus(const std::string& peerId);
 
 	static Poco::Net::NetworkInterface::List GetAllNetworkInterfaces();
 	static Poco::Net::IPAddress GetBroadcastAddress(Poco::Net::NetworkInterface interface);

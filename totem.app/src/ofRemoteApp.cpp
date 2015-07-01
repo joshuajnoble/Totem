@@ -113,7 +113,7 @@ void ofRemoteApp::update()
 				auto clientId = iter->first;
 				auto client = iter->second;
 				auto video = this->streamManager.remoteVideos[clientId];
-
+				
 				if (video->getWidth() / video->getHeight() >= 2)
 				{
 					auto videoSource = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(client, video->getWidth(), video->getHeight()));
