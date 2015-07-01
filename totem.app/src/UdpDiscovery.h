@@ -36,7 +36,7 @@ private:
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
 	int myNextPort = 12000;
-	const int portIncrement = 10;
+	const int portIncrement = 20;
 
 	ofxJSONElement GetNetworkPayload(const std::string& action);
 	void SendJsonPayload(const ofxJSONElement& jsonPayload);

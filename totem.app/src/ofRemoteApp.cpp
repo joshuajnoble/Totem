@@ -308,6 +308,33 @@ void ofRemoteApp::ImpersonateRemoteConnection(const string& clientId, ofPtr<ofBa
 
 
 // ********************************************************************************************************************
+void ofRemoteApp::RemoveRemoteVideoSource(const RemoteVideoInfo& video)
+{
+	this->networkDisplay.RemoveVideoSource(video.source);
+
+	int videoCount = 0; // Count all non-totem video source while looking for this one
+	std::vector<RemoteVideoInfo>::iterator found = this->remoteVideoSources.end();
+	for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
+	{
+		if (!iter->isTotem) ++videoCount;
+		if (iter->clientId == video.clientId)
+		{
+			found = iter;
+		}
+	}
+
+	if (found != this->remoteVideoSources.end())
+	{
+		this->remoteVideoSources.erase(found);
+		if (videoCount == 1 && this->cylinderDisplay)
+		{
+			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
+		}
+	}
+}
+
+
+// ********************************************************************************************************************
 void ofRemoteApp::keyPressed(int key)
 {
 	if (this->networkDisplay.CanModify())
@@ -325,6 +352,7 @@ void ofRemoteApp::keyPressed(int key)
 		}
 		else if (key == 'z' && videoCount > 0)
 		{
+			// Get the last non-totem video that is in our list
 			auto iter = this->remoteVideoSources.rbegin();
 			for (; iter != this->remoteVideoSources.rend(); ++iter)
 			{
@@ -332,13 +360,7 @@ void ofRemoteApp::keyPressed(int key)
 			}
 
 			auto video = *iter;
-			this->networkDisplay.RemoveVideoSource(video.source);
-			this->remoteVideoSources.erase(--(iter.base()));
-
-			if (videoCount == 1 && this->cylinderDisplay)
-			{
-				this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
-			}
+			RemoveRemoteVideoSource(video);
 		}
 	}
 }
@@ -377,6 +399,14 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 }
 
 // ********************************************************************************************************************
+void ofRemoteApp::TransitionTo_UISTATE_STARTUP()
+{
+	// TODO: Transition with animations
+	// TODO: Mute and hide or reset the remote clients that are still connected ... or maybe just pause our video, so others don't recieve it yet.
+	this->state = UISTATE_STARTUP;
+}
+
+// ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
 	if (remote.isTotem)
@@ -406,12 +436,13 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 	{
 		this->remoteTotemClientId = "";
 		this->remoteTotem.reset();
+		TransitionTo_UISTATE_STARTUP();
+		this->cylinderDisplay.reset();
 	}
 	else
 	{
 		// TODO: This could fail (if it is already animating), so we should queue this up or something.
-		this->networkDisplay.RemoveVideoSource(remote.source);
-		this->cylinderDisplay.reset();
+		RemoveRemoteVideoSource(remote);
 	}
 }
 

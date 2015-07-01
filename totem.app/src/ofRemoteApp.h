@@ -43,6 +43,9 @@ private:
 	RemoteNetworkDisplay networkDisplay;
 	UISTATE state;
 
+	void TransitionTo_UISTATE_STARTUP();
+	void RemoveRemoteVideoSource(const RemoteVideoInfo& video);
+
 	void DrawSelfie();
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);

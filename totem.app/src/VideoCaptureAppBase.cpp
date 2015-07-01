@@ -110,5 +110,5 @@ std::vector<RemoteVideoInfo>::iterator VideoCaptureAppBase::GetRemoteFromClientI
 		}
 	}
 
-	return  this->remoteVideoSources.end();
+	return this->remoteVideoSources.end();
 }
