@@ -272,15 +272,13 @@ void StreamManager::newClient(clientParameters params){
 
 void StreamManager::ClientDisconnected(string clientId)
 {
-	if (connections.find(clientId) != connections.end()){
-		clients[clientId]->close();
-		servers[clientId]->close();
-		clients.erase(clientId);
-		servers.erase(clientId);
-		remoteVideos.erase(clientId);
-		bConnected.erase(clientId);
-		connections.erase(clientId);
+	connections.erase(clientId);
+	//clients[clientId]->close(); // Destructor will close automatically
+	//servers[clientId]->close(); // Destructor will close automatically
+	clients.erase(clientId);
+	servers.erase(clientId);
+	remoteVideos.erase(clientId);
+	bConnected.erase(clientId);
 
-		ofNotifyEvent(clientDisconnectedEvent, clientId, this);
-	}
+	ofNotifyEvent(clientDisconnectedEvent, clientId, this);
 }

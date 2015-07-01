@@ -65,6 +65,11 @@ void ofTotemApp::update()
 		auto output = this->totemDisplay.getDisplay(i);
 		output.begin();
 
+		if (!this->totemDisplay.drawTestPattern)
+		{
+			ofBackground(0);
+		}
+
 		if (this->netImpersonate.get())
 		{	// DEBUG
 			this->netImpersonate->update();
@@ -121,51 +126,6 @@ void ofTotemApp::update()
 
 		output.end();
 	}
-
-	// check for waiting messages
-	//while (rec.hasWaitingMessages()){
-	//	// get the next message
-	//	ofxOscMessage m;
-	//	rec.getNextMessage(&m);
-
-	//	// check for mouse moved message
-	//	if (m.getAddress() == "position"){
-	//		// both the arguments are int32's
-	//		selectedScreen = (m.getArgAsInt32(0) + 180) / 90;
-	//	}
-
-	//	if (m.getAddress() == "second_remote_on")
-	//	{
-	//		drawSecondRemote = true;
-
-	//		mainPlaylist.addKeyFrame(Playlist::Action::tween(300.f, &remotePosition.x, 0));
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remotePosition.y, 400));
-
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.x, 500));
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &remoteScale.y, 400));
-
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.x, -24));
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainPosition.y, 0));
-
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.x, 528));
-	//		mainPlaylist.addToKeyFrame(Playlist::Action::tween(300.f, &mainScale.y, 400));
-
-	//		//player.play();
-	//	}
-
-	//	if (m.getAddress() == "second_remote_off")
-	//	{
-	//		drawSecondRemote = false;
-
-	//		remotePosition.set(100, 670);
-	//		remoteScale.set(150, 120);
-	//		mainPosition.set(-150, 10);
-	//		mainScale.set(960 * 0.90, 660);
-
-	//		//player.stop();
-	//		//player.setPosition(0);
-	//	}
-	//}
 }
 
 
@@ -222,8 +182,11 @@ void ofTotemApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 void ofTotemApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
 	ofLog() << "Network client disconnected " << remote.clientId << endl;
-
-	this->remoteVideoSources.clear(); // Limit it to only one source for now.
+	auto found = std::find(this->remoteVideoSources.begin(), this->remoteVideoSources.end(), remote.source);
+	if (found != this->remoteVideoSources.end())
+	{
+		this->remoteVideoSources.erase(found);
+	}
 }
 
 void ofTotemApp::ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source)
