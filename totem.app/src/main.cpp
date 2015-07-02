@@ -77,7 +77,7 @@ namespace
 	{
 		auto remoteApp = new ofRemoteApp();
 
-		ofSetupOpenGL(10, 10, OF_WINDOW);
+		ofSetupOpenGL(1, 1, OF_WINDOW);
 		auto screenWidth = min(2160, ofGetScreenWidth());
 		auto screenHeight = min(1440, ofGetScreenHeight());
 
@@ -96,8 +96,31 @@ namespace
 		{
 			ForceDisplayToBestFitOf(3, 2, windowWidth, windowHeight);
 		}
+		else if (ofxArgParser::hasKey("display768"))
+		{
+			windowWidth = 1366;
+			windowHeight = 768;
+		}
+		else if (ofxArgParser::hasKey("display1080"))
+		{
+			windowWidth = 1920;
+			windowHeight = 1080;
+		}
 
+#if WIN32
+		auto hwnd = ofGetWin32Window();
+		auto lStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
+		lStyle &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
+		SetWindowLongPtr(hwnd, GWL_STYLE, lStyle);
+
+		auto lExStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+		lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
+		SetWindowLongPtr(hwnd, GWL_EXSTYLE, lExStyle);
+
+		SetWindowPos(hwnd, NULL, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED | /*SWP_NOMOVE | SWP_NOSIZE |*/ SWP_NOZORDER | SWP_NOOWNERZORDER);
+#else
 		ofSetWindowShape(windowWidth, windowHeight);
+#endif
 
 		remoteApp->earlyinit(networkInterfaceId, windowWidth, windowHeight);
 		//ofSetupOpenGL(windowWidth, windowHeight, OF_WINDOW);
@@ -148,10 +171,8 @@ int main(int argc, const char** argv)
 			"  -display16by10      (Force the window to a 16:9 aspect ratio)" << endl <<
 			"  -display16by9       (Force the window to a 16:9 aspect ratio)" << endl <<
 			"  -display3by2        (Force the window to a 16:9 aspect ratio)" << endl <<
-
-			endl << "WINDOW SETTINGS" << endl <<
-			"-xMargin=<border size> (Shift the window left by this amount)" << endl <<
-			"-yMargin=<border size> (Shift the window up by this amount)" << endl <<
+			"  -display768         (Force the window to 1366x768)" << endl <<
+			"  -display1080        (Force the window to 1920x1080)" << endl <<
 
 			endl << "NETWORK SETTINGS" << endl <<
 			"-netList                     (Show all network interfaces)" << endl <<
@@ -179,7 +200,7 @@ int main(int argc, const char** argv)
 			return -1;
 		}
 
-		vector<string> requireParams = { "totemSource", "netSource", "capDevice", "capWidth", "capHeight", "capSource", "xMargin", "yMargin", "netInterface" };
+		vector<string> requireParams = { "totemSource", "netSource", "capDevice", "capWidth", "capHeight", "capSource", "netInterface" };
 		for (auto i = requireParams.begin(); i != requireParams.end(); ++i)
 		{
 			if (ofxArgParser::hasKey(*i) && ofxArgParser::getValue(*i) == "")
@@ -218,17 +239,6 @@ int main(int argc, const char** argv)
 	}
 
 	bool totemMode = !ofxArgParser::hasKey("remote");
-	auto xMargin = totemMode ? 0 : 0;
-	auto yMargin = totemMode ? 0 : 0;
-	if (ofxArgParser::hasKey("xMargin"))
-	{
-		xMargin = ofToInt(ofxArgParser::getValue("xMargin"));
-	}
-
-	if (ofxArgParser::hasKey("yMargin"))
-	{
-		yMargin = ofToInt(ofxArgParser::getValue("yMargin"));
-	}
 
 	auto webCamDeviceId = 0;
 	if (ofxArgParser::hasKey("capDevice"))
@@ -308,6 +318,5 @@ int main(int argc, const char** argv)
 		app->videoSource = ofPtr<ofBaseVideoDraws>(unwrapper);
 	}
 
-	ofSetWindowPosition(-xMargin, -yMargin);
 	ofRunApp(app);
 }
