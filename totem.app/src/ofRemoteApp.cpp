@@ -19,10 +19,9 @@ namespace
 	const float TIME_INTRO_ICONS_APPEAR = 500.0f;
 	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
 
-	int SELFIE_FRAME_MARGIN = 6;
-
-	int ICON_MARGIN = 25;
-	int ICON_SIZE = 70;
+	int SELFIE_FRAME_MARGIN;
+	int ICON_MARGIN;
+	int ICON_SIZE;
 
 	const string INTRO_TRANSITION_COMPLETE_EVENT = "INTRO_TRANSITION_COMPLETE_EVENT";
 }
@@ -59,6 +58,9 @@ void ofRemoteApp::setup()
 	muteIcon.loadImage("mute.png");
 
 	SELFIE_FRAME_MARGIN = (int)roundf(this->displayHeight() * 0.0052f);
+	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
+	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
+
 	this->miniSelfieRegion.setFromCenter(
 		this->width / 2,
 		roundf(this->height * 0.025f),
@@ -74,9 +76,6 @@ void ofRemoteApp::setup()
 
 	auto bottomCenterY = this->introSelfieRegion.getBottom() + (this->height - this->introSelfieRegion.getBottom()) / 2;
 	connectIconRegion.setFromCenter(this->width / 2, bottomCenterY, ICON_SIZE, ICON_SIZE);
-
-	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
-	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
 
 	ofSetVerticalSync(false);
 
@@ -99,46 +98,6 @@ void ofRemoteApp::update()
 			this->currentConnectIconAlpha = 1;
 			this->currentSelfieRegion = this->introSelfieRegion;
 			this->state = UISTATE_INTRO;
-		}
-	}
-
-	if (this->state == UISTATE_MAIN)
-	{
-		// TODO: This is a hack for the current state of the networking system, since we don't get any connect/disconnect events
-		if (!this->isTotemInitialized && !this->remoteTotem)
-		{
-			// Look for a totem stream and use it if it exists
-			for (auto iter = this->streamManager.clients.begin(); iter != this->streamManager.clients.end(); ++iter)
-			{
-				auto clientId = iter->first;
-				auto client = iter->second;
-				auto video = this->streamManager.remoteVideos[clientId];
-				
-				if (video->getWidth() / video->getHeight() >= 2)
-				{
-					auto videoSource = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(client, video->getWidth(), video->getHeight()));
-
-					RemoteVideoInfo remote;
-					remote.clientId = clientId;
-					remote.width = video->getWidth();
-					remote.height = video->getHeight();
-					auto wrapped = new CroppedDrawableVideoDraws(videoSource);
-					remote.source = ofPtr<CroppedDrawable>(wrapped);
-					remote.isTotem = true;
-					this->remoteVideoSources.push_back(remote);
-
-					this->remoteTotem.reset(new RemoteVideoInfo(remote));
-					this->remoteTotemClientId = remote.clientId;
-
-					this->cylinderDisplay.reset(new CylinderDisplay());
-					this->cylinderDisplay->initCylinderDisplay(1920, 1080);
-					this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
-					this->cylinderDisplay->setTotemVideoSource(videoSource);
-
-					this->isTotemInitialized = true;
-					break;
-				}
-			}
 		}
 	}
 
@@ -275,26 +234,21 @@ int ofRemoteApp::displayHeight() const
 }
 
 // ********************************************************************************************************************
-void ofRemoteApp::ImpersonateRemoteConnection(const string& clientId, ofPtr<ofBaseVideoDraws> video)
+void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video)
 {
-	RemoteVideoInfo remote;
-	remote.clientId = clientId;
-	auto wrapped = new CroppedDrawableVideoDraws(video);
-	remote.source = ofPtr<CroppedDrawable>(wrapped);
-	remote.width = video->getWidth();
-	remote.height = video->getHeight();
-	remote.isTotem = video->getWidth() / video->getHeight() >= 2;
 	this->remoteVideoSources.push_back(remote);
 
 	if (remote.isTotem)
 	{
 		this->remoteTotem.reset(new RemoteVideoInfo(remote));
-
 		this->remoteTotemClientId = remote.clientId;
+
 		this->cylinderDisplay.reset(new CylinderDisplay());
-		this->cylinderDisplay->initCylinderDisplay(1920, 1080);
+		this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
 		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
 		this->cylinderDisplay->setTotemVideoSource(video);
+
+		this->isTotemInitialized = true;
 	}
 	else
 	{
@@ -347,7 +301,14 @@ void ofRemoteApp::keyPressed(int key)
 
 		if (key == 'a' && videoCount < 2)
 		{
-			ImpersonateRemoteConnection(ofToString(remoteVideoSources.size() + 1), this->videoSource);
+			RemoteVideoInfo remote;
+			remote.clientId = "localTotemImpersonator";
+			remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(this->videoSource));
+			remote.width = this->videoSource->getWidth();
+			remote.height = this->videoSource->getHeight();
+			remote.isTotem = false;
+
+			NewConnection(remote, this->videoSource);
 			if (this->cylinderDisplay) this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 		}
 		else if (key == 'z' && videoCount > 0)
@@ -409,24 +370,8 @@ void ofRemoteApp::TransitionTo_UISTATE_STARTUP()
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
-	if (remote.isTotem)
-	{
-		this->remoteTotem.reset(new RemoteVideoInfo(remote));
-
-		this->remoteTotemClientId = remote.clientId;
-		this->cylinderDisplay.reset(new CylinderDisplay());
-		this->cylinderDisplay->initCylinderDisplay(1920, 1080);
-		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
-		this->cylinderDisplay->setTotemVideoSource(ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(remote.netClient, remote.width, remote.height)));
-	}
-	else
-	{
-		this->networkDisplay.AddVideoSource(remote.source);
-		if (this->remoteTotem)
-		{
-			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
-		}
-	}
+	auto video = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(remote.netClient, remote.width, remote.height));
+	NewConnection(remote, video);
 }
 
 // ********************************************************************************************************************

@@ -145,7 +145,15 @@ namespace
 			auto unwrapper = new ThreeSixtyUnwrap();
 			auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getWidth(), videoSource->getHeight()), UNWRAPPED_DISPLAYRATIO);
 			unwrapper->initUnwrapper(videoSource, outputSize);
-			remoteApp->ImpersonateRemoteConnection("localTotemImpersonator", ofPtr<ofBaseVideoDraws>(unwrapper));
+
+			auto unwrappedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
+			RemoteVideoInfo remote;
+			remote.clientId = "localTotemImpersonator";
+			remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(unwrappedVideo));
+			remote.width = unwrappedVideo->getWidth();
+			remote.height = unwrappedVideo->getHeight();
+			remote.isTotem = true;
+			remoteApp->NewConnection(remote, unwrappedVideo);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(remoteApp);
