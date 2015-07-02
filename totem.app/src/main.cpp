@@ -43,6 +43,24 @@ namespace
 		}
 	}
 
+	void RemoveWindowChrome(int windowWidth, int windowHeight)
+	{
+#if WIN32
+		auto hwnd = ofGetWin32Window();
+		auto lStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
+		lStyle &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
+		SetWindowLongPtr(hwnd, GWL_STYLE, lStyle);
+
+		auto lExStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
+		lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
+		SetWindowLongPtr(hwnd, GWL_EXSTYLE, lExStyle);
+
+		SetWindowPos(hwnd, NULL, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED | /*SWP_NOMOVE | SWP_NOSIZE |*/ SWP_NOZORDER | SWP_NOOWNERZORDER);
+#else
+		ofSetWindowShape(windowWidth, windowHeight);
+#endif
+	}
+
 	ofPtr<VideoCaptureAppBase> CreateTotemAppInstance(int captureWidth, int captureHeight, int networkInterfaceId)
 	{
 		auto totemApp = new ofTotemApp();
@@ -68,6 +86,7 @@ namespace
 		else
 		{
 			ofSetupOpenGL((int)totemApp->displayWidth(), (int)totemApp->displayHeight(), OF_WINDOW);
+			RemoveWindowChrome((int)totemApp->displayWidth(), (int)totemApp->displayHeight());
 		}
 
 		return ofPtr<VideoCaptureAppBase>(totemApp);
@@ -107,20 +126,7 @@ namespace
 			windowHeight = 1080;
 		}
 
-#if WIN32
-		auto hwnd = ofGetWin32Window();
-		auto lStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
-		lStyle &= ~(WS_CAPTION | WS_THICKFRAME | WS_MINIMIZE | WS_MAXIMIZE | WS_SYSMENU);
-		SetWindowLongPtr(hwnd, GWL_STYLE, lStyle);
-
-		auto lExStyle = GetWindowLong(hwnd, GWL_EXSTYLE);
-		lExStyle &= ~(WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE);
-		SetWindowLongPtr(hwnd, GWL_EXSTYLE, lExStyle);
-
-		SetWindowPos(hwnd, NULL, 0, 0, windowWidth, windowHeight, SWP_FRAMECHANGED | /*SWP_NOMOVE | SWP_NOSIZE |*/ SWP_NOZORDER | SWP_NOOWNERZORDER);
-#else
-		ofSetWindowShape(windowWidth, windowHeight);
-#endif
+		RemoveWindowChrome(windowWidth, windowHeight);
 
 		remoteApp->earlyinit(networkInterfaceId, windowWidth, windowHeight);
 		//ofSetupOpenGL(windowWidth, windowHeight, OF_WINDOW);
