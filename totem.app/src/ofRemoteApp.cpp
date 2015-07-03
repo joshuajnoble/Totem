@@ -39,6 +39,27 @@ void ofRemoteApp::earlyinit(int netid, int w, int h)
 	auto remoteViewAreaWidth = this->width - remoteViewAreaX;
 	auto remoteViewAreaHeight = this->height;
 
+	SELFIE_FRAME_MARGIN = (int)roundf(this->displayHeight() * 0.0052f);
+	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
+	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
+
+	this->miniSelfieRegion.setFromCenter(
+		this->width / 2,
+		roundf(this->height * 0.025f),
+		(int)roundf(this->height * (0.12 * 2) * (10.0 / 16.0)),
+		(int)roundf(this->height * (0.12 * 2)));
+	this->miniSelfieRegion.y = 0 + (int)roundf(this->height * 0.03);
+
+	this->introSelfieRegion.setFromCenter(
+		this->width / 2,
+		this->height / 2,
+		(int)roundf(this->height * (0.4 * 2) * (10.0 / 16.0)),
+		(int)roundf(this->height * (0.4 * 2)));
+	this->introSelfieRegion.y = (this->height - this->introSelfieRegion.getHeight()) / 3;
+
+	auto bottomCenterY = this->introSelfieRegion.getBottom() + (this->height - this->introSelfieRegion.getBottom()) / 2;
+	connectIconRegion.setFromCenter(this->width / 2, bottomCenterY, ICON_SIZE, ICON_SIZE);
+
 	this->networkDisplay.initializeRemoteNetworkDisplay(ofRectangle(remoteViewAreaX, remoteViewAreaY, remoteViewAreaWidth, remoteViewAreaHeight));
 	this->currentConnectIconAlpha = 0;
 	this->state = UISTATE_STARTUP;
@@ -56,26 +77,6 @@ void ofRemoteApp::setup()
 	connectIcon.loadImage("call.png");
 	hangupIcon.loadImage("hangup.png");
 	muteIcon.loadImage("mute.png");
-
-	SELFIE_FRAME_MARGIN = (int)roundf(this->displayHeight() * 0.0052f);
-	ICON_SIZE = (int)roundf(this->displayWidth() * 0.0365f);
-	ICON_MARGIN = (int)roundf(this->displayWidth() * 0.013f);
-
-	this->miniSelfieRegion.setFromCenter(
-		this->width / 2,
-		roundf(this->height * 0.025f),
-		(int)roundf(this->height * (0.12 * 2) * (10.0 / 16.0)),
-		(int)roundf(this->height * (0.12 * 2)));
-	this->miniSelfieRegion.y = 0 + (int)roundf(this->height * 0.03);
-
-	this->introSelfieRegion.setFromCenter(
-		this->width / 2,
-		this->height / 2,
-		(int)roundf(this->height * (0.4 * 2) * (10.0 / 16.0)),
-		(int)roundf(this->height * (0.4 * 2)));
-
-	auto bottomCenterY = this->introSelfieRegion.getBottom() + (this->height - this->introSelfieRegion.getBottom()) / 2;
-	connectIconRegion.setFromCenter(this->width / 2, bottomCenterY, ICON_SIZE, ICON_SIZE);
 
 	ofSetVerticalSync(false);
 
