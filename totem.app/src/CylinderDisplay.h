@@ -51,7 +51,8 @@ public:
 	void update();
 	void draw();
 	void setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource);
-	void DoWelcome();
+	ofPtr<ofBaseVideoDraws> getTotemVideoSource();
+	void DoWelcome(const string& eventName);
 
 	ofVideoPlayer remotePlayer;
 

@@ -55,6 +55,7 @@ void VideoCaptureAppBase::clientStreamAvailable(string& clientId)
 	auto found = GetRemoteFromClientId(clientId);
 	if (found != this->remoteVideoSources.end())
 	{
+		found->hasLiveFeed = true;
 		Handle_ClientStreamAvailable(*found);
 	}
 }

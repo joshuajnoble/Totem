@@ -51,12 +51,11 @@ public:
 	int height;
 	StickyTimer activityTimer;
 	ofPtr<ofxGstRTPClient> netClient;
+	bool hasLiveFeed;
 
 	bool isTotem = false;
 
 	RemoteVideoInfo() : activityTimer(10.0f)
 	{
 	}
-
-	bool IsActive() { return true; }// return this->activityTimer.IsActive();
 };

@@ -153,6 +153,7 @@ namespace
 			remote.width = unwrappedVideo->getWidth();
 			remote.height = unwrappedVideo->getHeight();
 			remote.isTotem = true;
+			remote.hasLiveFeed = true;
 			remoteApp->NewConnection(remote, unwrappedVideo);
 		}
 

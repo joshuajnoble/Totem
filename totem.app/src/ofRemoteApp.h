@@ -28,13 +28,15 @@ private:
 	float curentSelfieMarginAlpha;
 	float currentConnectIconAlpha;
 	bool isAnimatingConnectIconAlpha;
+	bool canShowRemotes;
+	bool doneCylinderWelcome;
+	bool isInCall;
 
 	ofRectangle introSelfieRegion;
 	ofRectangle miniSelfieRegion;
 	ofRectangle connectIconRegion;
 	ofRectangle currentSelfieRegion;
 
-	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;
 	ofPtr<RemoteVideoInfo> totemSource;
 	ofImage connectIcon;
@@ -50,6 +52,7 @@ private:
 	void RemoveRemoteVideoSource(const RemoteVideoInfo& video);
 
 	void DrawSelfie();
+	void WelcomeSequenceComplete();
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);

@@ -207,24 +207,32 @@ void StreamManager::update(){
     
     for(map<string, ofPtr<ofxGstRTPClient> >::iterator iter = clients.begin(); iter != clients.end(); ++iter){
         iter->second->update();
-        if(iter->second->isFrameNewVideo()){
-            remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
-            if(!bConnected[iter->first]){
-                bConnected[iter->first] = true;
-                ofNotifyEvent(clientStreamAvailableEvent, const_cast<string&>(iter->first), this);
-            }
-        }else{
+		if(iter->second->isFrameNewVideo())
+		{
+			remoteVideos[iter->first]->getTextureReference().loadData(iter->second->getPixelsVideo());
+			if(!bConnected[iter->first]){
+				bConnected[iter->first] = true;
+				ofNotifyEvent(clientStreamAvailableEvent, const_cast<string&>(iter->first), this);
+			}
+		}
+		else
+		{
             // draw a spinner for a loading screen if we're not connected yet
-            if(!bConnected[iter->first]){
+            if(!bConnected[iter->first])
+			{
                 ofEnableAlphaBlending();
                 auto video = remoteVideos[iter->first];
                 video->begin();
                 ofClear(0, 0, 0);
-                for(int i = 0; i < 6; i++){
+				ofSetColor(255);
+				auto centerPoint = ofPoint(video->getWidth() / 2, video->getHeight() / 2);
+				auto outerRadius = 15;// video->getHeight() * 0.04;
+				auto radius = 5;// video->getHeight() * 0.02;
+				for (int i = 0; i < 6; i++){
                     ofPushMatrix();
-                    ofTranslate(remoteVideos[iter->first]->getWidth()/2, remoteVideos[iter->first]->getHeight()/2);
-                    ofCircle(15*cos(ofGetElapsedTimef()*2.5+i*PI/3), 15*sin(ofGetElapsedTimef()*2.5+i*PI/3), 5);
-                    
+					ofTranslate(centerPoint);
+					auto circleCenter = ofPoint(outerRadius * cos(ofGetElapsedTimef()*2.5 + i*PI / 3), outerRadius * sin(ofGetElapsedTimef()*2.5 + i*PI / 3));
+					ofCircle(circleCenter, radius);
                     ofPopMatrix();
                 }
                 video->end();

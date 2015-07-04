@@ -14,6 +14,7 @@ void CylinderDisplay::initCylinderDisplay(int width, int height)
 {
 	this->windowWidth = width;
 	this->windowHeight = height;
+	this->totemVideoSource.reset();
 }
 
 
@@ -46,13 +47,26 @@ void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
 	this->allocateBuffers();
 }
 
-void CylinderDisplay::DoWelcome()
+
+// ********************************************************************************************************************
+ofPtr<ofBaseVideoDraws> CylinderDisplay::getTotemVideoSource()
 {
-	introPlaylist.addKeyFrame(Playlist::Action::pause(2000.0f));
-	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
+	return this->totemVideoSource;
 }
 
 
+// ********************************************************************************************************************
+void CylinderDisplay::DoWelcome(const string& eventName)
+{
+	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
+	if (eventName.length())
+	{
+		introPlaylist.addKeyFrame(Playlist::Action::event(this, eventName));
+	}
+}
+
+
+// ********************************************************************************************************************
 void CylinderDisplay::SetViewAngle(float angle, bool animate)
 {
 	if (this->totemVideoSource && animate)
@@ -71,6 +85,7 @@ void CylinderDisplay::SetViewAngle(float angle, bool animate)
 		this->viewRotationAngle = angle;
 	}
 }
+
 
 // ********************************************************************************************************************
 void CylinderDisplay::update()
@@ -123,6 +138,8 @@ void CylinderDisplay::draw()
 	}
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::drawTexturedCylinder()
 {
 	if (this->totemVideoSource)
@@ -141,6 +158,8 @@ void CylinderDisplay::drawTexturedCylinder()
 	}
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::drawLeftCylinder()
 {
 	if (this->totemVideoSource)
@@ -155,6 +174,8 @@ void CylinderDisplay::drawLeftCylinder()
 	}
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::drawRightCylinder()
 {
 	if (this->totemVideoSource)
@@ -169,6 +190,8 @@ void CylinderDisplay::drawRightCylinder()
 	}
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::createCylinderPiece(ofMesh &m, float radius, float height, float degrees)
 {
 
@@ -221,6 +244,8 @@ void CylinderDisplay::createCylinderPiece(ofMesh &m, float radius, float height,
 
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2)
 {
 	//for (int j = 0; j < m.getNumTexCoords(); j++)
@@ -274,6 +299,8 @@ void CylinderDisplay::mapTexCoords(ofMesh &m, float u1, float v1, float u2, floa
 	}
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::findLeftFace()
 {
 	this->totemVideoSource->getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);
@@ -298,6 +325,8 @@ void CylinderDisplay::findLeftFace()
 	mapTexCoords(leftCylinderPiece, max(400, min(1920, (int)leftMost.x + 200)), 380, 0, 700);
 }
 
+
+// ********************************************************************************************************************
 void CylinderDisplay::findRightFace()
 {
 	this->totemVideoSource->getPixelsRef().cropTo(cropped, 0, 380, 1920, 700);

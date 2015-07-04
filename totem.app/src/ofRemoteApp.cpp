@@ -14,10 +14,11 @@ namespace
 	const float WAITING_ROTATION = 270.0f; // TODO: Why is the "centered" spin icon at 270 deg and not 180 deg?
 	const float DEFAULT_ROTATION = 0.0f;
 	const float SHIFTED_OFFSET = 25.0f;
-	
+
 	const float TIME_INTRO_TRANSITION = 750.0f;
 	const float TIME_INTRO_ICONS_APPEAR = 500.0f;
 	const float TIME_INTRO_CONNECT_ICON_APPEARS = 1000.0f;
+	const float TIME_WELCOME_BARNDOORS_OPEN = 2000.0f;
 	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
 
 	int SELFIE_FRAME_MARGIN;
@@ -26,6 +27,8 @@ namespace
 
 	const string INTRO_TRANSITION_COMPLETE_EVENT = "INTRO_TRANSITION_COMPLETE_EVENT";
 	const string CurrentConnectIconAlpha_COMPLETE_EVENT = "CurrentConnectIconAlpha_COMPLETE_EVENT";
+	const string CylinderDisplay_WELCOME_COMPLETE_EVENT = "CylinderDisplay:WELCOME_COMPLETE_EVENT";
+	const string OpenBarndoors_COMPLETE_EVENT = "OpenBarndoors_COMPLETE_EVENT";
 }
 
 
@@ -97,17 +100,28 @@ void ofRemoteApp::update()
 		TransitionTo_UISTATE_INTRO();
 	}
 
-	if (this->state == UISTATE_INTRO && this->totemSource && !this->isAnimatingConnectIconAlpha && !this->currentConnectIconAlpha)
+	if (this->state == UISTATE_MAIN && this->totemSource->hasLiveFeed && !this->doneCylinderWelcome)
 	{
-		this->isAnimatingConnectIconAlpha = true;
-		this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
-		this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+		this->doneCylinderWelcome = true;
+		this->currentCylinderBarnDoorPosition = 0.33;
+		this->playlist.addKeyFrame(Action::tween(TIME_WELCOME_BARNDOORS_OPEN, &this->currentCylinderBarnDoorPosition, 1));
+		this->playlist.addKeyFrame(Action::event(this, OpenBarndoors_COMPLETE_EVENT));
 	}
-	else if (this->state == UISTATE_INTRO && !this->totemSource && !this->isAnimatingConnectIconAlpha && this->currentConnectIconAlpha == 1.0)
+
+	if (!this->isInCall && this->state == UISTATE_INTRO && !this->isAnimatingConnectIconAlpha)
 	{
-		this->isAnimatingConnectIconAlpha = true;
-		this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
-		this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+		if (this->totemSource && !this->currentConnectIconAlpha)
+		{
+			this->isAnimatingConnectIconAlpha = true;
+			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
+			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+		}
+		else if (!this->totemSource && this->currentConnectIconAlpha == 1.0)
+		{
+			this->isAnimatingConnectIconAlpha = true;
+			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
+			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+		}
 	}
 
 	if (this->totemSource)
@@ -142,7 +156,7 @@ void ofRemoteApp::draw()
 
 	ofPopStyle();
 
-	if (this->state == UISTATE_MAIN && this->cylinderDisplay)
+	if (this->cylinderDisplay && this->state == UISTATE_MAIN)
 	{
 		this->cylinderDisplay->draw();
 
@@ -154,12 +168,13 @@ void ofRemoteApp::draw()
 			ofSetRectMode(OF_RECTMODE_CORNER);
 			int barndoorWidth = this->displayWidth() / 2;
 
-			// currentCylinderBarnDoorPosition, 1 is fully closed while 0 is fully open
+			// currentCylinderBarnDoorPosition, 1 is fully open while 0 is fully opeclosed
 			int barndoorOffsetX = (int)(this->currentCylinderBarnDoorPosition * barndoorWidth);
 
-			ofSetColor(127, 127, 0); // TODO: should be the background color
+			ofSetColor(BACKGROUND_COLOR);
+			//ofSetColor(127, 127, 0); // TODO: should be the background color
 			ofRect(-barndoorOffsetX, 0, barndoorWidth, this->displayHeight());
-			ofSetColor(127, 0, 127); // TODO: this should be removed and just use the same color as set above
+			//ofSetColor(127, 0, 127); // TODO: this should be removed and just use the same color as set above
 			ofRect(this->displayWidth() / 2 + barndoorOffsetX, 0, barndoorWidth, this->displayHeight());
 			ofPopStyle();
 		}
@@ -168,7 +183,25 @@ void ofRemoteApp::draw()
 
 	DrawSelfie();
 
-	this->networkDisplay.draw();
+	// DEBUG JRUSH TODO : Remove this line after debugging
+#ifdef _DEBUGX
+	if (this->cylinderDisplay)
+	{
+		auto source = this->cylinderDisplay->getTotemVideoSource();
+		if (source)
+		{
+			ofPushMatrix();
+			ofScale(0.5, 0.5);
+			source->draw(0, 0);
+			ofPopMatrix();
+		}
+	}
+#endif
+
+	if (this->canShowRemotes)
+	{
+		this->networkDisplay.draw();
+	}
 }
 
 
@@ -228,22 +261,18 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 {
 	this->remoteVideoSources.push_back(remote);
 
-	if (remote.isTotem)
+	if (remote.isTotem && !this->totemSource)
 	{
 		this->totemSource.reset(new RemoteVideoInfo(remote));
 
 		this->cylinderDisplay.reset(new CylinderDisplay());
 		this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
-		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
+		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
 		this->cylinderDisplay->setTotemVideoSource(video);
 	}
 	else
 	{
 		this->networkDisplay.AddVideoSource(remote.source);
-		if (this->totemSource)
-		{
-			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
-		}
 	}
 }
 
@@ -267,10 +296,6 @@ void ofRemoteApp::RemoveRemoteVideoSource(const RemoteVideoInfo& video)
 	if (found != this->remoteVideoSources.end())
 	{
 		this->remoteVideoSources.erase(found);
-		if (videoCount == 1 && this->cylinderDisplay)
-		{
-			this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION);
-		}
 	}
 }
 
@@ -294,9 +319,9 @@ void ofRemoteApp::keyPressed(int key)
 			remote.width = this->videoSource->getWidth();
 			remote.height = this->videoSource->getHeight();
 			remote.isTotem = false;
+			remote.hasLiveFeed = true;
 
 			NewConnection(remote, this->videoSource);
-			if (this->cylinderDisplay) this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION + SHIFTED_OFFSET);
 		}
 		else if (key == 'z' && videoCount > 0)
 		{
@@ -317,7 +342,7 @@ void ofRemoteApp::keyPressed(int key)
 // ********************************************************************************************************************
 void ofRemoteApp::mousePressed(int x, int y, int button)
 {
-	if (this->state == UISTATE_INTRO)
+	if (this->state == UISTATE_INTRO && !this->isInCall)
 	{
 		if (button == 0)
 		{
@@ -328,6 +353,19 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 			}
 		}
 	}
+	else if (this->state == UISTATE_MAIN)
+	{
+		if (button == 0)
+		{
+			// Did they click on the hangup icon?
+			ofRectangle hangupIconRegion;
+			hangupIconRegion.setFromCenter((int)this->hangupIconCenterX, (int)this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+			if (this->totemSource && hangupIconRegion.inside(x, y))
+			{
+				TransitionTo_UISTATE_INTRO();
+			}
+		}
+	}
 }
 
 // ********************************************************************************************************************
@@ -335,6 +373,9 @@ void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 {
 	this->state = UISTATE_INTRO;
 
+	this->isInCall = false;
+	this->doneCylinderWelcome = false;
+	this->canShowRemotes = false;
 	this->currentHangupMuteIconAlpha = 0;
 	this->currentConnectIconAlpha = 0;
 	this->currentSelfieRegion = this->introSelfieRegion;
@@ -345,8 +386,12 @@ void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 // ********************************************************************************************************************
 void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 {
-	this->state = UISTATE_INTRO_TO_MAIN;
+	this->isInCall = true;
+	this->doneCylinderWelcome = false;
+	this->canShowRemotes = false;
 
+	// Transition the selfie view to the "rear view mirror" mode.
+	this->isAnimatingConnectIconAlpha = true;
 	this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
 	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->curentSelfieMarginAlpha, 1));
 	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
@@ -354,6 +399,7 @@ void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
 	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
 
+	// Reveal the in-conversation icons
 	auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
 	auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
 	this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
@@ -361,7 +407,6 @@ void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 	this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
 	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
 	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
-
 	this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
 }
 
@@ -370,7 +415,13 @@ void ofRemoteApp::TransitionTo_UISTATE_STARTUP()
 {
 	// TODO: Transition with animations
 	// TODO: Mute and hide or reset the remote clients that are still connected ... or maybe just pause our video, so others don't recieve it yet.
+	this->playlist.clear();
 	this->state = UISTATE_STARTUP;
+}
+
+void ofRemoteApp::WelcomeSequenceComplete()
+{
+	this->canShowRemotes = true;
 }
 
 // ********************************************************************************************************************
@@ -386,8 +437,8 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 	if (remote.isTotem)
 	{
 		this->totemSource.reset();
-		TransitionTo_UISTATE_STARTUP();
 		this->cylinderDisplay.reset();
+		TransitionTo_UISTATE_STARTUP();
 	}
 	else
 	{
@@ -400,10 +451,9 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientStreamAvailable(RemoteVideoInfo& remote)
 {
-	if (remote.isTotem)
+	if (remote.isTotem && this->cylinderDisplay)
 	{
 		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
-		this->cylinderDisplay->DoWelcome();
 	}
 }
 
@@ -413,9 +463,18 @@ void ofRemoteApp::onKeyframe(ofxPlaylistEventArgs& args)
 	if (args.message == INTRO_TRANSITION_COMPLETE_EVENT)
 	{
 		this->state = UISTATE_MAIN;
+		this->isAnimatingConnectIconAlpha = false;
 	}
 	else if (args.message == CurrentConnectIconAlpha_COMPLETE_EVENT)
 	{
 		this->isAnimatingConnectIconAlpha = false;
+	}
+	else if (args.message == OpenBarndoors_COMPLETE_EVENT)
+	{
+		this->cylinderDisplay->DoWelcome(CylinderDisplay_WELCOME_COMPLETE_EVENT);
+	}
+	else if (args.message == CylinderDisplay_WELCOME_COMPLETE_EVENT)
+	{
+		this->canShowRemotes = true;
 	}
 }
