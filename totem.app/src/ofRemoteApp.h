@@ -21,11 +21,13 @@ private:
 	float scale = 1.0f;
 	int width, height;
 
-	float currentConnectIconAlpha;
 	float muteIconCenterX;
 	float hangupIconCenterX;
 	float currentHangupMuteIconAlpha;
 	float currentCylinderBarnDoorPosition;
+	float curentSelfieMarginAlpha;
+	float currentConnectIconAlpha;
+	bool isAnimatingConnectIconAlpha;
 
 	ofRectangle introSelfieRegion;
 	ofRectangle miniSelfieRegion;
@@ -34,8 +36,7 @@ private:
 
 	float rotateToPosition;
 	ofPtr<CylinderDisplay> cylinderDisplay;
-	std::string remoteTotemClientId;
-	ofPtr<RemoteVideoInfo> remoteTotem;
+	ofPtr<RemoteVideoInfo> totemSource;
 	ofImage connectIcon;
 	ofImage muteIcon;
 	ofImage hangupIcon;
@@ -44,6 +45,8 @@ private:
 	UISTATE state;
 
 	void TransitionTo_UISTATE_STARTUP();
+	void TransitionTo_UISTATE_INTRO();
+	void TransitionTo_UISTATE_MAIN();
 	void RemoveRemoteVideoSource(const RemoteVideoInfo& video);
 
 	void DrawSelfie();
@@ -51,7 +54,6 @@ private:
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 
-	bool isTotemInitialized;
 	int networkInterfaceId;
 
 public:
@@ -63,12 +65,9 @@ public:
 	void draw();
 	virtual void exit();
 	void keyPressed(int key);
-	//void keyReleased(int key);
 	//void mouseMoved(int x, int y);
 	//void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);
-	//void mouseReleased(int x, int y, int button);
-	//void windowResized(int w, int h);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
 	void NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video);

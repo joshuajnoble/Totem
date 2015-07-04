@@ -148,7 +148,7 @@ namespace
 
 			auto unwrappedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
 			RemoteVideoInfo remote;
-			remote.clientId = "localTotemImpersonator";
+			remote.clientId = "remoteTotemImpersonator";
 			remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(unwrappedVideo));
 			remote.width = unwrappedVideo->getWidth();
 			remote.height = unwrappedVideo->getHeight();
