@@ -9,21 +9,34 @@ class RemoteNetworkDisplay
 private:
 	ofRectangle viewport;
 	ofRectangle drawRegion;
-	ofRectangle SingleVideoSize;
-	ofRectangle DoubleVideoSize;
+	ofRectangle SingleVideoRegion;
+	ofRectangle FirstVideoRegion;
+	ofRectangle SecondVideoRegion;
+
+	//enum VideoinfoState { INACTIVE = 0, ACTIVE = 1, REMOVING = 2, REMOVED = 3 };
+	//struct VideoInfo
+	//{
+	//	ofPtr<CroppedDrawable> videoSource;
+	//};
 
 	std::vector<ofPtr<CroppedDrawable>> videoSources;
 
-	ofRectangle currentVideoPosition1;
-	ofRectangle currentVideoPosition2;
-	float video1Alpha;
-	float video2Alpha;
+	enum ACTIVE_WINDOW_TYPE { WINDOW_TYPE_Single = 0, WINDOW_TYPE_First = 1, WINDOW_TYPE_Second = 2 };
+	struct ActiveVideo
+	{
+		float alpha;
+		ACTIVE_WINDOW_TYPE windowType;
+		ofRectangle currentRegion;
+		ofPtr<CroppedDrawable> videoSource;
+		bool removing;
+	};
+
+	typedef std::vector<ofPtr<ActiveVideo>> activeVideoList;
+	activeVideoList activeVideos;
 
 	ofxPlaylist playlist;
-	bool animatingVideo1Entrance = false;
-	bool animatingVideo2Entrance = false;
-	bool animatingVideo1Exit = false;
-	bool animatingVideo2Exit = false;
+
+	activeVideoList::iterator GetActiveWindwoByType(ACTIVE_WINDOW_TYPE windowType);
 
 public:
 	RemoteNetworkDisplay();
@@ -33,10 +46,13 @@ public:
 	void update();
 	void draw();
 
-	bool AddVideoSource(ofPtr<CroppedDrawable> source);
-	bool RemoveVideoSource(ofPtr<CroppedDrawable> source);
+	void AddVideoSource(ofPtr<CroppedDrawable> source);
+	void RemoveVideoSource(ofPtr<CroppedDrawable> source);
+	void RemoveFirstVideoSource();
+	void RemoveSecondVideoSource();
+
+	size_t VideoCount() const { return this->videoSources.size(); }
 
 	void onKeyframe(ofxPlaylistEventArgs& args);
-	bool CanModify();
 };
 

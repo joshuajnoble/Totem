@@ -172,9 +172,7 @@ void ofRemoteApp::draw()
 			int barndoorOffsetX = (int)(this->currentCylinderBarnDoorPosition * barndoorWidth);
 
 			ofSetColor(BACKGROUND_COLOR);
-			//ofSetColor(127, 127, 0); // TODO: should be the background color
 			ofRect(-barndoorOffsetX, 0, barndoorWidth, this->displayHeight());
-			//ofSetColor(127, 0, 127); // TODO: this should be removed and just use the same color as set above
 			ofRect(this->displayWidth() / 2 + barndoorOffsetX, 0, barndoorWidth, this->displayHeight());
 			ofPopStyle();
 		}
@@ -183,7 +181,6 @@ void ofRemoteApp::draw()
 
 	DrawSelfie();
 
-	// DEBUG JRUSH TODO : Remove this line after debugging
 #ifdef _DEBUGX
 	if (this->cylinderDisplay)
 	{
@@ -259,8 +256,6 @@ int ofRemoteApp::displayHeight() const
 // ********************************************************************************************************************
 void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video)
 {
-	this->remoteVideoSources.push_back(remote);
-
 	if (remote.isTotem && !this->totemSource)
 	{
 		this->totemSource.reset(new RemoteVideoInfo(remote));
@@ -281,60 +276,32 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 void ofRemoteApp::RemoveRemoteVideoSource(const RemoteVideoInfo& video)
 {
 	this->networkDisplay.RemoveVideoSource(video.source);
-
-	int videoCount = 0; // Count all non-totem video source while looking for this one
-	std::vector<RemoteVideoInfo>::iterator found = this->remoteVideoSources.end();
-	for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
-	{
-		if (!iter->isTotem) ++videoCount;
-		if (iter->clientId == video.clientId)
-		{
-			found = iter;
-		}
-	}
-
-	if (found != this->remoteVideoSources.end())
-	{
-		this->remoteVideoSources.erase(found);
-	}
 }
 
 
 // ********************************************************************************************************************
 void ofRemoteApp::keyPressed(int key)
 {
-	if (this->networkDisplay.CanModify())
+	auto videoCount = this->networkDisplay.VideoCount();
+	if (key == 'q' && videoCount < 2)
 	{
-		int videoCount = 0;
-		for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
-		{
-			if (!iter->isTotem) ++videoCount;
-		}
+		RemoteVideoInfo remote;
+		remote.clientId = "remotePeerImpersonator";
+		remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(this->videoSource));
+		remote.width = this->videoSource->getWidth();
+		remote.height = this->videoSource->getHeight();
+		remote.isTotem = false;
+		remote.hasLiveFeed = true;
 
-		if (key == 'a' && videoCount < 2)
-		{
-			RemoteVideoInfo remote;
-			remote.clientId = "remotePeerImpersonator";
-			remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(this->videoSource));
-			remote.width = this->videoSource->getWidth();
-			remote.height = this->videoSource->getHeight();
-			remote.isTotem = false;
-			remote.hasLiveFeed = true;
-
-			NewConnection(remote, this->videoSource);
-		}
-		else if (key == 'z' && videoCount > 0)
-		{
-			// Get the last non-totem video that is in our list
-			auto iter = this->remoteVideoSources.rbegin();
-			for (; iter != this->remoteVideoSources.rend(); ++iter)
-			{
-				if (!iter->isTotem) break;
-			}
-
-			auto video = *iter;
-			RemoveRemoteVideoSource(video);
-		}
+		NewConnection(remote, this->videoSource);
+	}
+	else if (key == 'a' && videoCount > 0)
+	{
+		this->networkDisplay.RemoveFirstVideoSource();
+	}
+	else if (key == 'z' && videoCount > 0)
+	{
+		this->networkDisplay.RemoveSecondVideoSource();
 	}
 }
 
