@@ -16,17 +16,18 @@ private:
 	ofVec2f remotePosition, remoteScale;
 	ofVec2f mainPosition, mainScale;
 	double doubleM = 2560;
-
+	bool isRemoteSource1Initialized;
+	int networkInterfaceId;
+	ofVideoPlayer cortanaPlayer;
 	TotemDisplay totemDisplay;
-	std::vector<ofPtr<CroppedDrawable>> remoteVideoSources;
-	
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 
-	bool isRemoteSource1Initialized;
-	int networkInterfaceId;
+	void cortanaLoadClip(const string& clipName);
+	void cortanaPlayIntro();
+	void cortanaPlayIdle();
 
 public:
 	//----------------------------------------

@@ -7,6 +7,10 @@ using namespace cv;
 namespace
 {
 	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
+
+	const std::string CORTANA_INTRO = "personaassets720x1280_circle_greeting1_10.gif";
+	const std::string CORTANA_INTRO_ALTERNATE = "personaassets720x1280_circle_greeting2_10.gif";
+	const std::string CORTANA_IDLE = "personaassets720x1280_circle_calm1_10.gif";
 }
 
 void ofTotemApp::earlyinit(int netid)
@@ -35,6 +39,8 @@ void ofTotemApp::setup()
 	this->isInitialized = true;
 
 	this->streamManager.broadcastVideoBitrate = 8000;
+
+	cortanaPlayIntro();
 }
 
 //--------------------------------------------------------------
@@ -49,6 +55,16 @@ void ofTotemApp::update()
 	if (!this->isInitialized)
 	{
 		return;
+	}
+
+	if (this->cortanaPlayer.getIsMovieDone())
+	{
+		cortanaPlayIdle();
+	}
+
+	if (this->cortanaPlayer.isFrameNew())
+	{
+		this->cortanaPlayer.update();
 	}
 
 	VideoCaptureAppBase::update();
@@ -83,7 +99,6 @@ void ofTotemApp::draw()
 		{
 			auto output = this->totemDisplay.getDisplay(0);
 			output.begin();
-			ofBackground(BACKGROUND_COLOR);
 
 			if (this->netImpersonate.get())
 			{	// DEBUG
@@ -100,20 +115,21 @@ void ofTotemApp::draw()
 				auto halfHeight = (int)output.getHeight() / 2;
 				auto halfWidth = (int)output.getWidth() / 2;
 
+				ofBackground(BACKGROUND_COLOR);
 				auto remoteSourceCount = this->remoteVideoSources.size();
 				if (remoteSourceCount == 1)
 				{
-					auto videoSource = this->remoteVideoSources[0];
+					auto videoSource = this->remoteVideoSources[0].source;
 					videoSource->DrawCropped((int)output.getWidth(), (int)output.getHeight());
 				}
 				else if (remoteSourceCount == 2)
 				{
-					auto videoSource = this->remoteVideoSources[0];
+					auto videoSource = this->remoteVideoSources[0].source;
 					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
 
 					ofPushMatrix();
 
-					videoSource = this->remoteVideoSources[1];
+					videoSource = this->remoteVideoSources[1].source;
 					ofTranslate(0, halfHeight + halfMargin);
 					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
 
@@ -121,21 +137,31 @@ void ofTotemApp::draw()
 				}
 				else if (remoteSourceCount == 3)
 				{
-					auto videoSource = this->remoteVideoSources[0];
+					auto videoSource = this->remoteVideoSources[0].source;
 					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
 
 					ofPushMatrix();
 
-					videoSource = this->remoteVideoSources[1];
+					videoSource = this->remoteVideoSources[1].source;
 					ofTranslate(0, halfHeight + halfMargin);
 					videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
 
-					videoSource = this->remoteVideoSources[2];
+					videoSource = this->remoteVideoSources[2].source;
 					ofTranslate(halfWidth + halfMargin, 0);
 					videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
 
 					ofPopMatrix();
 				}
+			}
+			else
+			{
+				auto halfHeight = (int)output.getHeight() / 2;
+				auto halfWidth = (int)output.getWidth() / 2;
+
+				ofBackground(0);
+				auto ratio = this->cortanaPlayer.getHeight() / this->cortanaPlayer.getWidth();
+				auto height = (int)output.getWidth() * ratio;
+				this->cortanaPlayer.draw(0, (int)(output.getHeight() - height) / 2, (int)output.getWidth(), height);
 			}
 
 			output.end();
@@ -165,20 +191,13 @@ void ofTotemApp::onKeyframe(ofxPlaylistEventArgs& args)
 void ofTotemApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
 	this->totemDisplay.drawTestPattern = false;
-
-	ofLog() << "Network client connected " << remote.clientId << endl;
-
-	// Show the client video
-	this->remoteVideoSources.push_back(remote.source);
 }
 
 void ofTotemApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
-	ofLog() << "Network client disconnected " << remote.clientId << endl;
-	auto found = std::find(this->remoteVideoSources.begin(), this->remoteVideoSources.end(), remote.source);
-	if (found != this->remoteVideoSources.end())
+	if (!this->remoteVideoSources.size())
 	{
-		this->remoteVideoSources.erase(found);
+		cortanaPlayIntro();
 	}
 }
 
@@ -186,4 +205,27 @@ void ofTotemApp::ImporsonateRemoteClient(ofPtr<ofBaseVideoDraws> source)
 {
 	this->totemDisplay.drawTestPattern = false;
 	this->netImpersonate = source;
+}
+
+void ofTotemApp::cortanaLoadClip(const string& clipName)
+{
+	auto fullPath = ofToDataPath("cortana\\" + clipName);
+	if (ofFile::doesFileExist(fullPath))
+	{
+		this->cortanaPlayer.loadMovie(fullPath);
+	}
+}
+
+void ofTotemApp::cortanaPlayIntro()
+{
+	cortanaLoadClip(CORTANA_INTRO);
+	this->cortanaPlayer.setLoopState(OF_LOOP_NONE);
+	this->cortanaPlayer.play();
+}
+
+void ofTotemApp::cortanaPlayIdle()
+{
+	cortanaLoadClip(CORTANA_IDLE);
+	this->cortanaPlayer.setLoopState(OF_LOOP_NORMAL);
+	this->cortanaPlayer.play();
 }

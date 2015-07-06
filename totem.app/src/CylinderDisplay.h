@@ -54,8 +54,6 @@ public:
 	ofPtr<ofBaseVideoDraws> getTotemVideoSource();
 	void DoWelcome(const string& eventName);
 
-	ofVideoPlayer remotePlayer;
-
 	bool isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
 	void SetViewAngle(float angle, bool animate = true);
 };
