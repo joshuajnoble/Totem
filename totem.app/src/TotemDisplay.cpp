@@ -91,6 +91,7 @@ void TotemDisplay::update()
 			auto fbo = this->_output[i];
 			fbo.begin();
 			ofPushStyle();
+			ofBackground(0);
 
 			// Draw Debug Display
 			ofSetColor(0, 191 / (i + 1) + 64, 0);
@@ -128,6 +129,41 @@ void TotemDisplay::draw()
 	for (int i = 0; i < this->displayCount; ++i)
 	{
 		auto fbo = this->_output[i];
+		if (this->displayVertical)
+		{
+			fbo.draw(0, this->displayHeight * i); // Vertical
+		}
+		else
+		{
+			fbo.draw(this->displayWidth * i, 0); // Horizontal
+		}
+	}
+
+	if (this->scale != 1.0)
+	{
+		ofPopMatrix();
+	}
+}
+
+
+// ********************************************************************************************************************
+void TotemDisplay::drawCloned()
+{
+	if (!this->_output.size())
+	{
+		return;
+	}
+
+	if (this->scale != 1.0)
+	{
+		ofPushMatrix();
+		ofScale(this->scale, this->scale);
+	}
+
+	auto fbo = this->_output[0];
+
+	for (int i = 0; i < this->displayCount; ++i)
+	{
 		if (this->displayVertical)
 		{
 			fbo.draw(0, this->displayHeight * i); // Vertical

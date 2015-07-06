@@ -11,6 +11,7 @@ public:
 	void allocateBuffers();
 	void update();
 	void draw();
+	void drawCloned(); // Draw the first frame buffer to all displays
 	//void setVideoSource(int totemDisplayId, ofPtr<ofBaseVideoDraws> videoSource);
 	ofFbo& getDisplay(int totemDisplayId);
 	int windowWidth() const;
