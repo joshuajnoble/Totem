@@ -197,8 +197,8 @@ int main(int argc, const char** argv)
 			"-capSource=<path>           (Use a test file instead of the camera for input)" << endl <<
 			"-capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
 			"-capDeviceList              (Show all available capture devices)" << endl <<
-			"-capWidth=<capture width>   (default=2160(totem)/1280(remote) pixels)" << endl <<
-			"-capHeight=<capture height> (default=2160(totem)/720(remote) pixels)" << endl;
+			"-capWidth=<capture width>   (default=2160(totem)/640(remote) pixels)" << endl <<
+			"-capHeight=<capture height> (default=2160(totem)/480(remote) pixels)" << endl;
 		return 0;
 	}
 	else if (ofxArgParser::hasKey("capDeviceList"))
@@ -261,13 +261,13 @@ int main(int argc, const char** argv)
 		webCamDeviceId = ofToInt(ofxArgParser::getValue("capDevice"));
 	}
 
-	auto captureWidth = totemMode ? 2160 : 1280;
+	auto captureWidth = totemMode ? 2160 : 640;
 	if (ofxArgParser::hasKey("capWidth"))
 	{
 		captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
 	}
 
-	auto captureHeight = totemMode ? 2160 : 720;
+	auto captureHeight = totemMode ? 2160 : 480;
 	if (ofxArgParser::hasKey("capHeight"))
 	{
 		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
