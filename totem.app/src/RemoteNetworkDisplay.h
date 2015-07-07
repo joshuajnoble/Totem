@@ -37,6 +37,8 @@ private:
 	ofxPlaylist playlist;
 
 	activeVideoList::iterator GetActiveWindwoByType(ACTIVE_WINDOW_TYPE windowType);
+	void RemoveActiveVideo(ofPtr<CroppedDrawable> source);
+	void AddActiveVideo(ofPtr<CroppedDrawable> source);
 
 public:
 	RemoteNetworkDisplay();
@@ -55,4 +57,3 @@ public:
 
 	void onKeyframe(ofxPlaylistEventArgs& args);
 };
-

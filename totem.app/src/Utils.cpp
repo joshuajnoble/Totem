@@ -96,3 +96,54 @@ ofPtr<ofBaseVideoDraws> Utils::CreateVideoSourceFromCamera(int deviceId, int wid
 	grabber->initGrabber(width, height);
 	return rval;
 }
+
+
+shared_ptr<ofxBaseKeyframe> ofxFunctionKeyframe::create(std::function<void()> c)
+{
+	return shared_ptr<ofxBaseKeyframe>(new ofxFunctionKeyframe(c));
+}
+
+// ----------------------------------------------------------------------
+
+void ofxFunctionKeyframe::start(){
+	is_idle = FALSE;     // bool value to give notice that the keyframe is done with.
+	(isFrameBased) ? startValue = 0 : startValue = ofGetSystemTime();
+	step = 0;
+	hasStarted = TRUE;
+};
+
+// ----------------------------------------------------------------------
+
+void ofxFunctionKeyframe::execute(){
+	// call the Event as soon as possible.
+	// call event here
+	if (is_idle == FALSE) {
+
+		if (hasStarted == FALSE) start();
+
+		step = isFrameBased ? labs(startValue) : labs(ofGetSystemTime() - startValue);
+		if (isFrameBased) startValue++;		// increase frame count if the animation is by-frame
+
+		delayHasEnded();	// check whether delay has ended.
+
+		if (isDelayed) return;
+		// ----------| invariant: delay has ended, we are ready to execute:
+
+		this->_callback();
+		// ofxCoreKeyframeEvents Ev;
+#ifdef PLAYLIST_DEBUG_MODE
+		ofLog(OF_LOG_VERBOSE) << ofToString(ofGetFrameNum()) << ": EventKeyframe calling event callback";
+#endif
+		is_idle = TRUE;	// get rid of it.
+	}
+}
+
+// ----------------------------------------------------------------------
+
+bool ofxFunctionKeyframe::delayHasEnded() {
+	if (isDelayed && (step >= delay_steps)) {
+		isDelayed = false;
+		return true;
+	}
+	return false;
+};

@@ -44,52 +44,16 @@ void RemoteNetworkDisplay::initializeRemoteNetworkDisplay(ofRectangle v)
 	ofxKeyframeAnimRegisterEvents(this);
 }
 
-
+int callCount = 0;
 void RemoteNetworkDisplay::AddVideoSource(ofPtr<CroppedDrawable> source)
 {
+	OutputDebugStringA(("AddVideoSource " + ofToString(++callCount)).c_str());
+
 	this->videoSources.push_back(source);
-
-	if (this->activeVideos.size() == 0)
+	
+	if (this->activeVideos.size() < 2)
 	{
-		auto activeVideo = ofPtr<ActiveVideo>(new ActiveVideo());
-		activeVideo->alpha = 0.0f;
-		activeVideo->videoSource = source;
-		activeVideo->windowType = WINDOW_TYPE_Single;
-		activeVideo->currentRegion = this->SingleVideoRegion;
-		activeVideo->removing = false;
-		this->activeVideos.push_back(activeVideo);
-		auto test = this->activeVideos[0];
-		auto aresame = &test == &activeVideo;
-
-		this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->currentRegion.x, activeVideo->currentRegion.x));
-		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->alpha, 1.0f));
-
-		// Position the video off the right side of the screen, so it can scroll onto the screen.
-		activeVideo->currentRegion.x = this->viewport.getRight();
-	}
-	else if (this->activeVideos.size() == 1)
-	{
-		auto activeVideo = ofPtr<ActiveVideo>(new ActiveVideo());
-		activeVideo->alpha = 0.0f;
-		activeVideo->videoSource = source;
-		activeVideo->windowType = WINDOW_TYPE_Second;
-		activeVideo->currentRegion = this->SecondVideoRegion;
-		activeVideo->removing = false;
-		this->activeVideos.push_back(activeVideo);
-
-		if (this->activeVideos[0]->windowType == WINDOW_TYPE_Single)
-		{
-			this->activeVideos[0]->windowType = WINDOW_TYPE_First;
-
-			// Shrink the first video
-			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->activeVideos[0]->currentRegion.height, this->FirstVideoRegion.height));
-
-			// Slide in the second video
-			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &activeVideo->currentRegion.x, activeVideo->currentRegion.x));
-			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &activeVideo->alpha, 1.0f));
-
-			activeVideo->currentRegion.x = this->viewport.getRight();
-		}
+		AddActiveVideo(source);
 	}
 }
 
@@ -137,6 +101,61 @@ void RemoteNetworkDisplay::RemoveVideoSource(ofPtr<CroppedDrawable> source)
 		this->videoSources.erase(found);
 	}
 
+	RemoveActiveVideo(source);
+}
+
+void RemoteNetworkDisplay::AddActiveVideo(ofPtr<CroppedDrawable> source)
+{
+	if (this->activeVideos.size() == 0)
+	{
+		auto activeVideo = ofPtr<ActiveVideo>(new ActiveVideo());
+		activeVideo->alpha = 0.0f;
+		activeVideo->videoSource = source;
+		activeVideo->windowType = WINDOW_TYPE_Single;
+		activeVideo->currentRegion = this->SingleVideoRegion;
+		activeVideo->removing = false;
+		this->activeVideos.push_back(activeVideo);
+		auto test = this->activeVideos[0];
+		auto aresame = &test == &activeVideo;
+
+		this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->currentRegion.x, activeVideo->currentRegion.x));
+		this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->alpha, 1.0f));
+		//auto funcS = ofxFunctionKeyframe::create([]() { OutputDebugStringA("start \n"); });
+		//auto funcF = ofxFunctionKeyframe::create([]() { OutputDebugStringA("finish \n"); });
+		//this->playlist.addToKeyFrame(funcS);
+		//this->playlist.addToKeyFrame(funcF);
+
+		// Position the video off the right side of the screen, so it can scroll onto the screen.
+		activeVideo->currentRegion.x = this->viewport.getRight();
+	}
+	else if (this->activeVideos.size() == 1)
+	{
+		auto activeVideo = ofPtr<ActiveVideo>(new ActiveVideo());
+		activeVideo->alpha = 0.0f;
+		activeVideo->videoSource = source;
+		activeVideo->windowType = WINDOW_TYPE_Second;
+		activeVideo->currentRegion = this->SecondVideoRegion;
+		activeVideo->removing = false;
+		this->activeVideos.push_back(activeVideo);
+
+		if (this->activeVideos[0]->windowType == WINDOW_TYPE_Single)
+		{
+			this->activeVideos[0]->windowType = WINDOW_TYPE_First;
+
+			// Shrink the first video
+			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &this->activeVideos[0]->currentRegion.height, this->FirstVideoRegion.height));
+
+			// Slide in the second video
+			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &activeVideo->currentRegion.x, activeVideo->currentRegion.x));
+			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed / 2, &activeVideo->alpha, 1.0f));
+
+			activeVideo->currentRegion.x = this->viewport.getRight();
+		}
+	}
+}
+
+void RemoteNetworkDisplay::RemoveActiveVideo(ofPtr<CroppedDrawable> source)
+{
 	for (auto iter = this->activeVideos.begin(); iter != this->activeVideos.end(); ++iter)
 	{
 		auto activeVideo = *iter;
@@ -145,7 +164,7 @@ void RemoteNetworkDisplay::RemoveVideoSource(ofPtr<CroppedDrawable> source)
 		{
 			// Slide this video off the screen;
 			activeVideo->removing = true;
-			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->currentRegion.x, this->viewport.getRight()));
+			this->playlist.addKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->currentRegion.x, this->viewport.getRight(), Playlist::TWEEN_LIN, TWEEN_EASE_OUT));
 			this->playlist.addToKeyFrame(Playlist::Action::tween(AnimationSpeed, &activeVideo->alpha, 0.0f));
 
 			if (activeVideo->windowType == WINDOW_TYPE_Single)
@@ -184,7 +203,6 @@ void RemoteNetworkDisplay::RemoveVideoSource(ofPtr<CroppedDrawable> source)
 		}
 	}
 }
-
 
 void RemoteNetworkDisplay::update()
 {
