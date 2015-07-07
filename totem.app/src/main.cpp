@@ -103,27 +103,22 @@ namespace
 		int windowWidth = screenWidth;
 		int windowHeight = screenHeight;
 
-		if (ofxArgParser::hasKey("display16by9"))
+		if (ofxArgParser::hasKey("display"))
 		{
-			ForceDisplayToBestFitOf(16, 9, windowWidth, windowHeight);
-		}
-		else if (ofxArgParser::hasKey("display16by10"))
-		{
-			ForceDisplayToBestFitOf(16, 10, windowWidth, windowHeight);
-		}
-		else if (ofxArgParser::hasKey("display3by2"))
-		{
-			ForceDisplayToBestFitOf(3, 2, windowWidth, windowHeight);
-		}
-		else if (ofxArgParser::hasKey("display768"))
-		{
-			windowWidth = 1366;
-			windowHeight = 768;
-		}
-		else if (ofxArgParser::hasKey("display1080"))
-		{
-			windowWidth = 1920;
-			windowHeight = 1080;
+			auto displayMode = ofxArgParser::getValue("display");
+			if (displayMode == "16x9") ForceDisplayToBestFitOf(16, 9, windowWidth, windowHeight);
+			else if (displayMode == "16x10") ForceDisplayToBestFitOf(16, 10, windowWidth, windowHeight);
+			else if (displayMode == "3x2") ForceDisplayToBestFitOf(3, 2, windowWidth, windowHeight);
+			else if (displayMode == "768")
+			{
+				windowWidth = 1366;
+				windowHeight = 768;
+			}
+			else if (displayMode == "1080")
+			{
+				windowWidth = 1920;
+				windowHeight = 1080;
+			}
 		}
 
 		RemoveWindowChrome(windowWidth, windowHeight);
@@ -183,11 +178,8 @@ int main(int argc, const char** argv)
 			endl <<
 			"-remote               (Don't use the totem display)" << endl <<
 			"  -totemSource=<path> (Use a test file instead of a remote totem network connection)" << endl <<
-			"  -display16by10      (Force the window to a 16:9 aspect ratio)" << endl <<
-			"  -display16by9       (Force the window to a 16:9 aspect ratio)" << endl <<
-			"  -display3by2        (Force the window to a 16:9 aspect ratio)" << endl <<
-			"  -display768         (Force the window to 1366x768)" << endl <<
-			"  -display1080        (Force the window to 1920x1080)" << endl <<
+			"  -display=<mode>     (Force the window to a specific size or aspect ratio)" << endl <<
+			"                      (supported modes: 16x10, 10x9, 3x2, 768, 1080)" << endl <<
 
 			endl << "NETWORK SETTINGS" << endl <<
 			"-netList                     (Show all network interfaces)" << endl <<
@@ -215,7 +207,7 @@ int main(int argc, const char** argv)
 			return -1;
 		}
 
-		vector<string> requireParams = { "totemSource", "netSource", "capDevice", "capWidth", "capHeight", "capSource", "netInterface" };
+		vector<string> requireParams = { "totemSource", "netSource", "capDevice", "capWidth", "capHeight", "capSource", "netInterface", "display" };
 		for (auto i = requireParams.begin(); i != requireParams.end(); ++i)
 		{
 			if (ofxArgParser::hasKey(*i) && ofxArgParser::getValue(*i) == "")
