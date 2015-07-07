@@ -6,7 +6,7 @@
 void TotemDisplay::initTotemDisplay(int count, int width, int height)
 {
 	this->drawTestPattern = false;
-#ifdef _DEBUG
+#ifdef _DEBUGX
 	this->drawTestPattern = true;
 #endif
 

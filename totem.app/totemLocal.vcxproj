@@ -75,7 +75,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"
 md "$(ProjectDir)bin\data"
-xcopy /d /y "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
+xcopy /s /d /y "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,7 +126,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"
 md "$(ProjectDir)bin\data"
-xcopy /d /y "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
+xcopy /s /d /y "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -421,6 +421,13 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <Image Include="data\call.png" />
     <Image Include="data\camera.png" />
     <Image Include="data\close.png" />
+    <Image Include="data\cortana\personaassets720x1280_circle_calm1_10.gif" />
+    <Image Include="data\cortana\personaassets720x1280_circle_elated1_10.gif" />
+    <Image Include="data\cortana\personaassets720x1280_circle_greeting1_10.gif" />
+    <Image Include="data\cortana\personaassets720x1280_circle_greeting2_10.gif" />
+    <Image Include="data\cortana\personaassets720x1280_circle_greeting3_10_Reverse.gif" />
+    <Image Include="data\cortana\personaassets720x1280_circle_listening1_10.gif" />
+    <Image Include="data\cortana\personaassets720x1280_circle_thinking1_10.gif" />
     <Image Include="data\hangup.png" />
     <Image Include="data\hub.png" />
     <Image Include="data\mute.png" />

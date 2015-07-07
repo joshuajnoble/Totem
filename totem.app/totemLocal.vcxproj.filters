@@ -396,6 +396,9 @@
     <Filter Include="data">
       <UniqueIdentifier>{b00b2400-ed6f-4c9f-bf9b-3a80a6433c5b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\cortana">
+      <UniqueIdentifier>{6b4effaa-253e-4a1c-8cf6-1d4e2f666320}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThreeSixtyUnwrap.h">
@@ -650,6 +653,27 @@
     </Image>
     <Image Include="data\camera.png">
       <Filter>data</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_listening1_10.gif">
+      <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_thinking1_10.gif">
+      <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_calm1_10.gif">
+      <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_elated1_10.gif">
+      <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_greeting1_10.gif">
+      <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_greeting2_10.gif">
+      <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\cortana\personaassets720x1280_circle_greeting3_10_Reverse.gif">
+      <Filter>data\cortana</Filter>
     </Image>
   </ItemGroup>
 </Project>
