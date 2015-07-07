@@ -25,7 +25,10 @@ void CylinderDisplay::allocateBuffers()
 	this->warpedH = this->totemVideoSource->getHeight();
 
 	/// set up the cylinder
-	cylinder.set(warpedW, warpedH * 4, 120, 60, 0, false);
+	float scale = this->windowHeight / (float)warpedH / 4;
+	auto radius = roundf(warpedW * scale);
+	auto height = roundf(warpedH * 2 * PI * scale);
+	cylinder.set(radius, height,  120, 60, 0, false);
 	cylinder.mapTexCoords(0, 0, warpedW, warpedH);
 
 	//createCylinderPiece(leftCylinderPiece, warpedW, 1080 * 2, CYLINDER_PIECE_WIDTH);
