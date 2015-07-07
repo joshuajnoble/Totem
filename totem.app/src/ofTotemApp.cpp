@@ -8,9 +8,12 @@ namespace
 {
 	const ofColor BACKGROUND_COLOR = ofColor(0x08, 0x21, 0x35);
 
-	const std::string CORTANA_INTRO = "personaassets720x1280_circle_greeting1_10.gif";
-	const std::string CORTANA_INTRO_ALTERNATE = "personaassets720x1280_circle_greeting2_10.gif";
 	const std::string CORTANA_IDLE = "personaassets720x1280_circle_calm1_10.gif";
+	const std::string CORTANA_ELATED = "personaassets720x1280_circle_elated1_10.gif";
+	const std::string CORTANA_GREET = "personaassets720x1280_circle_greeting1_10.gif";
+	const std::string CORTANA_GREET_ALTERNATE = "personaassets720x1280_circle_greeting2_10.gif";
+	const std::string CORTANA_LISTENTING = "personaassets720x1280_circle_listening1_10.gif";
+	const std::string CORTANA_THINKING = "personaassets720x1280_circle_thinking1_10.gif";
 }
 
 void ofTotemApp::earlyinit(int netid)
@@ -155,13 +158,12 @@ void ofTotemApp::draw()
 			}
 			else
 			{
-				auto halfHeight = (int)output.getHeight() / 2;
-				auto halfWidth = (int)output.getWidth() / 2;
-
 				ofBackground(0);
-				auto ratio = this->cortanaPlayer.getHeight() / this->cortanaPlayer.getWidth();
-				auto height = (int)output.getWidth() * ratio;
-				this->cortanaPlayer.draw(0, (int)(output.getHeight() - height) / 2, (int)output.getWidth(), height);
+
+				auto scale = output.getWidth() / this->cortanaPlayer.getWidth();
+				auto height = (int)roundf(this->cortanaPlayer.getHeight() * scale);
+				auto yOffset = -(int)roundf(30 * scale);
+				this->cortanaPlayer.draw(0, (int)(output.getHeight() - height) / 2 + yOffset, (int)output.getWidth(), height);
 			}
 
 			output.end();
@@ -218,7 +220,7 @@ void ofTotemApp::cortanaLoadClip(const string& clipName)
 
 void ofTotemApp::cortanaPlayIntro()
 {
-	cortanaLoadClip(CORTANA_INTRO);
+	cortanaLoadClip(CORTANA_GREET);
 	this->cortanaPlayer.setLoopState(OF_LOOP_NONE);
 	this->cortanaPlayer.play();
 }
