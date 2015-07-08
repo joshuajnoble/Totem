@@ -69,8 +69,9 @@ public:
 	virtual void exit();
 	void keyPressed(int key);
 	//void mouseMoved(int x, int y);
-	//void mouseDragged(int x, int y, int button);
+	void mouseDragged(int x, int y, int button);
 	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
 	void NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video);

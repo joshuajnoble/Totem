@@ -13,12 +13,6 @@ private:
 	ofRectangle FirstVideoRegion;
 	ofRectangle SecondVideoRegion;
 
-	//enum VideoinfoState { INACTIVE = 0, ACTIVE = 1, REMOVING = 2, REMOVED = 3 };
-	//struct VideoInfo
-	//{
-	//	ofPtr<CroppedDrawable> videoSource;
-	//};
-
 	std::vector<ofPtr<CroppedDrawable>> videoSources;
 
 	enum ACTIVE_WINDOW_TYPE { WINDOW_TYPE_Single = 0, WINDOW_TYPE_First = 1, WINDOW_TYPE_Second = 2 };

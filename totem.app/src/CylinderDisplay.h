@@ -28,12 +28,14 @@ private:
 	void mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2);
 
 	float currentLeftCylinder, currentRightCylinder, targetLeftCylinder, targetRightCylinder;
-	int   warpedW;
-	int   warpedH;
-	int   cylinderRes;
-	float *cylinderX;
-	float *cylinderY;
+	int warpedW;
+	int warpedH;
+	float cylinderCircumference;
 	float cylinderWedgeAngle;
+
+	ofPoint dragStart;
+	float startDragAngle;
+	bool isDragging = false;
 
 	ofMesh leftCylinderPiece, rightCylinderPiece;
 	ofVec4f prevTcoordLCP, prevTcoordRCP;
@@ -56,4 +58,9 @@ public:
 
 	bool isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
 	void SetViewAngle(float angle, bool animate = true);
+
+	void DragStart(ofPoint screenPosition);
+	void DragMove(ofPoint screenPosition);
+	void DragEnd(ofPoint screenPosition);
+	bool IsDragging() const { return this->isDragging; }
 };

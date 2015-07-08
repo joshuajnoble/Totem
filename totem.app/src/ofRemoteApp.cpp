@@ -335,6 +335,33 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 	}
 }
 
+
+// ********************************************************************************************************************
+void ofRemoteApp::mouseReleased(int x, int y, int button)
+{
+	if (button == 0 && this->cylinderDisplay->IsDragging())
+	{
+		this->cylinderDisplay->DragEnd(ofPoint(x, y));
+	}
+}
+
+// ********************************************************************************************************************
+void ofRemoteApp::mouseDragged(int x, int y, int button)
+{
+	if (button == 0)
+	{
+		if (!this->cylinderDisplay->IsDragging())
+		{
+			this->cylinderDisplay->DragStart(ofPoint(x, y));
+		}
+		else
+		{
+			this->cylinderDisplay->DragMove(ofPoint(x, y));
+		}
+	}
+}
+
+
 // ********************************************************************************************************************
 void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 {

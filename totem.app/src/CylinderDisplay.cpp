@@ -7,6 +7,106 @@ namespace
 	const int CYLINDER_PIECE_HEIGHT = 2;
 	const int PIECE_TEXCOORD_WIDTH = 720;
 	const int NEO_PIXELS_COUNT = 45;
+
+	class ofRay {
+	public:
+		ofRay() {}
+		ofRay(const ofVec3f &aOrigin, const ofVec3f &aDirection) : mOrigin(aOrigin) { setDirection(aDirection); }
+
+		void            setOrigin(const ofVec3f &aOrigin) { mOrigin = aOrigin; }
+		const ofVec3f&    getOrigin() const { return mOrigin; }
+
+		void setDirection(const ofVec3f &aDirection) {
+			mDirection = aDirection;
+			mInvDirection = ofVec3f(1.0f / mDirection.x, 1.0f / mDirection.y, 1.0f / mDirection.z);
+			mSignX = (mDirection.x < 0.0f) ? 1 : 0;
+			mSignY = (mDirection.y < 0.0f) ? 1 : 0;
+			mSignZ = (mDirection.z < 0.0f) ? 1 : 0;
+		}
+		const ofVec3f&    getDirection() const { return mDirection; }
+		const ofVec3f&    getInverseDirection() const { return mInvDirection; }
+
+		char    getSignX() const { return mSignX; }
+		char    getSignY() const { return mSignY; }
+		char    getSignZ() const { return mSignZ; }
+
+		ofVec3f calcPosition(float t) const { return mOrigin + mDirection * t; }
+
+		bool calcTriangleIntersection(const ofVec3f &vert0, const ofVec3f &vert1, const ofVec3f &vert2, float *result) const;
+		bool calcPlaneIntersection(const ofVec3f &origin, const ofVec3f &normal, float *result) const;
+
+		friend class ofMeshFace;
+
+	protected:
+		ofVec3f    mOrigin;
+		ofVec3f    mDirection;
+		// these are helpful to certain ray intersection algorithms
+		char    mSignX, mSignY, mSignZ;
+		ofVec3f    mInvDirection;
+	};
+
+	// algorithm from "Fast, Minimum Storage Ray-Triangle Intersection"
+	bool ofRay::calcTriangleIntersection(const ofVec3f &vert0, const ofVec3f &vert1, const ofVec3f &vert2, float *result) const
+	{
+
+		ofVec3f edge1, edge2, tvec, pvec, qvec;
+		float det;
+		float u, v;
+		const float EPSILON = 0.000001f;
+
+		edge1 = vert1 - vert0;
+		edge2 = vert2 - vert0;
+
+		pvec = getDirection().getCrossed(edge2);
+		det = edge1.dot(pvec);
+
+#if 0 // we don't want to backface cull
+		if (det < EPSILON)
+			return false;
+		tvec = getOrigin() - vert0;
+
+		u = tvec.dot(pvec);
+		if ((u < 0.0f) || (u > det))
+			return false;
+
+		qvec = tvec.getCrossed(edge1);
+		v = getDirection().dot(qvec);
+		if (v < 0.0f || u + v > det)
+			return false;
+
+		*result = edge2.dot(qvec) / det;
+		return true;
+#else
+		if (det > -EPSILON && det < EPSILON)
+			return false;
+
+		float inv_det = 1.0f / det;
+		tvec = getOrigin() - vert0;
+		u = tvec.dot(pvec) * inv_det;
+		if (u < 0.0f || u > 1.0f)
+			return false;
+
+		qvec = tvec.getCrossed(edge1);
+
+		v = getDirection().dot(qvec) * inv_det;
+		if (v < 0.0f || u + v > 1.0f)
+			return 0;
+
+		*result = edge2.dot(qvec) * inv_det;
+		return true;
+#endif
+	}
+
+	bool ofRay::calcPlaneIntersection(const ofVec3f &planeOrigin, const ofVec3f &planeNormal, float *result) const
+	{
+		float denom = planeNormal.dot(getDirection());
+
+		if (denom != 0.0f){
+			*result = planeNormal.dot(planeOrigin - getOrigin()) / denom;
+			return true;
+		}
+		return false;
+	}
 }
 
 // ********************************************************************************************************************
@@ -28,8 +128,10 @@ void CylinderDisplay::allocateBuffers()
 	float scale = this->windowHeight / (float)warpedH / 4;
 	auto radius = roundf(warpedW * scale);
 	auto height = roundf(warpedH * 2 * PI * scale);
-	cylinder.set(radius, height,  120, 60, 0, false);
+	cylinder.set(radius, height, 120, 60, 0, false);
 	cylinder.mapTexCoords(0, 0, warpedW, warpedH);
+
+	this->cylinderCircumference = radius * 2 * PI;
 
 	//createCylinderPiece(leftCylinderPiece, warpedW, 1080 * 2, CYLINDER_PIECE_WIDTH);
 	//createCylinderPiece(rightCylinderPiece, warpedW, 1080 * 2, CYLINDER_PIECE_WIDTH);
@@ -352,4 +454,63 @@ void CylinderDisplay::findRightFace()
 	}
 
 	mapTexCoords(rightCylinderPiece, min(1920, max(500, (int)rightMost.x + 200)), 380, 0, 700);
+}
+
+
+// ********************************************************************************************************************
+void CylinderDisplay::DragStart(ofPoint screenPosition)
+{
+	if (this->isDragging)
+	{
+		return;
+	}
+
+	this->isDragging = true;
+	this->dragStart = screenPosition;
+	this->startDragAngle = this->viewRotationAngle;
+}
+
+
+// ********************************************************************************************************************
+void CylinderDisplay::DragMove(ofPoint screenPosition)
+{
+	if (!this->isDragging)
+	{
+		return;
+	}
+
+	auto xDelta = screenPosition.x - this->dragStart.x;
+	auto adj = -0.125f;
+
+	//auto testAdj1 = -(float)this->windowWidth / this->warpedW;
+	//auto testAdj2 = -(float)this->windowWidth / this->cylinderCircumference / 2.5;
+	
+	if (windowWidth == 1920)
+	{
+		adj = -(float)this->windowWidth / this->cylinderCircumference / 2.5;
+	}
+
+	auto angleDelta = (xDelta * adj);
+
+	this->viewRotationAngle = this->startDragAngle + angleDelta;
+	while (this->viewRotationAngle >= 360)
+	{
+		this->viewRotationAngle -= 360;
+	}
+	while (this->viewRotationAngle < 0)
+	{
+		this->viewRotationAngle += 360;
+	}
+}
+
+
+// ********************************************************************************************************************
+void CylinderDisplay::DragEnd(ofPoint screenPosition)
+{
+	if (!this->isDragging)
+	{
+		return;
+	}
+
+	this->isDragging = false;
 }
