@@ -234,9 +234,33 @@ void CylinderDisplay::draw()
 		ofScale(this->scale, this->scale);
 	}
 
+#ifdef CHECK_FOV
+	auto halfWidth = this->windowWidth / 2.0f;
+	auto step = halfWidth / 5.0f;
+	auto autoClickAngle01 = getClickAngle(halfWidth + step * 0);
+	auto autoClickAngle02 = getClickAngle(halfWidth + step * 1);
+	auto autoClickAngle03 = getClickAngle(halfWidth + step * 2);
+	auto autoClickAngle04 = getClickAngle(halfWidth + step * 3);
+	auto autoClickAngle05 = getClickAngle(halfWidth + step * 4);
+	auto autoClickAngle06 = getClickAngle(halfWidth + step * 5);
+#endif
+
 	ofSetColor(255);
 	//this->fboOutput.draw(0, 0);
 	this->drawTexturedCylinder();
+
+#ifdef DRAW_AXIS
+	// Draw axis lines at the origin
+	ofPushMatrix();
+	ofTranslate(this->windowWidth / 2, this->windowHeight / 2);
+	ofSetColor(255, 0, 0);
+	ofLine(0, 0, 100, 0);
+	ofSetColor(0, 255, 0);
+	ofLine(0, 0, 0, 100);
+	ofSetColor(0, 0, 255);
+	ofLine(0, 0, 100, 100);
+	ofPopMatrix();
+#endif
 
 	//if (isDrawingLeftCylinder)
 	//{
@@ -478,7 +502,22 @@ void CylinderDisplay::findRightFace()
 // ********************************************************************************************************************
 float CylinderDisplay::getClickAngle(int x)
 {
-	auto xOffsetFromCenter = x - (this->windowWidth / 2);
+#if 1
+	// This is a cheating linear mapping that will need to be tweaked for each resolution (FOV)
+	auto fov = 148.0f;
+	if (windowWidth == 1920)
+	{
+		fov = 148.0f;
+	}
+
+	float scale = fov / this->windowWidth;
+
+	auto halfWidth = this->windowWidth / 2;
+	auto angle = ((x - halfWidth) * scale);
+	return angle;
+#else
+	// Ths maps X positions to real circle-based y positions since the drag is not actually linear
+	auto xOffsetFromCenter = (x - this->windowWidth / 2);
 	auto opposite = xOffsetFromCenter;
 	auto rSqr = this->cylinder.getRadius() * this->cylinder.getRadius();
 	auto adjacent = std::sqrtf(std::abs(rSqr - opposite * opposite));
@@ -487,9 +526,10 @@ float CylinderDisplay::getClickAngle(int x)
 	//auto calculatedAngleRadians = std::atan2f(opposite, adjacent);
 	auto calculatedAngleDegrees = calculatedAngleRadians * 180 / PI;
 
-	float fovScale = 2.0;
+	float fovScale = 1.6f;
 	calculatedAngleDegrees = calculatedAngleDegrees * fovScale;
 	return calculatedAngleDegrees;
+#endif
 }
 
 
@@ -518,21 +558,9 @@ void CylinderDisplay::DragMove(ofPoint screenPosition)
 
 	float angleDelta = 0;
 
-#if 0
-	// This is a cheating linear mapping that will need to be tweaked for each resolution
-	auto xDelta = screenPosition.x - this->dragStart.x;
-	auto adj = -0.125f;
-	if (windowWidth == 1920)
-	{
-		adj = -(float)this->windowWidth / this->cylinderCircumference / 2.5;
-	}
-
-	angleDelta = (xDelta * adj);
-#else
 	// This should be more accurate across more resolutions, but is untested.
 	auto currentAngleOffset = getClickAngle(screenPosition.x);
 	angleDelta = -(currentAngleOffset - this->startDragAngleOffset);
-#endif
 
 	this->viewRotationAngle = this->startDragAngle + angleDelta;
 }
