@@ -160,10 +160,17 @@ void ofTotemApp::draw()
 			{
 				ofBackground(0);
 
-				auto scale = output.getWidth() / this->cortanaPlayer.getWidth();
-				auto height = (int)roundf(this->cortanaPlayer.getHeight() * scale);
-				auto yOffset = -(int)roundf(30 * scale);
-				this->cortanaPlayer.draw(0, (int)(output.getHeight() - height) / 2 + yOffset, (int)output.getWidth(), height);
+				auto halfHeight = (int)output.getHeight() / 2;
+				auto halfWidth = (int)output.getWidth() / 2;
+				ofRectangle region(0, 0, this->cortanaPlayer.width, this->cortanaPlayer.height);
+
+				auto scale = 1.0;// output.getWidth() / this->cortanaPlayer.getWidth();
+				region.scaleFromCenter(scale, scale);
+
+				region.translateY(halfHeight - this->cortanaPlayer.height / 2 - 30 * scale);
+				region.translateX(halfWidth - this->cortanaPlayer.width / 2);
+
+				this->cortanaPlayer.draw(region);
 			}
 
 			output.end();
