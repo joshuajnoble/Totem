@@ -197,6 +197,8 @@ float CylinderDisplay::GetViewAngle() const
 // ********************************************************************************************************************
 void CylinderDisplay::SetViewAngle(float angle, bool animate)
 {
+	this->isDragging = false;
+
 	if (this->totemVideoSource && animate)
 	{
 		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
