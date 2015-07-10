@@ -150,6 +150,7 @@ namespace
 			remote.isTotem = true;
 			remote.hasLiveFeed = true;
 			remoteApp->NewConnection(remote, unwrappedVideo);
+			remoteApp->Handle_ClientStreamAvailable(remote);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(remoteApp);

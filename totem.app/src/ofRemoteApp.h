@@ -55,7 +55,6 @@ private:
 	void WelcomeSequenceComplete();
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
-	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 
 	int networkInterfaceId;
 
@@ -74,6 +73,7 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
+	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 	void NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video);
 
 	virtual int displayWidth() const;

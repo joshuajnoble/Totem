@@ -469,6 +469,7 @@ void ofRemoteApp::onKeyframe(ofxPlaylistEventArgs& args)
 	}
 	else if (args.message == CylinderDisplay_WELCOME_COMPLETE_EVENT)
 	{
+		this->cylinderDisplay->SetViewAngle(CylinderDisplay::NormalizeAngle(this->cylinderDisplay->GetViewAngle()), false);
 		this->canShowRemotes = true;
 	}
 }
