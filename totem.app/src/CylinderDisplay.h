@@ -26,6 +26,7 @@ private:
 
 	void createCylinderPiece(ofMesh &m, float radius, float height, float degrees);
 	void mapTexCoords(ofMesh &m, float u1, float v1, float u2, float v2);
+	float getClickAngle(int x);
 
 	float currentLeftCylinder, currentRightCylinder, targetLeftCylinder, targetRightCylinder;
 	int warpedW;
@@ -35,6 +36,7 @@ private:
 
 	ofPoint dragStart;
 	float startDragAngle;
+	float startDragAngleOffset;
 	bool isDragging = false;
 
 	ofMesh leftCylinderPiece, rightCylinderPiece;
@@ -57,7 +59,9 @@ public:
 	void DoWelcome(const string& eventName);
 
 	bool isDrawingLeftCylinder, isDrawingRightCylinder, isDrawingSecondRemote;
+	float GetViewAngle() const;
 	void SetViewAngle(float angle, bool animate = true);
+	static float NormalizeAngle(float);
 
 	void DragStart(ofPoint screenPosition);
 	void DragMove(ofPoint screenPosition);

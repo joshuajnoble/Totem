@@ -172,22 +172,40 @@ void CylinderDisplay::DoWelcome(const string& eventName)
 
 
 // ********************************************************************************************************************
+float CylinderDisplay::NormalizeAngle(float angle)
+{
+	while (angle >= 360)
+	{
+		angle -= 360;
+	}
+
+	while (angle < 0)
+	{
+		angle += 360;
+	}
+
+	return angle;
+}
+
+// ********************************************************************************************************************
+float CylinderDisplay::GetViewAngle() const
+{
+	return this->viewRotationAngle;
+}
+
+
+// ********************************************************************************************************************
 void CylinderDisplay::SetViewAngle(float angle, bool animate)
 {
 	if (this->totemVideoSource && animate)
 	{
 		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
-		while (this->viewRotationAngle >= 360)
-		{
-			this->viewRotationAngle -= 360;
-		}
-
 		float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
 		introPlaylist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
 	}
 	else
 	{
-		this->viewRotationAngle = angle;
+		this->viewRotationAngle = NormalizeAngle(angle);
 	}
 }
 
@@ -458,6 +476,24 @@ void CylinderDisplay::findRightFace()
 
 
 // ********************************************************************************************************************
+float CylinderDisplay::getClickAngle(int x)
+{
+	auto xOffsetFromCenter = x - (this->windowWidth / 2);
+	auto opposite = xOffsetFromCenter;
+	auto rSqr = this->cylinder.getRadius() * this->cylinder.getRadius();
+	auto adjacent = std::sqrtf(std::abs(rSqr - opposite * opposite));
+	auto tanTheta = opposite / adjacent;
+	auto calculatedAngleRadians = std::atanf(tanTheta);
+	//auto calculatedAngleRadians = std::atan2f(opposite, adjacent);
+	auto calculatedAngleDegrees = calculatedAngleRadians * 180 / PI;
+
+	float fovScale = 2.0;
+	calculatedAngleDegrees = calculatedAngleDegrees * fovScale;
+	return calculatedAngleDegrees;
+}
+
+
+// ********************************************************************************************************************
 void CylinderDisplay::DragStart(ofPoint screenPosition)
 {
 	if (this->isDragging)
@@ -468,6 +504,7 @@ void CylinderDisplay::DragStart(ofPoint screenPosition)
 	this->isDragging = true;
 	this->dragStart = screenPosition;
 	this->startDragAngle = this->viewRotationAngle;
+	this->startDragAngleOffset = getClickAngle(screenPosition.x);
 }
 
 
@@ -479,28 +516,25 @@ void CylinderDisplay::DragMove(ofPoint screenPosition)
 		return;
 	}
 
+	float angleDelta = 0;
+
+#if 0
+	// This is a cheating linear mapping that will need to be tweaked for each resolution
 	auto xDelta = screenPosition.x - this->dragStart.x;
 	auto adj = -0.125f;
-
-	//auto testAdj1 = -(float)this->windowWidth / this->warpedW;
-	//auto testAdj2 = -(float)this->windowWidth / this->cylinderCircumference / 2.5;
-	
 	if (windowWidth == 1920)
 	{
 		adj = -(float)this->windowWidth / this->cylinderCircumference / 2.5;
 	}
 
-	auto angleDelta = (xDelta * adj);
+	angleDelta = (xDelta * adj);
+#else
+	// This should be more accurate across more resolutions, but is untested.
+	auto currentAngleOffset = getClickAngle(screenPosition.x);
+	angleDelta = -(currentAngleOffset - this->startDragAngleOffset);
+#endif
 
 	this->viewRotationAngle = this->startDragAngle + angleDelta;
-	while (this->viewRotationAngle >= 360)
-	{
-		this->viewRotationAngle -= 360;
-	}
-	while (this->viewRotationAngle < 0)
-	{
-		this->viewRotationAngle += 360;
-	}
 }
 
 
@@ -512,5 +546,6 @@ void CylinderDisplay::DragEnd(ofPoint screenPosition)
 		return;
 	}
 
+	this->viewRotationAngle = NormalizeAngle(this->viewRotationAngle);
 	this->isDragging = false;
 }
