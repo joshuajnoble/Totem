@@ -1,6 +1,7 @@
 #include "UdpDiscovery.h"
 #include <Poco/Mutex.h>
 #include <Poco/URI.h>
+#include "Utils.h"
 
 void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSource)
 {
@@ -8,8 +9,15 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	auto interfaces = GetAllNetworkInterfaces();
 	if (networkInterfaceId == -1) // Use default network interface
 	{
-		interfaces = GetAllNetworkInterfaces();
-		networkInterfaceId = interfaces[0].index();
+		auto found = std::find_if(interfaces.begin(), interfaces.end(), [](const Poco::Net::NetworkInterface& i) { return -1 != find_indexof_substr_nocase(i.name(), std::string("ethernet")); });
+		if (found != interfaces.end())
+		{
+			networkInterfaceId = found->index();
+		}
+		else
+		{
+			networkInterfaceId = interfaces[0].index();
+		}
 	}
 
 	this->isTotem = isTotemSource;
@@ -236,6 +244,11 @@ Poco::Net::NetworkInterface::List UdpDiscovery::GetAllNetworkInterfaces()
 	for (auto iter = interfaces.begin(); iter != interfaces.end(); ++iter)
 	{
 		auto interface = *iter;
+#if _DEBUGX
+		auto a = interface.displayName();
+		auto b = interface.adapterName();
+		auto c = interface.name();
+#endif
 		if (interface.macAddress().size() && !interface.isLoopback() && interface.supportsIPv4() && interface.macAddress().size())
 		{
 			rval.push_back(interface);

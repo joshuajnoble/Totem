@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "ofxPlaylist/src/ofxEventKeyframe.h"
+#include <cctype>
+#include <locale>
 
 class Utils
 {
@@ -55,3 +57,28 @@ public:
 	bool delayHasEnded();
 	int getDuration()	{ return delay_steps; };
 };
+
+template<typename charT>
+struct upper_compare {
+	upper_compare(const std::locale &loc) : locale(loc) {}
+	bool operator()(charT ch1, charT ch2)
+	{
+		return std::toupper(ch1, this->locale) == std::toupper(ch2, this->locale);
+	}
+private:
+	const std::locale& locale;
+};
+
+template<typename T>
+int find_indexof_substr_nocase(const T& string1, const T& string2, const std::locale& locale = std::locale())
+{
+	auto found = std::search(string1.begin(), string1.end(), string2.begin(), string2.end(), upper_compare<typename T::value_type>(locale));
+	if (found != string1.end())
+	{
+		return found - string1.begin();
+	}
+	else
+	{
+		return -1;
+	}
+}
