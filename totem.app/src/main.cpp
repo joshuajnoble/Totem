@@ -109,6 +109,11 @@ namespace
 			if (displayMode == "16x9") ForceDisplayToBestFitOf(16, 9, windowWidth, windowHeight);
 			else if (displayMode == "16x10") ForceDisplayToBestFitOf(16, 10, windowWidth, windowHeight);
 			else if (displayMode == "3x2") ForceDisplayToBestFitOf(3, 2, windowWidth, windowHeight);
+			else if (displayMode == "720")
+			{
+				windowWidth = 1280;
+				windowHeight = 720;
+			}
 			else if (displayMode == "768")
 			{
 				windowWidth = 1366;
