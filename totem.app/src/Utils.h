@@ -82,3 +82,32 @@ int find_indexof_substr_nocase(const T& string1, const T& string2, const std::lo
 		return -1;
 	}
 }
+
+class FrameRateGate
+{
+public:
+	FrameRateGate(int framesPerSecond) : timeDelta(framesPerSecond / 1.0) {};
+	FrameRateGate(float frameTime) : timeDelta(frameTime) {};
+
+	bool IsGateOpen()
+	{
+		auto time = ofGetElapsedTimef();
+		if (this->nextTime == -1)
+		{
+			this->nextTime = time + this->timeDelta;
+			return false;
+		}
+		else if (time >= this->nextTime)
+		{
+			this->nextTime = time + this->timeDelta;
+			return true;
+		}
+
+		return false;
+	}
+
+private:
+	const float timeDelta;
+	float startTime = -1;
+	float nextTime = -1;
+};
