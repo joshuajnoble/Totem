@@ -2,6 +2,8 @@
 #include "ofxGstRTPClientAsVideoSource.h"
 #include "Utils.h"
 
+#define SHOW_FPS
+
 #define CYLINDER_PIECE_WIDTH 44
 #define CYLINDER_PIECE_HEIGHT 2
 #define PIECE_TEXCOORD_WIDTH 720
@@ -81,7 +83,12 @@ void ofRemoteApp::setup()
 	hangupIcon.loadImage("hangup.png");
 	muteIcon.loadImage("mute.png");
 
+#ifdef SHOW_FPS
 	ofSetVerticalSync(false);
+#else
+	ofSetFrameRate(30);
+	ofSetVerticalSync(true);
+#endif
 
 	this->streamManager.broadcastVideoBitrate = 4000;
 }
@@ -199,6 +206,10 @@ void ofRemoteApp::draw()
 	{
 		this->networkDisplay.draw();
 	}
+
+#ifdef SHOW_FPS
+	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
+#endif
 }
 
 
