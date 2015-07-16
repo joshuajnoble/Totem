@@ -3,6 +3,42 @@
 #include <Poco/URI.h>
 #include "Utils.h"
 
+/*
+ * OVERVIEW:
+ * We don't want the clients/peers to have to configure anything on the network and they can't connect to each other
+ * if they don't have the proper settings.  So we need a way for them to discover each other and to be able to
+ * connect automatically.  We do that by sending UDP broadcast messages to the subnet that each client can get
+ * without having to know the IP Address and Port (or even the existence) of each other peer.
+ *
+ * DETAILS:
+ * UDP is unreliable, so we send a steady quantity of messages continuously.  Each packet is a JSON encoded data
+ * record that advertises the information that a remote needs to know (like video width and height).  We don't
+ * have to send our own IP address explicitly because it is part of the packet information that is available to
+ * each peer when they receive any UDP packet.  You do have to provide a port for each peer to connect on, though.
+ * In fact, each peer will need multiple ports for video and audio streaming.
+ *
+ * The GStreamer system is what actually sends, receives and synchs the video streams.  GStreamer is using a dedicated
+ * set of connections between each peer.  That means that we need a unique starting port address for each peer that we
+ * want to send video to.  The remote peer will also have a port specifically reserved for us to connect to.  Given
+ * the starting port, GStreamer will open up more ports (in sequence) as needed.  For this reason, we have to skip
+ * a certain number of ports between each client, so we don't accidentally have an overlap in our port ranges.
+ *
+ * We send a custom "DNS" packet to advertise our own information at regular intervals.  Whenever we receive a "DNS"
+ * packet from a peer, we track it and can then assign local ports specific to that peer.  We then make the peer to
+ * port mapping information part of our own "DNS" broadcast.  Each peer that sees the "DNS" packet will check for its
+ * own id in that packet and extract the ports that are assigned to them.  In this way, the "DNS" part of the system
+ * does not require any of the peers to have to connect or communicate directly between each other.
+ *
+ * Since we are expecting to see lots of "DNS" messages from each peer, we can track the last time we saw one for
+ * each peer.  If we haven't seen a message in a certain amount of time, we treat that peer as lost/disconnected.
+ *
+ * We don't want all of the clients to immediately connect to each other because we want to promote the concept that
+ * the totem connection is the central piece of the conversation.  So when we don't have a totem source, we don't want
+ * the peers connected.  We also don't want to be broadcasting a remote stream unless the user has chosen to connect
+ * to the active session.  If the totem peer is lost, then everyone should disconnect.  So we have to adjust
+ * exactly when we broadcast each of the port records in the "DNS" packet to get the behaviour we want.
+ */
+
 void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSource)
 {
 	bool found = false;
