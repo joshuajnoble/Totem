@@ -1,5 +1,29 @@
 #include "ThreeSixtyUnwrap.h"
 
+class UnwrapThread : public ofThread
+{
+private:
+	ofImage image;
+	ofPtr<ofBaseVideoDraws> input;
+	ThreeSixtyUnwrap* unwrapper;
+
+public:
+	void threadedFunction()
+	{
+		while (isThreadRunning())
+		{
+			this->input->update();
+			if (this->input->isFrameNew())
+			{
+				this->lock();
+				this->unlock();
+			}
+
+			ofSleepMillis(10); // No need to run faster than 100 fps
+		}
+	}
+};
+
 ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
 {
 	float div = displayRatio.x * displayRatio.y;
@@ -79,46 +103,71 @@ void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideo> videoSource, ofVec2f out
 
 	computePanoramaProperties();
 	computeInversePolarTransform();
+
+	this->startThread();
 }
+
+void ThreeSixtyUnwrap::threadedFunction()
+{
+	while (isThreadRunning())
+	{
+		this->videoSource->update();
+		if (this->videoSource->isFrameNew())
+		{
+			if (_bCenterChanged || _bAngularOffsetChanged)
+			{
+				//XML.setValue("CENTERX", warpedCx);
+				//XML.setValue("CENTERY", warpedCy);
+				//XML.setValue("ROTATION_DEGREES", angularOffset);
+				computePanoramaProperties();
+				computeInversePolarTransform();
+
+				_bAngularOffsetChanged = false;
+				_bCenterChanged = false;
+			}
+
+			memcpy(warpedPixels.get(), this->videoSource->getPixels(), warpedW*warpedH * 3);
+			warpedIplImage->imageData = (char*)warpedPixels.get();
+
+			cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedIplImage->width, warpedIplImage->height));
+
+			cvRemap(warpedIplImage,
+				unwarpedIplImage,
+				srcxArrayOpenCV.getCvImage(),
+				srcyArrayOpenCV.getCvImage(),
+				interpMethod | CV_WARP_FILL_OUTLIERS, blackOpenCV);
+
+			this->lock();
+			unwarpedPixels.setFromPixels((unsigned char*)unwarpedIplImage->imageData, unwarpedIplImage->width, unwarpedIplImage->height, 3);
+			unwarpedPixels.mirror(true, false);
+			this->newSourceFrame = true;
+			this->unlock();
+		}
+
+		ofSleepMillis(10); // No need to run faster than 100 fps
+	}
+}
+
 
 void ThreeSixtyUnwrap::update()
 {
-	this->videoSource->update();
-	if (this->videoSource->isFrameNew())
+	this->lock();
+	if (this->newSourceFrame)
 	{
-		if (_bCenterChanged || _bAngularOffsetChanged)
-		{
-			//XML.setValue("CENTERX", warpedCx);
-			//XML.setValue("CENTERY", warpedCy);
-			//XML.setValue("ROTATION_DEGREES", angularOffset);
-			computePanoramaProperties();
-			computeInversePolarTransform();
-
-			_bAngularOffsetChanged = false;
-			_bCenterChanged = false;
-		}
-
-		memcpy(warpedPixels.get(), this->videoSource->getPixels(), warpedW*warpedH * 3);
-		warpedIplImage->imageData = (char*)warpedPixels.get();
-
-		cvSetImageROI(warpedIplImage, cvRect(0, 0, warpedIplImage->width, warpedIplImage->height));
-
-		cvRemap(warpedIplImage,
-			unwarpedIplImage,
-			srcxArrayOpenCV.getCvImage(),
-			srcyArrayOpenCV.getCvImage(),
-			interpMethod | CV_WARP_FILL_OUTLIERS, blackOpenCV);
-
-		unwarpedPixels.setFromPixels((unsigned char*)unwarpedIplImage->imageData, unwarpedIplImage->width, unwarpedIplImage->height, 3);
-		unwarpedPixels.mirror(true, false);
-
 		unwrappedImage.setFromPixels(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, OF_IMAGE_COLOR, true);
+		this->newSourceFrame = false;
+		this->unlock();
 		unwrappedImage.update();
+	}
+	else
+	{
+		this->unlock();
 	}
 }
 
 void ThreeSixtyUnwrap::close()
 {
+	this->waitForThread(true);
 	this->warpedPixels.reset();
 	this->unwrappedImageOpenCV.clear();
 	this->unwrappedImage.clear();

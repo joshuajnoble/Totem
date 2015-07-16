@@ -6,7 +6,7 @@
 #include "ofxOpenCv\src\ofxCvFloatImage.h"
 #include "ofxXmlSettings\src\ofxXmlSettings.h"
 
-class ThreeSixtyUnwrap : public ofBaseVideoDraws
+class ThreeSixtyUnwrap : public ofBaseVideoDraws, ofThread
 {
 public:
 	virtual ~ThreeSixtyUnwrap(){}
@@ -36,7 +36,9 @@ public:
 private:
 	void computePanoramaProperties();
 	void computeInversePolarTransform();
+	void threadedFunction();
 
+	bool newSourceFrame = false;
 	int   warpedW;
 	int   warpedH;
 	float unwarpedW;

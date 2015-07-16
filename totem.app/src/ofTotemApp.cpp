@@ -49,6 +49,7 @@ void ofTotemApp::setup()
 //--------------------------------------------------------------
 void ofTotemApp::exit()
 {
+	this->videoSource->close();
 	streamManager.exit();
 }
 

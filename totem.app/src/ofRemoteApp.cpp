@@ -247,6 +247,7 @@ void ofRemoteApp::DrawSelfie()
 // ********************************************************************************************************************
 void ofRemoteApp::exit()
 {
+	this->videoSource->close();
 	VideoCaptureAppBase::exit();
 }
 
