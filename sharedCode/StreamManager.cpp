@@ -267,7 +267,7 @@ void StreamManager::newClient(clientParameters params){
     clients[params.clientID]->setup(params.ipAddress, 0);
     clients[params.clientID]->addVideoChannel(params.videoPort);
     clients[params.clientID]->addAudioChannel(params.audioPort);
-    
+	clients[params.clientID]->drop = true;    
     
     remoteVideos[params.clientID] = ofPtr<ofFbo>(new ofFbo());
     remoteVideos[params.clientID]->allocate(params.videoWidth,params.videoHeight, GL_RGB);
