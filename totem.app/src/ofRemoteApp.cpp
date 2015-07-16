@@ -131,7 +131,7 @@ void ofRemoteApp::update()
 		}
 	}
 
-	if (this->totemSource)
+	if (this->totemSource && this->cylinderDisplay)
 	{
 		this->cylinderDisplay->update();
 	}
@@ -350,7 +350,7 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 // ********************************************************************************************************************
 void ofRemoteApp::mouseReleased(int x, int y, int button)
 {
-	if (button == 0 && this->cylinderDisplay->IsDragging())
+	if (button == 0 && this->cylinderDisplay && this->cylinderDisplay->IsDragging())
 	{
 		this->cylinderDisplay->DragEnd(ofPoint(x, y));
 	}
@@ -359,7 +359,7 @@ void ofRemoteApp::mouseReleased(int x, int y, int button)
 // ********************************************************************************************************************
 void ofRemoteApp::mouseDragged(int x, int y, int button)
 {
-	if (button == 0)
+	if (button == 0 && this->cylinderDisplay)
 	{
 		if (!this->cylinderDisplay->IsDragging())
 		{
