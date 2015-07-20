@@ -1,6 +1,8 @@
 #include "ofTotemApp.h"
 #include "Utils.h"
 
+//#define SHOW_FPS
+
 using namespace ofxCv;
 using namespace cv;
 
@@ -35,6 +37,13 @@ int ofTotemApp::displayHeight() const
 //--------------------------------------------------------------
 void ofTotemApp::setup()
 {
+#ifdef SHOW_FPS
+	ofSetVerticalSync(false);
+#else
+	ofSetFrameRate(30);
+	ofSetVerticalSync(true);
+#endif
+
 	VideoCaptureAppBase::setup(this->networkInterfaceId, true);
 
 	this->totemDisplay.allocateBuffers();
@@ -66,9 +75,9 @@ void ofTotemApp::update()
 		cortanaPlayIdle();
 	}
 
+	this->cortanaPlayer.update();
 	if (this->cortanaPlayer.isFrameNew())
 	{
-		this->cortanaPlayer.update();
 	}
 
 	VideoCaptureAppBase::update();
@@ -178,6 +187,10 @@ void ofTotemApp::draw()
 			this->totemDisplay.drawCloned();
 		}
 	}
+
+#ifdef SHOW_FPS
+	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
+#endif
 }
 
 
