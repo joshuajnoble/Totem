@@ -319,7 +319,7 @@ int main(int argc, const char** argv)
 		}
 	}
 
-	if (!totemMode || ofxArgParser::hasKey("dontUnwrap"))
+	if (!totemMode || ofxArgParser::hasKey("dontUnwrap") || ofxArgParser::hasKey("showInput"))
 	{
 		app->videoSource = videoSource;
 	}

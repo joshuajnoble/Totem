@@ -1,29 +1,5 @@
 #include "ThreeSixtyUnwrap.h"
 
-class UnwrapThread : public ofThread
-{
-private:
-	ofImage image;
-	ofPtr<ofBaseVideoDraws> input;
-	ThreeSixtyUnwrap* unwrapper;
-
-public:
-	void threadedFunction()
-	{
-		while (isThreadRunning())
-		{
-			this->input->update();
-			if (this->input->isFrameNew())
-			{
-				this->lock();
-				this->unlock();
-			}
-
-			ofSleepMillis(10); // No need to run faster than 100 fps
-		}
-	}
-};
-
 ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
 {
 	float div = displayRatio.x * displayRatio.y;
