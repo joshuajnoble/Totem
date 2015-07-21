@@ -237,6 +237,11 @@ void ofTotemApp::cortanaLoadClip(const string& clipName)
 	{
 		this->cortanaPlayer.loadMovie(fullPath);
 	}
+	else if (!this->cortanaLoadErrorDisplayed)
+	{
+		this->cortanaLoadErrorDisplayed = true;
+		cout << "You are missing a cortana file: " + fullPath;
+	}
 }
 
 void ofTotemApp::cortanaPlayIntro()

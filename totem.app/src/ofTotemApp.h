@@ -21,6 +21,7 @@ private:
 	ofVideoPlayer cortanaPlayer;
 	TotemDisplay totemDisplay;
 	ofPtr<ofBaseVideoDraws> netImpersonate;
+	bool cortanaLoadErrorDisplayed = false;
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
