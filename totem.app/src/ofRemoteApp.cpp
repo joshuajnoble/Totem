@@ -188,7 +188,7 @@ void ofRemoteApp::draw()
 
 	DrawSelfie();
 
-#ifdef _DEBUGX
+#ifdef _DEBUG
 	if (this->cylinderDisplay)
 	{
 		auto source = this->cylinderDisplay->getTotemVideoSource();

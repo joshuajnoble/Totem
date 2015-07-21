@@ -1,5 +1,10 @@
 #include "ThreeSixtyUnwrap.h"
 
+ThreeSixtyUnwrap::~ThreeSixtyUnwrap()
+{
+	this->close();
+}
+
 ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
 {
 	float div = displayRatio.x * displayRatio.y;
@@ -73,9 +78,6 @@ void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideo> videoSource, ofVec2f out
 	yocvdata = (float*)srcyArrayOpenCV.getCvImage()->imageData;
 
 	playerScaleFactor = (float)(ofGetHeight() - unwarpedH) / (float)warpedH;
-	savedWarpedCx = warpedCx = XML.getValue("CENTERX", warpedW / 2.0);
-	savedWarpedCy = warpedCy = XML.getValue("CENTERY", warpedH / 2.0);
-	savedAngularOffset = angularOffset;
 
 	computePanoramaProperties();
 	computeInversePolarTransform();
@@ -143,13 +145,18 @@ void ThreeSixtyUnwrap::update()
 
 void ThreeSixtyUnwrap::close()
 {
-	this->waitForThread(true);
-	this->warpedPixels.reset();
-	this->unwrappedImageOpenCV.clear();
-	this->unwrappedImage.clear();
-	this->unwarpedPixels.clear();
-	this->srcxArrayOpenCV.clear();
-	this->srcyArrayOpenCV.clear();
+	if (this->warpedPixels)
+	{
+		this->waitForThread(true);
+
+		this->warpedPixels.reset();
+		this->unwrappedImageOpenCV.clear();
+		this->unwrappedImage.clear();
+		this->unwarpedPixels.clear();
+		this->srcxArrayOpenCV.clear();
+		this->srcyArrayOpenCV.clear();
+		this->videoSource.reset();
+	}
 }
 
 //=============================================

@@ -9,7 +9,7 @@
 class ThreeSixtyUnwrap : public ofBaseVideoDraws, ofThread
 {
 public:
-	virtual ~ThreeSixtyUnwrap(){}
+	virtual ~ThreeSixtyUnwrap();
 
 	static ofVec2f CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio);
 	void initUnwrapper(ofPtr<ofBaseVideo> videoSource, ofVec2f outputSize);
@@ -45,9 +45,6 @@ private:
 	float unwarpedH;
 	float warpedCx;
 	float warpedCy;
-	float savedWarpedCx;
-	float savedWarpedCy;
-	float savedAngularOffset;
 	float angularOffset;
 
 	float maxR;
