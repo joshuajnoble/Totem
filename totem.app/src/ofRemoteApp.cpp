@@ -2,7 +2,7 @@
 #include "ofxGstRTPClientAsVideoSource.h"
 #include "Utils.h"
 
-#define SHOW_FPS
+//#define SHOW_FPS
 
 #define CYLINDER_PIECE_WIDTH 44
 #define CYLINDER_PIECE_HEIGHT 2
@@ -188,7 +188,7 @@ void ofRemoteApp::draw()
 
 	DrawSelfie();
 
-#ifdef _DEBUG
+#ifdef _DEBUGX
 	if (this->cylinderDisplay)
 	{
 		auto source = this->cylinderDisplay->getTotemVideoSource();

@@ -78,6 +78,8 @@ void ThreeSixtyUnwrap::initUnwrapper(ofPtr<ofBaseVideo> videoSource, ofVec2f out
 	yocvdata = (float*)srcyArrayOpenCV.getCvImage()->imageData;
 
 	playerScaleFactor = (float)(ofGetHeight() - unwarpedH) / (float)warpedH;
+	warpedCx = XML.getValue("CENTERX", warpedW / 2.0);
+	warpedCy = XML.getValue("CENTERY", warpedH / 2.0);
 
 	computePanoramaProperties();
 	computeInversePolarTransform();
