@@ -117,14 +117,15 @@ void ThreeSixtyUnwrap::threadedFunction()
 				srcyArrayOpenCV.getCvImage(),
 				interpMethod | CV_WARP_FILL_OUTLIERS, blackOpenCV);
 
-			this->lock();
-			unwarpedPixels.setFromPixels((unsigned char*)unwarpedIplImage->imageData, unwarpedIplImage->width, unwarpedIplImage->height, 3);
-			unwarpedPixels.mirror(true, false);
-			this->newSourceFrame = true;
-			this->unlock();
+			{
+				ofScopedLock lock(this->mutex);
+				unwarpedPixels.setFromPixels((unsigned char*)unwarpedIplImage->imageData, unwarpedIplImage->width, unwarpedIplImage->height, 3);
+				unwarpedPixels.mirror(true, false);
+				this->newSourceFrame = true;
+			}
 		}
 
-		ofSleepMillis(10); // No need to run faster than 100 fps
+		ofSleepMillis(5); // No need to run faster than 200 fps
 	}
 }
 
