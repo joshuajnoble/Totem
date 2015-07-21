@@ -23,8 +23,7 @@ void ofApp::update(){
 	{
 		grabber.update();
 		if (grabber.isFrameNew()){
-			sharedImg->setFromPixels(grabber.getPixelsRef());
-			streaming.newFrame();
+			streaming.newFrame(grabber.getPixelsRef());
 		}
 
 		streaming.update();
@@ -33,8 +32,7 @@ void ofApp::update(){
 	{
 		unwrapper->update();
 		if (unwrapper->isFrameNew()){
-			sharedImg->setFromPixels(unwrapper->getPixelsRef());
-			streaming.newFrame();
+			streaming.newFrame(unwrapper->getPixelsRef());
 		}
 		streaming.update();
 	}
@@ -102,7 +100,6 @@ void ofApp::keyPressed(int key){
 
 		streaming.setup(outputSize.x, outputSize.y);
 		streaming.broadcastVideoBitrate = 8000;
-		streaming.setImageSource(sharedImg);
 	}
 	else if (key == 'x')
 	{
@@ -118,7 +115,6 @@ void ofApp::InitWebcam()
 	sharedImg = ofPtr<ofImage>(new ofImage());
 	streaming.setup(1280, 720);
 	streaming.broadcastVideoBitrate = 4000;
-	streaming.setImageSource(sharedImg);
 }
 
 //--------------------------------------------------------------
