@@ -79,7 +79,7 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	connection.videoWidth = peer.videoWidth;
 	connection.videoHeight = peer.videoHeight;
 	connection.videoPort = peer.assignedLocalPort;
-	connection.audioPort = peer.assignedLocalPort + 1000;
+	connection.audioPort = peer.assignedLocalPort + 100;
 	this->streamManager.newClient(connection);
 }
 
