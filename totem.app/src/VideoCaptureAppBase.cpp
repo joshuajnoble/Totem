@@ -4,6 +4,17 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
 	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight(), networkInterfaceId, isTotemSource);
 	this->setupStreamManager();
+
+	// Initailize the broadcast stream!
+	StreamManager::clientParameters connection;
+	auto myIp = this->udpDiscovery.GetLocalAddress();
+	auto str = myIp.toString();
+	auto dotIndex = str.find_last_of('.');
+	connection.ipAddress = "239.0.0." + str.substr(dotIndex + 1);
+	connection.remoteVideoPort = 12000;
+	connection.remoteAudioPort = 12100;
+	this->streamManager.newServer(connection);
+
 }
 
 void VideoCaptureAppBase::update()
@@ -68,29 +79,25 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	connection.videoWidth = peer.videoWidth;
 	connection.videoHeight = peer.videoHeight;
 	connection.videoPort = peer.assignedLocalPort;
-	connection.audioPort = peer.assignedLocalPort + 5;
+	connection.audioPort = peer.assignedLocalPort + 1000;
 	this->streamManager.newClient(connection);
 }
 
-bool connected = false;
-
 void VideoCaptureAppBase::peerReady(UdpDiscovery::RemotePeerStatus& peer)
 {
-	if (!connected)
-	{
-		connected = true;
-		StreamManager::clientParameters connection;
-		connection.clientID = peer.id;
-		auto myIp = this->udpDiscovery.GetLocalAddress();
-		auto str = myIp.toString();
-		str = "239.0.0." + str.substr(str.length() - 3);
-		connection.ipAddress = str;// = peer.ipAddress;
-		connection.remoteVideoPort = peer.assignedRemotePort;
-		connection.remoteAudioPort = peer.assignedRemotePort + 5;
-		connection.remoteVideoPort = peer.assignedRemotePort;
-		connection.remoteAudioPort = peer.assignedRemotePort + 5;
-		this->streamManager.newServer(connection);
-	}
+	//if (!connected)
+	//{
+	//	connected = true;
+	//	StreamManager::clientParameters connection;
+	//	connection.clientID = peer.id;
+	//	auto myIp = this->udpDiscovery.GetLocalAddress();
+	//	auto str = myIp.toString();
+	//	str = "239.0.0." + str.substr(str.length() - 3);
+	//	connection.ipAddress = str;// = peer.ipAddress;
+	//	connection.remoteVideoPort = peer.assignedRemotePort;
+	//	connection.remoteAudioPort = peer.assignedRemotePort + 5;
+	//	this->streamManager.newServer(connection);
+	//}
 }
 
 void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
