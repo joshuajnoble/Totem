@@ -74,8 +74,10 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 		ofExit();
 	}
 
+	this->interface = interface;
+
 	this->broadcastAddress = GetBroadcastAddress(interface).toString();
-	this->myid = MACtoString(interface.macAddress());
+	this->myid = MACtoString(this->interface.macAddress());
 	this->myid += "/";
 	this->myid += ofToString((int)roundf(ofRandomf() * 0xFFFFFF));
 
@@ -232,14 +234,14 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	RemotePeerStatus peer;
 	peer.id = jsonPayload["id"].asString();
 	peer.assignedLocalPort = this->myNextPort;
-	peer.ipAddress = remoteAddress;
+	peer.ipAddress = "239.0.0." + remoteAddress.substr(remoteAddress.length() - 3);
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
 	peer.assignedRemotePort = 0;
 	peer.isTotem = jsonPayload["totem"].asBool();
 
 	this->remoteClientMap[peer.id] = peer;
-	this->myNextPort += this->portIncrement;
+	//this->myNextPort += this->portIncrement;
 
 	ofNotifyEvent(this->peerArrivedEvent, peer, this);
 
@@ -323,4 +325,9 @@ Poco::Net::IPAddress UdpDiscovery::GetBroadcastAddress(Poco::Net::NetworkInterfa
 	long broadcastBytes = (*bytes | *mask);
 	auto broadcastAddress = Poco::Net::IPAddress(&broadcastBytes, 4);
 	return broadcastAddress;
+}
+
+Poco::Net::IPAddress UdpDiscovery::GetLocalAddress()
+{
+	return this->interface.address();
 }

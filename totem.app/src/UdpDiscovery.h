@@ -46,6 +46,8 @@ private:
 	void HandleDiscovery(const ofxJSONElement& jsonPayload, const string& remoteAddress);
 	void HandleDisconnect(const string& remoteId, bool isTimeout = false);
 
+	Poco::Net::NetworkInterface interface;
+
 public:
 	virtual ~UdpDiscovery();
 
@@ -56,6 +58,7 @@ public:
 	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
 	void update();
 	RemotePeerStatus GetPeerStatus(const std::string& peerId);
+	Poco::Net::IPAddress GetLocalAddress();
 
 	static Poco::Net::NetworkInterface::List GetAllNetworkInterfaces();
 	static Poco::Net::IPAddress GetBroadcastAddress(Poco::Net::NetworkInterface interface);
