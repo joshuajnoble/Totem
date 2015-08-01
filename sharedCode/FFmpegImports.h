@@ -9,6 +9,7 @@ extern "C"
 	//#include "ffmpeg.h"
 #include "libavdevice/avdevice.h"
 #include "libavcodec/avcodec.h"
+#include "libavutil/imgutils.h"
 }
 
 #define FFMPEG_IMPORT(X) do { this->##X = (decltype(##X))GetProcAddress(this->hmodule, #X); assert(this->##X != NULL); } while(0)
@@ -353,5 +354,42 @@ namespace FFmpegWrapper {
 		decltype(avcodec_descriptor_get)* avcodec_descriptor_get;
 		decltype(avcodec_descriptor_next)* avcodec_descriptor_next;
 		decltype(avcodec_descriptor_get_by_name)* avcodec_descriptor_get_by_name;
+	};
+
+	class imgutils: public FFmpegDllImport
+	{
+	private:
+		void init()
+		{
+			FFMPEG_IMPORT(av_image_fill_max_pixsteps);
+			FFMPEG_IMPORT(av_image_get_linesize);
+			FFMPEG_IMPORT(av_image_fill_linesizes);
+			FFMPEG_IMPORT(av_image_fill_pointers);
+			FFMPEG_IMPORT(av_image_alloc);
+			FFMPEG_IMPORT(av_image_copy_plane);
+			FFMPEG_IMPORT(av_image_copy);
+			FFMPEG_IMPORT(av_image_fill_arrays);
+			FFMPEG_IMPORT(av_image_get_buffer_size);
+			FFMPEG_IMPORT(av_image_copy_to_buffer);
+			FFMPEG_IMPORT(av_image_check_size);
+			FFMPEG_IMPORT(av_image_check_sar);
+		}
+
+		public:
+			imgutils(const std::string dllName) : FFmpegDllImport(dllName) { init(); }
+			imgutils(HMODULE hmodulle) : FFmpegDllImport(hmodule) { init(); }
+
+			decltype(av_image_fill_max_pixsteps)* av_image_fill_max_pixsteps;
+			decltype(av_image_get_linesize)* av_image_get_linesize;
+			decltype(av_image_fill_linesizes)* av_image_fill_linesizes;
+			decltype(av_image_fill_pointers)* av_image_fill_pointers;
+			decltype(av_image_alloc)* av_image_alloc;
+			decltype(av_image_copy_plane)* av_image_copy_plane;
+			decltype(av_image_copy)* av_image_copy;
+			decltype(av_image_fill_arrays)* av_image_fill_arrays;
+			decltype(av_image_get_buffer_size)* av_image_get_buffer_size;
+			decltype(av_image_copy_to_buffer)* av_image_copy_to_buffer;
+			decltype(av_image_check_size)* av_image_check_size;
+			decltype(av_image_check_sar)* av_image_check_sar;
 	};
 }
