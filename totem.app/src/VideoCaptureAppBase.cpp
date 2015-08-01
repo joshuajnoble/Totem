@@ -1,4 +1,5 @@
 #include "VideoCaptureAppBase.h"
+#include "..\..\sharedCode\FFmpegHelper.h"
 
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
@@ -15,6 +16,7 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	connection.remoteAudioPort = 12100;
 	this->streamManager.newServer(connection);
 
+	auto ffmpeg = new FFmpegHelper();
 }
 
 void VideoCaptureAppBase::update()

@@ -313,6 +313,12 @@
     <ClCompile Include="src\UdpDiscovery.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\FFmpegImports.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\FFmpegHelper.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -621,6 +627,12 @@
       <Filter>addons\ofxNetwork</Filter>
     </ClInclude>
     <ClInclude Include="src\UdpDiscovery.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegImports.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegHelper.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
