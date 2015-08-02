@@ -10,7 +10,10 @@ extern "C"
 #include "libavdevice/avdevice.h"
 #include "libavcodec/avcodec.h"
 #include "libavutil/imgutils.h"
+#include "libavutil/frame.h"
 #include "libavutil/opt.h"
+#include "libavformat/avformat.h"
+#include "libavformat/avio.h"
 }
 
 #define FFMPEG_IMPORT(X) do { this->##X = (decltype(##X))GetProcAddress(this->hmodule, #X); assert(this->##X != NULL); } while(0)
@@ -357,11 +360,12 @@ namespace FFmpegWrapper {
 		decltype(avcodec_descriptor_get_by_name)* avcodec_descriptor_get_by_name;
 	};
 
-	class imgutils: public FFmpegDllImport
+	class utils: public FFmpegDllImport
 	{
 	private:
 		void init()
 		{
+			// imgutils.h
 			FFMPEG_IMPORT(av_image_fill_max_pixsteps);
 			FFMPEG_IMPORT(av_image_get_linesize);
 			FFMPEG_IMPORT(av_image_fill_linesizes);
@@ -374,31 +378,20 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(av_image_copy_to_buffer);
 			FFMPEG_IMPORT(av_image_check_size);
 			FFMPEG_IMPORT(av_image_check_sar);
-		}
 
-		public:
-			imgutils(const std::string dllName) : FFmpegDllImport(dllName) { init(); }
-			imgutils(HMODULE hmodulle) : FFmpegDllImport(hmodule) { init(); }
+			// frame.h
+			FFMPEG_IMPORT(av_frame_alloc);
+			FFMPEG_IMPORT(av_frame_free);
+			
+			// mem.h
+			FFMPEG_IMPORT(av_malloc);
+			FFMPEG_IMPORT(av_free);
+			FFMPEG_IMPORT(av_freep);
 
-			decltype(av_image_fill_max_pixsteps)* av_image_fill_max_pixsteps;
-			decltype(av_image_get_linesize)* av_image_get_linesize;
-			decltype(av_image_fill_linesizes)* av_image_fill_linesizes;
-			decltype(av_image_fill_pointers)* av_image_fill_pointers;
-			decltype(av_image_alloc)* av_image_alloc;
-			decltype(av_image_copy_plane)* av_image_copy_plane;
-			decltype(av_image_copy)* av_image_copy;
-			decltype(av_image_fill_arrays)* av_image_fill_arrays;
-			decltype(av_image_get_buffer_size)* av_image_get_buffer_size;
-			decltype(av_image_copy_to_buffer)* av_image_copy_to_buffer;
-			decltype(av_image_check_size)* av_image_check_size;
-			decltype(av_image_check_sar)* av_image_check_sar;
-	};
+			// dict.h
+			FFMPEG_IMPORT(av_dict_set);
 
-	class opt : public FFmpegDllImport
-	{
-	private:
-		void init()
-		{
+			// opt.h
 			FFMPEG_IMPORT(av_opt_show2);
 			FFMPEG_IMPORT(av_opt_set_defaults);
 			FFMPEG_IMPORT(av_set_options_string);
@@ -448,60 +441,136 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(av_opt_is_set_to_default);
 			FFMPEG_IMPORT(av_opt_is_set_to_default_by_name);
 			FFMPEG_IMPORT(av_opt_serialize);
+
+		}
+
+		public:
+			utils(const std::string dllName) : FFmpegDllImport(dllName) { init(); }
+			utils(HMODULE hmodulle) : FFmpegDllImport(hmodule) { init(); }
+
+			// imgutils.h
+			decltype(av_image_fill_max_pixsteps)* av_image_fill_max_pixsteps;
+			decltype(av_image_get_linesize)* av_image_get_linesize;
+			decltype(av_image_fill_linesizes)* av_image_fill_linesizes;
+			decltype(av_image_fill_pointers)* av_image_fill_pointers;
+			decltype(av_image_alloc)* av_image_alloc;
+			decltype(av_image_copy_plane)* av_image_copy_plane;
+			decltype(av_image_copy)* av_image_copy;
+			decltype(av_image_fill_arrays)* av_image_fill_arrays;
+			decltype(av_image_get_buffer_size)* av_image_get_buffer_size;
+			decltype(av_image_copy_to_buffer)* av_image_copy_to_buffer;
+			decltype(av_image_check_size)* av_image_check_size;
+			decltype(av_image_check_sar)* av_image_check_sar;
+
+			// frame.h
+			decltype(av_frame_alloc)* av_frame_alloc;
+			decltype(av_frame_free)* av_frame_free;
+
+			// mem.h
+			decltype(av_malloc)* av_malloc;
+			decltype(av_free)* av_free;
+			decltype(av_freep)* av_freep;
+
+			// dict.h
+			decltype(av_dict_set)* av_dict_set;
+
+			// opt.h
+			decltype(av_opt_show2)* av_opt_show2;
+			decltype(av_opt_set_defaults)* av_opt_set_defaults;
+			decltype(av_set_options_string)* av_set_options_string;
+			decltype(av_opt_set_from_string)* av_opt_set_from_string;
+			decltype(av_opt_free)* av_opt_free;
+			decltype(av_opt_flag_is_set)* av_opt_flag_is_set;
+			decltype(av_opt_set_dict)* av_opt_set_dict;
+			decltype(av_opt_set_dict2)* av_opt_set_dict2;
+			decltype(av_opt_get_key_value)* av_opt_get_key_value;
+			decltype(av_opt_eval_flags)* av_opt_eval_flags;
+			decltype(av_opt_eval_int)* av_opt_eval_int;
+			decltype(av_opt_eval_int64)* av_opt_eval_int64;
+			decltype(av_opt_eval_float)* av_opt_eval_float;
+			decltype(av_opt_eval_double)* av_opt_eval_double;
+			decltype(av_opt_eval_q)* av_opt_eval_q;
+			decltype(av_opt_find)* av_opt_find;
+			decltype(av_opt_find2)* av_opt_find2;
+			decltype(av_opt_next)* av_opt_next;
+			decltype(av_opt_child_next)* av_opt_child_next;
+			decltype(av_opt_child_class_next)* av_opt_child_class_next;
+			decltype(av_opt_set)* av_opt_set;
+			decltype(av_opt_set_int)* av_opt_set_int;
+			decltype(av_opt_set_double)* av_opt_set_double;
+			decltype(av_opt_set_q)* av_opt_set_q;
+			decltype(av_opt_set_bin)* av_opt_set_bin;
+			decltype(av_opt_set_image_size)* av_opt_set_image_size;
+			decltype(av_opt_set_pixel_fmt)* av_opt_set_pixel_fmt;
+			decltype(av_opt_set_sample_fmt)* av_opt_set_sample_fmt;
+			decltype(av_opt_set_video_rate)* av_opt_set_video_rate;
+			decltype(av_opt_set_channel_layout)* av_opt_set_channel_layout;
+			decltype(av_opt_set_dict_val)* av_opt_set_dict_val;
+			decltype(av_opt_get)* av_opt_get;
+			decltype(av_opt_get_int)* av_opt_get_int;
+			decltype(av_opt_get_double)* av_opt_get_double;
+			decltype(av_opt_get_q)* av_opt_get_q;
+			decltype(av_opt_get_image_size)* av_opt_get_image_size;
+			decltype(av_opt_get_pixel_fmt)* av_opt_get_pixel_fmt;
+			decltype(av_opt_get_sample_fmt)* av_opt_get_sample_fmt;
+			decltype(av_opt_get_video_rate)* av_opt_get_video_rate;
+			decltype(av_opt_get_channel_layout)* av_opt_get_channel_layout;
+			decltype(av_opt_get_dict_val)* av_opt_get_dict_val;
+			decltype(av_opt_ptr)* av_opt_ptr;
+			decltype(av_opt_freep_ranges)* av_opt_freep_ranges;
+			decltype(av_opt_query_ranges)* av_opt_query_ranges;
+			decltype(av_opt_copy)* av_opt_copy;
+			decltype(av_opt_query_ranges_default)* av_opt_query_ranges_default;
+			decltype(av_opt_is_set_to_default)* av_opt_is_set_to_default;
+			decltype(av_opt_is_set_to_default_by_name)* av_opt_is_set_to_default_by_name;
+			decltype(av_opt_serialize)* av_opt_serialize;
+	};
+
+	class format : public FFmpegDllImport
+	{
+	private:
+		void init()
+		{
+			// AVFORMAT.H
+			FFMPEG_IMPORT(av_register_all);
+			FFMPEG_IMPORT(avformat_alloc_context);
+			FFMPEG_IMPORT(avformat_free_context);
+			FFMPEG_IMPORT(av_guess_format);
+			FFMPEG_IMPORT(av_guess_codec);
+			FFMPEG_IMPORT(av_get_output_timestamp);
+			FFMPEG_IMPORT(avformat_write_header);
+			FFMPEG_IMPORT(av_write_trailer);
+			FFMPEG_IMPORT(av_write_frame);
+			FFMPEG_IMPORT(av_write_frame);
+			FFMPEG_IMPORT(av_dump_format);
+
+			// AVIO.H
+			FFMPEG_IMPORT(avio_open);
+			FFMPEG_IMPORT(avio_open2);
+			FFMPEG_IMPORT(avio_close);
+			FFMPEG_IMPORT(avformat_new_stream);
 		}
 
 	public:
-		opt(const std::string dllName) : FFmpegDllImport(dllName) { init(); }
-		opt(HMODULE hmodulle) : FFmpegDllImport(hmodule) { init(); }
+		format(const std::string dllName) : FFmpegDllImport(dllName) { init(); }
+		format(HMODULE hmodulle) : FFmpegDllImport(hmodule) { init(); }
 
-		decltype(av_opt_show2)* av_opt_show2;
-		decltype(av_opt_set_defaults)* av_opt_set_defaults;
-		decltype(av_set_options_string)* av_set_options_string;
-		decltype(av_opt_set_from_string)* av_opt_set_from_string;
-		decltype(av_opt_free)* av_opt_free;
-		decltype(av_opt_flag_is_set)* av_opt_flag_is_set;
-		decltype(av_opt_set_dict)* av_opt_set_dict;
-		decltype(av_opt_set_dict2)* av_opt_set_dict2;
-		decltype(av_opt_get_key_value)* av_opt_get_key_value;
-		decltype(av_opt_eval_flags)* av_opt_eval_flags;
-		decltype(av_opt_eval_int)* av_opt_eval_int;
-		decltype(av_opt_eval_int64)* av_opt_eval_int64;
-		decltype(av_opt_eval_float)* av_opt_eval_float;
-		decltype(av_opt_eval_double)* av_opt_eval_double;
-		decltype(av_opt_eval_q)* av_opt_eval_q;
-		decltype(av_opt_find)* av_opt_find;
-		decltype(av_opt_find2)* av_opt_find2;
-		decltype(av_opt_next)* av_opt_next;
-		decltype(av_opt_child_next)* av_opt_child_next;
-		decltype(av_opt_child_class_next)* av_opt_child_class_next;
-		decltype(av_opt_set)* av_opt_set;
-		decltype(av_opt_set_int)* av_opt_set_int;
-		decltype(av_opt_set_double)* av_opt_set_double;
-		decltype(av_opt_set_q)* av_opt_set_q;
-		decltype(av_opt_set_bin)* av_opt_set_bin;
-		decltype(av_opt_set_image_size)* av_opt_set_image_size;
-		decltype(av_opt_set_pixel_fmt)* av_opt_set_pixel_fmt;
-		decltype(av_opt_set_sample_fmt)* av_opt_set_sample_fmt;
-		decltype(av_opt_set_video_rate)* av_opt_set_video_rate;
-		decltype(av_opt_set_channel_layout)* av_opt_set_channel_layout;
-		decltype(av_opt_set_dict_val)* av_opt_set_dict_val;
-		decltype(av_opt_get)* av_opt_get;
-		decltype(av_opt_get_int)* av_opt_get_int;
-		decltype(av_opt_get_double)* av_opt_get_double;
-		decltype(av_opt_get_q)* av_opt_get_q;
-		decltype(av_opt_get_image_size)* av_opt_get_image_size;
-		decltype(av_opt_get_pixel_fmt)* av_opt_get_pixel_fmt;
-		decltype(av_opt_get_sample_fmt)* av_opt_get_sample_fmt;
-		decltype(av_opt_get_video_rate)* av_opt_get_video_rate;
-		decltype(av_opt_get_channel_layout)* av_opt_get_channel_layout;
-		decltype(av_opt_get_dict_val)* av_opt_get_dict_val;
-		decltype(av_opt_ptr)* av_opt_ptr;
-		decltype(av_opt_freep_ranges)* av_opt_freep_ranges;
-		decltype(av_opt_query_ranges)* av_opt_query_ranges;
-		decltype(av_opt_copy)* av_opt_copy;
-		decltype(av_opt_query_ranges_default)* av_opt_query_ranges_default;
-		decltype(av_opt_is_set_to_default)* av_opt_is_set_to_default;
-		decltype(av_opt_is_set_to_default_by_name)* av_opt_is_set_to_default_by_name;
-		decltype(av_opt_serialize)* av_opt_serialize;
+		// AVFORMAT.H
+		decltype(av_register_all)* av_register_all;
+		decltype(avformat_alloc_context)* avformat_alloc_context;
+		decltype(avformat_free_context)* avformat_free_context;
+		decltype(av_guess_format)* av_guess_format;
+		decltype(av_guess_codec)* av_guess_codec;
+		decltype(av_get_output_timestamp)* av_get_output_timestamp;
+		decltype(avformat_write_header)* avformat_write_header;
+		decltype(av_write_trailer)* av_write_trailer;
+		decltype(av_write_frame)* av_write_frame;
+		decltype(av_dump_format)* av_dump_format;
+
+		// AVIO.H
+		decltype(avio_open)* avio_open;
+		decltype(avio_open2)* avio_open2;
+		decltype(avio_close)* avio_close;
+		decltype(avformat_new_stream)* avformat_new_stream;
 	};
 }

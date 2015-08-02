@@ -9,10 +9,9 @@ class FFmpegHelper
 {
 public:
 	FFmpegWrapper::avdevice deviceDll;
-	FFmpegWrapper::avcodec codecDll;
-	FFmpegWrapper::imgutils imgUtilsDll;
-	FFmpegWrapper::opt opt;
-
+	FFmpegWrapper::avcodec codec;
+	FFmpegWrapper::utils utils;
+	FFmpegWrapper::format format;
 
 	FFmpegHelper();
 	~FFmpegHelper();
