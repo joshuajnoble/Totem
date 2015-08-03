@@ -12,6 +12,7 @@ extern "C"
 #include "libavutil/imgutils.h"
 #include "libavutil/frame.h"
 #include "libavutil/opt.h"
+#include "libavutil/pixdesc.h"
 #include "libavformat/avformat.h"
 #include "libavformat/avio.h"
 }
@@ -442,6 +443,27 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(av_opt_is_set_to_default_by_name);
 			FFMPEG_IMPORT(av_opt_serialize);
 
+			// pixdesc.h
+			FFMPEG_IMPORT(av_read_image_line);
+			FFMPEG_IMPORT(av_write_image_line);
+			FFMPEG_IMPORT(av_get_pix_fmt);
+			FFMPEG_IMPORT(av_get_pix_fmt_name);
+			FFMPEG_IMPORT(av_get_pix_fmt_string);
+			FFMPEG_IMPORT(av_get_bits_per_pixel);
+			FFMPEG_IMPORT(av_get_padded_bits_per_pixel);
+			FFMPEG_IMPORT(av_pix_fmt_desc_get);
+			FFMPEG_IMPORT(av_pix_fmt_desc_next);
+			FFMPEG_IMPORT(av_pix_fmt_desc_get_id);
+			FFMPEG_IMPORT(av_pix_fmt_get_chroma_sub_sample);
+			FFMPEG_IMPORT(av_pix_fmt_count_planes);
+			FFMPEG_IMPORT(av_pix_fmt_swap_endianness);
+			FFMPEG_IMPORT(av_get_pix_fmt_loss);
+			FFMPEG_IMPORT(av_find_best_pix_fmt_of_2);
+			FFMPEG_IMPORT(av_color_range_name);
+			FFMPEG_IMPORT(av_color_primaries_name);
+			FFMPEG_IMPORT(av_color_transfer_name);
+			FFMPEG_IMPORT(av_color_space_name);
+			FFMPEG_IMPORT(av_chroma_location_name);
 		}
 
 		public:
@@ -524,6 +546,28 @@ namespace FFmpegWrapper {
 			decltype(av_opt_is_set_to_default)* av_opt_is_set_to_default;
 			decltype(av_opt_is_set_to_default_by_name)* av_opt_is_set_to_default_by_name;
 			decltype(av_opt_serialize)* av_opt_serialize;
+
+			// pixdesc.h
+			decltype(av_read_image_line)* av_read_image_line;
+			decltype(av_write_image_line)* av_write_image_line;
+			decltype(av_get_pix_fmt)* av_get_pix_fmt;
+			decltype(av_get_pix_fmt_name)* av_get_pix_fmt_name;
+			decltype(av_get_pix_fmt_string)* av_get_pix_fmt_string;
+			decltype(av_get_bits_per_pixel)* av_get_bits_per_pixel;
+			decltype(av_get_padded_bits_per_pixel)* av_get_padded_bits_per_pixel;
+			decltype(av_pix_fmt_desc_get)* av_pix_fmt_desc_get;
+			decltype(av_pix_fmt_desc_next)* av_pix_fmt_desc_next;
+			decltype(av_pix_fmt_desc_get_id)* av_pix_fmt_desc_get_id;
+			decltype(av_pix_fmt_get_chroma_sub_sample)* av_pix_fmt_get_chroma_sub_sample;
+			decltype(av_pix_fmt_count_planes)* av_pix_fmt_count_planes;
+			decltype(av_pix_fmt_swap_endianness)* av_pix_fmt_swap_endianness;
+			decltype(av_get_pix_fmt_loss)* av_get_pix_fmt_loss;
+			decltype(av_find_best_pix_fmt_of_2)* av_find_best_pix_fmt_of_2;
+			decltype(av_color_range_name)* av_color_range_name;
+			decltype(av_color_primaries_name)* av_color_primaries_name;
+			decltype(av_color_transfer_name)* av_color_transfer_name;
+			decltype(av_color_space_name)* av_color_space_name;
+			decltype(av_chroma_location_name)* av_chroma_location_name;
 	};
 
 	class format : public FFmpegDllImport
@@ -543,6 +587,11 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(av_write_frame);
 			FFMPEG_IMPORT(av_write_frame);
 			FFMPEG_IMPORT(av_dump_format);
+			FFMPEG_IMPORT(av_find_input_format);
+			FFMPEG_IMPORT(avformat_open_input);
+			FFMPEG_IMPORT(avformat_close_input);
+			FFMPEG_IMPORT(avformat_find_stream_info);		
+			FFMPEG_IMPORT(av_read_frame);
 
 			// AVIO.H
 			FFMPEG_IMPORT(avio_open);
@@ -566,6 +615,11 @@ namespace FFmpegWrapper {
 		decltype(av_write_trailer)* av_write_trailer;
 		decltype(av_write_frame)* av_write_frame;
 		decltype(av_dump_format)* av_dump_format;
+		decltype(av_find_input_format)* av_find_input_format;
+		decltype(avformat_open_input)* avformat_open_input;
+		decltype(avformat_close_input)* avformat_close_input;
+		decltype(avformat_find_stream_info)* avformat_find_stream_info;
+		decltype(av_read_frame)* av_read_frame;
 
 		// AVIO.H
 		decltype(avio_open)* avio_open;

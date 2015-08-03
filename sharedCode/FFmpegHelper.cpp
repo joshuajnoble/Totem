@@ -1,5 +1,35 @@
 #include "FFmpegHelper.h"
 
+class GuardFileHandle
+{
+private:
+	FILE *handle;
+	
+	// Not copyable
+	GuardFileHandle(const GuardFileHandle& other) {}
+	GuardFileHandle& operator = (const GuardFileHandle& other);
+
+public:
+	GuardFileHandle(FILE *fp) : handle(fp) {}
+	~GuardFileHandle() { Cleanup(); }
+
+	// Abondon the resource (presumably so the calling code can handle cleanup).
+	void Release()
+	{
+		this->handle = NULL;
+	}
+
+	// Force the cleanup (so you don't have to wait to go out of scope).
+	void Cleanup()
+	{
+		if (this->handle)
+		{
+			fclose(handle);
+			handle = NULL;
+		}
+	}
+};
+
 // http ://sourceforge.net/p/simplestffmpegvideoencoder/code/ci/master/tree/simplest_ffmpeg_video_encoder/simplest_ffmpeg_video_encoder.cpp
 class encodeToVideoFile
 {
@@ -47,7 +77,12 @@ public:
 		int picture_size;
 		int y_size;
 		int framecnt = 0;
-		FILE *in_file = fopen(inputFileName, "rb");   //Input raw YUV data
+		FILE *in_file;
+
+		auto error = fopen_s(&in_file, inputFileName, "rb");   //Input raw YUV data
+		assert(!error);
+		GuardFileHandle safeFile(in_file);
+
 		int in_w = width, in_h = height;
 		//const char* out_file = "src01.h264";              //Output Filepath 
 		//const char* out_file = "src01.ts";
@@ -274,17 +309,20 @@ public:
 			return;
 		}
 		//Input raw data
-		fp_in = fopen(filename_in, "rb");
-		if (!fp_in) {
+		auto error = fopen_s(&fp_in, filename_in, "rb");
+		if (error) {
 			printf("Could not open %s\n", filename_in);
 			return;
 		}
+		GuardFileHandle safeInput(fp_in);
+
 		//Output bitstream
-		fp_out = fopen(filename_out, "wb");
-		if (!fp_out) {
+		error = fopen_s(&fp_out, filename_out, "wb");
+		if (error) {
 			printf("Could not open %s\n", filename_out);
 			return;
 		}
+		GuardFileHandle safeOutput(fp_out);
 
 		y_size = pCodecCtx->width * pCodecCtx->height;
 		//Encode
@@ -334,7 +372,6 @@ public:
 			}
 		}
 
-		fclose(fp_out);
 		m_ffmpeg->codec.avcodec_close(pCodecCtx);
 		m_ffmpeg->utils.av_free(pCodecCtx);
 		m_ffmpeg->utils.av_freep(&pFrame->data[0]);
@@ -342,21 +379,194 @@ public:
 	}
 };
 
+// https://github.com/leixiaohua1020/simplest_ffmpeg_device/blob/master/simplest_ffmpeg_readcamera/simplest_ffmpeg_readcamera.cpp
+class VideoCaptureTest
+{
+private:
+	FFmpegHelper* m_ffmpeg;
+	AVFormatContext	*pFormatCtx;
+	int				videoindex;
+	AVCodecContext	*pCodecCtx;
+	AVCodec			*pCodec;
+
+public:
+	VideoCaptureTest(FFmpegHelper* ffmpeg, const char *filename, int width, int height, int fps, int duration) : m_ffmpeg(ffmpeg)
+	{
+		AVInputFormat *ifmt = m_ffmpeg->format.av_find_input_format("dshow");
+		//Set own video device's name
+		pFormatCtx = m_ffmpeg->format.avformat_alloc_context();
+
+		AVDictionary* options = NULL;
+		m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_YUV420P), 0);
+		m_ffmpeg->utils.av_dict_set(&options, "video_size", (std::to_string(width) + "x" + std::to_string(height)).c_str(), 0);
+		//m_ffmpeg->utils.av_dict_set(&options, "width", std::to_string(width).c_str(), 0);
+		//m_ffmpeg->utils.av_dict_set(&options, "height", std::to_string(height).c_str(), 0);
+		m_ffmpeg->utils.av_dict_set(&options, "framerate", std::to_string(fps).c_str(), 0);
+
+		if (m_ffmpeg->format.avformat_open_input(&pFormatCtx, "video=Logitech HD Pro Webcam C920", ifmt, &options) != 0)
+		{
+			printf("Couldn't open input stream.\n");
+			return;
+		}
+
+		if (m_ffmpeg->format.avformat_find_stream_info(pFormatCtx, NULL) < 0)
+		{
+			printf("Couldn't find stream information.\n");
+			return;
+		}
+
+		auto videoindex = -1;
+		for (unsigned i = 0; i < pFormatCtx->nb_streams; i++)
+		{
+			auto candidateCodec = pFormatCtx->streams[i]->codec;
+			if (candidateCodec->codec_type == AVMEDIA_TYPE_VIDEO
+				&& candidateCodec->width == width
+				&& candidateCodec->height == height)
+				if (candidateCodec->pix_fmt == PIX_FMT_YUV420P)
+			{
+				videoindex = i;
+				break;
+			}
+		}
+
+		if (videoindex == -1)
+		{
+			printf("Couldn't find a video stream.\n");
+			return;
+		}
+		pCodecCtx = pFormatCtx->streams[videoindex]->codec;
+		pCodec = m_ffmpeg->codec.avcodec_find_decoder(pCodecCtx->codec_id);
+		if (pCodec == NULL)
+		{
+			printf("Codec not found.\n");
+			return;
+		}
+
+		pCodecCtx->width = width;
+		pCodecCtx->height = height;
+		pCodecCtx->framerate.num = 1;
+		pCodecCtx->framerate.den = fps;
+
+		if (m_ffmpeg->codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0)
+		{
+			printf("Could not open codec.\n");
+			return;
+		}
+
+		AVFrame* pFrameYUV = m_ffmpeg->utils.av_frame_alloc();
+		//uint8_t *out_buffer=(uint8_t *)av_malloc(avpicture_get_size(PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height));
+		//avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height);
+
+		AVPacket *packet = (AVPacket *)m_ffmpeg->utils.av_malloc(sizeof(AVPacket));
+		FILE *fp_yuv;
+		auto error = fopen_s(&fp_yuv, filename, "wb+");
+		assert(!error);
+		GuardFileHandle safeFile(fp_yuv);
+
+		int ret, got_picture;
+		//struct SwsContext *img_convert_ctx;
+		//img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height, PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
+		//------------------------------
+
+		LARGE_INTEGER time, nextTime, frequency, stopTime;
+		QueryPerformanceFrequency(&frequency);
+		auto frameInterval = static_cast<LONGLONG>(roundf(frequency.QuadPart / fps));
+
+		QueryPerformanceCounter(&time);
+		nextTime = stopTime = time;
+		stopTime.QuadPart += frequency.QuadPart * duration;
+		for (;stopTime.QuadPart > time.QuadPart;)
+		{
+			QueryPerformanceCounter(&time);
+			bool hasNewFrame = time.QuadPart >= nextTime.QuadPart;
+			if (!hasNewFrame) {
+				Sleep(5);
+				continue;
+			}
+
+			do
+			{
+				nextTime.QuadPart += frameInterval;
+			} while (nextTime.QuadPart < time.QuadPart);
+
+			if (m_ffmpeg->format.av_read_frame(pFormatCtx, packet) >= 0)
+			{
+				if (packet->stream_index == videoindex)
+				{
+					ret = m_ffmpeg->codec.avcodec_decode_video2(pCodecCtx, pFrameYUV, &got_picture, packet);
+					if (ret < 0)
+					{
+						printf("Decode Error.\n");
+						return;
+					}
+					if (got_picture)
+					{
+						int y_size = pCodecCtx->width*pCodecCtx->height;
+						fwrite(pFrameYUV->data[0], 1, y_size, fp_yuv);    //Y   
+						fwrite(pFrameYUV->data[1], 1, y_size / 4, fp_yuv);  //U  
+						fwrite(pFrameYUV->data[2], 1, y_size / 4, fp_yuv);  //V  
+					}
+				}
+				m_ffmpeg->codec.av_free_packet(packet);
+			}
+		}
+
+		//sws_freeContext(img_convert_ctx);
+
+		safeFile.Cleanup();
+
+		//av_free(out_buffer);
+		m_ffmpeg->utils.av_free(pFrameYUV);
+		m_ffmpeg->codec.avcodec_close(pCodecCtx);
+		m_ffmpeg->format.avformat_close_input(&pFormatCtx);
+	}
+};
+
 FFmpegHelper::FFmpegHelper() :
-	deviceDll("avdevice-56.dll"),
+	device("avdevice-56.dll"),
 	codec("avcodec-56.dll"),
 	utils("avutil-54.dll"),
 	format("avformat-56.dll")
 {
-	this->deviceDll.avdevice_register_all();
+	this->device.avdevice_register_all();
 	this->codec.avcodec_register_all();
 	this->format.av_register_all();
 
-	auto fileTest = new encodeToVideoFile(this, "test.yuv", "test.h264", 640, 480, 15);
+	int width = 800;
+	int height = 600;
+	int fps = 15;
+	auto videoCapture = new VideoCaptureTest(this, "test.yuv", width, height, fps, 10);
+	delete videoCapture;
+
+	auto fileTest = new encodeToVideoFile(this, "test.yuv", "test.h264", width, height, fps);
 	delete fileTest;
 
-	auto streamTest = new encodeRawFile(this, "test.yuv", "test-raw.h264", 640, 480, 15);
+	auto streamTest = new encodeRawFile(this, "test.yuv", "test-raw.h264", width, height, fps);
 	delete streamTest;
+
+	{
+		AVFormatContext *pFormatCtx = this->format.avformat_alloc_context();
+		AVDictionary* options = NULL;
+		this->utils.av_dict_set(&options, "list_devices", "true", 0);
+		AVInputFormat *iformat = this->format.av_find_input_format("dshow");
+		printf("========Device Info=============\n");
+		this->format.avformat_open_input(&pFormatCtx, "video=dummy", iformat, &options);
+		this->format.avformat_close_input(&pFormatCtx);
+		printf("================================\n");
+	}
+
+	{
+		AVFormatContext *pFormatCtx = this->format.avformat_alloc_context();
+		AVDictionary* options = NULL;
+		this->utils.av_dict_set(&options, "list_options", "true", 0);
+		AVInputFormat *iformat = this->format.av_find_input_format("dshow");
+		printf("========Device Option Info======\n");
+		std::string deviceName("Logitech HD Pro Webcam C920");
+		//std::string deviceName("HP Truevision HD");
+		this->format.avformat_open_input(&pFormatCtx, (std::string("video=") + deviceName).c_str(), iformat, &options);
+		this->format.avformat_close_input(&pFormatCtx);
+		printf("================================\n");
+	}
 
 	//const char *codecName = false ? "h264_qsv" : "libx264";
 	//auto encoder = encoderHelper(codecName, this);
@@ -402,7 +612,7 @@ std::vector<std::auto_ptr<AVInputFormat>> FFmpegHelper::GetDeviceList()
 	AVInputFormat *fmt = NULL;
 	do
 	{
-		fmt = deviceDll.av_input_video_device_next(fmt);
+		fmt = device.av_input_video_device_next(fmt);
 		rval.push_back(std::auto_ptr<AVInputFormat>(fmt));
 	} while (fmt);
 
@@ -418,7 +628,7 @@ std::vector<std::auto_ptr<AVDeviceInfoList>> FFmpegHelper::GetInputSource(const 
 	// "HP Truevision HD"
 	auto rval = std::vector<std::auto_ptr<AVDeviceInfoList>>();
 	AVDeviceInfoList *device_list = NULL;
-	auto count = deviceDll.avdevice_list_input_sources(NULL, sourceName.c_str(), NULL, &device_list);
+	auto count = device.avdevice_list_input_sources(NULL, sourceName.c_str(), NULL, &device_list);
 
 	if (count > 0)
 	{
