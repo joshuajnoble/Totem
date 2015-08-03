@@ -282,6 +282,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="..\sharedCode\FFmpegHelper.cpp" />
     <ClCompile Include="..\sharedCode\FFmpegImports.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
+    <ClCompile Include="..\sharedCode\YUV420_H264_Encoder.cpp" />
     <ClCompile Include="src\CylinderDisplay.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofRemoteApp.cpp" />
@@ -397,6 +398,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="..\sharedCode\FFmpegSamples.h" />
     <ClInclude Include="..\sharedCode\LegacyGuards.h" />
     <ClInclude Include="..\sharedCode\StreamManager.h" />
+    <ClInclude Include="..\sharedCode\YUV420_H264_Encoder.h" />
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
     <ClInclude Include="src\ofTotemApp.h" />

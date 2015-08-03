@@ -90,8 +90,6 @@ typedef struct URLProtocol {
     int (*url_open_dir)(URLContext *h);
     int (*url_read_dir)(URLContext *h, AVIODirEntry **next);
     int (*url_close_dir)(URLContext *h);
-    int (*url_delete)(URLContext *h);
-    int (*url_move)(URLContext *h_src, URLContext *h_dst);
 } URLProtocol;
 
 /**

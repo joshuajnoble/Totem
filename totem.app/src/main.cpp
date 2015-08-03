@@ -1,10 +1,9 @@
 #include "ofMain.h"
+#include "ofxPGR\src\PGRCamera.h"
 #include "ofxArgParser\src\ofxArgParser.h"
 #include "ofTotemApp.h"
 #include "ofRemoteApp.h"
 #include "Utils.h"
-#include "ofxPGR\src\PGRCamera.h"
-#include "..\..\sharedCode\FFmpegHelper.h"
 
 namespace
 {
@@ -168,8 +167,6 @@ int main(int argc, const char** argv)
 {
 	ofSetWorkingDirectoryToDefault();
 	
-	delete new FFmpegHelper();
-
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	//ofLogToFile("logfile-mempool.txt", true);
 

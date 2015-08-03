@@ -1,5 +1,4 @@
 #include "VideoCaptureAppBase.h"
-#include "..\..\sharedCode\FFmpegHelper.h"
 
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
@@ -15,6 +14,9 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	connection.remoteVideoPort = 12000;
 	connection.remoteAudioPort = 12100;
 	this->streamManager.newServer(connection);
+
+	this->ffmpegEncoder.reset(new EncodeRGBToH264(m_ffmpeg));
+	this->ffmpegEncoder->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
 }
 
 void VideoCaptureAppBase::update()
@@ -24,7 +26,9 @@ void VideoCaptureAppBase::update()
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
 	{
-		this->streamManager.newFrame(this->videoSource->getPixelsRef());
+		auto ref = this->videoSource->getPixelsRef();
+		this->streamManager.newFrame(ref);
+		this->ffmpegEncoder->EncodeFrame(ref.getPixels());
 	}
 
 	this->streamManager.update();

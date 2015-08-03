@@ -4,6 +4,7 @@
 #include "RemoteVideoInfo.h"
 #include "..\..\SharedCode\StreamManager.h"
 #include "UdpDiscovery.h"
+#include "..\..\sharedCode\FFmpegHelper.h"
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -28,9 +29,12 @@ private:
 	void peerReady(UdpDiscovery::RemotePeerStatus& peer);
 	
 protected:
-	StreamManager streamManager;
 	std::vector<RemoteVideoInfo> remoteVideoSources;
+	StreamManager streamManager;
 	UdpDiscovery udpDiscovery;
+
+	FFmpegFactory m_ffmpeg;
+	std::auto_ptr<EncodeRGBToH264> ffmpegEncoder;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 

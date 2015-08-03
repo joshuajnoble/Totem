@@ -38,7 +38,8 @@ typedef struct FFPsyBand {
     int   bits;
     float energy;
     float threshold;
-    float spread;    /* Energy spread over the band */
+    float distortion;
+    float perceptual_weight;
 } FFPsyBand;
 
 /**

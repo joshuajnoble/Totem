@@ -44,10 +44,6 @@ typedef struct SVQ1EncContext {
     PutBitContext pb;
     GetBitContext gb;
 
-    /* Some compression statistics */
-    enum AVPictureType pict_type;
-    int quality;
-
     /* why ooh why this sick breadth first order,
      * everything is slower and more complex */
     PutBitContext reorder_pb[6];

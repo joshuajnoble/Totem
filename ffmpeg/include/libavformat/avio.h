@@ -79,7 +79,7 @@ typedef struct AVIODirEntry {
     char *name;                           /**< Filename */
     int type;                             /**< Type of the entry */
     int utf8;                             /**< Set to 1 when name is encoded with UTF-8, 0 otherwise.
-                                               Name can be encoded with UTF-8 even though 0 is set. */
+                                               Name can be encoded with UTF-8 eventhough 0 is set. */
     int64_t size;                         /**< File size in bytes, -1 if unknown. */
     int64_t modification_timestamp;       /**< Time of last modification in microseconds since unix
                                                epoch, -1 if unknown. */
@@ -196,12 +196,6 @@ typedef struct AVIOContext {
      * This field is internal to libavformat and access from outside is not allowed.
      */
     int orig_buffer_size;
-
-    /**
-     * Threshold to favor readahead over seek.
-     * This is current internal only, do not use from outside.
-     */
-    int short_seek_threshold;
 } AVIOContext;
 
 /* unbuffered I/O */
@@ -228,25 +222,6 @@ const char *avio_find_protocol_name(const char *url);
  * checked resource.
  */
 int avio_check(const char *url, int flags);
-
-/**
- * Move or rename a resource.
- *
- * @note url_src and url_dst should share the same protocol and authority.
- *
- * @param url_src url to resource to be moved
- * @param url_dst new url to resource if the operation succeeded
- * @return >=0 on success or negative on error.
- */
-int avpriv_io_move(const char *url_src, const char *url_dst);
-
-/**
- * Delete a resource.
- *
- * @param url resource to be deleted.
- * @return >=0 on success or negative on error.
- */
-int avpriv_io_delete(const char *url);
 
 /**
  * Open directory for reading.

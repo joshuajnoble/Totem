@@ -28,7 +28,6 @@
 
 #include <mfx/mfxvideo.h>
 
-#include "libavutil/fifo.h"
 #include "libavutil/frame.h"
 #include "libavutil/pixfmt.h"
 
@@ -41,14 +40,12 @@ typedef struct QSVContext {
 
     // the session we allocated internally, in case the caller did not provide
     // one
-    QSVSession internal_qs;
+    mfxSession internal_session;
 
     /**
      * a linked list of frames currently being used by QSV
      */
     QSVFrame *work_frames;
-
-    AVFifoBuffer *async_fifo;
 
     // options set by the caller
     int async_depth;
@@ -60,7 +57,7 @@ typedef struct QSVContext {
 
 int ff_qsv_map_pixfmt(enum AVPixelFormat format);
 
-int ff_qsv_decode_init(AVCodecContext *s, QSVContext *q);
+int ff_qsv_decode_init(AVCodecContext *s, QSVContext *q, mfxSession session);
 
 int ff_qsv_decode(AVCodecContext *s, QSVContext *q,
                   AVFrame *frame, int *got_frame,

@@ -15,6 +15,7 @@ extern "C"
 #include "libavutil/pixdesc.h"
 #include "libavformat/avformat.h"
 #include "libavformat/avio.h"
+#include "libswscale/swscale.h"
 }
 
 #define FFMPEG_IMPORT(X) do { this->##X = (decltype(##X))GetProcAddress(this->hmodule, #X); assert(this->##X != NULL); } while(0)
@@ -635,6 +636,85 @@ namespace FFmpegWrapper
 		decltype(avio_close)* avio_close;
 		decltype(avformat_new_stream)* avformat_new_stream;
 	};
+	
+	class scale : public FFmpegDllImport
+	{
+	private:
+		void init()
+		{
+			FFMPEG_IMPORT(swscale_version);
+			FFMPEG_IMPORT(swscale_configuration);
+			FFMPEG_IMPORT(swscale_license);
+			FFMPEG_IMPORT(sws_getCoefficients);
+			FFMPEG_IMPORT(sws_isSupportedInput);
+			FFMPEG_IMPORT(sws_isSupportedOutput);
+			FFMPEG_IMPORT(sws_isSupportedEndiannessConversion);
+			FFMPEG_IMPORT(sws_alloc_context);
+			FFMPEG_IMPORT(sws_init_context);
+			FFMPEG_IMPORT(sws_freeContext);
+			FFMPEG_IMPORT(sws_getContext);
+			FFMPEG_IMPORT(sws_scale);
+			FFMPEG_IMPORT(sws_setColorspaceDetails);
+			FFMPEG_IMPORT(sws_getColorspaceDetails);
+			FFMPEG_IMPORT(sws_allocVec);
+			FFMPEG_IMPORT(sws_getGaussianVec);
+			FFMPEG_IMPORT(sws_getConstVec);
+			FFMPEG_IMPORT(sws_getIdentityVec);
+			FFMPEG_IMPORT(sws_scaleVec);
+			FFMPEG_IMPORT(sws_normalizeVec);
+			FFMPEG_IMPORT(sws_convVec);
+			FFMPEG_IMPORT(sws_addVec);
+			FFMPEG_IMPORT(sws_subVec);
+			FFMPEG_IMPORT(sws_shiftVec);
+			FFMPEG_IMPORT(sws_cloneVec);
+			FFMPEG_IMPORT(sws_printVec2);
+			FFMPEG_IMPORT(sws_freeVec);
+			FFMPEG_IMPORT(sws_getDefaultFilter);
+			FFMPEG_IMPORT(sws_freeFilter);
+			FFMPEG_IMPORT(sws_getCachedContext);
+			FFMPEG_IMPORT(sws_convertPalette8ToPacked32);
+			FFMPEG_IMPORT(sws_convertPalette8ToPacked24);
+			FFMPEG_IMPORT(sws_get_class);
+		}
+
+	public:
+		scale(const std::string dllName) : FFmpegDllImport(dllName) { init(); }
+		scale(HMODULE hmodulle) : FFmpegDllImport(hmodule) { init(); }
+
+		decltype(swscale_version)* swscale_version;
+		decltype(swscale_configuration)* swscale_configuration;
+		decltype(swscale_license)* swscale_license;
+		decltype(sws_getCoefficients)* sws_getCoefficients;
+		decltype(sws_isSupportedInput)* sws_isSupportedInput;
+		decltype(sws_isSupportedOutput)* sws_isSupportedOutput;
+		decltype(sws_isSupportedEndiannessConversion)* sws_isSupportedEndiannessConversion;
+		decltype(sws_alloc_context)* sws_alloc_context;
+		decltype(sws_init_context)* sws_init_context;
+		decltype(sws_freeContext)* sws_freeContext;
+		decltype(sws_getContext)* sws_getContext;
+		decltype(sws_scale)* sws_scale;
+		decltype(sws_setColorspaceDetails)* sws_setColorspaceDetails;
+		decltype(sws_getColorspaceDetails)* sws_getColorspaceDetails;
+		decltype(sws_allocVec)* sws_allocVec;
+		decltype(sws_getGaussianVec)* sws_getGaussianVec;
+		decltype(sws_getConstVec)* sws_getConstVec;
+		decltype(sws_getIdentityVec)* sws_getIdentityVec;
+		decltype(sws_scaleVec)* sws_scaleVec;
+		decltype(sws_normalizeVec)* sws_normalizeVec;
+		decltype(sws_convVec)* sws_convVec;
+		decltype(sws_addVec)* sws_addVec;
+		decltype(sws_subVec)* sws_subVec;
+		decltype(sws_shiftVec)* sws_shiftVec;
+		decltype(sws_cloneVec)* sws_cloneVec;
+		decltype(sws_printVec2)* sws_printVec2;
+		decltype(sws_freeVec)* sws_freeVec;
+		decltype(sws_getDefaultFilter)* sws_getDefaultFilter;
+		decltype(sws_freeFilter)* sws_freeFilter;
+		decltype(sws_getCachedContext)* sws_getCachedContext;
+		decltype(sws_convertPalette8ToPacked32)* sws_convertPalette8ToPacked32;
+		decltype(sws_convertPalette8ToPacked24)* sws_convertPalette8ToPacked24;
+		decltype(sws_get_class)* sws_get_class;
+	};
 }
 
 class FFmpegFactory
@@ -644,4 +724,5 @@ public:
 	static FFmpegWrapper::avcodec codec;
 	static FFmpegWrapper::utils utils;
 	static FFmpegWrapper::format format;
+	static FFmpegWrapper::scale scale;
 };

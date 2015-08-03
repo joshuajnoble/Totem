@@ -29,7 +29,6 @@
 #include <mfx/mfxvideo.h>
 
 #include "libavutil/avutil.h"
-#include "libavutil/fifo.h"
 
 #include "avcodec.h"
 #include "qsv_internal.h"
@@ -40,19 +39,15 @@ typedef struct QSVEncContext {
     QSVFrame *work_frames;
 
     mfxSession session;
-    QSVSession internal_qs;
+    mfxSession internal_session;
 
     int packet_size;
-    int width_align;
-    int height_align;
 
     mfxVideoParam param;
     mfxFrameAllocRequest req;
 
     mfxExtCodingOption  extco;
     mfxExtBuffer *extparam[1];
-
-    AVFifoBuffer *async_fifo;
 
     // options set by the caller
     int async_depth;
@@ -61,8 +56,6 @@ typedef struct QSVEncContext {
     int preset;
     int avbr_accuracy;
     int avbr_convergence;
-
-    char *load_plugins;
 } QSVEncContext;
 
 int ff_qsv_enc_init(AVCodecContext *avctx, QSVEncContext *q);

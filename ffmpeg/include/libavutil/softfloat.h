@@ -36,20 +36,6 @@ typedef struct SoftFloat{
     int32_t  exp;
 }SoftFloat;
 
-static const SoftFloat FLOAT_0          = {          0,   0};
-static const SoftFloat FLOAT_05         = { 0x20000000,   0};
-static const SoftFloat FLOAT_1          = { 0x20000000,   1};
-static const SoftFloat FLOAT_EPSILON    = { 0x29F16B12, -16};
-static const SoftFloat FLOAT_1584893192 = { 0x32B771ED,   1};
-static const SoftFloat FLOAT_100000     = { 0x30D40000,  17};
-static const SoftFloat FLOAT_0999999    = { 0x3FFFFBCE,   0};
-
-static inline av_const double av_sf2double(SoftFloat v) {
-    v.exp -= ONE_BITS +1;
-    if(v.exp > 0) return (double)v.mant * (double)(1 << v.exp);
-    else          return (double)v.mant / (double)(1 << (-v.exp));
-}
-
 static av_const SoftFloat av_normalize_sf(SoftFloat a){
     if(a.mant){
 #if 1
@@ -105,7 +91,7 @@ static inline av_const SoftFloat av_mul_sf(SoftFloat a, SoftFloat b){
  * b has to be normalized and not zero.
  * @return Will not be more denormalized than a.
  */
-static inline av_const SoftFloat av_div_sf(SoftFloat a, SoftFloat b){
+static av_const SoftFloat av_div_sf(SoftFloat a, SoftFloat b){
     a.exp -= b.exp;
     a.mant = ((int64_t)a.mant<<(ONE_BITS+1)) / b.mant;
     return av_normalize1_sf(a);

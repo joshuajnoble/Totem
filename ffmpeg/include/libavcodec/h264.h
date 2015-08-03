@@ -132,12 +132,11 @@ enum {
 typedef enum {
     SEI_TYPE_BUFFERING_PERIOD       = 0,   ///< buffering period (H.264, D.1.1)
     SEI_TYPE_PIC_TIMING             = 1,   ///< picture timing
-    SEI_TYPE_USER_DATA_REGISTERED   = 4,   ///< registered user data as specified by Rec. ITU-T T.35
+    SEI_TYPE_USER_DATA_ITU_T_T35    = 4,   ///< user data registered by ITU-T Recommendation T.35
     SEI_TYPE_USER_DATA_UNREGISTERED = 5,   ///< unregistered user data
     SEI_TYPE_RECOVERY_POINT         = 6,   ///< recovery point (frame # to decoder sync)
     SEI_TYPE_FRAME_PACKING          = 45,  ///< frame packing arrangement
     SEI_TYPE_DISPLAY_ORIENTATION    = 47,  ///< display orientation
-    SEI_TYPE_GREEN_METADATA         = 56   ///< GreenMPEG information
 } SEI_Type;
 
 /**
@@ -267,22 +266,6 @@ typedef struct FPA {
     int         content_interpretation_type;
     int         quincunx_sampling_flag;
 } FPA;
-
-/**
- *     Green MetaData Information Type
- */
-typedef struct GreenMetaData {
-    uint8_t  green_metadata_type;
-    uint8_t  period_type;
-    uint16_t  num_seconds;
-    uint16_t  num_pictures;
-    uint8_t percent_non_zero_macroblocks;
-    uint8_t percent_intra_coded_macroblocks;
-    uint8_t percent_six_tap_filtering;
-    uint8_t percent_alpha_point_deblocking_instance;
-    uint8_t xsd_metric_type;
-    uint16_t xsd_metric_value;
-} GreenMetaData;
 
 /**
  * Memory management control operation opcode.
@@ -426,8 +409,7 @@ typedef struct H264SliceContext {
     int mb_xy;
     int resync_mb_x;
     int resync_mb_y;
-    // index of the first MB of the next slice
-    int next_slice_idx;
+    int mb_index_end;
     int mb_skip_run;
     int is_complex;
 
@@ -536,14 +518,6 @@ typedef struct H264Context {
     /* coded dimensions -- 16 * mb w/h */
     int width, height;
     int chroma_x_shift, chroma_y_shift;
-
-    /**
-     * Backup frame properties: needed, because they can be different
-     * between returned frame and last decoded frame.
-     **/
-    int backup_width;
-    int backup_height;
-    enum AVPixelFormat backup_pix_fmt;
 
     int droppable;
     int coded_picture_number;
@@ -742,14 +716,6 @@ typedef struct H264Context {
     int sei_hflip, sei_vflip;
 
     /**
-     * User data registered by Rec. ITU-T T.35 SEI
-     */
-    int sei_reguserdata_afd_present;
-    uint8_t active_format_description;
-    int a53_caption_size;
-    uint8_t *a53_caption;
-
-    /**
      * Bit set of clock types for fields/frames in picture timing SEI message.
      * For each found ct_type, appropriate bit is set (e.g., bit 1 for
      * interlaced).
@@ -807,11 +773,6 @@ typedef struct H264Context {
 
     int missing_fields;
 
-/* for frame threading, this is set to 1
-     * after finish_setup() has been called, so we cannot modify
-     * some context properties (which are supposed to stay constant between
-     * slices) anymore */
-    int setup_finished;
 
     // Timestamp stuff
     int sei_buffering_period_present;   ///< Buffering period SEI flag
@@ -835,10 +796,6 @@ typedef struct H264Context {
     /* Motion Estimation */
     qpel_mc_func (*qpel_put)[16];
     qpel_mc_func (*qpel_avg)[16];
-
-    /*Green Metadata */
-    GreenMetaData sei_green_metadata;
-
 } H264Context;
 
 extern const uint8_t ff_h264_chroma_qp[7][QP_MAX_NUM + 1]; ///< One chroma qp table for each possible bit depth (8-14).
