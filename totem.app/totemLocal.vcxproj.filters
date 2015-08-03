@@ -313,11 +313,11 @@
     <ClCompile Include="src\UdpDiscovery.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\FFmpegImports.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\sharedCode\FFmpegHelper.cpp">
-      <Filter>src</Filter>
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\FFmpegImports.cpp">
+      <Filter>ffmpeg</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -404,6 +404,9 @@
     </Filter>
     <Filter Include="data\cortana">
       <UniqueIdentifier>{6b4effaa-253e-4a1c-8cf6-1d4e2f666320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ffmpeg">
+      <UniqueIdentifier>{18be1eef-3c0e-49d1-9d65-2d32a5618b3d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -629,11 +632,17 @@
     <ClInclude Include="src\UdpDiscovery.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\sharedCode\FFmpegImports.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\sharedCode\FFmpegHelper.h">
-      <Filter>src</Filter>
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegImports.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\LegacyGuards.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegSamples.h">
+      <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

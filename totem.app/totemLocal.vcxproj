@@ -394,6 +394,8 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\sharedCode\FFmpegHelper.h" />
     <ClInclude Include="..\sharedCode\FFmpegImports.h" />
+    <ClInclude Include="..\sharedCode\FFmpegSamples.h" />
+    <ClInclude Include="..\sharedCode\LegacyGuards.h" />
     <ClInclude Include="..\sharedCode\StreamManager.h" />
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />

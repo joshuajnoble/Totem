@@ -19,7 +19,9 @@ extern "C"
 
 #define FFMPEG_IMPORT(X) do { this->##X = (decltype(##X))GetProcAddress(this->hmodule, #X); assert(this->##X != NULL); } while(0)
 
-namespace FFmpegWrapper {
+namespace FFmpegWrapper
+{
+
 	class FFmpegDllImport
 	{
 	protected:
@@ -70,6 +72,8 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(avdevice_free_list_devices);
 			FFMPEG_IMPORT(avdevice_list_devices);
 			FFMPEG_IMPORT(avdevice_list_output_sinks);
+
+			this->avdevice_register_all();
 		}
 
 	public:
@@ -226,6 +230,8 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(avcodec_descriptor_get);
 			FFMPEG_IMPORT(avcodec_descriptor_next);
 			FFMPEG_IMPORT(avcodec_descriptor_get_by_name);
+
+			this->avcodec_register_all();
 		}
 
 	public:
@@ -598,6 +604,8 @@ namespace FFmpegWrapper {
 			FFMPEG_IMPORT(avio_open2);
 			FFMPEG_IMPORT(avio_close);
 			FFMPEG_IMPORT(avformat_new_stream);
+
+			this->av_register_all();
 		}
 
 	public:
@@ -628,3 +636,12 @@ namespace FFmpegWrapper {
 		decltype(avformat_new_stream)* avformat_new_stream;
 	};
 }
+
+class FFmpegFactory
+{
+public:
+	static FFmpegWrapper::avdevice device;
+	static FFmpegWrapper::avcodec codec;
+	static FFmpegWrapper::utils utils;
+	static FFmpegWrapper::format format;
+};
