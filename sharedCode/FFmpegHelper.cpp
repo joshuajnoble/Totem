@@ -1,4 +1,5 @@
 #include "FFmpegHelper.h"
+#include <fstream>
 
 class GuardFileHandle
 {
@@ -25,6 +26,38 @@ public:
 		if (this->handle)
 		{
 			fclose(handle);
+			handle = NULL;
+		}
+	}
+};
+
+class GuardCodecContext
+{
+private:
+	FFmpegHelper *m_ffmpeg;
+	AVCodecContext *handle;
+
+	// Not copyable
+	GuardCodecContext(const GuardCodecContext& other) {}
+	GuardCodecContext& operator = (const GuardCodecContext& other);
+
+public:
+	GuardCodecContext(AVCodecContext *fp, FFmpegHelper *ffmpeg) : handle(fp), m_ffmpeg(ffmpeg) {}
+	~GuardCodecContext() { Cleanup(); }
+
+	// Abondon the resource (presumably so the calling code can handle cleanup).
+	void Release()
+	{
+		this->handle = NULL;
+	}
+
+	// Force the cleanup (so you don't have to wait to go out of scope).
+	void Cleanup()
+	{
+		if (this->handle)
+		{
+			m_ffmpeg->codec.avcodec_close(handle);
+			m_ffmpeg->utils.av_free(handle);
 			handle = NULL;
 		}
 	}
@@ -379,6 +412,200 @@ public:
 	}
 };
 
+class YUV420P_H264_Encoder
+{
+private:
+	FFmpegHelper *m_ffmpeg;
+
+	int cInputFrames = 0;
+	AVPacket pkt;
+	int yBlocksize, uBlockSize, vBlockSize;
+
+	AVCodec *pCodec = NULL;
+	AVCodecContext *pCodecCtx = NULL;
+	FILE *fp_out = NULL;
+	AVFrame *pFrame = NULL;
+
+public:
+	int getRawFrameSize()
+	{
+		return yBlocksize + uBlockSize + vBlockSize;
+	}
+
+	YUV420P_H264_Encoder(FFmpegHelper *ffmpeg, char* filename_out, int width, int height, int fps) : m_ffmpeg(ffmpeg)
+	{
+		//auto codecName = "h264_qsv";
+		auto codecName = "libx264";
+		pCodec = m_ffmpeg->codec.avcodec_find_encoder_by_name(codecName);
+		if (!pCodec) {
+			throw std::exception((std::string("Coded not found: ") + codecName).c_str());
+		}
+
+		pCodecCtx = m_ffmpeg->codec.avcodec_alloc_context3(pCodec);
+		if (!pCodecCtx) {
+			throw std::exception("Could not allocate video codec context.");
+		}
+		
+		GuardCodecContext codecGuard(pCodecCtx, m_ffmpeg);
+
+		pCodecCtx->bit_rate = 400000;
+		pCodecCtx->width = width;
+		pCodecCtx->height = height;
+		pCodecCtx->time_base.num = 1;
+		pCodecCtx->time_base.den = fps;
+		pCodecCtx->gop_size = 10;
+		pCodecCtx->max_b_frames = 1;
+		pCodecCtx->pix_fmt = AV_PIX_FMT_YUV420P;
+
+		//m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "preset", "slow", 0);
+		//m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "preset", "ultrafast", 0);
+		//m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "tune", "zerolatency", 0);
+		m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "preset", "7", 0);
+		m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+		m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "bf", "0", 0);
+
+		if (m_ffmpeg->codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
+			printf("Could not open codec.");
+		}
+
+		pFrame = m_ffmpeg->utils.av_frame_alloc();
+		if (!pFrame) {
+			throw std::exception("Could not allocate video frame.");
+		}
+		pFrame->format = pCodecCtx->pix_fmt;
+		pFrame->width = pCodecCtx->width;
+		pFrame->height = pCodecCtx->height;
+
+		auto ret = m_ffmpeg->utils.av_image_alloc(pFrame->data, pFrame->linesize, pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 16);
+		if (ret < 0) {
+			throw std::exception("Could not allocate raw picture buffer.");
+		}
+
+		//Output bitstream
+		auto error = fopen_s(&fp_out, filename_out, "wb");
+		if (error) {
+			throw std::exception((std::string("Could not open ") + filename_out).c_str());
+		}
+
+		yBlocksize = this->pFrame->height * this->pFrame->linesize[0];
+		uBlockSize = this->pFrame->height / 2 * this->pFrame->linesize[1];
+		vBlockSize = this->pFrame->height / 2 * this->pFrame->linesize[2];
+
+		codecGuard.Release();
+	}
+
+	~YUV420P_H264_Encoder()
+	{
+		AVCodec *pCodec = NULL;
+		AVCodecContext *pCodecCtx = NULL;
+		FILE *fp_out = NULL;
+		AVFrame *pFrame = NULL;
+
+		if (this->pCodecCtx)
+		{
+			m_ffmpeg->codec.avcodec_close(this->pCodecCtx);
+			this->pCodecCtx = NULL;
+		}
+
+		if (this->pCodecCtx)
+		{
+			m_ffmpeg->utils.av_free(pCodecCtx);
+			this->pCodecCtx = NULL;
+		}
+
+		if (this->pCodec)
+		{
+			this->pCodec = NULL;
+		}
+
+		if (this->pFrame)
+		{
+			if (pFrame->data)
+			{
+				m_ffmpeg->utils.av_freep(&this->pFrame->data[0]);
+			}
+
+			m_ffmpeg->utils.av_frame_free(&this->pFrame);
+			this->pFrame = NULL;
+		}
+
+		if (this->fp_out)
+		{
+			fclose(this->fp_out);
+			this->fp_out = NULL;
+		}
+	}
+
+	void EncodeFrame(byte* framebuffer)
+	{
+		if (framebuffer == NULL)
+		{
+			throw std::invalid_argument("framebuffer");
+		}
+
+		m_ffmpeg->codec.av_init_packet(&pkt);
+		pkt.data = NULL; // packet data will be allocated by the encoder
+		pkt.size = 0;
+
+		pFrame->data[0] = framebuffer;
+		pFrame->data[1] = framebuffer + yBlocksize;
+		pFrame->data[2] = framebuffer + yBlocksize + uBlockSize;
+
+		pFrame->pts = this->cInputFrames++;
+		int got_output;
+		
+		/* encode the image */
+		auto ret = m_ffmpeg->codec.avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_output);
+		if (ret < 0)
+		{
+			throw std::exception("Error encoding frame.");
+		}
+
+		if (got_output)
+		{
+			fwrite(pkt.data, 1, pkt.size, fp_out);
+			m_ffmpeg->codec.av_free_packet(&pkt);
+		}
+	}
+
+	void Close() {
+		//Flush Encoder even at least one frame was given to us
+		int got_output = this->cInputFrames ? 1 : 0;
+		while (got_output)
+		{
+			auto ret = m_ffmpeg->codec.avcodec_encode_video2(pCodecCtx, &pkt, NULL, &got_output);
+			if (ret < 0) {
+				printf("Error encoding frame\n");
+				return;
+			}
+			if (got_output) {
+				printf("Flush Encoder: Succeed to encode 1 frame!\tsize:%5d\n", pkt.size);
+				fwrite(pkt.data, 1, pkt.size, fp_out);
+				m_ffmpeg->codec.av_free_packet(&pkt);
+			}
+		}
+
+		fclose(this->fp_out);
+		this->fp_out = NULL;
+
+		m_ffmpeg->codec.avcodec_close(pCodecCtx);
+		m_ffmpeg->utils.av_free(pCodecCtx);
+		pCodecCtx = NULL;
+		this->pCodec = NULL;
+
+		if (pFrame)
+		{
+			if (pFrame->data)
+			{
+				//m_ffmpeg->utils.av_freep(&pFrame->data[0]);
+			}
+
+			m_ffmpeg->utils.av_frame_free(&pFrame);
+			pFrame = NULL;
+		}
+	}
+};
+
 // https://github.com/leixiaohua1020/simplest_ffmpeg_device/blob/master/simplest_ffmpeg_readcamera/simplest_ffmpeg_readcamera.cpp
 class VideoCaptureTest
 {
@@ -388,7 +615,7 @@ private:
 	int				videoindex;
 	AVCodecContext	*pCodecCtx;
 	AVCodec			*pCodec;
-
+	
 public:
 	VideoCaptureTest(FFmpegHelper* ffmpeg, const char *filename, int width, int height, int fps, int duration) : m_ffmpeg(ffmpeg)
 	{
@@ -396,17 +623,23 @@ public:
 		//Set own video device's name
 		pFormatCtx = m_ffmpeg->format.avformat_alloc_context();
 
-		AVDictionary* options = NULL;
-		m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_YUV420P), 0);
-		m_ffmpeg->utils.av_dict_set(&options, "video_size", (std::to_string(width) + "x" + std::to_string(height)).c_str(), 0);
-		//m_ffmpeg->utils.av_dict_set(&options, "width", std::to_string(width).c_str(), 0);
-		//m_ffmpeg->utils.av_dict_set(&options, "height", std::to_string(height).c_str(), 0);
-		m_ffmpeg->utils.av_dict_set(&options, "framerate", std::to_string(fps).c_str(), 0);
+		std::string captureSourceName("Logitech HD Pro Webcam C920");
+		//std::string captureSourceName("HP Truevision HD");
 
-		if (m_ffmpeg->format.avformat_open_input(&pFormatCtx, "video=Logitech HD Pro Webcam C920", ifmt, &options) != 0)
+		AVDictionary* options = NULL;
+		m_ffmpeg->utils.av_dict_set(&options, "video_size", (std::to_string(width) + "x" + std::to_string(height)).c_str(), 0);
+		m_ffmpeg->utils.av_dict_set(&options, "framerate", std::to_string(fps).c_str(), 0);
+		m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_YUV420P), 0);
+		if (m_ffmpeg->format.avformat_open_input(&pFormatCtx, (std::string("video=") + captureSourceName).c_str(), ifmt, &options) != 0)
 		{
-			printf("Couldn't open input stream.\n");
-			return;
+			if (!m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_YUYV422), 0))
+			{
+				if (!m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_RGB24), 0))
+				{
+					printf("Couldn't open input stream.\n");
+					return;
+				}
+			}
 		}
 
 		if (m_ffmpeg->format.avformat_find_stream_info(pFormatCtx, NULL) < 0)
@@ -470,7 +703,7 @@ public:
 
 		LARGE_INTEGER time, nextTime, frequency, stopTime;
 		QueryPerformanceFrequency(&frequency);
-		auto frameInterval = static_cast<LONGLONG>(roundf(frequency.QuadPart / fps));
+		auto frameInterval = frequency.QuadPart / fps;
 
 		QueryPerformanceCounter(&time);
 		nextTime = stopTime = time;
@@ -523,26 +756,41 @@ public:
 };
 
 FFmpegHelper::FFmpegHelper() :
-	device("avdevice-56.dll"),
-	codec("avcodec-56.dll"),
-	utils("avutil-54.dll"),
-	format("avformat-56.dll")
+device("avdevice-56.dll"),
+codec("avcodec-56.dll"),
+utils("avutil-54.dll"),
+format("avformat-56.dll")
 {
 	this->device.avdevice_register_all();
 	this->codec.avcodec_register_all();
 	this->format.av_register_all();
 
-	int width = 800;
-	int height = 600;
+	int width = 640;
+	int height = 480;
 	int fps = 15;
 	auto videoCapture = new VideoCaptureTest(this, "test.yuv", width, height, fps, 10);
 	delete videoCapture;
 
-	auto fileTest = new encodeToVideoFile(this, "test.yuv", "test.h264", width, height, fps);
-	delete fileTest;
+	auto streamingEncoder = new YUV420P_H264_Encoder(this, "test.h264", width, height, fps);
 
-	auto streamTest = new encodeRawFile(this, "test.yuv", "test-raw.h264", width, height, fps);
-	delete streamTest;
+	auto frameSize = streamingEncoder->getRawFrameSize();
+	auto buffer = new byte[frameSize];
+	std::ifstream rawFileYuv("test.yuv", std::ios::binary);
+	while (rawFileYuv && !rawFileYuv.eof())
+	{
+		rawFileYuv.read((char *)buffer, frameSize);
+		streamingEncoder->EncodeFrame(buffer);
+	}
+
+	streamingEncoder->Close();
+	delete streamingEncoder;
+	delete[] buffer;
+
+	//auto fileTest = new encodeToVideoFile(this, "test.yuv", "test.h264", width, height, fps);
+	//delete fileTest;
+
+	//auto streamTest = new encodeRawFile(this, "test.yuv", "test-raw.h264", width, height, fps);
+	//delete streamTest;
 
 	{
 		AVFormatContext *pFormatCtx = this->format.avformat_alloc_context();

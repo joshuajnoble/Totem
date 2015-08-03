@@ -4,6 +4,7 @@
 #include "ofRemoteApp.h"
 #include "Utils.h"
 #include "ofxPGR\src\PGRCamera.h"
+#include "..\..\sharedCode\FFmpegHelper.h"
 
 namespace
 {
@@ -166,6 +167,8 @@ namespace
 int main(int argc, const char** argv)
 {
 	ofSetWorkingDirectoryToDefault();
+	
+	delete new FFmpegHelper();
 
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	//ofLogToFile("logfile-mempool.txt", true);
