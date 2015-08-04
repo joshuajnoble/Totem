@@ -9,14 +9,14 @@
 class ConvertToNV12
 {
 private:
+	uint8_t* srcData[1];
+	uint8_t* dstData[2];
+	int srcLineSize[1];
+	int dstLineSize[2];
+
 	int width, height;
 	FFmpegFactory& m_ffmpeg;
 	SwsContext* sws_context;
-	uint8_t* srcData[1];
-	int srcLineSize[1];
-
-	uint8_t* dstData[2];
-	int dstLineSize[2];
 
 public:
 	ConvertToNV12(FFmpegFactory& ffmpeg, int width, int height);

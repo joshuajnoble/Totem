@@ -9,33 +9,33 @@ ConvertToNV12::ConvertToNV12(FFmpegFactory& ffmpeg, int width, int height) :
 	m_ffmpeg(ffmpeg)
 {
 	// Asume we are converting from RGB24
-	sws_context = m_ffmpeg.scale.sws_getContext(
-		width, height, AV_PIX_FMT_RGB24,
-		width, height, AV_PIX_FMT_NV12,
+	this->sws_context = m_ffmpeg.scale.sws_getContext(
+		this->width, this->height, AV_PIX_FMT_RGB24,
+		this->width, this->height, AV_PIX_FMT_NV12,
 		SWS_FAST_BILINEAR, NULL, NULL, NULL);
-	if (!sws_context) throw std::exception("Could not allocate convetsion context.");
+	if (!this->sws_context) throw std::exception("Could not allocate convetsion context.");
 
-	srcLineSize[0] = 3 * width;
-	dstLineSize[0] = width;
-	dstLineSize[1] = width;
+	this->srcLineSize[0] = 3 * width;
+	this->dstLineSize[0] = width;
+	this->dstLineSize[1] = width;
 }
 
 ConvertToNV12::~ConvertToNV12()
 {
-	if (sws_context)
+	if (this->sws_context)
 	{
-		m_ffmpeg.scale.sws_freeContext(sws_context);
-		sws_context = NULL;
+		m_ffmpeg.scale.sws_freeContext(this->sws_context);
+		this->sws_context = NULL;
 	}
 }
 
 void ConvertToNV12::ConvertFrame(const uint8_t *rgbSource, uint8_t* yuvDestination)
 {
-	srcData[0] = const_cast<uint8_t*>(rgbSource);
+	this->srcData[0] = const_cast<uint8_t*>(rgbSource);
 
-	dstData[0] = yuvDestination;
-	dstData[1] = yuvDestination + height * dstLineSize[0];
-	m_ffmpeg.scale.sws_scale(sws_context, srcData, srcLineSize, 0, height, dstData, dstLineSize);
+	this->dstData[0] = yuvDestination;
+	this->dstData[1] = yuvDestination + height * dstLineSize[0];
+	m_ffmpeg.scale.sws_scale(this->sws_context, this->srcData, this->srcLineSize, 0, this->height, this->dstData, this->dstLineSize);
 }
 
 //
