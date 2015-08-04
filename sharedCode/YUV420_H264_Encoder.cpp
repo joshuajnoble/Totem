@@ -1,8 +1,6 @@
 #include "YUV420_H264_Encoder.h"
 #include "LegacyGuards.h"
 
-#define QSV_CHEAT
-
 #ifdef QSV_CHEAT
 #include "mfx/mfxvideo.h"
 #include "libavcodec\qsv.h"
@@ -19,7 +17,9 @@ int YUV420_H264_Encoder::getRawFrameSize()
 	return yBlocksize + uBlockSize + vBlockSize;
 }
 
-YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, char* filename_out, int width, int height, int fps) : m_ffmpeg(ffmpeg)
+YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int height, int fps, FrameCallback callback) :
+	m_ffmpeg(ffmpeg),
+	callback(callback)
 {
 	auto codecName = "h264_qsv";
 	//auto codecName = "libx264";
@@ -72,12 +72,6 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, char* filename_o
 		throw std::exception("Could not allocate raw picture buffer.");
 	}
 
-	//Output bitstream
-	error = fopen_s(&fp_out, filename_out, "wb");
-	if (error) {
-		throw std::exception((std::string("Could not open ") + filename_out).c_str());
-	}
-
 	yBlocksize = this->pFrame->height * this->pFrame->linesize[0];
 	uBlockSize = this->pFrame->height / 2 * this->pFrame->linesize[1];
 	vBlockSize = this->pFrame->height / 2 * this->pFrame->linesize[2];
@@ -89,7 +83,6 @@ YUV420_H264_Encoder::~YUV420_H264_Encoder()
 {
 	AVCodec *pCodec = NULL;
 	AVCodecContext *pCodecCtx = NULL;
-	FILE *fp_out = NULL;
 	AVFrame *pFrame = NULL;
 
 	if (this->pCodecCtx)
@@ -119,15 +112,9 @@ YUV420_H264_Encoder::~YUV420_H264_Encoder()
 		m_ffmpeg.utils.av_frame_free(&this->pFrame);
 		this->pFrame = NULL;
 	}
-
-	if (this->fp_out)
-	{
-		fclose(this->fp_out);
-		this->fp_out = NULL;
-	}
 }
 
-void YUV420_H264_Encoder::EncodeFrame(const uint8_t* framebuffer)
+void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 {
 	if (framebuffer == NULL)
 	{
@@ -154,7 +141,10 @@ void YUV420_H264_Encoder::EncodeFrame(const uint8_t* framebuffer)
 
 	if (got_output)
 	{
-		fwrite(pkt.data, 1, pkt.size, fp_out);
+		if (this->callback)
+		{
+			this->callback(pkt.data, pkt.size);
+		}
 		m_ffmpeg.codec.av_free_packet(&pkt);
 	}
 }
@@ -171,14 +161,13 @@ void YUV420_H264_Encoder::Close()
 			return;
 		}
 		if (got_output) {
-			printf("Flush Encoder: Succeed to encode 1 frame!\tsize:%5d\n", pkt.size);
-			fwrite(pkt.data, 1, pkt.size, fp_out);
+			if (this->callback)
+			{
+				this->callback(pkt.data, pkt.size);
+			}
 			m_ffmpeg.codec.av_free_packet(&pkt);
 		}
 	}
-
-	fclose(this->fp_out);
-	this->fp_out = NULL;
 
 	m_ffmpeg.codec.avcodec_close(pCodecCtx);
 	m_ffmpeg.utils.av_free(pCodecCtx);

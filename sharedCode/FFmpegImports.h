@@ -3,6 +3,9 @@
 #include <Windows.h>
 #include <cassert>
 #include <string>
+#include <functional>
+#include <stdint.h>
+typedef std::function<void(const uint8_t*, int)> FrameCallback;
 
 extern "C"
 {
@@ -13,6 +16,8 @@ extern "C"
 #include "libavutil/frame.h"
 #include "libavutil/opt.h"
 #include "libavutil/pixdesc.h"
+#include "libavutil/time.h"
+#include "libavutil/mathematics.h"
 #include "libavformat/avformat.h"
 #include "libavformat/avio.h"
 #include "libswscale/swscale.h"
@@ -471,6 +476,23 @@ namespace FFmpegWrapper
 			FFMPEG_IMPORT(av_color_transfer_name);
 			FFMPEG_IMPORT(av_color_space_name);
 			FFMPEG_IMPORT(av_chroma_location_name);
+
+			// time.h
+			FFMPEG_IMPORT(av_gettime);
+			FFMPEG_IMPORT(av_gettime_relative);
+			FFMPEG_IMPORT(av_gettime_relative_is_monotonic);
+			FFMPEG_IMPORT(av_usleep);
+
+			// mathematics.h
+			FFMPEG_IMPORT(av_gcd);
+			FFMPEG_IMPORT(av_rescale);
+			FFMPEG_IMPORT(av_rescale_rnd);
+			FFMPEG_IMPORT(av_rescale_q);
+			FFMPEG_IMPORT(av_rescale_q_rnd);
+			FFMPEG_IMPORT(av_compare_ts);
+			FFMPEG_IMPORT(av_compare_mod);
+			FFMPEG_IMPORT(av_rescale_delta);
+			FFMPEG_IMPORT(av_add_stable);
 		}
 
 		public:
@@ -575,6 +597,23 @@ namespace FFmpegWrapper
 			decltype(av_color_transfer_name)* av_color_transfer_name;
 			decltype(av_color_space_name)* av_color_space_name;
 			decltype(av_chroma_location_name)* av_chroma_location_name;
+
+			// time.h
+			decltype(av_gettime)* av_gettime;
+			decltype(av_gettime_relative)* av_gettime_relative;
+			decltype(av_gettime_relative_is_monotonic)* av_gettime_relative_is_monotonic;
+			decltype(av_usleep)* av_usleep;
+
+			// mathematics.h
+			decltype(av_gcd)* av_gcd;
+			decltype(av_rescale)* av_rescale;
+			decltype(av_rescale_rnd)* av_rescale_rnd;
+			decltype(av_rescale_q)* av_rescale_q;
+			decltype(av_rescale_q_rnd)* av_rescale_q_rnd;
+			decltype(av_compare_ts)* av_compare_ts;
+			decltype(av_compare_mod)* av_compare_mod;
+			decltype(av_rescale_delta)* av_rescale_delta;
+			decltype(av_add_stable)* av_add_stable;
 	};
 
 	class format : public FFmpegDllImport
@@ -585,6 +624,7 @@ namespace FFmpegWrapper
 			// AVFORMAT.H
 			FFMPEG_IMPORT(av_register_all);
 			FFMPEG_IMPORT(avformat_alloc_context);
+			FFMPEG_IMPORT(avformat_alloc_output_context2);
 			FFMPEG_IMPORT(avformat_free_context);
 			FFMPEG_IMPORT(av_guess_format);
 			FFMPEG_IMPORT(av_guess_codec);
@@ -599,6 +639,8 @@ namespace FFmpegWrapper
 			FFMPEG_IMPORT(avformat_close_input);
 			FFMPEG_IMPORT(avformat_find_stream_info);		
 			FFMPEG_IMPORT(av_read_frame);
+			FFMPEG_IMPORT(avformat_network_init);
+			FFMPEG_IMPORT(av_interleaved_write_frame);
 
 			// AVIO.H
 			FFMPEG_IMPORT(avio_open);
@@ -607,6 +649,7 @@ namespace FFmpegWrapper
 			FFMPEG_IMPORT(avformat_new_stream);
 
 			this->av_register_all();
+			this->avformat_network_init();
 		}
 
 	public:
@@ -616,6 +659,7 @@ namespace FFmpegWrapper
 		// AVFORMAT.H
 		decltype(av_register_all)* av_register_all;
 		decltype(avformat_alloc_context)* avformat_alloc_context;
+		decltype(avformat_alloc_output_context2)* avformat_alloc_output_context2;
 		decltype(avformat_free_context)* avformat_free_context;
 		decltype(av_guess_format)* av_guess_format;
 		decltype(av_guess_codec)* av_guess_codec;
@@ -629,6 +673,8 @@ namespace FFmpegWrapper
 		decltype(avformat_close_input)* avformat_close_input;
 		decltype(avformat_find_stream_info)* avformat_find_stream_info;
 		decltype(av_read_frame)* av_read_frame;
+		decltype(avformat_network_init)* avformat_network_init;
+		decltype(av_interleaved_write_frame)* av_interleaved_write_frame;
 
 		// AVIO.H
 		decltype(avio_open)* avio_open;

@@ -322,6 +322,9 @@
     <ClCompile Include="..\sharedCode\YUV420_H264_Encoder.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\VideoConverters.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -648,6 +651,12 @@
       <Filter>ffmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\sharedCode\YUV420_H264_Encoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegNetworkServer.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\VideoConverters.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>

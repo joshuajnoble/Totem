@@ -2,9 +2,11 @@
 
 #include "ofMain.h"
 #include "RemoteVideoInfo.h"
-#include "..\..\SharedCode\StreamManager.h"
 #include "UdpDiscovery.h"
-#include "..\..\sharedCode\FFmpegHelper.h"
+#include "..\..\SharedCode\StreamManager.h"
+#include "..\..\sharedCode\VideoConverters.h"
+#include "..\..\sharedCode\FFmpegNetworkServer.h"
+
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -34,7 +36,8 @@ protected:
 	UdpDiscovery udpDiscovery;
 
 	FFmpegFactory m_ffmpeg;
-	std::auto_ptr<EncodeRGBToH264> ffmpegEncoder;
+	std::auto_ptr<EncodeRGBToH264File> ffmpegEncoder;
+	std::auto_ptr<FFmpegNetworkServer> ffmpegNetworkServer;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 
@@ -43,4 +46,7 @@ protected:
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote) {};
 
 	void setupStreamManager();
+
+	virtual void audioOut(float * output, int bufferSize, int nChannels);
+	virtual void audioIn(float * input, int bufferSize, int nChannels);
 };

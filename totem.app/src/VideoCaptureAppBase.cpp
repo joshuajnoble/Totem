@@ -15,8 +15,30 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	connection.remoteAudioPort = 12100;
 	this->streamManager.newServer(connection);
 
-	this->ffmpegEncoder.reset(new EncodeRGBToH264(m_ffmpeg));
-	this->ffmpegEncoder->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+	//this->ffmpegEncoder.reset(new EncodeRGBToH264File(m_ffmpeg, "test.h264"));
+	//this->ffmpegEncoder->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+
+	//this->ffmpegNetworkServer.reset(new FFmpegNetworkServer(m_ffmpeg));
+	//this->ffmpegNetworkServer->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15, "239.0.0.200:2000");
+	
+	TestStreamer testStreamer;
+	testStreamer.Start();
+
+	//auto ss = ofSoundStream();
+	//ss.listDevices();
+	//ss.setDeviceID(0);
+	//auto rval = ss.setup(this, 0, 2, 4400, 256, 4);
+	//ss.start();
+}
+
+void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
+{
+
+}
+
+void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)
+{
+
 }
 
 void VideoCaptureAppBase::update()
@@ -28,7 +50,8 @@ void VideoCaptureAppBase::update()
 	{
 		auto ref = this->videoSource->getPixelsRef();
 		this->streamManager.newFrame(ref);
-		this->ffmpegEncoder->EncodeFrame(ref.getPixels());
+		if (this->ffmpegEncoder.get()) this->ffmpegEncoder->WriteFrame(ref.getPixels());
+		if (this->ffmpegNetworkServer.get()) this->ffmpegNetworkServer->WriteFrame(ref.getPixels());
 	}
 
 	this->streamManager.update();
@@ -36,6 +59,7 @@ void VideoCaptureAppBase::update()
 
 void VideoCaptureAppBase::exit()
 {
+	ofSoundStreamClose();
 	this->streamManager.exit();
 }
 
