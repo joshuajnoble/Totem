@@ -1,4 +1,5 @@
 #include "VideoConverters.h"
+#include "FFmpegNetworkServer.h"
 
 //
 // ConvertToNV12
@@ -86,9 +87,9 @@ void EncodeRGBToH264::Close()
 // EncodeRGBToH264File
 //
 EncodeRGBToH264File::EncodeRGBToH264File(FFmpegFactory &ffmpeg, const std::string& filename) : closed(false),
-encoder(ffmpeg, std::bind(&EncodeRGBToH264File::ProcessEncodedFrame, this, std::placeholders::_1, std::placeholders::_2))
+encoder(ffmpeg, std::bind(&EncodeRGBToH264File::ProcessEncodedFrame, this, std::placeholders::_1))
 {
-	this->outptuFile = std::ofstream(filename, std::ofstream::binary);
+	this->outputFile = std::ofstream(filename, std::ofstream::binary);
 }
 
 EncodeRGBToH264File::~EncodeRGBToH264File()
@@ -106,9 +107,9 @@ void EncodeRGBToH264File::WriteFrame(const uint8_t *srcBytes)
 	this->encoder.WriteFrame(srcBytes);
 }
 
-void EncodeRGBToH264File::ProcessEncodedFrame(const uint8_t* buffer, int count)
+void EncodeRGBToH264File::ProcessEncodedFrame(AVPacket &packet)
 {
-	this->outptuFile.write(reinterpret_cast<const char *>(buffer), count);
+	this->outputFile.write(reinterpret_cast<const char *>(packet.data), packet.size);
 }
 
 void EncodeRGBToH264File::Close()
@@ -116,7 +117,48 @@ void EncodeRGBToH264File::Close()
 	if (!this->closed)
 	{
 		this->encoder.Close();
-		this->outptuFile.close();
+		this->outputFile.close();
+		this->closed = true;
+	}
+}
+
+
+//
+// EncodeRGBToH264Live
+//
+EncodeRGBToH264Live::EncodeRGBToH264Live(FFmpegFactory &ffmpeg) : closed(false),
+encoder(ffmpeg, std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1))
+{
+	this->streamer.reset(new TestStreamerLive());
+}
+
+EncodeRGBToH264Live::~EncodeRGBToH264Live()
+{
+	this->Close();
+}
+
+void EncodeRGBToH264Live::Start(int width, int height, int fps)
+{
+	this->streamer->Start();
+	this->encoder.Start(width, height, fps);
+}
+
+void EncodeRGBToH264Live::WriteFrame(const uint8_t *srcBytes)
+{
+	this->encoder.WriteFrame(srcBytes);
+}
+
+void EncodeRGBToH264Live::ProcessEncodedFrame(AVPacket& packet)
+{
+	this->streamer->WriteFrame(packet);
+}
+
+void EncodeRGBToH264Live::Close()
+{
+	if (!this->closed)
+	{
+		this->encoder.Close();
+		this->streamer->Close();
 		this->closed = true;
 	}
 }

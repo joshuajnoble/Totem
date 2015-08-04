@@ -143,7 +143,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 	{
 		if (this->callback)
 		{
-			this->callback(pkt.data, pkt.size);
+			this->callback(pkt);
 		}
 		m_ffmpeg.codec.av_free_packet(&pkt);
 	}
@@ -163,7 +163,7 @@ void YUV420_H264_Encoder::Close()
 		if (got_output) {
 			if (this->callback)
 			{
-				this->callback(pkt.data, pkt.size);
+				this->callback(pkt);
 			}
 			m_ffmpeg.codec.av_free_packet(&pkt);
 		}

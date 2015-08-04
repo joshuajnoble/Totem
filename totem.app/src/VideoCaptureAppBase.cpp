@@ -21,8 +21,11 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	//this->ffmpegNetworkServer.reset(new FFmpegNetworkServer(m_ffmpeg));
 	//this->ffmpegNetworkServer->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15, "239.0.0.200:2000");
 	
-	TestStreamer testStreamer;
-	testStreamer.Start();
+	//this->ffmpegLiveTest.reset(new EncodeRGBToH264Live(m_ffmpeg));
+	//this->ffmpegLiveTest->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+
+	//TestStreamer testStreamer;
+	//testStreamer.Start();
 
 	//auto ss = ofSoundStream();
 	//ss.listDevices();
@@ -52,6 +55,7 @@ void VideoCaptureAppBase::update()
 		this->streamManager.newFrame(ref);
 		if (this->ffmpegEncoder.get()) this->ffmpegEncoder->WriteFrame(ref.getPixels());
 		if (this->ffmpegNetworkServer.get()) this->ffmpegNetworkServer->WriteFrame(ref.getPixels());
+		if (this->ffmpegLiveTest.get()) this->ffmpegLiveTest->WriteFrame(ref.getPixels());
 	}
 
 	this->streamManager.update();

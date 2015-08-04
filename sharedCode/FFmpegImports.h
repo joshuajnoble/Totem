@@ -5,7 +5,6 @@
 #include <string>
 #include <functional>
 #include <stdint.h>
-typedef std::function<void(const uint8_t*, int)> FrameCallback;
 
 extern "C"
 {
@@ -22,6 +21,9 @@ extern "C"
 #include "libavformat/avio.h"
 #include "libswscale/swscale.h"
 }
+
+//typedef std::function<void(const uint8_t*, int)> FrameCallback;
+typedef std::function<void(AVPacket&)> FrameCallback;
 
 #define FFMPEG_IMPORT(X) do { this->##X = (decltype(##X))GetProcAddress(this->hmodule, #X); assert(this->##X != NULL); } while(0)
 

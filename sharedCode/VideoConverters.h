@@ -51,14 +51,36 @@ class EncodeRGBToH264File
 {
 private:
 	EncodeRGBToH264 encoder;
-	std::ofstream outptuFile;
+	std::ofstream outputFile;
 	bool closed;
 	
-	void ProcessEncodedFrame(const uint8_t* buffer, int count);
+	void ProcessEncodedFrame(AVPacket&);
 
 public:
 	EncodeRGBToH264File(FFmpegFactory &ffmpeg, const std::string& filename);
 	~EncodeRGBToH264File();
+
+	void Start(int width, int height, int fps);
+	void WriteFrame(const uint8_t *srcBytes);
+	void Close();
+};
+
+class TestStreamerLive;
+
+class EncodeRGBToH264Live
+{
+private:
+	EncodeRGBToH264 encoder;
+	std::auto_ptr<TestStreamerLive> streamer;
+		
+	std::ofstream outptuFile;
+	bool closed;
+
+	void ProcessEncodedFrame(AVPacket&);
+
+public:
+	EncodeRGBToH264Live(FFmpegFactory &ffmpeg);
+	~EncodeRGBToH264Live();
 
 	void Start(int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);

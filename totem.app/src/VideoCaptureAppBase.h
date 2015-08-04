@@ -38,6 +38,7 @@ protected:
 	FFmpegFactory m_ffmpeg;
 	std::auto_ptr<EncodeRGBToH264File> ffmpegEncoder;
 	std::auto_ptr<FFmpegNetworkServer> ffmpegNetworkServer;
+	std::auto_ptr<EncodeRGBToH264Live> ffmpegLiveTest;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 

@@ -22,8 +22,8 @@ public:
 	{
 		FFmpegFactory m_ffmpeg;
 
-		AVOutputFormat *ofmt = NULL;
-		AVFormatContext *ifmt_ctx = NULL, *ofmt_ctx = NULL;
+		AVOutputFormat *avOutputFromat = NULL;
+		AVFormatContext *avFormatContextSource = NULL, *avFormatContextDest = NULL;
 		AVPacket pkt;
 		const char *in_filename, *out_filename;
 		int ret, i;
@@ -31,42 +31,42 @@ public:
 		int frame_index = 0;
 		int64_t start_time = 0;
 		in_filename = "test.h264";
-
 		out_filename = "rtp://239.0.0.210:5800";
 
 		//Input
-		if ((ret = m_ffmpeg.format.avformat_open_input(&ifmt_ctx, in_filename, 0, 0)) < 0) {
+		if ((ret = m_ffmpeg.format.avformat_open_input(&avFormatContextSource, in_filename, 0, 0)) < 0) {
 			printf("Could not open input file.");
 			goto end;
 		}
-		if ((ret = m_ffmpeg.format.avformat_find_stream_info(ifmt_ctx, 0)) < 0) {
+
+		if ((ret = m_ffmpeg.format.avformat_find_stream_info(avFormatContextSource, 0)) < 0) {
 			printf("Failed to retrieve input stream information");
 			goto end;
 		}
 
-		for (i = 0; i < ifmt_ctx->nb_streams; i++)
-			if (ifmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO){
+		for (i = 0; i < avFormatContextSource->nb_streams; i++)
+			if (avFormatContextSource->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO){
 				videoindex = i;
 				break;
 			}
 
-		m_ffmpeg.format.av_dump_format(ifmt_ctx, 0, in_filename, 0);
+		m_ffmpeg.format.av_dump_format(avFormatContextSource, 0, in_filename, 0);
 
 		//Output
-		//avformat_alloc_output_context2(&ofmt_ctx, NULL, "h264", out_filename); //RTMP
-		//avformat_alloc_output_context2(&ofmt_ctx, NULL, "mpegts", out_filename);//UDP
-		m_ffmpeg.format.avformat_alloc_output_context2(&ofmt_ctx, NULL, "rtp", out_filename);//UDP
+		//avformat_alloc_output_context2(&avFormatContextDest, NULL, "h264", out_filename); //RTMP
+		//avformat_alloc_output_context2(&avFormatContextDest, NULL, "mpegts", out_filename);//UDP
+		m_ffmpeg.format.avformat_alloc_output_context2(&avFormatContextDest, NULL, "rtp", out_filename);//UDP
 
-		if (!ofmt_ctx) {
+		if (!avFormatContextDest) {
 			printf("Could not create output context\n");
 			ret = AVERROR_UNKNOWN;
 			goto end;
 		}
-		ofmt = ofmt_ctx->oformat;
-		for (i = 0; i < ifmt_ctx->nb_streams; i++) {
+		avOutputFromat = avFormatContextDest->oformat;
+		for (i = 0; i < avFormatContextSource->nb_streams; i++) {
 			//Create output AVStream according to input AVStream
-			AVStream *in_stream = ifmt_ctx->streams[i];
-			AVStream *out_stream = m_ffmpeg.format.avformat_new_stream(ofmt_ctx, in_stream->codec->codec);
+			AVStream *in_stream = avFormatContextSource->streams[i];
+			AVStream *out_stream = m_ffmpeg.format.avformat_new_stream(avFormatContextDest, in_stream->codec->codec);
 			if (!out_stream) {
 				printf("Failed allocating output stream\n");
 				ret = AVERROR_UNKNOWN;
@@ -79,21 +79,21 @@ public:
 				goto end;
 			}
 			out_stream->codec->codec_tag = 0;
-			if (ofmt_ctx->oformat->flags & AVFMT_GLOBALHEADER)
+			if (avFormatContextDest->oformat->flags & AVFMT_GLOBALHEADER)
 				out_stream->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 		}
 		//Dump Format------------------
-		m_ffmpeg.format.av_dump_format(ofmt_ctx, 0, out_filename, 1);
+		m_ffmpeg.format.av_dump_format(avFormatContextDest, 0, out_filename, 1);
 		//Open output URL
-		if (!(ofmt->flags & AVFMT_NOFILE)) {
-			ret = m_ffmpeg.format.avio_open(&ofmt_ctx->pb, out_filename, AVIO_FLAG_WRITE);
+		if (!(avOutputFromat->flags & AVFMT_NOFILE)) {
+			ret = m_ffmpeg.format.avio_open(&avFormatContextDest->pb, out_filename, AVIO_FLAG_WRITE);
 			if (ret < 0) {
 				printf("Could not open output URL '%s'", out_filename);
 				goto end;
 			}
 		}
 		//Write file header
-		ret = m_ffmpeg.format.avformat_write_header(ofmt_ctx, NULL);
+		ret = m_ffmpeg.format.avformat_write_header(avFormatContextDest, NULL);
 		if (ret < 0) {
 			printf("Error occurred when opening output URL\n");
 			goto end;
@@ -103,16 +103,16 @@ public:
 		while (1) {
 			AVStream *in_stream, *out_stream;
 			//Get an AVPacket
-			ret = m_ffmpeg.format.av_read_frame(ifmt_ctx, &pkt);
+			ret = m_ffmpeg.format.av_read_frame(avFormatContextSource, &pkt);
 			if (ret < 0)
 				break;
 			//FIX：No PTS (Example: Raw H.264)
 			//Simple Write PTS
 			if (pkt.pts == AV_NOPTS_VALUE){
 				//Write PTS
-				AVRational time_base1 = ifmt_ctx->streams[videoindex]->time_base;
+				AVRational time_base1 = avFormatContextSource->streams[videoindex]->time_base;
 				//Duration between 2 frames (us)
-				int64_t calc_duration = (double)AV_TIME_BASE / av_q2d(ifmt_ctx->streams[videoindex]->r_frame_rate);
+				int64_t calc_duration = (double)AV_TIME_BASE / av_q2d(avFormatContextSource->streams[videoindex]->r_frame_rate);
 				//Parameters
 				pkt.pts = (double)(frame_index*calc_duration) / (double)(av_q2d(time_base1)*AV_TIME_BASE);
 				pkt.dts = pkt.pts;
@@ -120,7 +120,7 @@ public:
 			}
 			//Important:Delay
 			if (pkt.stream_index == videoindex){
-				AVRational time_base = ifmt_ctx->streams[videoindex]->time_base;
+				AVRational time_base = avFormatContextSource->streams[videoindex]->time_base;
 				AVRational time_base_q = { 1, AV_TIME_BASE };
 				int64_t pts_time = m_ffmpeg.utils.av_rescale_q(pkt.dts, time_base, time_base_q);
 				int64_t now_time = m_ffmpeg.utils.av_gettime() - start_time;
@@ -129,21 +129,24 @@ public:
 
 			}
 
-			in_stream = ifmt_ctx->streams[pkt.stream_index];
-			out_stream = ofmt_ctx->streams[pkt.stream_index];
+			in_stream = avFormatContextSource->streams[pkt.stream_index];
+			out_stream = avFormatContextDest->streams[pkt.stream_index];
+
 			/* copy packet */
 			//Convert PTS/DTS
 			pkt.pts = m_ffmpeg.utils.av_rescale_q_rnd(pkt.pts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
 			pkt.dts = m_ffmpeg.utils.av_rescale_q_rnd(pkt.dts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
 			pkt.duration = m_ffmpeg.utils.av_rescale_q(pkt.duration, in_stream->time_base, out_stream->time_base);
 			pkt.pos = -1;
+
 			//Print to Screen
 			if (pkt.stream_index == videoindex){
 				printf("Send %8d video frames to output URL\n", frame_index);
 				frame_index++;
 			}
-			//ret = av_write_frame(ofmt_ctx, &pkt);
-			ret = m_ffmpeg.format.av_interleaved_write_frame(ofmt_ctx, &pkt);
+
+			//ret = av_write_frame(avFormatContextDest, &pkt);
+			ret = m_ffmpeg.format.av_interleaved_write_frame(avFormatContextDest, &pkt);
 
 			if (ret < 0) {
 				printf("Error muxing packet\n");
@@ -154,18 +157,204 @@ public:
 
 		}
 		//Write file trailer
-		m_ffmpeg.format.av_write_trailer(ofmt_ctx);
+		m_ffmpeg.format.av_write_trailer(avFormatContextDest);
 	end:
-		m_ffmpeg.format.avformat_close_input(&ifmt_ctx);
+		m_ffmpeg.format.avformat_close_input(&avFormatContextSource);
 		/* close output */
-		if (ofmt_ctx && !(ofmt->flags & AVFMT_NOFILE))
-			m_ffmpeg.format.avio_close(ofmt_ctx->pb);
-		m_ffmpeg.format.avformat_free_context(ofmt_ctx);
+		if (avFormatContextDest && !(avOutputFromat->flags & AVFMT_NOFILE))
+			m_ffmpeg.format.avio_close(avFormatContextDest->pb);
+		m_ffmpeg.format.avformat_free_context(avFormatContextDest);
 		if (ret < 0 && ret != AVERROR_EOF) {
 			printf("Error occurred.\n");
 			return -1;
 		}
 		return 0;
+	}
+};
+
+class TestStreamerLive
+{
+private:
+	FFmpegFactory m_ffmpeg;
+	AVOutputFormat *avOutputFromat = NULL;
+	AVFormatContext *avFormatContextSource = NULL, *avFormatContextDest = NULL;
+	//AVPacket pkt;
+	int ret, i;
+	int videoindex = -1;
+	int frame_index = 0;
+	int64_t start_time = 0;
+	const char* in_filename = "test.h264";
+	const char* out_filename = "rtp://239.0.0.210:5800";
+
+public:
+	TestStreamerLive()
+	{
+	}
+
+	~TestStreamerLive()
+	{
+		Close();
+	}
+
+	int Start()
+	{
+		//Input
+		if ((ret = m_ffmpeg.format.avformat_open_input(&avFormatContextSource, in_filename, 0, 0)) < 0) {
+			printf("Could not open input file.");
+			goto end;
+		}
+
+		if ((ret = m_ffmpeg.format.avformat_find_stream_info(avFormatContextSource, 0)) < 0) {
+			printf("Failed to retrieve input stream information");
+			goto end;
+		}
+
+		for (i = 0; i < avFormatContextSource->nb_streams; i++)
+			if (avFormatContextSource->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO){
+				videoindex = i;
+				break;
+			}
+
+		m_ffmpeg.format.av_dump_format(avFormatContextSource, 0, in_filename, 0);
+
+		//Output
+		//avformat_alloc_output_context2(&avFormatContextDest, NULL, "h264", out_filename); //RTMP
+		//avformat_alloc_output_context2(&avFormatContextDest, NULL, "mpegts", out_filename);//UDP
+		m_ffmpeg.format.avformat_alloc_output_context2(&avFormatContextDest, NULL, "rtp", out_filename);//UDP
+
+		if (!avFormatContextDest) {
+			printf("Could not create output context\n");
+			ret = AVERROR_UNKNOWN;
+			goto end;
+		}
+		avOutputFromat = avFormatContextDest->oformat;
+		for (i = 0; i < avFormatContextSource->nb_streams; i++) {
+			//Create output AVStream according to input AVStream
+			AVStream *in_stream = avFormatContextSource->streams[i];
+			AVStream *out_stream = m_ffmpeg.format.avformat_new_stream(avFormatContextDest, in_stream->codec->codec);
+			if (!out_stream) {
+				printf("Failed allocating output stream\n");
+				ret = AVERROR_UNKNOWN;
+				goto end;
+			}
+			//Copy the settings of AVCodecContext
+			ret = m_ffmpeg.codec.avcodec_copy_context(out_stream->codec, in_stream->codec);
+			if (ret < 0) {
+				printf("Failed to copy context from input to output stream codec context\n");
+				goto end;
+			}
+			out_stream->codec->codec_tag = 0;
+			if (avFormatContextDest->oformat->flags & AVFMT_GLOBALHEADER)
+				out_stream->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
+		}
+		//Dump Format------------------
+		m_ffmpeg.format.av_dump_format(avFormatContextDest, 0, out_filename, 1);
+		//Open output URL
+		if (!(avOutputFromat->flags & AVFMT_NOFILE)) {
+			ret = m_ffmpeg.format.avio_open(&avFormatContextDest->pb, out_filename, AVIO_FLAG_WRITE);
+			if (ret < 0) {
+				printf("Could not open output URL '%s'", out_filename);
+				goto end;
+			}
+		}
+		//Write file header
+		ret = m_ffmpeg.format.avformat_write_header(avFormatContextDest, NULL);
+		if (ret < 0) {
+			printf("Error occurred when opening output URL\n");
+			goto end;
+		}
+
+		start_time = m_ffmpeg.utils.av_gettime();
+		return 0;
+
+	end:
+		m_ffmpeg.format.avformat_close_input(&avFormatContextSource);
+		/* close output */
+		if (avFormatContextDest && !(avOutputFromat->flags & AVFMT_NOFILE))
+			m_ffmpeg.format.avio_close(avFormatContextDest->pb);
+		m_ffmpeg.format.avformat_free_context(avFormatContextDest);
+		if (ret < 0 && ret != AVERROR_EOF) {
+			printf("Error occurred.\n");
+			return -1;
+		}
+
+		return 0;
+	}
+
+	int WriteFrame(AVPacket& pkt)
+	{
+		//Get an AVPacket
+		//ret = m_ffmpeg.format.av_read_frame(avFormatContextSource, &pkt);
+		//if (ret < 0)
+		//	break;
+		
+		//FIX：No PTS (Example: Raw H.264)
+		//Simple Write PTS
+		if (pkt.pts == AV_NOPTS_VALUE)
+		{
+			//Write PTS
+			AVRational time_base1 = avFormatContextSource->streams[videoindex]->time_base;
+			//Duration between 2 frames (us)
+			int64_t calc_duration = (double)AV_TIME_BASE / av_q2d(avFormatContextSource->streams[videoindex]->r_frame_rate);
+			//Parameters
+			pkt.pts = (double)(frame_index*calc_duration) / (double)(av_q2d(time_base1)*AV_TIME_BASE);
+			pkt.dts = pkt.pts;
+			pkt.duration = (double)calc_duration / (double)(av_q2d(time_base1)*AV_TIME_BASE);
+		}
+		//Important:Delay
+		if (pkt.stream_index == videoindex){
+			AVRational time_base = avFormatContextSource->streams[videoindex]->time_base;
+			AVRational time_base_q = { 1, AV_TIME_BASE };
+			int64_t pts_time = m_ffmpeg.utils.av_rescale_q(pkt.dts, time_base, time_base_q);
+			int64_t now_time = m_ffmpeg.utils.av_gettime() - start_time;
+			if (pts_time > now_time)
+				m_ffmpeg.utils.av_usleep(pts_time - now_time);
+
+		}
+
+		AVStream *in_stream, *out_stream;
+		in_stream = avFormatContextSource->streams[pkt.stream_index];
+		out_stream = avFormatContextDest->streams[pkt.stream_index];
+
+		/* copy packet */
+		//Convert PTS/DTS
+		pkt.pts = m_ffmpeg.utils.av_rescale_q_rnd(pkt.pts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
+		pkt.dts = m_ffmpeg.utils.av_rescale_q_rnd(pkt.dts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
+		pkt.duration = m_ffmpeg.utils.av_rescale_q(pkt.duration, in_stream->time_base, out_stream->time_base);
+		pkt.pos = -1;
+
+		//Print to Screen
+		if (pkt.stream_index == videoindex){
+			printf("Send %8d video frames to output URL\n", frame_index);
+			frame_index++;
+		}
+
+		//ret = av_write_frame(avFormatContextDest, &pkt);
+		ret = m_ffmpeg.format.av_interleaved_write_frame(avFormatContextDest, &pkt);
+
+		if (ret < 0) {
+			printf("Error muxing packet\n");
+		}
+
+		//m_ffmpeg.codec.av_free_packet(&pkt);
+
+		return 0;
+	}
+
+	int Close()
+	{
+		//Write file trailer
+		m_ffmpeg.format.av_write_trailer(avFormatContextDest);
+
+		m_ffmpeg.format.avformat_close_input(&avFormatContextSource);
+		/* close output */
+		if (avFormatContextDest && !(avOutputFromat->flags & AVFMT_NOFILE))
+			m_ffmpeg.format.avio_close(avFormatContextDest->pb);
+		m_ffmpeg.format.avformat_free_context(avFormatContextDest);
+		if (ret < 0 && ret != AVERROR_EOF) {
+			printf("Error occurred.\n");
+			return -1;
+		}
 	}
 };
 
@@ -216,7 +405,7 @@ public:
 		{
 			AVCodecContext *c = _videoStream->codec;
 			AVDictionary *opt = NULL;
-			auto ret = m_ffmpeg.codec.avcodec_open2(c, codec, &opt); 
+			auto ret = m_ffmpeg.codec.avcodec_open2(c, codec, &opt);
 		}
 
 		/* open the output file, if needed */
@@ -363,7 +552,7 @@ public:
 		{
 			if (this->callback)
 			{
-				this->callback(pkt.data, pkt.size);
+				this->callback(pkt);
 			}
 			m_ffmpeg.codec.av_free_packet(&pkt);
 		}
@@ -383,7 +572,7 @@ public:
 			if (got_output) {
 				if (this->callback)
 				{
-					this->callback(pkt.data, pkt.size);
+					this->callback(pkt);
 				}
 				m_ffmpeg.codec.av_free_packet(&pkt);
 			}
@@ -415,9 +604,10 @@ private:
 	std::auto_ptr<EncodeToNetworkStream> streamEncoder;
 	bool closed;
 
-	void ProcessEncodedFrame(const uint8_t* encodedFrame, int frameSize)
+	//void ProcessEncodedFrame(const uint8_t* encodedFrame, int frameSize)
+	void ProcessEncodedFrame(AVPacket& packet)
 	{
-		this->streamEncoder->WriteFrame(encodedFrame, frameSize);
+		this->streamEncoder->WriteFrame(packet.data, packet.size);
 	}
 
 public:
@@ -432,7 +622,7 @@ public:
 
 	void Start(int width, int height, int fps, const std::string& networkAddress)
 	{
-		auto callback = std::bind(&FFmpegNetworkServer::ProcessEncodedFrame, this, std::placeholders::_1, std::placeholders::_2);
+		auto callback = std::bind(&FFmpegNetworkServer::ProcessEncodedFrame, this, std::placeholders::_1);
 		this->rgbToh264Encoder.reset(new EncodeRGBToH264(m_ffmpeg, callback));
 		this->streamEncoder.reset(new EncodeToNetworkStream(m_ffmpeg, width, height, fps, networkAddress));
 	}
