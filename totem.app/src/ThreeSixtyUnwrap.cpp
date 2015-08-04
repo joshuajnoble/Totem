@@ -13,8 +13,9 @@ ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f disp
 	auto height = std::sqrtf(area / div);
 	auto width = height * (displayRatio.x / displayRatio.y);
 
-	int w = (int)(width / 4) * 4; // Round to even mutiple of 4 for display
-	int h = w / (displayRatio.x / displayRatio.y);
+	// (+15) &~ 15 rounds up to an even mutiple of 16
+	int w = int(width + 15) & ~15;
+	int h = int((w / (displayRatio.x / displayRatio.y))+ 15) & ~15;
 
 	return ofVec2f(w, h);
 }
