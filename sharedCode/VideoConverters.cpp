@@ -2,6 +2,7 @@
 #include "H264NetworkSender.h"
 #include "H264NetworkReceiver.h"
 #include "YUV420_H264_Encoder.h"
+#include "YUV420_H264_Decoder.h"
 
 //
 // ConvertToNV12
@@ -49,6 +50,49 @@ void ConvertToNV12::WriteFrame(const uint8_t *rgbSource, uint8_t* yuvDestination
 	this->dstData[0] = yuvDestination;
 	this->dstData[1] = yuvDestination + height * dstLineSize[0];
 	m_ffmpeg.scale.sws_scale(this->sws_context, this->srcData, this->srcLineSize, 0, this->height, this->dstData, this->dstLineSize);
+}
+
+//
+// ConvertToRGB
+//
+ConvertToRGB::ConvertToRGB(FFmpegFactory& ffmpeg, int width, int height) :
+width(width),
+height(height),
+m_ffmpeg(ffmpeg)
+{
+	// Asume we are converting from NV12
+	this->sws_context = m_ffmpeg.scale.sws_getContext(
+		this->width, this->height, AV_PIX_FMT_NV12,
+		this->width, this->height, AV_PIX_FMT_RGB24,
+		SWS_FAST_BILINEAR, NULL, NULL, NULL);
+	if (!this->sws_context) throw std::runtime_error("Could not allocate convetsion context.");
+
+	this->dstLineSize[0] = width * 3;
+}
+
+ConvertToRGB::~ConvertToRGB()
+{
+	if (this->sws_context)
+	{
+		m_ffmpeg.scale.sws_freeContext(this->sws_context);
+		this->sws_context = NULL;
+	}
+}
+
+int ConvertToRGB::GetInputFrameSize()
+{
+	return (this->width * this->height) + (this->width * this->height / 2);
+}
+
+int ConvertToRGB::GetOutputFrameSize()
+{
+	return this->width * this->height * 3;
+}
+
+void ConvertToRGB::WriteFrame(const AVFrame& frameSource, uint8_t *rgbDestination)
+{
+	this->dstData[0] = const_cast<uint8_t*>(rgbDestination);
+	m_ffmpeg.scale.sws_scale(this->sws_context, frameSource.data, frameSource.linesize, 0, this->height, this->dstData, this->dstLineSize);
 }
 
 //
@@ -171,36 +215,78 @@ void EncodeRGBToH264Live::Close()
 }
 
 //
-// EncodeH264LiveToRGB
+// DecodeH264LiveToRGB
 //
-void EncodeH264LiveToRGB::ProcessEncodedFrame(AVPacket& packet)
-{
-	outputFile.write((char *)packet.buf->data, packet.buf->size);
-}
-
-EncodeH264LiveToRGB::EncodeH264LiveToRGB(FFmpegFactory &ffmpeg) :
+DecodeH264LiveToRGB::DecodeH264LiveToRGB(FFmpegFactory &ffmpeg) :
+	m_ffmpeg(ffmpeg),
 	closed(false),
 	outputFile(std::ofstream("received.h264", std::ofstream::binary))
+	//,outputFileYuv(std::ofstream("received.yuv", std::ofstream::binary))
 {
-	this->receiver.reset(new H264NetworkReceiver(ffmpeg));
+	this->receiver.reset(new H264NetworkReceiver(m_ffmpeg));
+	this->decoder.reset(new YUV420_H264_Decoder(m_ffmpeg, std::bind(&DecodeH264LiveToRGB::ProcessYUVFrame, this, std::placeholders::_1)));
 }
 
-EncodeH264LiveToRGB::~EncodeH264LiveToRGB()
+DecodeH264LiveToRGB::~DecodeH264LiveToRGB()
 {
 	this->Close();
 }
 
-void EncodeH264LiveToRGB::Start(std::string& ipAddress, std::string& port, RGBFrameCallback rgbFrameCallback)
+void DecodeH264LiveToRGB::Start(std::string& ipAddress, std::string& port, RGBFrameCallback rgbFrameCallback)
 {
-	this->receiver->Start(std::bind(&EncodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1));
+	this->callback = rgbFrameCallback;
+	this->receiver->Start(std::bind(&DecodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1));
 }
 
-void EncodeH264LiveToRGB::Close()
+void DecodeH264LiveToRGB::Close()
 {
 	if (!this->closed)
 	{
 		this->closed = true;
 		this->receiver->Close();
 		this->outputFile.close();
+		//this->outputFileYuv.close();
 	}
+}
+
+void DecodeH264LiveToRGB::ProcessEncodedFrame(AVPacket& packet)
+{
+	//outputFile.write((char *)packet.buf->data, packet.buf->size);
+	outputFile.write((char *)packet.data, packet.size);
+	this->decoder->WriteFrame(packet);
+}
+
+void DecodeH264LiveToRGB::ProcessYUVFrame(const AVFrame &frame)
+{
+	if (!this->converter.get())
+	{
+		this->m_width = frame.width;
+		this->m_height = frame.height;
+		this->m_fps = 15; // TODO: Can we read this froem somewhere?
+
+		this->converter.reset(new ConvertToRGB(m_ffmpeg, frame.width, frame.height));
+		this->rgbBuffer.resize(this->converter->GetOutputFrameSize());
+	}
+
+	this->converter->WriteFrame(frame, this->rgbBuffer.data());
+
+	//auto cur = this->rgbBuffer.data();
+	//for (auto i = 0; i < frame.linesize[0] * frame.height; ++i)
+	//{
+	//	*cur++ = 128;// frame.data[0][i];
+	//	*cur++ = 128;// frame.data[0][i];
+	//	*cur++ = 0;// frame.data[0][i];
+	//}
+
+	//memcpy(this->rgbBuffer.data(), frame.data[0], frame.linesize[0] * frame.height);
+	//memcpy(this->rgbBuffer.data() + frame.linesize[0] * frame.height, frame.data[1], frame.linesize[1] * frame.height / 2);
+	//memcpy(this->rgbBuffer.data() + frame.linesize[0] * frame.height + frame.linesize[1] * frame.height / 2, frame.data[1], frame.linesize[1] * frame.height / 2);
+
+	if (this->callback)
+	{
+		this->callback(this->rgbBuffer.data(), this->rgbBuffer.size());
+	}
+	//outputFileYuv.write((char *)frame.data[0], frame.linesize[0]);
+	//outputFileYuv.write((char *)frame.data[1], frame.linesize[1] / 2);
+	//outputFileYuv.write((char *)frame.data[1] + frame.linesize[1] / 2, frame.linesize[1] / 2);
 }

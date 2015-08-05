@@ -22,13 +22,22 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	this->ffmpegVideoBroadcast.reset(new EncodeRGBToH264Live(m_ffmpeg));
 	this->ffmpegVideoBroadcast->Start(ipAddress, videoPort, this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
 
-	this->ffmpegVideoReceive.reset(new EncodeH264LiveToRGB(m_ffmpeg));
+	this->ffmpegVideoReceive.reset(new DecodeH264LiveToRGB(m_ffmpeg));
 	auto callback = std::bind(&VideoCaptureAppBase::HandleFFmpegFrame, this, std::placeholders::_1, std::placeholders::_2);
 	this->ffmpegVideoReceive->Start(ipAddress, videoPort, callback);
 }
 
 void VideoCaptureAppBase::HandleFFmpegFrame(const uint8_t* buffer, int bufferSize)
 {
+	this->testVideoFeed.setFromPixels(buffer, this->ffmpegVideoReceive->width(), this->ffmpegVideoReceive->height(), ofPixelFormat::OF_PIXELS_RGB);
+	//if (!this->testVideoTexture.isAllocated())
+	//{
+	//	this->testVideoTexture.allocate(this->ffmpegVideoReceive->width(), this->ffmpegVideoReceive->height(), ofImageType::OF_IMAGE_COLOR);
+	//	for (int i = 3; i <= 640; ++i)
+	//	this->testVideoTexture.getPixels()[i*3] = 0x7F;
+	//}
+
+	this->testVideoTexture.setFromPixels(this->testVideoFeed);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)

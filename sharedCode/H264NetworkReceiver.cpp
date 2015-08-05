@@ -73,7 +73,7 @@ void H264NetworkReceiver::OtherThread()
 	char tempPath[MAX_PATH];
 	char tempFile[MAX_PATH];
 	GetTempPathA(sizeof(tempPath), tempPath);
-	GetTempFileNameA(tempPath, NULL, 0, tempFile);
+	GetTempFileNameA(tempPath, NULL, timeGetTime(), tempFile);
 	auto extention = strchr(tempFile, '.');
 	if (!extention)
 	{

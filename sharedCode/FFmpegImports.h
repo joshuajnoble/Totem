@@ -24,6 +24,7 @@ extern "C"
 
 //typedef std::function<void(const uint8_t*, int)> FrameCallback;
 typedef std::function<void(AVPacket&)> FrameCallback;
+typedef std::function<void(const AVFrame&)> DecodedFrameCallback;
 
 #define FFMPEG_IMPORT(X) do { this->##X = (decltype(##X))GetProcAddress(this->hmodule, #X); assert(this->##X != NULL); } while(0)
 

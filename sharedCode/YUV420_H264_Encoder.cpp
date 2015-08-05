@@ -25,7 +25,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int h
 	//auto codecName = "libx264";
 	pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name(codecName);
 	if (!pCodec) {
-		throw std::runtime_error((std::string("Coded not found: ") + codecName).c_str());
+		throw std::runtime_error((std::string("Codec not found: ") + codecName).c_str());
 	}
 
 	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);

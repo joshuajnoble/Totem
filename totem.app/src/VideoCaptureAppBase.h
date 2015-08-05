@@ -7,7 +7,7 @@
 #include "..\..\SharedCode\FFmpegImports.h"
 
 class EncodeRGBToH264Live;
-class EncodeH264LiveToRGB;
+class DecodeH264LiveToRGB;
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -40,7 +40,9 @@ protected:
 
 	FFmpegFactory m_ffmpeg;
 	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
-	std::auto_ptr<EncodeH264LiveToRGB> ffmpegVideoReceive;
+	std::auto_ptr<DecodeH264LiveToRGB> ffmpegVideoReceive;
+	ofPixels testVideoFeed;
+	ofImage testVideoTexture;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 

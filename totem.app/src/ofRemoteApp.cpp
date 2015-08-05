@@ -1,6 +1,7 @@
 #include "ofRemoteApp.h"
 #include "ofxGstRTPClientAsVideoSource.h"
 #include "Utils.h"
+#include "..\..\SharedCode\VideoConverters.h"
 
 //#define SHOW_FPS
 
@@ -144,6 +145,11 @@ void ofRemoteApp::update()
 void ofRemoteApp::draw()
 {
 	ofBackground(BACKGROUND_COLOR);
+	if (this->testVideoTexture.isAllocated())
+	{
+		this->testVideoTexture.draw(0, 0);
+	}
+
 	ofEnableAlphaBlending();
 
 	ofPushStyle();

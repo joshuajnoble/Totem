@@ -322,10 +322,13 @@
     <ClCompile Include="..\sharedCode\VideoConverters.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\H264NetworkSender.cpp">
+    <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp">
+    <ClCompile Include="..\sharedCode\YUV420_H264_Decoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\H264NetworkSender.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
   </ItemGroup>
@@ -656,10 +659,13 @@
     <ClInclude Include="..\sharedCode\VideoConverters.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\sharedCode\H264NetworkSender.h">
+    <ClInclude Include="..\sharedCode\H264NetworkReceiver.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\sharedCode\H264NetworkReceiver.h">
+    <ClInclude Include="..\sharedCode\YUV420_H264_Decoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\H264NetworkSender.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>

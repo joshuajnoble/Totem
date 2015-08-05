@@ -12,6 +12,7 @@ typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallb
 class YUV420_H264_Encoder;
 class H264NetworkSender;
 class H264NetworkReceiver;
+class YUV420_H264_Decoder;
 
 class ConvertToNV12
 {
@@ -33,6 +34,26 @@ public:
 	int GetOutputFrameSize();
 
 	void WriteFrame(const uint8_t *rgbSource, uint8_t* yuvDestination);
+};
+
+class ConvertToRGB
+{
+private:
+	uint8_t* dstData[1];
+	int dstLineSize[2];
+
+	int width, height;
+	FFmpegFactory& m_ffmpeg;
+	SwsContext* sws_context;
+
+public:
+	ConvertToRGB(FFmpegFactory& ffmpeg, int width, int height);
+	~ConvertToRGB();
+
+	int GetInputFrameSize();
+	int GetOutputFrameSize();
+
+	void WriteFrame(const AVFrame& frameSource, uint8_t *rgbDestination);
 };
 
 class EncodeRGBToH264
@@ -91,23 +112,29 @@ public:
 };
 
 
-class EncodeH264LiveToRGB
+class DecodeH264LiveToRGB
 {
 private:
-	//std::auto_ptr<EncodeRGBToH264> encoder;
+	FFmpegFactory &m_ffmpeg;
+
+	std::auto_ptr<YUV420_H264_Decoder> decoder;
 	std::auto_ptr<H264NetworkReceiver> receiver;
+	std::auto_ptr<ConvertToRGB> converter;
 
 	std::ofstream outputFile;
+	//std::ofstream outputFileYuv;
 	bool closed;
 
 	void ProcessEncodedFrame(AVPacket&);
+	void ProcessYUVFrame(const AVFrame &);
 	RGBFrameCallback callback;
 
 	int m_width, m_height, m_fps;
+	std::vector<uint8_t> rgbBuffer;
 
 public:
-	EncodeH264LiveToRGB(FFmpegFactory &ffmpeg);
-	~EncodeH264LiveToRGB();
+	DecodeH264LiveToRGB(FFmpegFactory &ffmpeg);
+	~DecodeH264LiveToRGB();
 
 	int width() { return m_width; }
 	int height() { return m_height; }
