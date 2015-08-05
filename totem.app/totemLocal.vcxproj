@@ -279,8 +279,8 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp" />
+    <ClCompile Include="..\sharedCode\H264NetworkSender.cpp" />
     <ClCompile Include="..\sharedCode\VideoConverters.cpp" />
-    <ClCompile Include="..\sharedCode\FFmpegHelper.cpp" />
     <ClCompile Include="..\sharedCode\FFmpegImports.cpp" />
     <ClCompile Include="..\sharedCode\StreamManager.cpp" />
     <ClCompile Include="..\sharedCode\YUV420_H264_Encoder.cpp" />
@@ -395,9 +395,8 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.h" />
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\sharedCode\VideoConverters.h" />
-    <ClInclude Include="..\sharedCode\FFmpegHelper.h" />
     <ClInclude Include="..\sharedCode\FFmpegImports.h" />
-    <ClInclude Include="..\sharedCode\FFmpegNetworkServer.h" />
+    <ClInclude Include="..\sharedCode\H264NetworkSender.h" />
     <ClInclude Include="..\sharedCode\FFmpegSamples.h" />
     <ClInclude Include="..\sharedCode\LegacyGuards.h" />
     <ClInclude Include="..\sharedCode\StreamManager.h" />

@@ -1,11 +1,14 @@
 #pragma once
 
 #include "FFmpegImports.h"
-#include "YUV420_H264_Encoder.h"
+//#include "YUV420_H264_Encoder.h"
 
 #include <string>
 #include <vector>
 #include <fstream>
+
+class YUV420_H264_Encoder;
+class H264NetworkSender;
 
 class ConvertToNV12
 {
@@ -65,13 +68,11 @@ public:
 	void Close();
 };
 
-class TestStreamerLive;
-
 class EncodeRGBToH264Live
 {
 private:
-	EncodeRGBToH264 encoder;
-	std::auto_ptr<TestStreamerLive> streamer;
+	std::auto_ptr<EncodeRGBToH264> encoder;
+	std::auto_ptr<H264NetworkSender> streamer;
 		
 	std::ofstream outptuFile;
 	bool closed;
@@ -82,7 +83,7 @@ public:
 	EncodeRGBToH264Live(FFmpegFactory &ffmpeg);
 	~EncodeRGBToH264Live();
 
-	void Start(int width, int height, int fps);
+	void Start(std::string& ipAddress, std::string& port, int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);
 	void Close();
 };

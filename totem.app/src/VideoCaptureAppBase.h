@@ -4,9 +4,9 @@
 #include "RemoteVideoInfo.h"
 #include "UdpDiscovery.h"
 #include "..\..\SharedCode\StreamManager.h"
-#include "..\..\sharedCode\VideoConverters.h"
-#include "..\..\sharedCode\FFmpegNetworkServer.h"
+#include "..\..\SharedCode\FFmpegImports.h"
 
+class EncodeRGBToH264Live;
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -36,9 +36,7 @@ protected:
 	UdpDiscovery udpDiscovery;
 
 	FFmpegFactory m_ffmpeg;
-	std::auto_ptr<EncodeRGBToH264File> ffmpegEncoder;
-	std::auto_ptr<FFmpegNetworkServer> ffmpegNetworkServer;
-	std::auto_ptr<EncodeRGBToH264Live> ffmpegLiveTest;
+	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 

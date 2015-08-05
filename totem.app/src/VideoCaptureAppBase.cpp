@@ -1,4 +1,5 @@
 #include "VideoCaptureAppBase.h"
+#include "..\..\SharedCode\VideoConverters.h"
 
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
@@ -10,28 +11,16 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	auto myIp = this->udpDiscovery.GetLocalAddress();
 	auto str = myIp.toString();
 	auto dotIndex = str.find_last_of('.');
-	connection.ipAddress = "239.0.0." + str.substr(dotIndex + 1);
+	std::string ipAddress("239.0.0." + str.substr(dotIndex + 1));
+
+	connection.ipAddress = ipAddress;
 	connection.remoteVideoPort = 12000;
 	connection.remoteAudioPort = 12100;
 	this->streamManager.newServer(connection);
-
-	//this->ffmpegEncoder.reset(new EncodeRGBToH264File(m_ffmpeg, "test.h264"));
-	//this->ffmpegEncoder->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
-
-	//this->ffmpegNetworkServer.reset(new FFmpegNetworkServer(m_ffmpeg));
-	//this->ffmpegNetworkServer->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15, "239.0.0.200:2000");
 	
-	this->ffmpegLiveTest.reset(new EncodeRGBToH264Live(m_ffmpeg));
-	this->ffmpegLiveTest->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
-
-	//TestStreamer testStreamer;
-	//testStreamer.Start();
-
-	//auto ss = ofSoundStream();
-	//ss.listDevices();
-	//ss.setDeviceID(0);
-	//auto rval = ss.setup(this, 0, 2, 4400, 256, 4);
-	//ss.start();
+	std::string videoPort = "11000";
+	this->ffmpegVideoBroadcast.reset(new EncodeRGBToH264Live(m_ffmpeg));
+	this->ffmpegVideoBroadcast->Start(ipAddress, videoPort, this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
@@ -53,9 +42,7 @@ void VideoCaptureAppBase::update()
 	{
 		auto ref = this->videoSource->getPixelsRef();
 		this->streamManager.newFrame(ref);
-		if (this->ffmpegEncoder.get()) this->ffmpegEncoder->WriteFrame(ref.getPixels());
-		if (this->ffmpegNetworkServer.get()) this->ffmpegNetworkServer->WriteFrame(ref.getPixels());
-		if (this->ffmpegLiveTest.get()) this->ffmpegLiveTest->WriteFrame(ref.getPixels());
+		if (this->ffmpegVideoBroadcast.get()) this->ffmpegVideoBroadcast->WriteFrame(ref.getPixels());
 	}
 
 	this->streamManager.update();

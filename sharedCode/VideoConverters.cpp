@@ -1,5 +1,6 @@
 #include "VideoConverters.h"
-#include "FFmpegNetworkServer.h"
+#include "H264NetworkSender.h"
+#include "YUV420_H264_Encoder.h"
 
 //
 // ConvertToNV12
@@ -126,10 +127,11 @@ void EncodeRGBToH264File::Close()
 //
 // EncodeRGBToH264Live
 //
-EncodeRGBToH264Live::EncodeRGBToH264Live(FFmpegFactory &ffmpeg) : closed(false),
-encoder(ffmpeg, std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1))
+EncodeRGBToH264Live::EncodeRGBToH264Live(FFmpegFactory &ffmpeg) :
+	closed(false)
 {
-	this->streamer.reset(new TestStreamerLive());
+	this->streamer.reset(new H264NetworkSender());
+	this->encoder.reset(new EncodeRGBToH264(ffmpeg, std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1)));
 }
 
 EncodeRGBToH264Live::~EncodeRGBToH264Live()
@@ -137,15 +139,17 @@ EncodeRGBToH264Live::~EncodeRGBToH264Live()
 	this->Close();
 }
 
-void EncodeRGBToH264Live::Start(int width, int height, int fps)
+void EncodeRGBToH264Live::Start(std::string& ipAddress, std::string& port, int width, int height, int fps)
 {
-	this->streamer->Start();
-	this->encoder.Start(width, height, fps);
+	std::string networkAddress("rtp://" + ipAddress + ":" + port);
+
+	this->streamer->Start(networkAddress, width, height, fps);
+	this->encoder->Start(width, height, fps);
 }
 
 void EncodeRGBToH264Live::WriteFrame(const uint8_t *srcBytes)
 {
-	this->encoder.WriteFrame(srcBytes);
+	this->encoder->WriteFrame(srcBytes);
 }
 
 void EncodeRGBToH264Live::ProcessEncodedFrame(AVPacket& packet)
@@ -157,7 +161,7 @@ void EncodeRGBToH264Live::Close()
 {
 	if (!this->closed)
 	{
-		this->encoder.Close();
+		this->encoder->Close();
 		this->streamer->Close();
 		this->closed = true;
 	}
