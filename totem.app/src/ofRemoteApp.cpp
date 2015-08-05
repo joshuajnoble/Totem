@@ -145,11 +145,6 @@ void ofRemoteApp::update()
 void ofRemoteApp::draw()
 {
 	ofBackground(BACKGROUND_COLOR);
-	if (this->testVideoTexture.isAllocated())
-	{
-		this->testVideoTexture.draw(0, 0);
-	}
-
 	ofEnableAlphaBlending();
 
 	ofPushStyle();
@@ -211,6 +206,11 @@ void ofRemoteApp::draw()
 	if (this->canShowRemotes)
 	{
 		this->networkDisplay.draw();
+	}
+
+	if (this->testVideoTexture.isAllocated())
+	{
+		this->testVideoTexture.draw(0, 0);
 	}
 
 #ifdef SHOW_FPS

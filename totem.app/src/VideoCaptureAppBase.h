@@ -17,6 +17,8 @@ public:
 	virtual int displayWidth() const = 0;
 	virtual int displayHeight() const = 0;
 	ofPtr<ofBaseVideoDraws> videoSource;
+	ofMutex videoLock;
+	volatile bool hasNewVideo = false;
 
 	virtual void setup(int networkInterfaceId, bool isTotem = false);
 	virtual void update();

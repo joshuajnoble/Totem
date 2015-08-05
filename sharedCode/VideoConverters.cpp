@@ -270,12 +270,10 @@ void DecodeH264LiveToRGB::ProcessYUVFrame(const AVFrame &frame)
 
 	this->converter->WriteFrame(frame, this->rgbBuffer.data());
 
-	//auto cur = this->rgbBuffer.data();
-	//for (auto i = 0; i < frame.linesize[0] * frame.height; ++i)
+	//auto cur = (byte*)(this->rgbBuffer.data());
+	//for (auto i = 0; i < frame.height; ++i)
 	//{
-	//	*cur++ = 128;// frame.data[0][i];
-	//	*cur++ = 128;// frame.data[0][i];
-	//	*cur++ = 0;// frame.data[0][i];
+	//	memset(cur + i * 640, int((255.0 / frame.height) * i), 640 * 3);
 	//}
 
 	//memcpy(this->rgbBuffer.data(), frame.data[0], frame.linesize[0] * frame.height);
