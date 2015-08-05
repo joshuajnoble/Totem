@@ -525,7 +525,7 @@ public:
 		while (rawFileYuv && !rawFileYuv.eof())
 		{
 			rawFileYuv.read((char *)buffer.data(), frameSize);
-			streamingEncoder.EncodeFrame(buffer.data());
+			streamingEncoder.WriteFrame(buffer.data());
 		}
 
 		streamingEncoder.Close();

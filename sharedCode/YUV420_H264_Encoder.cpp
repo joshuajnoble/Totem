@@ -25,12 +25,12 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int h
 	//auto codecName = "libx264";
 	pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name(codecName);
 	if (!pCodec) {
-		throw std::exception((std::string("Coded not found: ") + codecName).c_str());
+		throw std::runtime_error((std::string("Coded not found: ") + codecName).c_str());
 	}
 
 	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
 	if (!pCodecCtx) {
-		throw std::exception("Could not allocate video codec context.");
+		throw std::runtime_error("Could not allocate video codec context.");
 	}
 
 #ifdef QSV_CHEAT
@@ -38,7 +38,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int h
 	auto qsvContext = (myQSVH264EncContext *)pCodecCtx->priv_data;
 #endif
 
-	GuardCodecContext codecGuard(pCodecCtx, &m_ffmpeg);
+	GuardAVCondexContext codecGuard(pCodecCtx, &m_ffmpeg);
 	
 	pCodecCtx->bit_rate = 400000;
 	pCodecCtx->width = width;
@@ -60,7 +60,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int h
 
 	pFrame = m_ffmpeg.utils.av_frame_alloc();
 	if (!pFrame) {
-		throw std::exception("Could not allocate video frame.");
+		throw std::runtime_error("Could not allocate video frame.");
 	}
 
 	pFrame->format = pCodecCtx->pix_fmt;
@@ -69,7 +69,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int h
 
 	auto ret = m_ffmpeg.utils.av_image_alloc(pFrame->data, pFrame->linesize, pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 16);
 	if (ret < 0) {
-		throw std::exception("Could not allocate raw picture buffer.");
+		throw std::runtime_error("Could not allocate raw picture buffer.");
 	}
 
 	yBlocksize = this->pFrame->height * this->pFrame->linesize[0];
@@ -136,7 +136,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 	auto ret = m_ffmpeg.codec.avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_output);
 	if (ret < 0)
 	{
-		throw std::exception("Error encoding frame.");
+		throw std::runtime_error("Error encoding frame.");
 	}
 
 	if (got_output)

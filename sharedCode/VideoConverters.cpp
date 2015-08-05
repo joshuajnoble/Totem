@@ -14,7 +14,7 @@ m_ffmpeg(ffmpeg)
 		this->width, this->height, AV_PIX_FMT_RGB24,
 		this->width, this->height, AV_PIX_FMT_NV12,
 		SWS_FAST_BILINEAR, NULL, NULL, NULL);
-	if (!this->sws_context) throw std::exception("Could not allocate convetsion context.");
+	if (!this->sws_context) throw std::runtime_error("Could not allocate convetsion context.");
 
 	this->srcLineSize[0] = 3 * width;
 	this->dstLineSize[0] = width;

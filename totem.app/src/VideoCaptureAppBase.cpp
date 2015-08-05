@@ -21,8 +21,8 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	//this->ffmpegNetworkServer.reset(new FFmpegNetworkServer(m_ffmpeg));
 	//this->ffmpegNetworkServer->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15, "239.0.0.200:2000");
 	
-	//this->ffmpegLiveTest.reset(new EncodeRGBToH264Live(m_ffmpeg));
-	//this->ffmpegLiveTest->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+	this->ffmpegLiveTest.reset(new EncodeRGBToH264Live(m_ffmpeg));
+	this->ffmpegLiveTest->Start(this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
 
 	//TestStreamer testStreamer;
 	//testStreamer.Start();
