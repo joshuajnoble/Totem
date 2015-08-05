@@ -21,6 +21,14 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	std::string videoPort = "11000";
 	this->ffmpegVideoBroadcast.reset(new EncodeRGBToH264Live(m_ffmpeg));
 	this->ffmpegVideoBroadcast->Start(ipAddress, videoPort, this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+
+	this->ffmpegVideoReceive.reset(new EncodeH264LiveToRGB(m_ffmpeg));
+	auto callback = std::bind(&VideoCaptureAppBase::HandleFFmpegFrame, this, std::placeholders::_1, std::placeholders::_2);
+	this->ffmpegVideoReceive->Start(ipAddress, videoPort, callback);
+}
+
+void VideoCaptureAppBase::HandleFFmpegFrame(const uint8_t* buffer, int bufferSize)
+{
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
@@ -51,6 +59,7 @@ void VideoCaptureAppBase::update()
 void VideoCaptureAppBase::exit()
 {
 	ofSoundStreamClose();
+	this->ffmpegVideoReceive->Close();
 	this->streamManager.exit();
 }
 

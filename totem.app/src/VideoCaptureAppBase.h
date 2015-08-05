@@ -7,6 +7,7 @@
 #include "..\..\SharedCode\FFmpegImports.h"
 
 class EncodeRGBToH264Live;
+class EncodeH264LiveToRGB;
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -30,6 +31,8 @@ private:
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
 	void peerReady(UdpDiscovery::RemotePeerStatus& peer);
 	
+	void HandleFFmpegFrame(const uint8_t* buffer, int bufferSize);
+
 protected:
 	std::vector<RemoteVideoInfo> remoteVideoSources;
 	StreamManager streamManager;
@@ -37,6 +40,7 @@ protected:
 
 	FFmpegFactory m_ffmpeg;
 	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
+	std::auto_ptr<EncodeH264LiveToRGB> ffmpegVideoReceive;
 
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 

@@ -1,5 +1,6 @@
 #include "VideoConverters.h"
 #include "H264NetworkSender.h"
+#include "H264NetworkReceiver.h"
 #include "YUV420_H264_Encoder.h"
 
 //
@@ -87,8 +88,10 @@ void EncodeRGBToH264::Close()
 //
 // EncodeRGBToH264File
 //
-EncodeRGBToH264File::EncodeRGBToH264File(FFmpegFactory &ffmpeg, const std::string& filename) : closed(false),
-encoder(ffmpeg, std::bind(&EncodeRGBToH264File::ProcessEncodedFrame, this, std::placeholders::_1))
+EncodeRGBToH264File::EncodeRGBToH264File(FFmpegFactory &ffmpeg, const std::string& filename) :
+	closed(false),
+	outputFile(std::ofstream(filename, std::ofstream::binary)),
+	encoder(ffmpeg, std::bind(&EncodeRGBToH264File::ProcessEncodedFrame, this, std::placeholders::_1))
 {
 	this->outputFile = std::ofstream(filename, std::ofstream::binary);
 }
@@ -164,5 +167,40 @@ void EncodeRGBToH264Live::Close()
 		this->encoder->Close();
 		this->streamer->Close();
 		this->closed = true;
+	}
+}
+
+//
+// EncodeH264LiveToRGB
+//
+void EncodeH264LiveToRGB::ProcessEncodedFrame(AVPacket& packet)
+{
+	outputFile.write((char *)packet.buf->data, packet.buf->size);
+}
+
+EncodeH264LiveToRGB::EncodeH264LiveToRGB(FFmpegFactory &ffmpeg) :
+	closed(false),
+	outputFile(std::ofstream("received.h264", std::ofstream::binary))
+{
+	this->receiver.reset(new H264NetworkReceiver(ffmpeg));
+}
+
+EncodeH264LiveToRGB::~EncodeH264LiveToRGB()
+{
+	this->Close();
+}
+
+void EncodeH264LiveToRGB::Start(std::string& ipAddress, std::string& port, RGBFrameCallback rgbFrameCallback)
+{
+	this->receiver->Start(std::bind(&EncodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1));
+}
+
+void EncodeH264LiveToRGB::Close()
+{
+	if (!this->closed)
+	{
+		this->closed = true;
+		this->receiver->Close();
+		this->outputFile.close();
 	}
 }

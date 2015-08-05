@@ -7,8 +7,11 @@
 #include <vector>
 #include <fstream>
 
+typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallback;
+
 class YUV420_H264_Encoder;
 class H264NetworkSender;
+class H264NetworkReceiver;
 
 class ConvertToNV12
 {
@@ -74,7 +77,6 @@ private:
 	std::auto_ptr<EncodeRGBToH264> encoder;
 	std::auto_ptr<H264NetworkSender> streamer;
 		
-	std::ofstream outptuFile;
 	bool closed;
 
 	void ProcessEncodedFrame(AVPacket&);
@@ -85,5 +87,32 @@ public:
 
 	void Start(std::string& ipAddress, std::string& port, int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);
+	void Close();
+};
+
+
+class EncodeH264LiveToRGB
+{
+private:
+	//std::auto_ptr<EncodeRGBToH264> encoder;
+	std::auto_ptr<H264NetworkReceiver> receiver;
+
+	std::ofstream outputFile;
+	bool closed;
+
+	void ProcessEncodedFrame(AVPacket&);
+	RGBFrameCallback callback;
+
+	int m_width, m_height, m_fps;
+
+public:
+	EncodeH264LiveToRGB(FFmpegFactory &ffmpeg);
+	~EncodeH264LiveToRGB();
+
+	int width() { return m_width; }
+	int height() { return m_height; }
+	int fps() { return m_fps; }
+
+	void Start(std::string& ipAddress, std::string& port, RGBFrameCallback rgbFrameCallback);
 	void Close();
 };

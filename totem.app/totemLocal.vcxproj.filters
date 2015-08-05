@@ -325,6 +325,9 @@
     <ClCompile Include="..\sharedCode\H264NetworkSender.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -654,6 +657,9 @@
       <Filter>ffmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\sharedCode\H264NetworkSender.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\H264NetworkReceiver.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>
