@@ -207,6 +207,11 @@ void ofRemoteApp::draw()
 		this->networkDisplay.draw();
 	}
 
+	if (this->peers.size() >= 1)
+	{
+		this->peers[0].videoSource->DrawCropped(640, 480);
+	}
+
 #ifdef SHOW_FPS
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
 #endif
