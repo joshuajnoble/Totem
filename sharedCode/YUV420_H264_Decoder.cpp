@@ -75,7 +75,7 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 			continue;
 
 		//Some Info from AVCodecParserContext
-		printf("[Packet]Size:%6d\t", packet.size);
+		//printf("[Packet]Size:%6d\t", packet.size);
 		//switch (pCodecParserCtx->pict_type){
 		//	case AV_PICTURE_TYPE_I: printf("Type:I\t"); break;
 		//	case AV_PICTURE_TYPE_P: printf("Type:P\t"); break;
