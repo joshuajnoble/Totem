@@ -26,6 +26,7 @@ private:
 	AVPacket packet;
 	int ret, got_picture;
 	int y_size;
+	bool gotStartingFrame;
 
 public:
 	YUV420_H264_Decoder(DecodedFrameCallback callback);

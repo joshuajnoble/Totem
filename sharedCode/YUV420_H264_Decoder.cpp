@@ -4,6 +4,8 @@
 YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 	callback(frameCallback)
 {
+	gotStartingFrame = false;
+
 	auto codecName = "h264_qsv";
 	//auto codecName = "libx264";
 	pCodec = m_ffmpeg.codec.avcodec_find_decoder_by_name(codecName);
@@ -15,12 +17,12 @@ YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 	if (!pCodecCtx) {
 		throw std::runtime_error("Could not allocate video codec context.");
 	}
-
+	
 	pCodecParserCtx = m_ffmpeg.codec.av_parser_init(pCodec->id);
 	if (!pCodecParserCtx){
 		throw std::runtime_error("Could not allocate video parser context");
 	}
-
+	
 	if (m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
 		throw std::runtime_error("Could not open codec");
 	}
@@ -32,24 +34,7 @@ YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 	uint8_t *out_buffer;
 
 #endif
-	//av_log_set_level(AV_LOG_DEBUG);
-
-	//if(pCodec->capabilities&CODEC_CAP_TRUNCATED)
-	//    pCodecCtx->flags|= CODEC_FLAG_TRUNCATED; /* we do not send complete frames */
-
-	////Input File
-	//fp_in = fopen(filepath_in, "rb");
-	//if (!fp_in) {
-	//	printf("Could not open input stream\n");
-	//	return -1;
-	//}
-	////Output File
-	//fp_out = fopen(filepath_out, "wb");
-	//if (!fp_out) {
-	//	printf("Could not open output YUV file\n");
-	//	return -1;
-	//}
-
+	
 	pFrame = m_ffmpeg.utils.av_frame_alloc();
 	m_ffmpeg.codec.av_init_packet(&packet);
 
@@ -64,9 +49,19 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 	cur_size = inPacket.size;
 	cur_ptr = inPacket.data;
 
+	if (!gotStartingFrame)
+	{
+		// Really should look for 00 00 00 01 followed by (0x1F == 7)
+		if (cur_size >= 11 && (cur_ptr[10] & 0x1F) != 7)
+		{
+			return;
+		}
+
+		gotStartingFrame = true;
+	}
+
 	while (cur_size > 0)
 	{
-
 		int len = m_ffmpeg.codec.av_parser_parse2(
 			pCodecParserCtx, pCodecCtx,
 			&packet.data, &packet.size,
@@ -80,12 +75,12 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 			continue;
 
 		//Some Info from AVCodecParserContext
-		//printf("[Packet]Size:%6d\t", packet.size);
+		printf("[Packet]Size:%6d\t", packet.size);
 		//switch (pCodecParserCtx->pict_type){
-		//case AV_PICTURE_TYPE_I: printf("Type:I\t"); break;
-		//case AV_PICTURE_TYPE_P: printf("Type:P\t"); break;
-		//case AV_PICTURE_TYPE_B: printf("Type:B\t"); break;
-		//default: printf("Type:Other\t"); break;
+		//	case AV_PICTURE_TYPE_I: printf("Type:I\t"); break;
+		//	case AV_PICTURE_TYPE_P: printf("Type:P\t"); break;
+		//	case AV_PICTURE_TYPE_B: printf("Type:B\t"); break;
+		//	default: printf("Type:Other\t"); break;
 		//}
 		//printf("Number:%4d\n", pCodecParserCtx->output_picture_number);
 
