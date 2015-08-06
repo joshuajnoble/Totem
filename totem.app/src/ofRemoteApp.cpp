@@ -209,7 +209,10 @@ void ofRemoteApp::draw()
 
 	if (this->peers.size() >= 1)
 	{
-		this->peers[0].videoSource->DrawCropped(640, 480);
+		if (this->peers[0].videoSource)
+		{
+			this->peers[0].videoSource->DrawCropped(640, 480);
+		}
 	}
 
 #ifdef SHOW_FPS

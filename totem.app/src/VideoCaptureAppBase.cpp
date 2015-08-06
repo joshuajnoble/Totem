@@ -1,6 +1,7 @@
 #include "VideoCaptureAppBase.h"
 #include "..\..\SharedCode\VideoConverters.h"
 #include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
+#include "ofxGstRTPClientAsVideoSource.h"
 
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
@@ -62,6 +63,8 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	remote.hasLiveFeed = false;
 	remote.netClient = receiver;
 	remote.peerStatus = peer;
+	ofPtr<ofBaseVideoDraws> videoDraws(new ofxFFmpegVideoReceiverAsVideoSource(receiver));
+	remote.videoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(videoDraws));
 
 	this->peers.push_back(remote);
 	this->Handle_ClientConnected(remote);
