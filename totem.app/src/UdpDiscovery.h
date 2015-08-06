@@ -28,8 +28,8 @@ private:
 	ofxUDPManager sender;
 	ofxUDPManager receiver;
 	float nextSendTime;
-	float broadcastDelay = 0.5f;
-	float broadcastMissingDuration = 10.0f;
+	float broadcastDelay = 0.25f;
+	float broadcastMissingDuration = 20.0f;
 	char incomingMessage[1024];
 	int videoWidth, videoHeight;
 	bool isTotem;
