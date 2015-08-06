@@ -25,7 +25,20 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	//peer.videoWidth = 640;
 	//peer.videoHeight = 480;
 	//this->PeerArrived(peer);
+	
+	ofSoundStreamListDevices();
+	ofSoundStreamSetup(0, 2, this, 44100, 512, 4);
+	ofSoundStreamStart();
 }
+
+void VideoCaptureAppBase::audioReceived(float* input, int bufferSize, int nChannels)
+{
+}
+
+void VideoCaptureAppBase::audioRequested(float* output, int bufferSize, int nChannels)
+{
+}
+
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
 {

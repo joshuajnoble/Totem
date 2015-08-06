@@ -49,4 +49,6 @@ protected:
 
 	virtual void audioOut(float * output, int bufferSize, int nChannels);
 	virtual void audioIn(float * input, int bufferSize, int nChannels);
+	virtual void audioRequested(float * output, int bufferSize, int nChannels);
+	virtual void audioReceived(float * input, int bufferSize, int nChannels);	
 };
