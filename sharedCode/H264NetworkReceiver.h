@@ -19,6 +19,7 @@ private:
 	int videoindex;
 	std::string remoteIp;
 	int remoteVideoPort;
+	bool hasReceviedPackets;
 
 	void OtherThread();
 
@@ -27,4 +28,6 @@ public:
 	~H264NetworkReceiver();
 	void Start(const std::string& remoteIp, int remotePort, FrameCallback callback);
 	void Close();
+
+	bool isConnected();
 };

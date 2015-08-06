@@ -17,11 +17,12 @@ namespace
 }
 
 H264NetworkReceiver::H264NetworkReceiver() :
-closeHandle(CreateEventA(NULL, TRUE, FALSE, NULL)),
-ifmt_ctx(NULL),
-videoindex(-1),
-initialized(false),
-closed(false)
+	closeHandle(CreateEventA(NULL, TRUE, FALSE, NULL)),
+	ifmt_ctx(NULL),
+	videoindex(-1),
+	initialized(false),
+	closed(false),
+	hasReceviedPackets(false)
 {
 }
 
@@ -117,8 +118,19 @@ void H264NetworkReceiver::OtherThread()
 
 	DeleteFileA(tempFile);
 
-	if ((ret = m_ffmpeg.format.avformat_find_stream_info(ifmt_ctx, 0)) < 0) {
-		throw std::runtime_error("Failed to retrieve input stream information");
+	int retriesLeft = 3;
+	while (retriesLeft--)
+	{
+		if ((ret = m_ffmpeg.format.avformat_find_stream_info(ifmt_ctx, 0)) < 0)
+		{
+			if (!retriesLeft)
+			{
+				printf("Unable to decode remote video stream.");
+				throw std::runtime_error("Failed to retrieve input stream information.");
+			}
+		}
+
+		break;
 	}
 
 	for (unsigned int i = 0; i<ifmt_ctx->nb_streams; i++)
@@ -199,6 +211,7 @@ void H264NetworkReceiver::OtherThread()
 		//Print to Screen
 		if (pkt.stream_index == videoindex)
 		{
+			this->hasReceviedPackets = true;
 			if (this->callback)
 			{
 				this->callback(pkt);
@@ -224,4 +237,9 @@ void H264NetworkReceiver::Close()
 
 		m_ffmpeg.format.avformat_close_input(&ifmt_ctx);
 	}
+}
+
+bool H264NetworkReceiver::isConnected()
+{
+	return this->hasReceviedPackets;
 }

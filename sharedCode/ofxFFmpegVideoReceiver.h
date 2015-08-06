@@ -26,4 +26,5 @@ public:
 	ofImage& getVideoImage();
 
 	std::string clientId;
+	bool isConnected() { return this->receiver->isConnected(); }
 };

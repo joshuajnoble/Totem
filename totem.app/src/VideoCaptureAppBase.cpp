@@ -48,12 +48,36 @@ void VideoCaptureAppBase::update()
 		if (this->ffmpegVideoBroadcast.get()) this->ffmpegVideoBroadcast->WriteFrame(ref.getPixels());
 	}
 
+	//std::vector<std::vector<ofxFFmpegVideoReceiver *>::iterator> toMove;
+	//for (auto iter = this->remoteVideoSourcesConnecting.begin(); iter != this->remoteVideoSourcesConnecting.end(); ++iter)
+	//{
+	//	auto remoteVideoSource = *iter;
+	//	if (remoteVideoSource->isConnected)
+	//	{
+	//		toMove.push_back(iter);
+	//	}
+	//}
+
+	//for (auto iter = toMove.begin(); iter != toMove.end(); ++iter)
+	//{
+	//	this->remoteVideoSources.push_back(**iter);
+	//	this->remoteVideoSourcesConnecting.erase(*iter);
+	//	this->Handle_ClientConnected(*iter);
+	//}
+
+
 	for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
 	{
 		auto peer = *iter;
 		peer.netClient->update();
 		if (peer.netClient->isFrameNew())
 		{
+			auto found = std::find(this->remoteVideoSources.begin(), this->remoteVideoSources.end(), peer.netClient);
+			if (found == this->remoteVideoSources.end())
+			{
+				this->remoteVideoSources.push_back(peer.netClient);
+				this->Handle_ClientConnected(peer);
+			}
 		}
 	}
 }
@@ -64,6 +88,13 @@ void VideoCaptureAppBase::exit()
 	this->videoSource->close();
 	this->ffmpegVideoBroadcast->Close();
 
+	//for (auto iter = this->remoteVideoSourcesConnecting.begin(); iter != this->remoteVideoSourcesConnecting.end(); ++iter)
+	//{
+	//	auto remoteVideoSource = *iter;
+	//	remoteVideoSource->Close();
+	//	delete remoteVideoSource;
+	//}
+	
 	for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
 	{
 		auto remoteVideoSource = *iter;
@@ -75,7 +106,7 @@ void VideoCaptureAppBase::exit()
 void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 {
 	auto receiver = new ofxFFmpegVideoReceiver(peer.id);
-	this->remoteVideoSources.push_back(receiver);
+	//this->remoteVideoSourcesConnecting.push_back(receiver);
 
 	RemoteVideoInfo remote;
 	remote.hasLiveFeed = false;
@@ -87,7 +118,6 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	receiver->start(peer.ipAddress, peer.port);
 
 	this->peers.push_back(remote);
-	this->Handle_ClientConnected(remote);
 }
 
 void VideoCaptureAppBase::PeerReady(UdpDiscovery::RemotePeerStatus& peer)

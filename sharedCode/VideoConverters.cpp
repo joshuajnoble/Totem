@@ -266,3 +266,8 @@ void DecodeH264LiveToRGB::ProcessYUVFrame(const AVFrame &frame)
 		this->callback(this->rgbBuffer.data(), this->rgbBuffer.size());
 	}
 }
+
+bool DecodeH264LiveToRGB::isConnected()
+{
+	return this->receiver->isConnected();
+}

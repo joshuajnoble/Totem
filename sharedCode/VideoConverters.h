@@ -140,4 +140,5 @@ public:
 
 	void Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback);
 	void Close();
+	bool isConnected();
 };

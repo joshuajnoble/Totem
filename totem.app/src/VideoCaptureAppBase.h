@@ -34,6 +34,7 @@ private:
 	
 protected:
 	UdpDiscovery udpDiscovery;
+	//std::vector<ofxFFmpegVideoReceiver *> remoteVideoSourcesConnecting;
 	std::vector<ofxFFmpegVideoReceiver *> remoteVideoSources;
 	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
 
