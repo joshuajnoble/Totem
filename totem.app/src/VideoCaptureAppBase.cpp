@@ -38,6 +38,15 @@ void VideoCaptureAppBase::update()
 		auto ref = this->videoSource->getPixelsRef();
 		if (this->ffmpegVideoBroadcast.get()) this->ffmpegVideoBroadcast->WriteFrame(ref.getPixels());
 	}
+
+	for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
+	{
+		auto peer = *iter;
+		peer.netClient->update();
+		if (peer.netClient->isFrameNew())
+		{
+		}
+	}
 }
 
 void VideoCaptureAppBase::exit()
@@ -58,13 +67,15 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 {
 	auto receiver = new ofxFFmpegVideoReceiver(peer.id);
 	this->remoteVideoSources.push_back(receiver);
-	
+
 	RemoteVideoInfo remote;
 	remote.hasLiveFeed = false;
 	remote.netClient = receiver;
 	remote.peerStatus = peer;
 	ofPtr<ofBaseVideoDraws> videoDraws(new ofxFFmpegVideoReceiverAsVideoSource(receiver));
 	remote.videoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(videoDraws));
+
+	receiver->start(peer.ipAddress, peer.port);
 
 	this->peers.push_back(remote);
 	this->Handle_ClientConnected(remote);
