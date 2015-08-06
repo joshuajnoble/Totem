@@ -13,7 +13,7 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	auto str = myIp.toString();
 	auto dotIndex = str.find_last_of('.');
 	std::string ipAddress("239.0.0." + str.substr(dotIndex + 1));
-	int videoPort = 11000;
+	int videoPort = 11005;
 	this->ffmpegVideoBroadcast.reset(new EncodeRGBToH264Live());
 	this->ffmpegVideoBroadcast->Start(ipAddress, to_string(videoPort), this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
 }
