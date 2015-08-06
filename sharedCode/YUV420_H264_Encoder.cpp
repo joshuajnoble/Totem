@@ -44,12 +44,17 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 	pCodecCtx->height = height;
 	pCodecCtx->time_base.num = 1;
 	pCodecCtx->time_base.den = fps;
-	pCodecCtx->gop_size = 10;
-	pCodecCtx->max_b_frames = 3;
+	pCodecCtx->gop_size = 5;
 	pCodecCtx->pix_fmt = AV_PIX_FMT_NV12;// AV_PIX_FMT_YUV420P;
 
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+	// Low-latency mode settings for h264_qsv
 	pCodecCtx->max_b_frames = 0;
+	pCodecCtx->refs = 1;
+	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "preset", "4", 0);
+	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);
+	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);
+	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "profile", "77", 0);
 
 	auto error = m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, NULL);
 	if (error < 0)
