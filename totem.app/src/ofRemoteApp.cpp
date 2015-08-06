@@ -209,9 +209,10 @@ void ofRemoteApp::draw()
 
 	if (this->peers.size() >= 1)
 	{
-		if (this->peers[0].videoSource)
+		if (this->peers[0].netClient)
 		{
-			this->peers[0].videoSource->DrawCropped(640, 480);
+			auto image = this->peers[0].netClient->getVideoImage();
+			image.draw(0, 0);
 		}
 	}
 

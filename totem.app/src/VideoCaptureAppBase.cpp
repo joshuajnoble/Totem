@@ -13,9 +13,18 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	auto str = myIp.toString();
 	auto dotIndex = str.find_last_of('.');
 	std::string ipAddress("239.0.0." + str.substr(dotIndex + 1));
-	int videoPort = 11005;
+	uint16_t videoPort = 11005;
 	this->ffmpegVideoBroadcast.reset(new EncodeRGBToH264Live());
-	this->ffmpegVideoBroadcast->Start(ipAddress, to_string(videoPort), this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+	this->ffmpegVideoBroadcast->Start(ipAddress, videoPort, this->videoSource->getWidth(), this->videoSource->getHeight(), 15);
+
+	//UdpDiscovery::RemotePeerStatus peer;
+	//peer.id = "Local Network Echo";
+	//peer.ipAddress = ipAddress;
+	//peer.port = videoPort;
+	//peer.isTotem = false;
+	//peer.videoWidth = 640;
+	//peer.videoHeight = 480;
+	//this->PeerArrived(peer);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
