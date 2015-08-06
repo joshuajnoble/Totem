@@ -51,10 +51,10 @@ public:
 	virtual ~CylinderDisplay() {}
 
 	void initCylinderDisplay(int width, int height);
-	void allocateBuffers();
+	void allocateBuffers(int width, int height);
 	void update();
 	void draw();
-	void setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource);
+	void setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource, int width, int height);
 	ofPtr<ofBaseVideoDraws> getTotemVideoSource();
 	void DoWelcome(const string& eventName);
 

@@ -119,10 +119,10 @@ void CylinderDisplay::initCylinderDisplay(int width, int height)
 
 
 // ********************************************************************************************************************
-void CylinderDisplay::allocateBuffers()
+void CylinderDisplay::allocateBuffers(int srcWidth, int srcHeight)
 {
-	this->warpedW = this->totemVideoSource->getWidth();
-	this->warpedH = this->totemVideoSource->getHeight();
+	this->warpedW = srcWidth;
+	this->warpedH = srcHeight;
 
 	/// set up the cylinder
 	float scale = this->windowHeight / (float)warpedH / 4;
@@ -146,10 +146,10 @@ void CylinderDisplay::allocateBuffers()
 
 
 // ********************************************************************************************************************
-void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
+void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource, int width, int height)
 {
 	this->totemVideoSource = videoSource;
-	this->allocateBuffers();
+	this->allocateBuffers(width, height);
 }
 
 

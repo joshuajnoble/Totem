@@ -44,11 +44,8 @@ void RemoteNetworkDisplay::initializeRemoteNetworkDisplay(ofRectangle v)
 	ofxKeyframeAnimRegisterEvents(this);
 }
 
-int callCount = 0;
 void RemoteNetworkDisplay::AddVideoSource(ofPtr<CroppedDrawable> source)
 {
-	OutputDebugStringA(("AddVideoSource " + ofToString(++callCount)).c_str());
-
 	this->videoSources.push_back(source);
 	
 	if (this->activeVideos.size() < 2)

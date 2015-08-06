@@ -283,7 +283,7 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 		this->cylinderDisplay.reset(new CylinderDisplay());
 		this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
 		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
-		this->cylinderDisplay->setTotemVideoSource(video);
+		this->cylinderDisplay->setTotemVideoSource(video, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
 	}
 	else
 	{

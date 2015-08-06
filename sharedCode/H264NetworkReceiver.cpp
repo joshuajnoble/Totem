@@ -127,6 +127,10 @@ void H264NetworkReceiver::OtherThread()
 			break;
 		}
 
+	if (videoindex == -1)
+	{
+		throw std::runtime_error("Could not find video stream index.");
+	}
 	//m_ffmpeg.format.av_dump_format(ifmt_ctx, 0, in_filename, 0);
 
 	//Output

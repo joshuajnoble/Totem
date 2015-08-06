@@ -126,7 +126,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 
 	pFrame->data[0] = const_cast<uint8_t*>(framebuffer);
 	pFrame->data[1] = const_cast<uint8_t*>(framebuffer + yBlocksize);
-	pFrame->data[2] = const_cast<uint8_t*>(framebuffer + yBlocksize + uBlockSize);
+	//pFrame->data[2] = const_cast<uint8_t*>(framebuffer + yBlocksize + uBlockSize); // Only for YUV420P; not AV_PIX_FMT_NV12
 
 	pFrame->pts = this->cInputFrames++;
 	int got_output;
