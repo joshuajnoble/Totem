@@ -207,14 +207,15 @@ void ofRemoteApp::draw()
 		this->networkDisplay.draw();
 	}
 
-	for (int i = 0; i < this->peers.size(); ++i)
-	{
-		if (this->peers[i].netClient && this->peers[i].netClient->isConnected())
-		{
-			auto image = this->peers[i].netClient->getVideoImage();
-			image.draw(0, i * 480);
-		}
-	}
+	//for (int i = 0; i < this->peers.size(); ++i)
+	//{
+	//	auto peer = this->peers[i];
+	//	if (peer.netClient && peer.netClient->isConnected())
+	//	{
+	//		auto image = peer.netClient->getVideoImage();
+	//		image.draw(0, i * 480);
+	//	}
+	//}
 
 #ifdef SHOW_FPS
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);

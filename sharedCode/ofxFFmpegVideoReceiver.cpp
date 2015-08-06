@@ -3,6 +3,7 @@
 ofxFFmpegVideoReceiver::ofxFFmpegVideoReceiver(const std::string &id) :
 	clientId(id),
 	m_isFrameNew(false),
+	hasEverReceivedAFrame(false),
 	m_hasFrameChanged(false)
 {
 }
@@ -28,6 +29,7 @@ void ofxFFmpegVideoReceiver::ProcessRgbFrame(const uint8_t*buffer, int bufferSiz
 	ofScopedLock lock(this->mutex);
 	this->pixels.setFromPixels(buffer, this->receiver->width(), this->receiver->height(), 3);
 	InterlockedExchange(&this->m_hasFrameChanged, 1);
+	hasEverReceivedAFrame = true;
 }
 
 void ofxFFmpegVideoReceiver::update()
@@ -48,4 +50,10 @@ ofImage& ofxFFmpegVideoReceiver::getVideoImage()
 void ofxFFmpegVideoReceiver::Close()
 {
 	this->receiver->Close();
+}
+
+bool ofxFFmpegVideoReceiver::isConnected()
+{
+	return this->hasEverReceivedAFrame;
+	//return this->receiver->isConnected();
 }

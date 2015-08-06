@@ -11,6 +11,7 @@ private:
 	ofImage mainThreadImage;
 	ofMutex mutex;
 	bool m_isFrameNew;
+	bool hasEverReceivedAFrame;
 	volatile LONG m_hasFrameChanged;
 
 	void ProcessRgbFrame(const uint8_t*, int);
@@ -26,5 +27,5 @@ public:
 	ofImage& getVideoImage();
 
 	std::string clientId;
-	bool isConnected() { return this->receiver->isConnected(); }
+	bool isConnected();
 };

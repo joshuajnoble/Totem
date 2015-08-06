@@ -218,6 +218,10 @@ void EncodeRGBToH264Live::Close()
 DecodeH264LiveToRGB::DecodeH264LiveToRGB() :
 	closed(false)
 {
+	//m_ffmpeg.utils.av_log_set_level(AV_LOG_QUIET);
+	//m_ffmpeg.utils.av_log_set_level(AV_LOG_VERBOSE);
+	//m_ffmpeg.utils.av_log_set_level(AV_LOG_DEBUG);
+
 	this->receiver.reset(new H264NetworkReceiver());
 	this->decoder.reset(new YUV420_H264_Decoder(std::bind(&DecodeH264LiveToRGB::ProcessYUVFrame, this, std::placeholders::_1)));
 }

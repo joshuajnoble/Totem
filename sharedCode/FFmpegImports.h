@@ -16,6 +16,7 @@ extern "C"
 #include "libavutil/opt.h"
 #include "libavutil/pixdesc.h"
 #include "libavutil/time.h"
+#include "libavutil/log.h"
 #include "libavutil/mathematics.h"
 #include "libavformat/avformat.h"
 #include "libavformat/avio.h"
@@ -496,6 +497,19 @@ namespace FFmpegWrapper
 			FFMPEG_IMPORT(av_compare_mod);
 			FFMPEG_IMPORT(av_rescale_delta);
 			FFMPEG_IMPORT(av_add_stable);
+
+			// log.h
+			FFMPEG_IMPORT(av_log_set_level);
+			FFMPEG_IMPORT(av_log);
+			FFMPEG_IMPORT(av_vlog);
+			FFMPEG_IMPORT(av_log_get_level);
+			FFMPEG_IMPORT(av_log_set_callback);
+			FFMPEG_IMPORT(av_log_default_callback);
+			FFMPEG_IMPORT(av_default_item_name);
+			FFMPEG_IMPORT(av_default_get_category);
+			FFMPEG_IMPORT(av_log_format_line);
+			FFMPEG_IMPORT(av_log_set_flags);
+			FFMPEG_IMPORT(av_log_get_flags);
 		}
 
 		public:
@@ -617,7 +631,20 @@ namespace FFmpegWrapper
 			decltype(av_compare_mod)* av_compare_mod;
 			decltype(av_rescale_delta)* av_rescale_delta;
 			decltype(av_add_stable)* av_add_stable;
-	};
+
+			// log.h
+			decltype(av_log_set_level)* av_log_set_level;
+			decltype(av_log)* av_log;
+			decltype(av_vlog)* av_vlog;
+			decltype(av_log_get_level)* av_log_get_level;
+			decltype(av_log_set_callback)* av_log_set_callback;
+			decltype(av_log_default_callback)* av_log_default_callback;
+			decltype(av_default_item_name)* av_default_item_name;
+			decltype(av_default_get_category)* av_default_get_category;
+			decltype(av_log_format_line)* av_log_format_line;
+			decltype(av_log_set_flags)* av_log_set_flags;
+			decltype(av_log_get_flags)* av_log_get_flags;
+};
 
 	class format : public FFmpegDllImport
 	{
