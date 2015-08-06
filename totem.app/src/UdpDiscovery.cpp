@@ -84,7 +84,7 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	this->videoWidth = w;
 	this->videoHeight = h;
 	this->sender.Create();
-	this->sender.Connect(this->broadcastAddress.c_str(), this->videoBroadcastPort);
+	this->sender.Connect(this->broadcastAddress.c_str(), this->discoveryBroadcastPort);
 	this->sender.SetNonBlocking(true);
 	this->sender.SetEnableBroadcast(true);
 

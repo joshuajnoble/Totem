@@ -105,9 +105,9 @@ void VideoCaptureAppBase::setupStreamManager()
 {
 	//streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
 
-	//ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
-	//ofAddListener(udpDiscovery.peerReadyEvent, this, &VideoCaptureAppBase::peerReady);
-	//ofAddListener(udpDiscovery.peerLeftEvent, this, &VideoCaptureAppBase::PeerLeft);
+	ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
+	ofAddListener(udpDiscovery.peerReadyEvent, this, &VideoCaptureAppBase::PeerReady);
+	ofAddListener(udpDiscovery.peerLeftEvent, this, &VideoCaptureAppBase::PeerLeft);
 
 	//ofAddListener(streamManager.newClientEvent, this, &VideoCaptureAppBase::newClient);
 	//ofAddListener(streamManager.clientDisconnectedEvent, this, &VideoCaptureAppBase::clientDisconnected);
