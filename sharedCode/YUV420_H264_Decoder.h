@@ -6,7 +6,7 @@
 class YUV420_H264_Decoder
 {
 private:
-	FFmpegFactory& m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 	DecodedFrameCallback callback;
 
 	int cInputFrames = 0;
@@ -30,7 +30,7 @@ private:
 
 
 public:
-	YUV420_H264_Decoder(FFmpegFactory& ffmpeg, DecodedFrameCallback callback);
+	YUV420_H264_Decoder(DecodedFrameCallback callback);
 	~YUV420_H264_Decoder();
 	void WriteFrame(const AVPacket&);
 

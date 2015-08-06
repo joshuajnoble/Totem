@@ -5,7 +5,6 @@
 #include "ofxPlaylist\src\ofxPlaylist.h"
 #include "ofxCv\src\ofxCv.h"
 #include "ThreeSixtyUnwrap.h"
-#include "..\..\sharedCode\StreamManager.h"
 #include "TotemDisplay.h"
 
 class ofTotemApp : public VideoCaptureAppBase

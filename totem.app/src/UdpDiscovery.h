@@ -12,23 +12,21 @@ public:
 	{
 		std::string id;
 		std::string ipAddress;
-		int assignedLocalPort;
-		int assignedRemotePort;
 		float disconnectTime;
+		int port;
 		int videoWidth;
 		int videoHeight;
 		bool isTotem;
 	};
 
 private:
-	const string version = string("1.0");
+	const string version = string("2.0");
 	Poco::Mutex portmutex;
 	std::string myid;
 	std::string broadcastAddress;
 
 	ofxUDPManager sender;
 	ofxUDPManager receiver;
-	int broadcastPort = 10527;
 	float nextSendTime;
 	float broadcastDelay = 0.5f;
 	float broadcastMissingDuration = 10.0f;
@@ -37,8 +35,9 @@ private:
 	bool isTotem;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
-	int myNextPort = 12000;
-	const int portIncrement = 20;
+	int discoveryBroadcastPort = 11000;
+	int videoBroadcastPort = 11005;
+	int AudioBroadcastPort = 11010;
 
 	ofxJSONElement GetNetworkPayload(const std::string& action);
 	void SendJsonPayload(const ofxJSONElement& jsonPayload);

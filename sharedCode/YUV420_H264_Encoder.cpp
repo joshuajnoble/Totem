@@ -17,8 +17,7 @@ int YUV420_H264_Encoder::getRawFrameSize()
 	return yBlocksize + uBlockSize + vBlockSize;
 }
 
-YUV420_H264_Encoder::YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int height, int fps, FrameCallback callback) :
-	m_ffmpeg(ffmpeg),
+YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCallback callback) :
 	callback(callback)
 {
 	auto codecName = "h264_qsv";

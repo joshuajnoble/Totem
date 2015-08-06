@@ -16,8 +16,7 @@ namespace
 	}
 }
 
-H264NetworkReceiver::H264NetworkReceiver(FFmpegFactory& ffmpeg) :
-m_ffmpeg(ffmpeg),
+H264NetworkReceiver::H264NetworkReceiver() :
 closeHandle(CreateEventA(NULL, TRUE, FALSE, NULL)),
 ifmt_ctx(NULL),
 videoindex(-1),

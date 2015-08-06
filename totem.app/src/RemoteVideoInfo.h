@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
 #include "StickyTimer.h"
-#include "ofxGstRTP/src/ofxGstRTPClient.h"
 #include "Utils.h"
+#include "UdpDiscovery.h"
+
+class ofxFFmpegVideoReceiver;
 
 class CroppedDrawable
 {
@@ -45,17 +47,8 @@ public:
 class RemoteVideoInfo
 {
 public:
-	std::string clientId = "";
-	ofPtr<CroppedDrawable> source;
-	int width;
-	int height;
-	StickyTimer activityTimer;
-	ofPtr<ofxGstRTPClient> netClient;
+	UdpDiscovery::RemotePeerStatus peerStatus;
+	ofxFFmpegVideoReceiver *netClient;
+	ofPtr<CroppedDrawable> videoSource;
 	bool hasLiveFeed;
-
-	bool isTotem = false;
-
-	RemoteVideoInfo() : activityTimer(10.0f)
-	{
-	}
 };

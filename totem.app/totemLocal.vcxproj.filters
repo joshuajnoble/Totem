@@ -7,9 +7,6 @@
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\StreamManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.cpp">
       <Filter>addons\ofxOpenCv</Filter>
     </ClCompile>
@@ -331,6 +328,9 @@
     <ClCompile Include="..\sharedCode\H264NetworkSender.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\ofxFFmpegVideoReceiver.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -423,9 +423,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThreeSixtyUnwrap.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sharedCode\StreamManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h">
@@ -666,6 +663,9 @@
       <Filter>ffmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\sharedCode\H264NetworkSender.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\ofxFFmpegVideoReceiver.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>

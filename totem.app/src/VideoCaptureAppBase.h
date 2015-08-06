@@ -3,11 +3,10 @@
 #include "ofMain.h"
 #include "RemoteVideoInfo.h"
 #include "UdpDiscovery.h"
-#include "..\..\SharedCode\StreamManager.h"
 #include "..\..\SharedCode\FFmpegImports.h"
 
 class EncodeRGBToH264Live;
-class DecodeH264LiveToRGB;
+class ofxFFmpegVideoReceiver;
 
 class VideoCaptureAppBase : public ofBaseApp
 {
@@ -25,27 +24,20 @@ public:
 	virtual void exit();
 
 private:
-	void newClient(string& args);
-	void clientDisconnected(string& clientId);
-	void clientStreamAvailable(string& clientId);
+	//void newClient(string& args);
+	//void clientDisconnected(string& clientId);
+	//void clientStreamAvailable(string& clientId);
 
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
-	void peerReady(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerReady(UdpDiscovery::RemotePeerStatus& peer);
 	
-	void HandleFFmpegFrame(const uint8_t* buffer, int bufferSize);
-
 protected:
-	std::vector<RemoteVideoInfo> remoteVideoSources;
-	StreamManager streamManager;
 	UdpDiscovery udpDiscovery;
-
-	FFmpegFactory m_ffmpeg;
+	std::vector<ofxFFmpegVideoReceiver *> remoteVideoSources;
 	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
-	std::auto_ptr<DecodeH264LiveToRGB> ffmpegVideoReceive;
-	ofPixels testVideoFeed;
-	ofImage testVideoTexture;
 
+	std::vector<RemoteVideoInfo> peers;
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote) = 0;

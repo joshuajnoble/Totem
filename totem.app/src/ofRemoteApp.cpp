@@ -2,6 +2,7 @@
 #include "ofxGstRTPClientAsVideoSource.h"
 #include "Utils.h"
 #include "..\..\SharedCode\VideoConverters.h"
+#include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
 
 //#define SHOW_FPS
 
@@ -90,8 +91,6 @@ void ofRemoteApp::setup()
 	ofSetFrameRate(30);
 	ofSetVerticalSync(true);
 #endif
-
-	this->streamManager.broadcastVideoBitrate = 4000;
 }
 
 
@@ -208,11 +207,6 @@ void ofRemoteApp::draw()
 		this->networkDisplay.draw();
 	}
 
-	if (this->testVideoTexture.isAllocated())
-	{
-		this->testVideoTexture.draw(0, 0);
-	}
-
 #ifdef SHOW_FPS
 	ofDrawBitmapString(ofToString(ofGetFrameRate()), 10, 10);
 #endif
@@ -253,7 +247,6 @@ void ofRemoteApp::DrawSelfie()
 // ********************************************************************************************************************
 void ofRemoteApp::exit()
 {
-	this->videoSource->close();
 	VideoCaptureAppBase::exit();
 }
 
@@ -274,10 +267,10 @@ int ofRemoteApp::displayHeight() const
 // ********************************************************************************************************************
 void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video)
 {
-	if (remote.isTotem && !this->totemSource)
+	if (remote.peerStatus.isTotem && !this->totemSource)
 	{
-		this->totemSource.reset(new RemoteVideoInfo(remote));
-
+		auto videoInfo = new RemoteVideoInfo(remote);
+		this->totemSource.reset(videoInfo);
 		this->cylinderDisplay.reset(new CylinderDisplay());
 		this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
 		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
@@ -285,7 +278,7 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 	}
 	else
 	{
-		this->networkDisplay.AddVideoSource(remote.source);
+		this->networkDisplay.AddVideoSource(remote.videoSource);
 	}
 }
 
@@ -293,34 +286,34 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 // ********************************************************************************************************************
 void ofRemoteApp::RemoveRemoteVideoSource(const RemoteVideoInfo& video)
 {
-	this->networkDisplay.RemoveVideoSource(video.source);
+	this->networkDisplay.RemoveVideoSource(video.videoSource);
 }
 
 
 // ********************************************************************************************************************
 void ofRemoteApp::keyPressed(int key)
 {
-	auto videoCount = this->networkDisplay.VideoCount();
-	if (key == 'q' && videoCount < 2)
-	{
-		RemoteVideoInfo remote;
-		remote.clientId = "remotePeerImpersonator";
-		remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(this->videoSource));
-		remote.width = this->videoSource->getWidth();
-		remote.height = this->videoSource->getHeight();
-		remote.isTotem = false;
-		remote.hasLiveFeed = true;
+	//auto videoCount = this->networkDisplay.VideoCount();
+	//if (key == 'q' && videoCount < 2)
+	//{
+	//	RemoteVideoInfo remote;
+	//	remote.clientId = "remotePeerImpersonator";
+	//	remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(this->videoSource));
+	//	remote.width = this->videoSource->getWidth();
+	//	remote.height = this->videoSource->getHeight();
+	//	remote.isTotem = false;
+	//	remote.hasLiveFeed = true;
 
-		NewConnection(remote, this->videoSource);
-	}
-	else if (key == 'a' && videoCount > 0)
-	{
-		this->networkDisplay.RemoveFirstVideoSource();
-	}
-	else if (key == 'z' && videoCount > 0)
-	{
-		this->networkDisplay.RemoveSecondVideoSource();
-	}
+	//	NewConnection(remote, this->videoSource);
+	//}
+	//else if (key == 'a' && videoCount > 0)
+	//{
+	//	this->networkDisplay.RemoveFirstVideoSource();
+	//}
+	//else if (key == 'z' && videoCount > 0)
+	//{
+	//	this->networkDisplay.RemoveSecondVideoSource();
+	//}
 }
 
 
@@ -439,14 +432,16 @@ void ofRemoteApp::WelcomeSequenceComplete()
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
-	auto video = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(remote.netClient, remote.width, remote.height));
-	NewConnection(remote, video);
+	//auto video = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(remote.netClient, remote.width, remote.height));
+	auto videoSource = ofPtr<ofBaseVideoDraws>(new ofxFFmpegVideoReceiverAsVideoSource(remote.netClient));
+	remote.videoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(videoSource));
+	NewConnection(remote, videoSource);
 }
 
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
-	if (remote.isTotem)
+	if (remote.peerStatus.isTotem)
 	{
 		this->totemSource.reset();
 		this->cylinderDisplay.reset();
@@ -463,7 +458,7 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientStreamAvailable(RemoteVideoInfo& remote)
 {
-	if (remote.isTotem && this->cylinderDisplay)
+	if (remote.peerStatus.isTotem && this->cylinderDisplay)
 	{
 		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
 	}

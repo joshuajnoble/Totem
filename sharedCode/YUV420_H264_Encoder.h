@@ -6,7 +6,7 @@
 class YUV420_H264_Encoder
 {
 private:
-	FFmpegFactory& m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 	FrameCallback callback;
 
 	int cInputFrames = 0;
@@ -19,7 +19,7 @@ private:
 
 public:
 	int getRawFrameSize();
-	YUV420_H264_Encoder(FFmpegFactory& ffmpeg, int width, int height, int fps, FrameCallback callback);
+	YUV420_H264_Encoder(int width, int height, int fps, FrameCallback callback);
 	~YUV420_H264_Encoder();
 	void WriteFrame(const uint8_t* framebuffer);
 

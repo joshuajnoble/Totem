@@ -1,8 +1,7 @@
 #include "YUV420_H264_Decoder.h"
 #include "LegacyGuards.h"
 
-YUV420_H264_Decoder::YUV420_H264_Decoder(FFmpegFactory& ffmpeg, DecodedFrameCallback frameCallback) :
-	m_ffmpeg(ffmpeg),
+YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 	callback(frameCallback)
 {
 	auto codecName = "h264_qsv";

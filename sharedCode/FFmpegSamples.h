@@ -508,16 +508,16 @@ public:
 class JustForTesting
 {
 private:
-	FFmpegFactory& m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 
 public:
-	JustForTesting(FFmpegFactory& ffmpeg) : m_ffmpeg(ffmpeg)
+	JustForTesting()
 	{
 		int width = 640;
 		int height = 480;
 		int fps = 15;
-		VideoCaptureTest videoCapture(&m_ffmpeg, "test.yuv", width, height, fps, 10);
-		YUV420_H264_Encoder streamingEncoder(m_ffmpeg, "test.h264", width, height, fps);
+		VideoCaptureTest videoCapture("test.yuv", width, height, fps, 10);
+		YUV420_H264_Encoder streamingEncoder("test.h264", width, height, fps);
 
 		auto frameSize = streamingEncoder.getRawFrameSize();
 		std::vector<byte> buffer(frameSize);

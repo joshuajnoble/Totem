@@ -23,11 +23,11 @@ private:
 	int dstLineSize[2];
 
 	int width, height;
-	FFmpegFactory& m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 	SwsContext* sws_context;
 
 public:
-	ConvertToNV12(FFmpegFactory& ffmpeg, int width, int height);
+	ConvertToNV12(int width, int height);
 	~ConvertToNV12();
 
 	int GetInputFrameSize();
@@ -43,11 +43,11 @@ private:
 	int dstLineSize[2];
 
 	int width, height;
-	FFmpegFactory& m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 	SwsContext* sws_context;
 
 public:
-	ConvertToRGB(FFmpegFactory& ffmpeg, int width, int height);
+	ConvertToRGB(int width, int height);
 	~ConvertToRGB();
 
 	int GetInputFrameSize();
@@ -59,7 +59,7 @@ public:
 class EncodeRGBToH264
 {
 protected:
-	FFmpegFactory &m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 	std::auto_ptr<ConvertToNV12> converter;
 	std::auto_ptr<YUV420_H264_Encoder> encoder;
 	std::vector<uint8_t> yuvBuffer;
@@ -67,7 +67,7 @@ protected:
 	bool closed;
 
 public:
-	EncodeRGBToH264(FFmpegFactory &ffmpeg, FrameCallback callback);
+	EncodeRGBToH264(FrameCallback callback);
 	~EncodeRGBToH264();
 	void Start(int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);
@@ -84,7 +84,7 @@ private:
 	void ProcessEncodedFrame(AVPacket&);
 
 public:
-	EncodeRGBToH264File(FFmpegFactory &ffmpeg, const std::string& filename);
+	EncodeRGBToH264File(const std::string& filename);
 	~EncodeRGBToH264File();
 
 	void Start(int width, int height, int fps);
@@ -103,10 +103,10 @@ private:
 	void ProcessEncodedFrame(AVPacket&);
 
 public:
-	EncodeRGBToH264Live(FFmpegFactory &ffmpeg);
+	EncodeRGBToH264Live();
 	~EncodeRGBToH264Live();
 
-	void Start(std::string& ipAddress, std::string& port, int width, int height, int fps);
+	void Start(const std::string& ipAddress, const std::string& port, int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);
 	void Close();
 };
@@ -115,14 +115,12 @@ public:
 class DecodeH264LiveToRGB
 {
 private:
-	FFmpegFactory &m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 
 	std::auto_ptr<YUV420_H264_Decoder> decoder;
 	std::auto_ptr<H264NetworkReceiver> receiver;
 	std::auto_ptr<ConvertToRGB> converter;
 
-	std::ofstream outputFile;
-	//std::ofstream outputFileYuv;
 	bool closed;
 
 	void ProcessEncodedFrame(AVPacket&);
@@ -133,13 +131,13 @@ private:
 	std::vector<uint8_t> rgbBuffer;
 
 public:
-	DecodeH264LiveToRGB(FFmpegFactory &ffmpeg);
+	DecodeH264LiveToRGB();
 	~DecodeH264LiveToRGB();
 
 	int width() { return m_width; }
 	int height() { return m_height; }
 	int fps() { return m_fps; }
 
-	void Start(std::string& ipAddress, std::string& port, RGBFrameCallback rgbFrameCallback);
+	void Start(const std::string& ipAddress, const std::string& port, RGBFrameCallback rgbFrameCallback);
 	void Close();
 };

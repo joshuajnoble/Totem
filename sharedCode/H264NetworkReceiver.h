@@ -9,7 +9,7 @@ class H264NetworkReceiver
 private:
 	static DWORD WINAPI ThreadMarshaller(LPVOID);
 
-	FFmpegFactory& m_ffmpeg;
+	FFmpegFactory m_ffmpeg;
 	bool initialized, closed;
 	FrameCallback callback;
 	HANDLE closeHandle, thread;
@@ -21,7 +21,7 @@ private:
 	void OtherThread();
 
 public:
-	H264NetworkReceiver(FFmpegFactory& ffmpeg);
+	H264NetworkReceiver();
 	~H264NetworkReceiver();
 	void Start(FrameCallback callback);
 	void Close();

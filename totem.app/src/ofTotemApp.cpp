@@ -1,5 +1,6 @@
 #include "ofTotemApp.h"
 #include "Utils.h"
+#include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
 
 //#define SHOW_FPS
 
@@ -50,16 +51,13 @@ void ofTotemApp::setup()
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 
-	this->streamManager.broadcastVideoBitrate = 8000;
-
 	cortanaPlayIntro();
 }
 
 //--------------------------------------------------------------
 void ofTotemApp::exit()
 {
-	this->videoSource->close();
-	streamManager.exit();
+	VideoCaptureAppBase::exit();
 }
 
 //--------------------------------------------------------------
@@ -132,36 +130,36 @@ void ofTotemApp::draw()
 				auto remoteSourceCount = this->remoteVideoSources.size();
 				if (remoteSourceCount == 1)
 				{
-					auto videoSource = this->remoteVideoSources[0].source;
-					videoSource->DrawCropped((int)output.getWidth(), (int)output.getHeight());
+					auto videoSource = this->remoteVideoSources[0]->getVideoImage();
+					Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
 				}
 				else if (remoteSourceCount == 2)
 				{
-					auto videoSource = this->remoteVideoSources[0].source;
-					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
+					auto videoSource = this->remoteVideoSources[0]->getVideoImage();
+					Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
 
 					ofPushMatrix();
 
-					videoSource = this->remoteVideoSources[1].source;
+					videoSource = this->remoteVideoSources[1]->getVideoImage();
 					ofTranslate(0, halfHeight + halfMargin);
-					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
+					Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
 
 					ofPopMatrix();
 				}
 				else if (remoteSourceCount == 3)
 				{
-					auto videoSource = this->remoteVideoSources[0].source;
-					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
+					auto videoSource = this->remoteVideoSources[0]->getVideoImage();
+					Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
 
 					ofPushMatrix();
 
-					videoSource = this->remoteVideoSources[1].source;
+					videoSource = this->remoteVideoSources[1]->getVideoImage();
 					ofTranslate(0, halfHeight + halfMargin);
-					videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
+					Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
 
-					videoSource = this->remoteVideoSources[2].source;
+					videoSource = this->remoteVideoSources[2]->getVideoImage();
 					ofTranslate(halfWidth + halfMargin, 0);
-					videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
+					Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
 
 					ofPopMatrix();
 				}

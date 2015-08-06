@@ -4,6 +4,7 @@
 #include "ofTotemApp.h"
 #include "ofRemoteApp.h"
 #include "Utils.h"
+#include "..\..\sharedCode\VideoConverters.h"
 
 namespace
 {
@@ -147,12 +148,13 @@ namespace
 			unwrapper->initUnwrapper(videoSource, outputSize);
 
 			auto unwrappedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
+			auto drawableVideoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(unwrappedVideo));
 			RemoteVideoInfo remote;
-			remote.clientId = "remoteTotemImpersonator";
-			remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(unwrappedVideo));
-			remote.width = unwrappedVideo->getWidth();
-			remote.height = unwrappedVideo->getHeight();
-			remote.isTotem = true;
+			remote.peerStatus.id = "remoteTotemImpersonator";
+			//remote.videoSource = drawableVideoSource;
+			remote.peerStatus.videoWidth = unwrappedVideo->getWidth();
+			remote.peerStatus.videoHeight = unwrappedVideo->getHeight();
+			remote.peerStatus.isTotem = true;
 			remote.hasLiveFeed = true;
 			remoteApp->NewConnection(remote, unwrappedVideo);
 			remoteApp->Handle_ClientStreamAvailable(remote);
