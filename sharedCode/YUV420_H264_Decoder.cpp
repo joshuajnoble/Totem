@@ -59,7 +59,7 @@ YUV420_H264_Decoder::~YUV420_H264_Decoder()
 {
 }
 
-void YUV420_H264_Decoder::WriteFrame(const AVPacket& inPacket)
+void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 {
 	cur_size = inPacket.size;
 	cur_ptr = inPacket.data;

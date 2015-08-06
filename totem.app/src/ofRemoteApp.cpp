@@ -207,12 +207,12 @@ void ofRemoteApp::draw()
 		this->networkDisplay.draw();
 	}
 
-	if (this->peers.size() >= 1)
+	for (int i = 0; i < this->peers.size(); ++i)
 	{
-		if (this->peers[0].netClient)
+		if (this->peers[i].netClient && this->peers[i].netClient->isConnected())
 		{
-			auto image = this->peers[0].netClient->getVideoImage();
-			image.draw(0, 0);
+			auto image = this->peers[i].netClient->getVideoImage();
+			image.draw(0, i * 480);
 		}
 	}
 

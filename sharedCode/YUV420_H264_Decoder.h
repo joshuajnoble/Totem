@@ -17,7 +17,6 @@ private:
 	AVCodecContext *pCodecCtx = NULL;
 	AVCodecParserContext *pCodecParserCtx = NULL;
 
-
 	FILE *fp_in;
 	FILE *fp_out;
 	AVFrame	*pFrame;
@@ -28,11 +27,10 @@ private:
 	int ret, got_picture;
 	int y_size;
 
-
 public:
 	YUV420_H264_Decoder(DecodedFrameCallback callback);
 	~YUV420_H264_Decoder();
-	void WriteFrame(const AVPacket&);
+	void DecodeFrame(const AVPacket&);
 
 	void Close();
 };

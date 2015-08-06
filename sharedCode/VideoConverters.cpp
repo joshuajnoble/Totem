@@ -244,7 +244,7 @@ void DecodeH264LiveToRGB::Close()
 
 void DecodeH264LiveToRGB::ProcessEncodedFrame(AVPacket& packet)
 {
-	this->decoder->WriteFrame(packet);
+	this->decoder->DecodeFrame(packet);
 }
 
 void DecodeH264LiveToRGB::ProcessYUVFrame(const AVFrame &frame)

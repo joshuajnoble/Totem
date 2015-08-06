@@ -113,6 +113,19 @@ YUV420_H264_Encoder::~YUV420_H264_Encoder()
 	}
 }
 
+long long milliseconds_now() {
+	static LARGE_INTEGER s_frequency;
+	static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+	if (s_use_qpc) {
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		return (1000LL * now.QuadPart) / s_frequency.QuadPart;
+	}
+	else {
+		return GetTickCount();
+	}
+}
+
 void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 {
 	if (framebuffer == NULL)
@@ -128,7 +141,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 	pFrame->data[1] = const_cast<uint8_t*>(framebuffer + yBlocksize);
 	//pFrame->data[2] = const_cast<uint8_t*>(framebuffer + yBlocksize + uBlockSize); // Only for YUV420P; not AV_PIX_FMT_NV12
 
-	pFrame->pts = this->cInputFrames++;
+	pFrame->pts = this->cInputFrames++; //milliseconds_now();// timeGetTime();
 	int got_output;
 
 	/* encode the image */
