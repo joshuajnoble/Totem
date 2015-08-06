@@ -118,26 +118,32 @@ void H264NetworkReceiver::OtherThread()
 
 	DeleteFileA(tempFile);
 
-	int retriesLeft = 3;
-	while (retriesLeft--)
+	//int retriesLeft = 3;
+	//while (retriesLeft--)
+	//{
+	//	if ((ret = m_ffmpeg.format.avformat_find_stream_info(ifmt_ctx, 0)) < 0)
+	//	{
+	//		if (!retriesLeft)
+	//		{
+	//			printf("Unable to decode remote video stream.");
+	//			throw std::runtime_error("Failed to retrieve input stream information.");
+	//		}
+	//	}
+
+	//	break;
+	//}
+
+
+	for (unsigned int i = 0; i < ifmt_ctx->nb_streams; i++)
 	{
-		if ((ret = m_ffmpeg.format.avformat_find_stream_info(ifmt_ctx, 0)) < 0)
-		{
-			if (!retriesLeft)
-			{
-				printf("Unable to decode remote video stream.");
-				throw std::runtime_error("Failed to retrieve input stream information.");
-			}
-		}
-
-		break;
-	}
-
-	for (unsigned int i = 0; i<ifmt_ctx->nb_streams; i++)
 		if (ifmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO){
 			videoindex = i;
 			break;
 		}
+	}
+
+	ifmt_ctx->streams[videoindex]->codec->framerate.num = 1;
+	ifmt_ctx->streams[videoindex]->codec->framerate.den = 15;
 
 	if (videoindex == -1)
 	{
@@ -190,7 +196,6 @@ void H264NetworkReceiver::OtherThread()
 	//	printf("Error occurred when opening output URL\n");
 	//	goto end;
 	//}
-
 	while (WaitForSingleObject(this->closeHandle, 0) == WAIT_TIMEOUT)
 	{
 		ifmt_ctx->interrupt_callback.callback = &H264NetworkReceiver::Interrupt;
