@@ -108,6 +108,11 @@ UdpDiscovery::~UdpDiscovery()
 	this->receiver.Close();
 	auto jsonPayload = GetNetworkPayload("disconnect");
 	SendJsonPayload(jsonPayload);
+	SendJsonPayload(jsonPayload);
+	SendJsonPayload(jsonPayload);
+	SendJsonPayload(jsonPayload);
+	SendJsonPayload(jsonPayload);
+	SendJsonPayload(jsonPayload);
 }
 
 UdpDiscovery::RemotePeerStatus UdpDiscovery::GetPeerStatus(const std::string& peerId)
