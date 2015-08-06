@@ -74,7 +74,7 @@ public:
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
-	void NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video);
+	void NewConnection(const RemoteVideoInfo& remote);
 
 	virtual int displayWidth() const;
 	virtual int displayHeight() const;

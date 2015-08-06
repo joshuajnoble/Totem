@@ -70,6 +70,8 @@ void VideoCaptureAppBase::update()
 	{
 		auto peer = *iter;
 		peer.netClient->update();
+		peer.videoDraws->update();
+		peer.videoCroppable->update();
 		if (peer.netClient->isFrameNew())
 		{
 			auto found = std::find(this->remoteVideoSources.begin(), this->remoteVideoSources.end(), peer.netClient);
@@ -112,8 +114,8 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	remote.hasLiveFeed = false;
 	remote.netClient = receiver;
 	remote.peerStatus = peer;
-	ofPtr<ofBaseVideoDraws> videoDraws(new ofxFFmpegVideoReceiverAsVideoSource(receiver));
-	remote.videoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(videoDraws));
+	remote.videoDraws = ofPtr<ofBaseVideoDraws>(new ofxFFmpegVideoReceiverAsVideoSource(receiver));
+	remote.videoCroppable = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(remote.videoDraws));
 
 	receiver->start(peer.ipAddress, peer.port);
 

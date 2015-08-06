@@ -275,7 +275,7 @@ int ofRemoteApp::displayHeight() const
 }
 
 // ********************************************************************************************************************
-void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video)
+void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote)
 {
 	if (remote.peerStatus.isTotem && !this->totemSource)
 	{
@@ -284,11 +284,11 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 		this->cylinderDisplay.reset(new CylinderDisplay());
 		this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
 		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
-		this->cylinderDisplay->setTotemVideoSource(video, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
+		this->cylinderDisplay->setTotemVideoSource(remote.videoDraws, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
 	}
 	else
 	{
-		this->networkDisplay.AddVideoSource(remote.videoSource);
+		this->networkDisplay.AddVideoSource(remote.videoCroppable);
 	}
 }
 
@@ -296,7 +296,7 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideo
 // ********************************************************************************************************************
 void ofRemoteApp::RemoveRemoteVideoSource(const RemoteVideoInfo& video)
 {
-	this->networkDisplay.RemoveVideoSource(video.videoSource);
+	this->networkDisplay.RemoveVideoSource(video.videoCroppable);
 }
 
 
@@ -442,10 +442,7 @@ void ofRemoteApp::WelcomeSequenceComplete()
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
-	//auto video = ofPtr<ofBaseVideoDraws>(new ofxGstRTPClientAsVideoSource(remote.netClient, remote.width, remote.height));
-	auto videoSource = ofPtr<ofBaseVideoDraws>(new ofxFFmpegVideoReceiverAsVideoSource(remote.netClient));
-	remote.videoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(videoSource));
-	NewConnection(remote, videoSource);
+	NewConnection(remote);
 }
 
 // ********************************************************************************************************************

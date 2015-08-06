@@ -1,4 +1,5 @@
 #pragma once
+
 #include <vector>
 #include "StickyTimer.h"
 #include "Utils.h"
@@ -10,6 +11,7 @@ class CroppedDrawable
 {
 public:
 	virtual void DrawCropped(int width, int height) = 0;
+	virtual void update() = 0;
 };
 
 class CroppedDrawableFbo : public CroppedDrawable
@@ -25,6 +27,10 @@ public:
 	virtual void DrawCropped(int width, int height)
 	{
 		Utils::DrawCroppedToFit(*this->source, width, height);
+	}
+
+	void update()
+	{
 	}
 };
 
@@ -42,6 +48,14 @@ public:
 	{
 		Utils::DrawCroppedToFit(*this->source, width, height);
 	}
+
+	void update()
+	{
+		if (this->source)
+		{
+			this->source->update();
+		}
+	}
 };
 
 class RemoteVideoInfo
@@ -49,6 +63,7 @@ class RemoteVideoInfo
 public:
 	UdpDiscovery::RemotePeerStatus peerStatus;
 	ofxFFmpegVideoReceiver *netClient;
-	ofPtr<CroppedDrawable> videoSource;
+	ofPtr<ofBaseVideoDraws> videoDraws;
+	ofPtr<CroppedDrawable> videoCroppable;
 	bool hasLiveFeed;
 };
