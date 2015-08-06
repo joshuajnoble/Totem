@@ -72,7 +72,9 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 		cur_size -= len;
 
 		if (packet.size == 0)
+		{
 			continue;
+		}
 
 		//Some Info from AVCodecParserContext
 		//printf("[Packet]Size:%6d\t", packet.size);

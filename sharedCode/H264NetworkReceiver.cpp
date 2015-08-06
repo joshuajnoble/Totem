@@ -133,7 +133,6 @@ void H264NetworkReceiver::OtherThread()
 	//	break;
 	//}
 
-
 	for (unsigned int i = 0; i < ifmt_ctx->nb_streams; i++)
 	{
 		if (ifmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO){
@@ -142,8 +141,15 @@ void H264NetworkReceiver::OtherThread()
 		}
 	}
 
-	ifmt_ctx->streams[videoindex]->codec->framerate.num = 1;
-	ifmt_ctx->streams[videoindex]->codec->framerate.den = 15;
+	// Set these so we don't have to call avformat_find_stream_info (above)
+	ifmt_ctx->streams[videoindex]->codec->framerate.num = 15;
+	ifmt_ctx->streams[videoindex]->codec->framerate.den = 1;
+	ifmt_ctx->streams[videoindex]->codec->time_base.num = 1;
+	ifmt_ctx->streams[videoindex]->codec->time_base.num = 30;
+	ifmt_ctx->streams[videoindex]->codec->ticks_per_frame = 2;
+	ifmt_ctx->streams[videoindex]->codec->pix_fmt = AV_PIX_FMT_YUV420P;
+	ifmt_ctx->streams[videoindex]->codec->sample_aspect_ratio.num = 1;
+	ifmt_ctx->streams[videoindex]->codec->sample_aspect_ratio.den = 1;
 
 	if (videoindex == -1)
 	{
