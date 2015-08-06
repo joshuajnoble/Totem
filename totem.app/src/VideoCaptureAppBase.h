@@ -11,6 +11,7 @@ class ofxFFmpegVideoReceiver;
 class VideoCaptureAppBase : public ofBaseApp
 {
 public:
+	VideoCaptureAppBase();
 	virtual ~VideoCaptureAppBase() {};
 
 	virtual int displayWidth() const = 0;
@@ -33,6 +34,9 @@ private:
 	void PeerReady(UdpDiscovery::RemotePeerStatus& peer);
 	
 protected:
+	RingBuffer audioBuffer;
+	uint8_t audioToProcess[1024 * 1024];
+
 	UdpDiscovery udpDiscovery;
 	//std::vector<ofxFFmpegVideoReceiver *> remoteVideoSourcesConnecting;
 	std::vector<ofxFFmpegVideoReceiver *> remoteVideoSources;
@@ -49,6 +53,6 @@ protected:
 
 	virtual void audioOut(float * output, int bufferSize, int nChannels);
 	virtual void audioIn(float * input, int bufferSize, int nChannels);
-	virtual void audioRequested(float * output, int bufferSize, int nChannels);
-	virtual void audioReceived(float * input, int bufferSize, int nChannels);	
+	//virtual void audioRequested(float * output, int bufferSize, int nChannels);
+	//virtual void audioReceived(float * input, int bufferSize, int nChannels);	
 };

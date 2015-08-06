@@ -2,6 +2,21 @@
 #include "..\..\SharedCode\VideoConverters.h"
 #include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
 #include "ofxGstRTPClientAsVideoSource.h"
+#include <vector>
+#include <queue>
+
+const int SAMPLE_RATE = 22050;
+const int AUDIO_CHANNELS = 1;
+const int AUDIO_BUFFER_FRAME_RATE = 2; // Audio packets per second
+const int AUDIO_BUFFER_CIRCULAR_SIZE = 20;
+const int AUDIO_CHUNK_SIZE = (SAMPLE_RATE * AUDIO_CHANNELS * sizeof(float)) * AUDIO_BUFFER_FRAME_RATE;
+
+FILE *fp = NULL;
+
+VideoCaptureAppBase::VideoCaptureAppBase() : audioBuffer(1024 * 1024)
+{
+
+}
 
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
@@ -25,33 +40,31 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	//peer.videoWidth = 640;
 	//peer.videoHeight = 480;
 	//this->PeerArrived(peer);
-	
+
+	if (!fp) fp = fopen("rawaudioout.pcm", "wb");
+
 	ofSoundStreamListDevices();
-	ofSoundStreamSetup(0, 2, this, 44100, 512, 4);
-	ofSoundStreamStart();
+	ofSoundStreamSetup(0, 1, this, SAMPLE_RATE, 512, 8);
+	//ofSoundStreamStart();
 }
-
-void VideoCaptureAppBase::audioReceived(float* input, int bufferSize, int nChannels)
-{
-}
-
-void VideoCaptureAppBase::audioRequested(float* output, int bufferSize, int nChannels)
-{
-}
-
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
 {
 
 }
 
+
 void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)
 {
-
+	bufferSize *= sizeof(float);
+	audioBuffer.Write((uint8_t*)input, bufferSize);
 }
 
 void VideoCaptureAppBase::update()
 {
+	int bytesWritten = audioBuffer.Read(audioToProcess, sizeof(audioToProcess));
+	fwrite(audioToProcess, 1, bytesWritten, fp);
+
 	this->udpDiscovery.update();
 
 	this->videoSource->update();
@@ -99,7 +112,10 @@ void VideoCaptureAppBase::update()
 
 void VideoCaptureAppBase::exit()
 {
-	ofSoundStreamClose();
+	fflush(fp);
+	//ofSoundStreamClose();
+	fclose(fp);
+
 	this->videoSource->close();
 	this->ffmpegVideoBroadcast->Close();
 

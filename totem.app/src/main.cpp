@@ -46,6 +46,7 @@ namespace
 
 	void RemoveWindowChrome(int windowWidth, int windowHeight)
 	{
+		return;
 #if WIN32
 		auto hwnd = ofGetWin32Window();
 		auto lStyle = GetWindowLongPtr(hwnd, GWL_STYLE);
