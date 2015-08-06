@@ -184,9 +184,9 @@ EncodeRGBToH264Live::~EncodeRGBToH264Live()
 	this->Close();
 }
 
-void EncodeRGBToH264Live::Start(const std::string& ipAddress, const std::string& port, int width, int height, int fps)
+void EncodeRGBToH264Live::Start(const std::string& ipAddress, uint16_t port, int width, int height, int fps)
 {
-	std::string networkAddress("rtp://" + ipAddress + ":" + port);
+	std::string networkAddress("rtp://" + ipAddress + ":" + std::to_string(port));
 
 	this->streamer->Start(networkAddress, width, height, fps);
 	this->encoder->Start(width, height, fps);
@@ -227,10 +227,10 @@ DecodeH264LiveToRGB::~DecodeH264LiveToRGB()
 	this->Close();
 }
 
-void DecodeH264LiveToRGB::Start(const std::string& ipAddress, const std::string& port, RGBFrameCallback rgbFrameCallback)
+void DecodeH264LiveToRGB::Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback)
 {
 	this->callback = rgbFrameCallback;
-	this->receiver->Start(std::bind(&DecodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1));
+	this->receiver->Start(ipAddress, port, std::bind(&DecodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1));
 }
 
 void DecodeH264LiveToRGB::Close()

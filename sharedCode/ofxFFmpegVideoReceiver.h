@@ -21,7 +21,7 @@ public:
 	~ofxFFmpegVideoReceiver();
 
 	void update();
-	void start(const std::string& networkAddress, int port);
+	void start(const std::string& networkAddress, uint16_t port);
 	void Close();
 	ofImage& getVideoImage();
 

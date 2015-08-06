@@ -30,13 +30,15 @@ H264NetworkReceiver::~H264NetworkReceiver()
 	this->Close();
 }
 
-void H264NetworkReceiver::Start(FrameCallback frameCallback)
+void H264NetworkReceiver::Start(const std::string& remote, int port, FrameCallback frameCallback)
 {
 	if (this->initialized)
 	{
 		throw std::runtime_error("Already started.");
 	}
 
+	this->remoteIp = remote;
+	this->remoteVideoPort = port;
 	this->callback = frameCallback;
 	this->initialized = true;
 	this->thread = CreateThread(NULL, 0, &H264NetworkReceiver::ThreadMarshaller, this, 0, NULL);
@@ -64,9 +66,9 @@ void H264NetworkReceiver::OtherThread()
 		"m=audio _AUDIOPORT_ RTP/AVP 14\n"
 		"c=IN IP4 _REMOTEIP_\n");
 
-	ReplaceAllSubstrings(sdpConfig, "_REMOTEIP_", "239.0.0.210");
-	ReplaceAllSubstrings(sdpConfig, "_VIDEOPORT_", "11000");
-	ReplaceAllSubstrings(sdpConfig, "_AUDIOPORT_", "11050");
+	ReplaceAllSubstrings(sdpConfig, "_REMOTEIP_", this->remoteIp);
+	ReplaceAllSubstrings(sdpConfig, "_VIDEOPORT_", std::to_string(this->remoteVideoPort));
+	ReplaceAllSubstrings(sdpConfig, "_AUDIOPORT_", "11010");
 
 	// Write the SDP to a temp file so we can pass it in later
 	char tempPath[MAX_PATH];

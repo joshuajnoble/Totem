@@ -16,7 +16,7 @@ private:
 public:
 	H264NetworkSender();
 	~H264NetworkSender();
-	void Start(std::string networkAddress, int width, int height, int fps);
+	void Start(const std::string& networkAddress, int width, int height, int fps);
 	void WriteFrame(AVPacket& pkt);
 	void Close();
 };

@@ -11,11 +11,11 @@ ofxFFmpegVideoReceiver::~ofxFFmpegVideoReceiver()
 {
 }
 
-void ofxFFmpegVideoReceiver::start(const std::string& networkAddress, int port)
+void ofxFFmpegVideoReceiver::start(const std::string& networkAddress, uint16_t port)
 {
 	this->receiver.reset(new DecodeH264LiveToRGB());
 	auto callback = std::bind(&ofxFFmpegVideoReceiver::ProcessRgbFrame, this, std::placeholders::_1, std::placeholders::_2);
-	this->receiver->Start(networkAddress, to_string(port), callback);
+	this->receiver->Start(networkAddress, port, callback);
 }
 
 bool ofxFFmpegVideoReceiver::isFrameNew()

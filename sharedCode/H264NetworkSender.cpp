@@ -10,7 +10,7 @@ H264NetworkSender::~H264NetworkSender()
 	Close();
 }
 
-void H264NetworkSender::Start(std::string networkAddress, int width, int height, int fps)
+void H264NetworkSender::Start(const std::string& networkAddress, int width, int height, int fps)
 {
 	this->out_filename = networkAddress;
 	if (this->out_filename.substr(0, 6) != "rtp://")

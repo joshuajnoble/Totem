@@ -17,12 +17,14 @@ private:
 	AVFormatContext *ifmt_ctx;
 	AVPacket pkt;
 	int videoindex;
+	std::string remoteIp;
+	int remoteVideoPort;
 
 	void OtherThread();
 
 public:
 	H264NetworkReceiver();
 	~H264NetworkReceiver();
-	void Start(FrameCallback callback);
+	void Start(const std::string& remoteIp, int remotePort, FrameCallback callback);
 	void Close();
 };

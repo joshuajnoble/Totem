@@ -106,7 +106,7 @@ public:
 	EncodeRGBToH264Live();
 	~EncodeRGBToH264Live();
 
-	void Start(const std::string& ipAddress, const std::string& port, int width, int height, int fps);
+	void Start(const std::string& ipAddress, uint16_t port, int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);
 	void Close();
 };
@@ -138,6 +138,6 @@ public:
 	int height() { return m_height; }
 	int fps() { return m_fps; }
 
-	void Start(const std::string& ipAddress, const std::string& port, RGBFrameCallback rgbFrameCallback);
+	void Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback);
 	void Close();
 };
