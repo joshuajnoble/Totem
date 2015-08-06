@@ -71,7 +71,7 @@ void VideoCaptureAppBase::update()
 		auto peer = *iter;
 		peer.netClient->update();
 		peer.videoDraws->update();
-		peer.videoCroppable->update();
+		//peer.videoCroppable->update();
 		if (peer.netClient->isFrameNew())
 		{
 			auto found = std::find(this->remoteVideoSources.begin(), this->remoteVideoSources.end(), peer.netClient);
@@ -149,10 +149,24 @@ void VideoCaptureAppBase::PeerReady(UdpDiscovery::RemotePeerStatus& peer)
 void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 {
 	//this->streamManager.ClientDisconnected(peer.id);
+	for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
+	{
+		auto remoteVideoSource = *iter;
+		if (remoteVideoSource->clientId == peer.id)
+		{
+			remoteVideoSource->Close();
+			delete remoteVideoSource;
+			this->remoteVideoSources.erase(iter);
+			break;
+		}
+	}
+
 	auto remote = GetRemoteFromClientId(peer.id);
 	if (remote != this->peers.end())
 	{
-		this->Handle_ClientDisconnected(*remote);
+		auto peer = *remote;
+		this->peers.erase(remote);
+		this->Handle_ClientDisconnected(peer);
 	}
 }
 
