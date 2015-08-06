@@ -8,6 +8,7 @@ class H264NetworkReceiver
 {
 private:
 	static DWORD WINAPI ThreadMarshaller(LPVOID);
+	static int Interrupt(void*);
 
 	FFmpegFactory m_ffmpeg;
 	bool initialized, closed;

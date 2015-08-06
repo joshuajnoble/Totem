@@ -191,10 +191,12 @@ void H264NetworkReceiver::OtherThread()
 	//	goto end;
 	//}
 
-	while (WaitForSingleObject(this->closeHandle, 5) == WAIT_TIMEOUT)
+	while (WaitForSingleObject(this->closeHandle, 0) == WAIT_TIMEOUT)
 	{
+		ifmt_ctx->interrupt_callback.callback = &H264NetworkReceiver::Interrupt;
+		ifmt_ctx->interrupt_callback.opaque = (void*)this;
 		auto ret = m_ffmpeg.format.av_read_frame(ifmt_ctx, &pkt);
-		if (ret < 0)
+		if (ret < 0 && WaitForSingleObject(this->closeHandle, 0) != WAIT_TIMEOUT)
 		{
 			return;
 		}
@@ -220,6 +222,12 @@ void H264NetworkReceiver::OtherThread()
 
 		m_ffmpeg.codec.av_free_packet(&pkt);
 	}
+}
+
+int H264NetworkReceiver::Interrupt(void* x)
+{
+	auto rval = WaitForSingleObject(((H264NetworkReceiver *)x)->closeHandle, 0) != WAIT_TIMEOUT;
+	return rval;
 }
 
 void H264NetworkReceiver::Close()
