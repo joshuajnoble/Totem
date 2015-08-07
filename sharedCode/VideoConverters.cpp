@@ -6,6 +6,7 @@
 #include "PCMAudioEncoder.h"
 #include "PCMNetworkSender.h"
 #include "MP3AudioEncoder.h"
+#include "MP3AudioDecoder.h"
 
 //
 // ConvertToNV12
@@ -237,12 +238,15 @@ void EncodeRGBToH264Live::Close()
 DecodeH264LiveToRGB::DecodeH264LiveToRGB() :
 	closed(false)
 {
+	pcmFile = fopen("received.pcm", "wb");
+	mp3File = fopen("received.mp3", "wb");
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_QUIET);
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_VERBOSE);
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_DEBUG);
-
 	this->receiver.reset(new H264NetworkReceiver());
 	this->decoder.reset(new YUV420_H264_Decoder(std::bind(&DecodeH264LiveToRGB::ProcessYUVFrame, this, std::placeholders::_1)));
+	auto pcmFinalCallback = std::bind(&DecodeH264LiveToRGB::ProcessDecodedAudioFrame, this, std::placeholders::_1);
+	this->audioDecoder.reset(new MP3AudioDecoder(1, 22050, pcmFinalCallback));
 }
 
 DecodeH264LiveToRGB::~DecodeH264LiveToRGB()
@@ -250,18 +254,39 @@ DecodeH264LiveToRGB::~DecodeH264LiveToRGB()
 	this->Close();
 }
 
-void DecodeH264LiveToRGB::Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback)
+void DecodeH264LiveToRGB::Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback, PCMFrameCallback pcmFrameCallback)
 {
 	this->callback = rgbFrameCallback;
-	this->receiver->Start(ipAddress, port, std::bind(&DecodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1));
+	this->callbackAudio = pcmFrameCallback;
+	this->receiver->Start(ipAddress, port,
+		std::bind(&DecodeH264LiveToRGB::ProcessEncodedFrame, this, std::placeholders::_1),
+		std::bind(&DecodeH264LiveToRGB::ProcessEncodedAudioFrame, this, std::placeholders::_1));
 }
 
 void DecodeH264LiveToRGB::Close()
 {
 	if (!this->closed)
 	{
+		fclose(pcmFile);
+		fclose(mp3File);
 		this->closed = true;
 		this->receiver->Close();
+	}
+}
+
+void DecodeH264LiveToRGB::ProcessEncodedAudioFrame(AVPacket& packet)
+{
+	fwrite(packet.data, 1, packet.size, mp3File);
+	this->audioDecoder->DecodeFrame(packet);
+}
+
+void DecodeH264LiveToRGB::ProcessDecodedAudioFrame(const AVFrame& frame)
+{
+	fwrite(frame.data[0], 1, frame.linesize[0], pcmFile);
+
+	if (this->callbackAudio)
+	{
+		this->callbackAudio((uint8_t *)frame.data[0], frame.linesize[0]);
 	}
 }
 
@@ -276,7 +301,7 @@ void DecodeH264LiveToRGB::ProcessYUVFrame(const AVFrame &frame)
 	{
 		this->m_width = frame.width;
 		this->m_height = frame.height;
-		this->m_fps = 15; // TODO: Can we read this froem somewhere?
+		this->m_fps = 15; // TODO: Can we read this from somewhere?
 
 		this->converter.reset(new ConvertToRGB(frame.width, frame.height));
 		this->rgbBuffer.resize(this->converter->GetOutputFrameSize());

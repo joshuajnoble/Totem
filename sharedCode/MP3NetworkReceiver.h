@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "FFmpegImports.h"
 
 #include <string>
 
-class H264NetworkReceiver
+class MP3NetworkReceiver
 {
 private:
 	static DWORD WINAPI ThreadMarshaller(LPVOID);
@@ -13,12 +13,11 @@ private:
 	FFmpegFactory m_ffmpeg;
 	bool initialized, closed;
 	FrameCallback callback;
-	FrameCallback callbackAudio;
 	HANDLE closeHandle, thread;
 
 	AVFormatContext *ifmt_ctx;
 	AVPacket pkt;
-	int videoindex, audioindex;
+	int videoindex;
 	std::string remoteIp;
 	int remoteVideoPort;
 	bool hasReceviedPackets;
@@ -26,9 +25,9 @@ private:
 	void OtherThread();
 
 public:
-	H264NetworkReceiver();
-	~H264NetworkReceiver();
-	void Start(const std::string& remoteIp, int remotePort, FrameCallback videoCallback, FrameCallback audioCallback);
+	MP3NetworkReceiver();
+	~MP3NetworkReceiver();
+	void Start(const std::string& remoteIp, int remotePort, FrameCallback callback);
 	void Close();
 
 	bool isConnected();

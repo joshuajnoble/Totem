@@ -1,4 +1,4 @@
-#include "H264NetworkReceiver.h"
+﻿#include "MP3NetworkReceiver.h"
 
 namespace
 {
@@ -16,23 +16,22 @@ namespace
 	}
 }
 
-H264NetworkReceiver::H264NetworkReceiver() :
+MP3NetworkReceiver::MP3NetworkReceiver() :
 	closeHandle(CreateEventA(NULL, TRUE, FALSE, NULL)),
 	ifmt_ctx(NULL),
 	videoindex(-1),
-	audioindex(-1),
 	initialized(false),
 	closed(false),
 	hasReceviedPackets(false)
 {
 }
 
-H264NetworkReceiver::~H264NetworkReceiver()
+MP3NetworkReceiver::~MP3NetworkReceiver()
 {
 	this->Close();
 }
 
-void H264NetworkReceiver::Start(const std::string& remote, int port, FrameCallback videoCallback, FrameCallback audioCallback)
+void MP3NetworkReceiver::Start(const std::string& remote, int port, FrameCallback frameCallback)
 {
 	if (this->initialized)
 	{
@@ -41,19 +40,18 @@ void H264NetworkReceiver::Start(const std::string& remote, int port, FrameCallba
 
 	this->remoteIp = remote;
 	this->remoteVideoPort = port;
-	this->callback = videoCallback;
-	this->callbackAudio = audioCallback;
+	this->callback = frameCallback;
 	this->initialized = true;
-	this->thread = CreateThread(NULL, 0, &H264NetworkReceiver::ThreadMarshaller, this, 0, NULL);
+	this->thread = CreateThread(NULL, 0, &MP3NetworkReceiver::ThreadMarshaller, this, 0, NULL);
 }
 
-DWORD H264NetworkReceiver::ThreadMarshaller(LPVOID context)
+DWORD MP3NetworkReceiver::ThreadMarshaller(LPVOID context)
 {
-	((H264NetworkReceiver*)context)->OtherThread();
+	((MP3NetworkReceiver*)context)->OtherThread();
 	return 0;
 }
 
-void H264NetworkReceiver::OtherThread()
+void MP3NetworkReceiver::OtherThread()
 {
 	std::string sdpConfig(
 		"v=0\n"
@@ -139,9 +137,7 @@ void H264NetworkReceiver::OtherThread()
 	{
 		if (ifmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_VIDEO){
 			videoindex = i;
-		}
-		else if (ifmt_ctx->streams[i]->codec->codec_type == AVMEDIA_TYPE_AUDIO){
-			audioindex = i;
+			break;
 		}
 	}
 
@@ -208,7 +204,7 @@ void H264NetworkReceiver::OtherThread()
 	//}
 	while (WaitForSingleObject(this->closeHandle, 0) == WAIT_TIMEOUT)
 	{
-		ifmt_ctx->interrupt_callback.callback = &H264NetworkReceiver::Interrupt;
+		ifmt_ctx->interrupt_callback.callback = &MP3NetworkReceiver::Interrupt;
 		ifmt_ctx->interrupt_callback.opaque = (void*)this;
 		auto ret = m_ffmpeg.format.av_read_frame(ifmt_ctx, &pkt);
 		if (ret < 0 && WaitForSingleObject(this->closeHandle, 0) != WAIT_TIMEOUT)
@@ -234,26 +230,18 @@ void H264NetworkReceiver::OtherThread()
 				this->callback(pkt);
 			}
 		}
-		else if (pkt.stream_index == audioindex)
-		{
-			this->hasReceviedPackets = true;
-			if (this->callbackAudio)
-			{
-				this->callbackAudio(pkt);
-			}
-		}
 
 		m_ffmpeg.codec.av_free_packet(&pkt);
 	}
 }
 
-int H264NetworkReceiver::Interrupt(void* x)
+int MP3NetworkReceiver::Interrupt(void* x)
 {
-	auto rval = WaitForSingleObject(((H264NetworkReceiver *)x)->closeHandle, 0) != WAIT_TIMEOUT;
+	auto rval = WaitForSingleObject(((MP3NetworkReceiver *)x)->closeHandle, 0) != WAIT_TIMEOUT;
 	return rval;
 }
 
-void H264NetworkReceiver::Close()
+void MP3NetworkReceiver::Close()
 {
 	if (this->initialized && !this->closed)
 	{
@@ -270,7 +258,7 @@ void H264NetworkReceiver::Close()
 	}
 }
 
-bool H264NetworkReceiver::isConnected()
+bool MP3NetworkReceiver::isConnected()
 {
 	return this->hasReceviedPackets;
 }

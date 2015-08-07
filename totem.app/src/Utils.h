@@ -167,3 +167,6 @@ public:
 		return outputWritten;
 	}
 };
+
+
+long long milliseconds_now();

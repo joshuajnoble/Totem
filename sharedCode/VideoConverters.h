@@ -7,6 +7,7 @@
 #include <fstream>
 
 typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallback;
+typedef std::function<void(const uint8_t* buffer, int bufferSize)> PCMFrameCallback;
 
 class PCMAudioEncoder;
 class MP3AudioEncoder;
@@ -15,6 +16,7 @@ class YUV420_H264_Encoder;
 class H264NetworkSender;
 class H264NetworkReceiver;
 class YUV420_H264_Decoder;
+class MP3AudioDecoder;
 
 class ConvertToNV12
 {
@@ -123,18 +125,25 @@ class DecodeH264LiveToRGB
 private:
 	FFmpegFactory m_ffmpeg;
 
+	std::auto_ptr<MP3AudioDecoder> audioDecoder;
 	std::auto_ptr<YUV420_H264_Decoder> decoder;
 	std::auto_ptr<H264NetworkReceiver> receiver;
 	std::auto_ptr<ConvertToRGB> converter;
 
 	bool closed;
 
+	void ProcessEncodedAudioFrame(AVPacket& packet);
+	void ProcessDecodedAudioFrame(const AVFrame& packet);
+
 	void ProcessEncodedFrame(AVPacket&);
 	void ProcessYUVFrame(const AVFrame &);
 	RGBFrameCallback callback;
+	PCMFrameCallback callbackAudio;
 
 	int m_width, m_height, m_fps;
 	std::vector<uint8_t> rgbBuffer;
+	FILE *mp3File;
+	FILE *pcmFile;
 
 public:
 	DecodeH264LiveToRGB();
@@ -144,7 +153,7 @@ public:
 	int height() { return m_height; }
 	int fps() { return m_fps; }
 
-	void Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback);
+	void Start(const std::string& ipAddress, uint16_t port, RGBFrameCallback rgbFrameCallback, PCMFrameCallback pcmFrameCallback);
 	void Close();
 	bool isConnected();
 };

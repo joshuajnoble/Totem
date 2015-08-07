@@ -138,8 +138,6 @@ void ofxFunctionKeyframe::execute(){
 	}
 }
 
-// ----------------------------------------------------------------------
-
 bool ofxFunctionKeyframe::delayHasEnded() {
 	if (isDelayed && (step >= delay_steps)) {
 		isDelayed = false;
@@ -147,3 +145,20 @@ bool ofxFunctionKeyframe::delayHasEnded() {
 	}
 	return false;
 };
+
+// ----------------------------------------------------------------------
+static LARGE_INTEGER s_frequency;
+static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+long long milliseconds_now()
+{
+	if (s_use_qpc)
+	{
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		return (1000LL * now.QuadPart) / s_frequency.QuadPart;
+	}
+	else
+	{
+		return GetTickCount();
+	}
+}

@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "VideoConverters.h"
+#include "..\totem.app\src\Utils.h"
 
 class ofxFFmpegVideoReceiver
 {
@@ -10,14 +11,17 @@ private:
 	ofPixels pixels;
 	ofImage mainThreadImage;
 	ofMutex mutex;
-	bool m_isFrameNew;
+	bool m_isFrameNew, m_isFrameNewAudio;
 	bool hasEverReceivedAFrame;
 	volatile LONG m_hasFrameChanged;
+	volatile LONG m_hasFrameChangedAudio;
 
 	void ProcessRgbFrame(const uint8_t*, int);
+	void ProcessPCMFrame(const uint8_t*buffer, int bufferSize);
 
 public:
 	bool isFrameNew();
+	bool isAudioFrameNew();
 	ofxFFmpegVideoReceiver(const std::string &clientId);
 	~ofxFFmpegVideoReceiver();
 
@@ -25,6 +29,8 @@ public:
 	void start(const std::string& networkAddress, uint16_t port);
 	void Close();
 	ofImage& getVideoImage();
+
+	RingBuffer audioBuffer;
 
 	std::string clientId;
 	bool isConnected();

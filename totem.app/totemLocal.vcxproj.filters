@@ -340,6 +340,9 @@
     <ClCompile Include="..\sharedCode\MP3AudioEncoder.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\MP3AudioDecoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -684,6 +687,9 @@
       <Filter>ffmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\sharedCode\MP3AudioEncoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\MP3AudioDecoder.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>
