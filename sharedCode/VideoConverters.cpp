@@ -3,6 +3,8 @@
 #include "H264NetworkReceiver.h"
 #include "YUV420_H264_Encoder.h"
 #include "YUV420_H264_Decoder.h"
+#include "PCMAudioEncoder.h"
+#include "PCMNetworkSender.h"
 
 //
 // ConvertToNV12
@@ -173,10 +175,13 @@ void EncodeRGBToH264File::Close()
 // EncodeRGBToH264Live
 //
 EncodeRGBToH264Live::EncodeRGBToH264Live() :
-	closed(false)
+	closed(false)	
 {
 	this->streamer.reset(new H264NetworkSender());
+	this->audioStreamer.reset(new PCMNetworkSender());
+
 	this->encoder.reset(new EncodeRGBToH264(std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1)));
+	//this->audioEncoder.reset(new PCMAudioEncoder(1, 22050, std::bind(&EncodeRGBToH264Live::ProcessEncodedAudioFrame, this, std::placeholders::_1)));
 }
 
 EncodeRGBToH264Live::~EncodeRGBToH264Live()
@@ -186,10 +191,12 @@ EncodeRGBToH264Live::~EncodeRGBToH264Live()
 
 void EncodeRGBToH264Live::Start(const std::string& ipAddress, uint16_t port, int width, int height, int fps)
 {
-	std::string networkAddress("rtp://" + ipAddress + ":" + std::to_string(port));
+	std::string networkAddressVideo("rtp://" + ipAddress + ":" + std::to_string(port));
+	std::string networkAddressAudio("rtp://" + ipAddress + ":" + std::to_string(port + 5));
 
-	this->streamer->Start(networkAddress, width, height, fps);
+	this->streamer->Start(networkAddressVideo, width, height, fps);
 	this->encoder->Start(width, height, fps);
+	this->audioStreamer->Start(networkAddressAudio, 1, 22050);
 }
 
 void EncodeRGBToH264Live::WriteFrame(const uint8_t *srcBytes)
@@ -197,9 +204,19 @@ void EncodeRGBToH264Live::WriteFrame(const uint8_t *srcBytes)
 	this->encoder->WriteFrame(srcBytes);
 }
 
+void EncodeRGBToH264Live::WriteAudioFrame(const uint8_t* audioSource, int cbAudioSource)
+{
+	//this->audioEncoder->WriteFrame(audioSource, cbAudioSource);
+}
+
 void EncodeRGBToH264Live::ProcessEncodedFrame(AVPacket& packet)
 {
 	this->streamer->WriteFrame(packet);
+}
+
+void EncodeRGBToH264Live::ProcessEncodedAudioFrame(AVPacket& packet)
+{
+	this->audioStreamer->WriteFrame(packet);
 }
 
 void EncodeRGBToH264Live::Close()

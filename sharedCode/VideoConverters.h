@@ -2,13 +2,14 @@
 
 #include "FFmpegImports.h"
 //#include "YUV420_H264_Encoder.h"
-
 #include <string>
 #include <vector>
 #include <fstream>
 
 typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallback;
 
+class PCMAudioEncoder;
+class PCMNetworkSender;
 class YUV420_H264_Encoder;
 class H264NetworkSender;
 class H264NetworkReceiver;
@@ -96,11 +97,14 @@ class EncodeRGBToH264Live
 {
 private:
 	std::auto_ptr<EncodeRGBToH264> encoder;
+	std::auto_ptr<PCMAudioEncoder> audioEncoder;
 	std::auto_ptr<H264NetworkSender> streamer;
+	std::auto_ptr<PCMNetworkSender> audioStreamer;
 		
 	bool closed;
 
 	void ProcessEncodedFrame(AVPacket&);
+	void ProcessEncodedAudioFrame(AVPacket&);
 
 public:
 	EncodeRGBToH264Live();
@@ -108,6 +112,7 @@ public:
 
 	void Start(const std::string& ipAddress, uint16_t port, int width, int height, int fps);
 	void WriteFrame(const uint8_t *srcBytes);
+	void WriteAudioFrame(const uint8_t* audioSource, int cbAudioSource);
 	void Close();
 };
 

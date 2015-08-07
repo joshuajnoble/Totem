@@ -1,27 +1,8 @@
 ﻿#include "H264NetworkSender.h"
 #include "LegacyGuards.h"
 
-#define SAMPLING_RATE 44100
-#if AUDIO_GOOFING
-float *noise_buffer;
-void generate_440(float *buffer) {
-	int pos;  // sample number we're on
-	float volume = 0.1;  // 0 to 1.0, one being the loudest
-
-	for (pos = 0; pos < SAMPLING_RATE; pos++) {
-		float a = (2 * 3.14159) * pos / (SAMPLING_RATE / 440.0);
-		float v = sin(a) * volume;
-		buffer[pos] = v;
-	}
-}
-#endif
-
 H264NetworkSender::H264NetworkSender() : initialized(false), closed(false)
 {
-#if AUDIO_GOOFING
-	noise_buffer = (float *)malloc(SAMPLING_RATE * sizeof(float));
-	generate_440(noise_buffer);
-#endif
 }
 
 H264NetworkSender::~H264NetworkSender()
@@ -94,25 +75,6 @@ void H264NetworkSender::Start(const std::string& networkAddress, int width, int 
 	if (!out_stream) {
 		throw std::runtime_error("Failed allocating output stream");
 	}
-
-#if AUDIO_GOOFING
-	auto audioCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name("pcm_f32le");
-	AVStream *audio_stream = m_ffmpeg.format.avformat_new_stream(avOutputFormatContext, audioCodec);
-	if (!audio_stream) {
-		throw std::runtime_error("Failed allocating output stream");
-	}
-	audio_stream->codec->sample_rate = 44100;
-	audio_stream->codec->channels = 1;
-	audio_stream->codec->bits_per_coded_sample = audio_stream->codec->bits_per_raw_sample = 16;
-	uint8_t out_audio_buffer[SAMPLING_RATE * sizeof(float)];
-
-	AVPacket audioPkt;
-	m_ffmpeg.codec.av_init_packet(&audioPkt);
-	audioPkt.size = m_ffmpeg.codec.avcodec_encode_audio(audio_stream->codec, (uint8_t*)out_audio_buffer, sizeof(out_audio_buffer), (short *)noise_buffer);
-	audioPkt.stream_index = audio_stream->index;
-	audioPkt.data = out_audio_buffer;
-	m_ffmpeg.format.av_interleaved_write_frame(avOutputFormatContext, &audioPkt);
-#endif
 
 	//Copy the settings of AVCodecContext
 	auto ret = m_ffmpeg.codec.avcodec_copy_context(out_stream->codec, in_stream->codec);

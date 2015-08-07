@@ -331,6 +331,12 @@
     <ClCompile Include="..\sharedCode\ofxFFmpegVideoReceiver.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\PCMAudioEncoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\PCMNetworkSender.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -666,6 +672,12 @@
       <Filter>ffmpeg</Filter>
     </ClInclude>
     <ClInclude Include="..\sharedCode\ofxFFmpegVideoReceiver.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\PCMAudioEncoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\PCMNetworkSender.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>

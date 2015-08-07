@@ -62,10 +62,14 @@ void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)
 
 void VideoCaptureAppBase::update()
 {
-	int bytesWritten = audioBuffer.Read(audioToProcess, sizeof(audioToProcess));
-	fwrite(audioToProcess, 1, bytesWritten, fp);
-
 	this->udpDiscovery.update();
+
+	if (this->ffmpegVideoBroadcast.get())
+	{
+		int bytesReceived = audioBuffer.Read(audioToProcess, sizeof(audioToProcess));
+		this->ffmpegVideoBroadcast->WriteAudioFrame(audioToProcess, bytesReceived);
+		fwrite(audioToProcess, 1, bytesReceived, fp);
+	}
 
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
