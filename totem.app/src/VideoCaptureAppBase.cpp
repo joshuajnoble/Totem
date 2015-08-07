@@ -50,16 +50,35 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	ofSoundStreamSetup(0, 1, this, SAMPLE_RATE, 512, 8);
 	//ofSoundStreamStart();
 	
-	//outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
+	outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
 	//outputStream->setup(this, 2, 0, 44100, 512, 8);
+	outputStream->setup(this, 1, 0, 22050, 512, 8);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
 {
 	// Fill whatever we can into the last read buffer
 	// That way, if we get nothing it will still be the same samples from before
-	audioBufferOutput.Read(lastAudioOutputBuffer, bufferSize);
-	memcpy(output, lastAudioOutputBuffer, bufferSize);
+	if (this->remoteVideoSources.size())
+	{
+		if (nChannels == 1)
+		{
+			auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
+			memcpy(output, lastAudioOutputBuffer, bufferSize);
+		}
+		else
+		{
+			auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize / 2);
+			memcpy(output, lastAudioOutputBuffer, bufferSize / 2);
+			memcpy(output + bufferSize / 2, lastAudioOutputBuffer, bufferSize);
+			// Convert from mono to stereo
+			//for (int i = 0; i < bufferSize / sizeof(float); ++i)
+			//{
+			//	((float*)output)[i*2]   = ((float*)lastAudioOutputBuffer)[i];
+			//	((float*)output)[i*2+1] = ((float*)lastAudioOutputBuffer)[i + 1];
+			//}
+		}
+	}
 }
 
 void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)

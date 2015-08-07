@@ -7,7 +7,7 @@ ofxFFmpegVideoReceiver::ofxFFmpegVideoReceiver(const std::string &id) :
 	m_hasFrameChanged(false),
 	m_isFrameNewAudio(false),
 	m_hasFrameChangedAudio(false),
-	audioBuffer(1024 * 64)
+	audioBuffer(512 * sizeof(float))
 {
 }
 
