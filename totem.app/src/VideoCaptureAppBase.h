@@ -34,7 +34,7 @@ private:
 	void PeerReady(UdpDiscovery::RemotePeerStatus& peer);
 	
 protected:
-	uint8_t lastAudioOutputBuffer[1024];
+	uint8_t lastAudioOutputBuffer[512*sizeof(float) * 2];
 	RingBuffer audioBufferInput;
 	RingBuffer audioBufferOutput;
 	int audioLeftover = 0;;

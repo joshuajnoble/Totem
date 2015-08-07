@@ -18,7 +18,7 @@ namespace
 	//FILE *fpraw;
 }
 
-VideoCaptureAppBase::VideoCaptureAppBase() : audioBufferInput(1024 * 1024), audioBufferOutput(1024 * 1024)
+VideoCaptureAppBase::VideoCaptureAppBase() : audioBufferInput(1024 * 16), audioBufferOutput(1024 * 1024)
 {
 	//fp = fopen("raw-s16mono22k.pcm", "wb");
 	//fpraw = fopen("raw-f32mono22k.pcm", "wb");
@@ -57,6 +57,8 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
 {
+	bufferSize *= sizeof(float);
+
 	// Fill whatever we can into the last read buffer
 	// That way, if we get nothing it will still be the same samples from before
 	if (this->remoteVideoSources.size())
@@ -65,6 +67,7 @@ void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels
 		{
 			auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
 			memcpy(output, lastAudioOutputBuffer, bufferSize);
+			if (cbRead < bufferSize)printf("* %d\n", cbRead);
 		}
 		else
 		{
