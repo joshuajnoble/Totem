@@ -4,9 +4,9 @@
 #include "YUV420_H264_Encoder.h"
 #include "YUV420_H264_Decoder.h"
 #include "PCMAudioEncoder.h"
-#include "PCMNetworkSender.h"
-#include "MP3AudioEncoder.h"
-#include "MP3AudioDecoder.h"
+#include "AACNetworkSender.h"
+#include "AACAudioEncoder.h"
+#include "AACAudioDecoder.h"
 
 //
 // ConvertToNV12
@@ -180,10 +180,10 @@ EncodeRGBToH264Live::EncodeRGBToH264Live() :
 	closed(false)	
 {
 	this->streamer.reset(new H264NetworkSender());
-	this->audioStreamer.reset(new PCMNetworkSender());
+	this->audioStreamer.reset(new AACNetworkSender());
 
 	this->encoder.reset(new EncodeRGBToH264(std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1)));
-	this->audioEncoder.reset(new MP3AudioEncoder(1, 22050, std::bind(&EncodeRGBToH264Live::ProcessEncodedAudioFrame, this, std::placeholders::_1)));
+	this->audioEncoder.reset(new AACAudioEncoder(1, 22050, std::bind(&EncodeRGBToH264Live::ProcessEncodedAudioFrame, this, std::placeholders::_1)));
 }
 
 EncodeRGBToH264Live::~EncodeRGBToH264Live()
@@ -239,14 +239,14 @@ DecodeH264LiveToRGB::DecodeH264LiveToRGB() :
 	closed(false)
 {
 	pcmFile = fopen("received.pcm", "wb");
-	mp3File = fopen("received.mp3", "wb");
+	mp3File = fopen("received.aac", "wb");
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_QUIET);
-	//m_ffmpeg.utils.av_log_set_level(AV_LOG_VERBOSE);
+	m_ffmpeg.utils.av_log_set_level(AV_LOG_VERBOSE);
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_DEBUG);
 	this->receiver.reset(new H264NetworkReceiver());
 	this->decoder.reset(new YUV420_H264_Decoder(std::bind(&DecodeH264LiveToRGB::ProcessYUVFrame, this, std::placeholders::_1)));
 	auto pcmFinalCallback = std::bind(&DecodeH264LiveToRGB::ProcessDecodedAudioFrame, this, std::placeholders::_1);
-	this->audioDecoder.reset(new MP3AudioDecoder(1, 22050, pcmFinalCallback));
+	this->audioDecoder.reset(new AACAudioDecoder(1, 22050, pcmFinalCallback));
 }
 
 DecodeH264LiveToRGB::~DecodeH264LiveToRGB()

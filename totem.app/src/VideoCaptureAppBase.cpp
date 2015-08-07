@@ -50,9 +50,8 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	ofSoundStreamSetup(0, 1, this, SAMPLE_RATE, 512, 8);
 	//ofSoundStreamStart();
 	
-	outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
-	outputStream->setup(this, 2, 0, 44100, 512, 8);
-	outputStream->start();
+	//outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
+	//outputStream->setup(this, 2, 0, 44100, 512, 8);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
@@ -148,8 +147,11 @@ void VideoCaptureAppBase::update()
 void VideoCaptureAppBase::exit()
 {
 	//ofSoundStreamClose();
-	outputStream->close();
-	outputStream.reset();
+	if (outputStream)
+	{
+		outputStream->close();
+		outputStream.reset();
+	}
 
 	this->videoSource->close();
 	this->ffmpegVideoBroadcast->Close();

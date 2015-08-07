@@ -1,8 +1,8 @@
 #include "..\..\totem.app\src\Utils.h"
-#include "MP3AudioEncoder.h"
+#include "AACAudioEncoder.h"
 #include <limits.h>
 
-MP3AudioEncoder::MP3AudioEncoder(int channels, int sampeRate, FrameCallback c) : callback(c)
+AACAudioEncoder::AACAudioEncoder(int channels, int sampeRate, FrameCallback c) : callback(c)
 {
 	sampleCount = 0;
 
@@ -26,12 +26,12 @@ MP3AudioEncoder::MP3AudioEncoder(int channels, int sampeRate, FrameCallback c) :
 	alignedBuffer.resize(frameSizeBytes);
 }
 
-MP3AudioEncoder::~MP3AudioEncoder()
+AACAudioEncoder::~AACAudioEncoder()
 {
 	this->Close();
 }
 
-int MP3AudioEncoder::WriteFrame(const uint8_t* audioSource, int cbAudioSource)
+int AACAudioEncoder::WriteFrame(const uint8_t* audioSource, int cbAudioSource)
 {
 	int error;
 	int cbEncoded = 0;
@@ -69,7 +69,7 @@ int MP3AudioEncoder::WriteFrame(const uint8_t* audioSource, int cbAudioSource)
 	return cbEncoded;
 }
 
-void MP3AudioEncoder::Close()
+void AACAudioEncoder::Close()
 {
 	if (!this->closed)
 	{

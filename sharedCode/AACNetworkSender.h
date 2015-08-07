@@ -4,7 +4,7 @@
 
 #include <string>
 
-class PCMNetworkSender
+class AACNetworkSender
 {
 private:
 	FFmpegFactory m_ffmpeg;
@@ -14,8 +14,8 @@ private:
 	bool initialized, closed;
 
 public:
-	PCMNetworkSender();
-	~PCMNetworkSender();
+	AACNetworkSender();
+	~AACNetworkSender();
 	void Start(const std::string& networkAddress, int channels, int sample_rate);
 	void WriteFrame(AVPacket& pkt);
 	void Close();

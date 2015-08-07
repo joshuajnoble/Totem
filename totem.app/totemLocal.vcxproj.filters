@@ -334,13 +334,13 @@
     <ClCompile Include="..\sharedCode\PCMAudioEncoder.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\PCMNetworkSender.cpp">
+    <ClCompile Include="..\sharedCode\AACAudioEncoder.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\MP3AudioEncoder.cpp">
+    <ClCompile Include="..\sharedCode\AACAudioDecoder.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\MP3AudioDecoder.cpp">
+    <ClCompile Include="..\sharedCode\AACNetworkSender.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
   </ItemGroup>
@@ -683,13 +683,13 @@
     <ClInclude Include="..\sharedCode\PCMAudioEncoder.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\sharedCode\PCMNetworkSender.h">
+    <ClInclude Include="..\sharedCode\AACAudioEncoder.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\sharedCode\MP3AudioEncoder.h">
+    <ClInclude Include="..\sharedCode\AACNetworkSender.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
-    <ClInclude Include="..\sharedCode\MP3AudioDecoder.h">
+    <ClInclude Include="..\sharedCode\AACAudioDecoder.h">
       <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>

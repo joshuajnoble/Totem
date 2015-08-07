@@ -10,13 +10,13 @@ typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallb
 typedef std::function<void(const uint8_t* buffer, int bufferSize)> PCMFrameCallback;
 
 class PCMAudioEncoder;
-class MP3AudioEncoder;
-class PCMNetworkSender;
+class AACAudioEncoder;
+class AACNetworkSender;
 class YUV420_H264_Encoder;
 class H264NetworkSender;
 class H264NetworkReceiver;
 class YUV420_H264_Decoder;
-class MP3AudioDecoder;
+class AACAudioDecoder;
 
 class ConvertToNV12
 {
@@ -100,9 +100,9 @@ class EncodeRGBToH264Live
 {
 private:
 	std::auto_ptr<EncodeRGBToH264> encoder;
-	std::auto_ptr<MP3AudioEncoder> audioEncoder;
+	std::auto_ptr<AACAudioEncoder> audioEncoder;
 	std::auto_ptr<H264NetworkSender> streamer;
-	std::auto_ptr<PCMNetworkSender> audioStreamer;
+	std::auto_ptr<AACNetworkSender> audioStreamer;
 		
 	bool closed;
 
@@ -125,7 +125,7 @@ class DecodeH264LiveToRGB
 private:
 	FFmpegFactory m_ffmpeg;
 
-	std::auto_ptr<MP3AudioDecoder> audioDecoder;
+	std::auto_ptr<AACAudioDecoder> audioDecoder;
 	std::auto_ptr<YUV420_H264_Decoder> decoder;
 	std::auto_ptr<H264NetworkReceiver> receiver;
 	std::auto_ptr<ConvertToRGB> converter;

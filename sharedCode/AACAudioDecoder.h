@@ -3,7 +3,7 @@
 #include "FFmpegImports.h"
 #include <functional>
 
-class MP3AudioDecoder
+class AACAudioDecoder
 {
 private:
 	FFmpegFactory m_ffmpeg;
@@ -28,8 +28,8 @@ private:
 	bool closed;
 
 public:
-	MP3AudioDecoder(int channels, int sampleRate, DecodedFrameCallback callback);
-	~MP3AudioDecoder();
+	AACAudioDecoder(int channels, int sampleRate, DecodedFrameCallback callback);
+	~AACAudioDecoder();
 	void DecodeFrame(AVPacket&);
 
 	void Close();

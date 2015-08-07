@@ -1,18 +1,18 @@
 ﻿#include "ofMain.h"
 
-#include "PCMNetworkSender.h"
+#include "AACNetworkSender.h"
 #include "LegacyGuards.h"
 
-PCMNetworkSender::PCMNetworkSender() : initialized(false), closed(false)
+AACNetworkSender::AACNetworkSender() : initialized(false), closed(false)
 {
 }
 
-PCMNetworkSender::~PCMNetworkSender()
+AACNetworkSender::~AACNetworkSender()
 {
 	Close();
 }
 
-void PCMNetworkSender::Start(const std::string& networkAddress, int channels, int sample_rate)
+void AACNetworkSender::Start(const std::string& networkAddress, int channels, int sample_rate)
 {
 	this->out_filename = networkAddress;
 	if (this->out_filename.substr(0, 6) != "rtp://")
@@ -24,7 +24,7 @@ void PCMNetworkSender::Start(const std::string& networkAddress, int channels, in
 	auto pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
-	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_FLT;
+	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_S16;
 	pCodecCtx->channel_layout = AV_CH_LAYOUT_MONO;
 	pCodecCtx->sample_rate = sample_rate;
 	pCodecCtx->channels = channels;
@@ -43,7 +43,7 @@ void PCMNetworkSender::Start(const std::string& networkAddress, int channels, in
 	}
 	out_stream->codec->codec_id = pCodec->id;
 	out_stream->codec->codec_type = AVMEDIA_TYPE_AUDIO;
-	out_stream->codec->sample_fmt = AV_SAMPLE_FMT_FLT;
+	out_stream->codec->sample_fmt = AV_SAMPLE_FMT_S16;
 	out_stream->codec->channel_layout = AV_CH_LAYOUT_MONO;
 	out_stream->codec->sample_rate = 22050;
 	out_stream->codec->channels = 1;
@@ -72,7 +72,7 @@ void PCMNetworkSender::Start(const std::string& networkAddress, int channels, in
 	this->initialized = true;
 }
 
-void PCMNetworkSender::WriteFrame(AVPacket& pkt)
+void AACNetworkSender::WriteFrame(AVPacket& pkt)
 {
 	if (m_ffmpeg.format.av_interleaved_write_frame(avOutputFormatContext, &pkt) < 0)
 	{
@@ -81,7 +81,7 @@ void PCMNetworkSender::WriteFrame(AVPacket& pkt)
 	}
 }
 
-void PCMNetworkSender::Close()
+void AACNetworkSender::Close()
 {
 	if (this->initialized && !this->closed)
 	{

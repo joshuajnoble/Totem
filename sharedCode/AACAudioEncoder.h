@@ -4,7 +4,7 @@
 #include <functional>
 #include <vector>
 
-class MP3AudioEncoder
+class AACAudioEncoder
 {
 private:
 	FFmpegFactory m_ffmpeg;
@@ -20,8 +20,8 @@ private:
 	bool closed;
 
 public:
-	MP3AudioEncoder(int channels, int sampeRate, FrameCallback c);
-	~MP3AudioEncoder();
+	AACAudioEncoder(int channels, int sampeRate, FrameCallback c);
+	~AACAudioEncoder();
 	int WriteFrame(const uint8_t* audioSource, int cbAudioSource);
 	void Close();
 };

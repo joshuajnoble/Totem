@@ -1,4 +1,4 @@
-#include "MP3AudioDecoder.h"
+#include "AACAudioDecoder.h"
 
 namespace
 {
@@ -6,19 +6,19 @@ namespace
 	const int AUDIO_INBUF_SIZE = 1024 * 64;
 }
 
-MP3AudioDecoder::MP3AudioDecoder(int channels, int sampeRate, DecodedFrameCallback c) : callback(c), closed(false)
+AACAudioDecoder::AACAudioDecoder(int channels, int sampeRate, DecodedFrameCallback c) : callback(c), closed(false)
 {
 	// Initialize audio
-	pCodec = m_ffmpeg.codec.avcodec_find_decoder_by_name("libmp3lame");
+	//pCodec = m_ffmpeg.codec.avcodec_find_decoder_by_name("libfdk_aac");
 	if (!pCodec)
 	{
-		pCodec = m_ffmpeg.codec.avcodec_find_decoder(CODEC_ID_MP3);
+		pCodec = m_ffmpeg.codec.avcodec_find_decoder(CODEC_ID_AAC);
 	}
 
 	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
-	pCodecCtx->sample_fmt = pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_FLT;
+	pCodecCtx->sample_fmt = pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_S16;
 	pCodecCtx->channel_layout = pCodecCtx->request_channel_layout = AV_CH_LAYOUT_MONO;
 	pCodecCtx->sample_rate = sampeRate;
 	pCodecCtx->channels = pCodecCtx->request_channels = channels;
@@ -32,16 +32,17 @@ MP3AudioDecoder::MP3AudioDecoder(int channels, int sampeRate, DecodedFrameCallba
 	pFrame->format = pCodecCtx->sample_fmt;
 }
 
-MP3AudioDecoder::~MP3AudioDecoder()
+AACAudioDecoder::~AACAudioDecoder()
 {
 	this->Close();
 }
 
-void MP3AudioDecoder::DecodeFrame(AVPacket& pkt)
+void AACAudioDecoder::DecodeFrame(AVPacket& pkt)
 {
 	uint8_t inbuf[AUDIO_INBUF_SIZE + FF_INPUT_BUFFER_PADDING_SIZE];
 	
-	while (pkt.size)
+	int cbProcessed = 0;
+	while (cbProcessed < pkt.size)
 	{
 		// Use the "inbuf" because it has the extra room at the end that the encoder secretly needs.
 		//for (int i = 0; i < pkt.size / sizeof(int16_t); ++i)
@@ -50,15 +51,12 @@ void MP3AudioDecoder::DecodeFrame(AVPacket& pkt)
 		//	auto source = reinterpret_cast<float*>(pkt.data);
 		//	dest[i] = source[i];
 		//}
-		memcpy(inbuf, pkt.data, pkt.size);
+		memcpy(inbuf, pkt.data + cbProcessed, pkt.size - cbProcessed);
 
 		pkt.data = inbuf;
-		int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
-
 		int got_frame = 0;
 		auto length = m_ffmpeg.codec.avcodec_decode_audio4(pCodecCtx, pFrame, &got_frame, &pkt);
-		pkt.data += length;
-		pkt.size -= length;
+		cbProcessed += length;
 		if (got_frame)
 		{
 			if (this->callback)
@@ -69,7 +67,7 @@ void MP3AudioDecoder::DecodeFrame(AVPacket& pkt)
 	}
 }
 
-void MP3AudioDecoder::Close()
+void AACAudioDecoder::Close()
 {
 	if (!this->closed)
 	{
