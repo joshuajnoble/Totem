@@ -22,7 +22,7 @@ AACAudioEncoder::AACAudioEncoder(int channels, int sampeRate, FrameCallback c) :
 	pFrame->format = pCodecCtx->sample_fmt;
 
 	frameSizeSamples = pCodecCtx->frame_size;
-	frameSizeBytes = frameSizeSamples * sizeof(float) * channels;
+	frameSizeBytes = frameSizeSamples * sizeof(int16_t) * channels;
 	alignedBuffer.resize(frameSizeBytes);
 }
 
