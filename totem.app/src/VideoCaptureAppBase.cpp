@@ -4,6 +4,7 @@
 #include "ofxGstRTPClientAsVideoSource.h"
 #include <vector>
 #include <queue>
+#include "Windows.h"
 
 const int SAMPLE_RATE = 22050;
 const int AUDIO_CHANNELS = 1;
@@ -11,9 +12,8 @@ const int AUDIO_BUFFER_FRAME_RATE = 2; // Audio packets per second
 const int AUDIO_BUFFER_CIRCULAR_SIZE = 20;
 const int AUDIO_CHUNK_SIZE = (SAMPLE_RATE * AUDIO_CHANNELS * sizeof(float)) * AUDIO_BUFFER_FRAME_RATE;
 
-VideoCaptureAppBase::VideoCaptureAppBase() : audioBuffer(1024 * 1024)
+VideoCaptureAppBase::VideoCaptureAppBase() : audioBufferInput(1024 * 1024), audioBufferOutput(1024 * 1024)
 {
-
 }
 
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
@@ -41,18 +41,24 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	ofSoundStreamListDevices();
 	ofSoundStreamSetup(0, 1, this, SAMPLE_RATE, 512, 8);
 	//ofSoundStreamStart();
+	
+	outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
+	outputStream->setup(this, 2, 0, 44100, 512, 8);
+	outputStream->start();
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
 {
-
+	// Fill whatever we can into the last read buffer
+	// That way, if we get nothing it will still be the same samples from before
+	audioBufferOutput.Read(lastAudioOutputBuffer, bufferSize);
+	memcpy(output, lastAudioOutputBuffer, bufferSize);
 }
-
 
 void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)
 {
 	bufferSize *= sizeof(float);
-	audioBuffer.Write((uint8_t*)input, bufferSize);
+	audioBufferInput.Write((uint8_t*)input, bufferSize);
 }
 
 void VideoCaptureAppBase::update()
@@ -61,7 +67,7 @@ void VideoCaptureAppBase::update()
 
 	if (this->ffmpegVideoBroadcast.get())
 	{
-		int bytesReceived = audioBuffer.Read(audioToProcess + audioLeftover, sizeof(audioToProcess) - audioLeftover);
+		int bytesReceived = audioBufferInput.Read(audioToProcess + audioLeftover, sizeof(audioToProcess) - audioLeftover);
 		int bytesEncoded = this->ffmpegVideoBroadcast->WriteAudioFrame(audioToProcess, bytesReceived + audioLeftover);
 		audioLeftover += bytesReceived - bytesEncoded;
 		memmove(audioToProcess, audioToProcess + bytesEncoded, audioLeftover);
@@ -113,6 +119,8 @@ void VideoCaptureAppBase::update()
 void VideoCaptureAppBase::exit()
 {
 	//ofSoundStreamClose();
+	outputStream->close();
+	outputStream.reset();
 
 	this->videoSource->close();
 	this->ffmpegVideoBroadcast->Close();

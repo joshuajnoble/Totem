@@ -1,4 +1,6 @@
-﻿#include "PCMNetworkSender.h"
+﻿#include "ofMain.h"
+
+#include "PCMNetworkSender.h"
 #include "LegacyGuards.h"
 
 PCMNetworkSender::PCMNetworkSender() : initialized(false), closed(false)

@@ -34,9 +34,12 @@ private:
 	void PeerReady(UdpDiscovery::RemotePeerStatus& peer);
 	
 protected:
-	RingBuffer audioBuffer;
+	uint8_t lastAudioOutputBuffer[1024];
+	RingBuffer audioBufferInput;
+	RingBuffer audioBufferOutput;
 	int audioLeftover = 0;;
 	uint8_t audioToProcess[1024 * 1024];
+	ofPtr<ofSoundStream> outputStream;
 
 	UdpDiscovery udpDiscovery;
 	//std::vector<ofxFFmpegVideoReceiver *> remoteVideoSourcesConnecting;

@@ -18,23 +18,13 @@ MP3AudioDecoder::MP3AudioDecoder(int channels, int sampeRate, DecodedFrameCallba
 	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
-	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_FLT;
-	pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_FLT;
-	pCodecCtx->channel_layout = AV_CH_LAYOUT_MONO;
+	pCodecCtx->sample_fmt = pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_FLT;
+	pCodecCtx->channel_layout = pCodecCtx->request_channel_layout = AV_CH_LAYOUT_MONO;
 	pCodecCtx->sample_rate = sampeRate;
-	pCodecCtx->channels = channels;
+	pCodecCtx->channels = pCodecCtx->request_channels = channels;
 	pCodecCtx->bit_rate = 128000;
-
 
 	auto error = m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, nullptr);
-	pCodecCtx->codec_id = pCodec->id;
-	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
-	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_FLT;
-	pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_FLT;
-	pCodecCtx->channel_layout = AV_CH_LAYOUT_MONO;
-	pCodecCtx->sample_rate = sampeRate;
-	pCodecCtx->channels = channels;
-	pCodecCtx->bit_rate = 128000;
 
 	if (error < 0) throw std::runtime_error("Can't open audio codec.");
 
@@ -54,7 +44,14 @@ void MP3AudioDecoder::DecodeFrame(AVPacket& pkt)
 	while (pkt.size)
 	{
 		// Use the "inbuf" because it has the extra room at the end that the encoder secretly needs.
+		//for (int i = 0; i < pkt.size / sizeof(int16_t); ++i)
+		//{
+		//	auto dest = reinterpret_cast<int16_t*>(inbuf);
+		//	auto source = reinterpret_cast<float*>(pkt.data);
+		//	dest[i] = source[i];
+		//}
 		memcpy(inbuf, pkt.data, pkt.size);
+
 		pkt.data = inbuf;
 		int out_size = AVCODEC_MAX_AUDIO_FRAME_SIZE;
 

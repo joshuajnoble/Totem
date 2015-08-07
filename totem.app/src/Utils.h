@@ -126,6 +126,7 @@ public:
 	{
 		pWriter = pReader = buffer.data();
 		pEnd = pWriter + size;
+		memset(pWriter, 0, size);
 	}
 
 	void Write(const uint8_t* source, int cbSource)
