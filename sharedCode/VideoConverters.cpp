@@ -5,6 +5,7 @@
 #include "YUV420_H264_Decoder.h"
 #include "PCMAudioEncoder.h"
 #include "PCMNetworkSender.h"
+#include "MP3AudioEncoder.h"
 
 //
 // ConvertToNV12
@@ -181,7 +182,7 @@ EncodeRGBToH264Live::EncodeRGBToH264Live() :
 	this->audioStreamer.reset(new PCMNetworkSender());
 
 	this->encoder.reset(new EncodeRGBToH264(std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1)));
-	//this->audioEncoder.reset(new PCMAudioEncoder(1, 22050, std::bind(&EncodeRGBToH264Live::ProcessEncodedAudioFrame, this, std::placeholders::_1)));
+	this->audioEncoder.reset(new MP3AudioEncoder(1, 22050, std::bind(&EncodeRGBToH264Live::ProcessEncodedAudioFrame, this, std::placeholders::_1)));
 }
 
 EncodeRGBToH264Live::~EncodeRGBToH264Live()
@@ -204,9 +205,9 @@ void EncodeRGBToH264Live::WriteFrame(const uint8_t *srcBytes)
 	this->encoder->WriteFrame(srcBytes);
 }
 
-void EncodeRGBToH264Live::WriteAudioFrame(const uint8_t* audioSource, int cbAudioSource)
+int EncodeRGBToH264Live::WriteAudioFrame(const uint8_t* audioSource, int cbAudioSource)
 {
-	//this->audioEncoder->WriteFrame(audioSource, cbAudioSource);
+	return this->audioEncoder->WriteFrame(audioSource, cbAudioSource);
 }
 
 void EncodeRGBToH264Live::ProcessEncodedFrame(AVPacket& packet)
@@ -216,6 +217,7 @@ void EncodeRGBToH264Live::ProcessEncodedFrame(AVPacket& packet)
 
 void EncodeRGBToH264Live::ProcessEncodedAudioFrame(AVPacket& packet)
 {
+	//fwrite(packet.data, 1, packet.size, fp);
 	this->audioStreamer->WriteFrame(packet);
 }
 

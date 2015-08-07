@@ -35,6 +35,7 @@ private:
 	
 protected:
 	RingBuffer audioBuffer;
+	int audioLeftover = 0;;
 	uint8_t audioToProcess[1024 * 1024];
 
 	UdpDiscovery udpDiscovery;

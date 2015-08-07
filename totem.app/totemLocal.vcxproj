@@ -283,6 +283,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp" />
     <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp" />
     <ClCompile Include="..\sharedCode\H264NetworkSender.cpp" />
+    <ClCompile Include="..\sharedCode\MP3AudioEncoder.cpp" />
     <ClCompile Include="..\sharedCode\ofxFFmpegVideoReceiver.cpp" />
     <ClCompile Include="..\sharedCode\PCMAudioEncoder.cpp" />
     <ClCompile Include="..\sharedCode\PCMNetworkSender.cpp" />
@@ -402,6 +403,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h" />
     <ClInclude Include="..\sharedCode\H264NetworkReceiver.h" />
     <ClInclude Include="..\sharedCode\H264NetworkSender.h" />
+    <ClInclude Include="..\sharedCode\MP3AudioEncoder.h" />
     <ClInclude Include="..\sharedCode\ofxFFmpegVideoReceiver.h" />
     <ClInclude Include="..\sharedCode\PCMAudioEncoder.h" />
     <ClInclude Include="..\sharedCode\PCMNetworkSender.h" />

@@ -11,8 +11,6 @@ const int AUDIO_BUFFER_FRAME_RATE = 2; // Audio packets per second
 const int AUDIO_BUFFER_CIRCULAR_SIZE = 20;
 const int AUDIO_CHUNK_SIZE = (SAMPLE_RATE * AUDIO_CHANNELS * sizeof(float)) * AUDIO_BUFFER_FRAME_RATE;
 
-FILE *fp = NULL;
-
 VideoCaptureAppBase::VideoCaptureAppBase() : audioBuffer(1024 * 1024)
 {
 
@@ -40,9 +38,6 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	//peer.videoWidth = 640;
 	//peer.videoHeight = 480;
 	//this->PeerArrived(peer);
-
-	if (!fp) fp = fopen("rawaudioout.pcm", "wb");
-
 	ofSoundStreamListDevices();
 	ofSoundStreamSetup(0, 1, this, SAMPLE_RATE, 512, 8);
 	//ofSoundStreamStart();
@@ -66,9 +61,10 @@ void VideoCaptureAppBase::update()
 
 	if (this->ffmpegVideoBroadcast.get())
 	{
-		int bytesReceived = audioBuffer.Read(audioToProcess, sizeof(audioToProcess));
-		this->ffmpegVideoBroadcast->WriteAudioFrame(audioToProcess, bytesReceived);
-		fwrite(audioToProcess, 1, bytesReceived, fp);
+		int bytesReceived = audioBuffer.Read(audioToProcess + audioLeftover, sizeof(audioToProcess) - audioLeftover);
+		int bytesEncoded = this->ffmpegVideoBroadcast->WriteAudioFrame(audioToProcess, bytesReceived + audioLeftover);
+		audioLeftover += bytesReceived - bytesEncoded;
+		memmove(audioToProcess, audioToProcess + bytesEncoded, audioLeftover);
 	}
 
 	this->videoSource->update();
@@ -116,9 +112,7 @@ void VideoCaptureAppBase::update()
 
 void VideoCaptureAppBase::exit()
 {
-	fflush(fp);
 	//ofSoundStreamClose();
-	fclose(fp);
 
 	this->videoSource->close();
 	this->ffmpegVideoBroadcast->Close();
