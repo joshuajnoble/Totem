@@ -70,7 +70,7 @@ void H264NetworkReceiver::OtherThread()
 		"c=IN IP4 _REMOTEIP_\n"
 		"b=AS:128\n"
 		"a=rtpmap:97 MPEG4-GENERIC/22050/1\n"
-		"a = fmtp:97 profile - level - id = 1; mode = AAC - hbr; sizelength = 13; indexlength = 3; indexdeltalength = 3; config = 1388");
+		"a=fmtp:97 profile-level-id=1;mode=AAC-hbr;sizelength=13;indexlength=3;indexdeltalength=3; config=1388");
 
 	ReplaceAllSubstrings(sdpConfig, "_REMOTEIP_", this->remoteIp);
 	ReplaceAllSubstrings(sdpConfig, "_VIDEOPORT_", std::to_string(this->remoteVideoPort));
