@@ -35,6 +35,7 @@ private:
 	
 protected:
 	uint8_t lastAudioOutputBuffer[512*sizeof(float) * 2];
+	uint8_t mixbuffer[512 * sizeof(float) * 2];
 	RingBuffer audioBufferInput;
 	RingBuffer audioBufferOutput;
 	int audioLeftover = 0;;

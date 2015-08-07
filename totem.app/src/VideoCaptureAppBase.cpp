@@ -61,26 +61,39 @@ void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels
 
 	// Fill whatever we can into the last read buffer
 	// That way, if we get nothing it will still be the same samples from before
-	if (this->remoteVideoSources.size())
+	if (nChannels == 1)
 	{
-		if (nChannels == 1)
+		for (int i = 0; i < this->remoteVideoSources.size(); ++i)
 		{
-			auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
+			if (i == 0)
+			{
+				auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
+			}
+			else
+			{
+				auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(mixbuffer, bufferSize);
+				for (int x = 0; x < cbRead / sizeof(float); ++x)
+				{
+					((float*)lastAudioOutputBuffer)[x] += ((float*)mixbuffer)[x];
+					if (((float*)lastAudioOutputBuffer)[x] > 1) ((float*)lastAudioOutputBuffer)[x] = 1;
+					if (((float*)lastAudioOutputBuffer)[x] > -1) ((float*)lastAudioOutputBuffer)[x] = -1;
+				}
+			}
+
 			memcpy(output, lastAudioOutputBuffer, bufferSize);
-			if (cbRead < bufferSize)printf("* %d\n", cbRead);
 		}
-		else
-		{
-			auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize / 2);
-			memcpy(output, lastAudioOutputBuffer, bufferSize / 2);
-			memcpy(output + bufferSize / 2, lastAudioOutputBuffer, bufferSize);
-			// Convert from mono to stereo
-			//for (int i = 0; i < bufferSize / sizeof(float); ++i)
-			//{
-			//	((float*)output)[i*2]   = ((float*)lastAudioOutputBuffer)[i];
-			//	((float*)output)[i*2+1] = ((float*)lastAudioOutputBuffer)[i + 1];
-			//}
-		}
+	}
+	else
+	{
+		auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize / 2);
+		memcpy(output, lastAudioOutputBuffer, bufferSize / 2);
+		memcpy(output + bufferSize / 2, lastAudioOutputBuffer, bufferSize);
+		// Convert from mono to stereo
+		//for (int i = 0; i < bufferSize / sizeof(float); ++i)
+		//{
+		//	((float*)output)[i*2]   = ((float*)lastAudioOutputBuffer)[i];
+		//	((float*)output)[i*2+1] = ((float*)lastAudioOutputBuffer)[i + 1];
+		//}
 	}
 }
 
