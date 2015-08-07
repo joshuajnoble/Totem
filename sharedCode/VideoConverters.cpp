@@ -238,8 +238,7 @@ void EncodeRGBToH264Live::Close()
 DecodeH264LiveToRGB::DecodeH264LiveToRGB() :
 	closed(false)
 {
-	pcmFile = fopen("received.pcm", "wb");
-	mp3File = fopen("received.aac", "wb");
+	//pcmFile = fopen("received.pcm", "wb");
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_QUIET);
 	m_ffmpeg.utils.av_log_set_level(AV_LOG_VERBOSE);
 	//m_ffmpeg.utils.av_log_set_level(AV_LOG_DEBUG);
@@ -267,8 +266,7 @@ void DecodeH264LiveToRGB::Close()
 {
 	if (!this->closed)
 	{
-		fclose(pcmFile);
-		fclose(mp3File);
+		//fclose(pcmFile);
 		this->closed = true;
 		this->receiver->Close();
 	}
@@ -276,17 +274,16 @@ void DecodeH264LiveToRGB::Close()
 
 void DecodeH264LiveToRGB::ProcessEncodedAudioFrame(AVPacket& packet)
 {
-	fwrite(packet.data, 1, packet.size, mp3File);
 	this->audioDecoder->DecodeFrame(packet);
 }
 
 void DecodeH264LiveToRGB::ProcessDecodedAudioFrame(const AVFrame& frame)
 {
-	fwrite(frame.data[0], 1, frame.linesize[0], pcmFile);
+	//fwrite(frame.data[0], 1, frame.nb_samples* sizeof(float), pcmFile);
 
 	if (this->callbackAudio)
 	{
-		this->callbackAudio((uint8_t *)frame.data[0], frame.linesize[0]);
+		this->callbackAudio((uint8_t *)frame.data[0], frame.nb_samples* sizeof(float));
 	}
 }
 

@@ -142,8 +142,7 @@ private:
 
 	int m_width, m_height, m_fps;
 	std::vector<uint8_t> rgbBuffer;
-	FILE *mp3File;
-	FILE *pcmFile;
+	//FILE *pcmFile;
 
 public:
 	DecodeH264LiveToRGB();
