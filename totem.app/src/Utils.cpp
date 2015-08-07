@@ -147,15 +147,21 @@ bool ofxFunctionKeyframe::delayHasEnded() {
 };
 
 // ----------------------------------------------------------------------
-static LARGE_INTEGER s_frequency;
-static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+namespace
+{
+	static LARGE_INTEGER s_frequency;
+	static BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+	static int ticks = 0;
+}
 long long milliseconds_now()
 {
+	//return ticks++;
+
 	if (s_use_qpc)
 	{
 		LARGE_INTEGER now;
 		QueryPerformanceCounter(&now);
-		return (1000LL * now.QuadPart) / s_frequency.QuadPart;
+		return now.QuadPart;
 	}
 	else
 	{

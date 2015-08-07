@@ -1,3 +1,4 @@
+#include "..\..\totem.app\src\Utils.h"
 #include "YUV420_H264_Encoder.h"
 #include "LegacyGuards.h"
 
@@ -132,7 +133,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 	pFrame->data[1] = const_cast<uint8_t*>(framebuffer + yBlocksize);
 	//pFrame->data[2] = const_cast<uint8_t*>(framebuffer + yBlocksize + uBlockSize); // Only for YUV420P; not AV_PIX_FMT_NV12
 
-	pFrame->pts = this->cInputFrames++; //milliseconds_now();// timeGetTime();
+	//pFrame->pts = this->cInputFrames++; //milliseconds_now();// timeGetTime();
 	int got_output;
 
 	/* encode the image */

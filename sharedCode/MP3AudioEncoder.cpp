@@ -1,3 +1,4 @@
+#include "..\..\totem.app\src\Utils.h"
 #include "MP3AudioEncoder.h"
 #include <limits.h>
 
@@ -42,7 +43,8 @@ int MP3AudioEncoder::WriteFrame(const uint8_t* audioSource, int cbAudioSource)
 		pFrame->data[0] = const_cast<uint8_t*>(alignedBuffer.data());
 		pFrame->linesize[0] = frameSizeBytes;
 		pFrame->nb_samples = frameSizeSamples;
-		pFrame->pts = sampleCount * 100;
+		//pFrame->pts = sampleCount * 100;
+		//pFrame->pts = milliseconds_now();
 		sampleCount += pFrame->nb_samples;
 
 		int gotPacket = 0;
@@ -52,7 +54,6 @@ int MP3AudioEncoder::WriteFrame(const uint8_t* audioSource, int cbAudioSource)
 		pkt.size = 0;
 		pkt.pos = 0;
 		error = m_ffmpeg.codec.avcodec_encode_audio2(pCodecCtx, &pkt, pFrame, &gotPacket);
-
 		cbEncoded += frameSizeBytes;
 
 		if (gotPacket)
