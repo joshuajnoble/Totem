@@ -60,14 +60,15 @@ void H264NetworkReceiver::OtherThread()
 		"o=- 0 0 IN IP4 127.0.0.1\n"
 		"s=No Name\n"
 		"t=0 0\n"
-		"a=tool:libavformat 56.36.100\n"
+		"a=tool:libavformat 56.40.101\n"
 		"m=video _VIDEOPORT_ RTP/AVP 96\n"
 		"c=IN IP4 _REMOTEIP_\n"
 		"b=AS:1000\n"
 		"a=rtpmap:96 H264/90000\n"
-		"a=fmtp:96 packetization-mode=1; sprop-parameter-sets=J0IAKZWgKA9sBEABRYVATEtAJQ==,KM4BryA=; profile-level-id=420029\n"
-		"m=audio _AUDIOPORT_ RTP/AVP 14\n"
-		"c=IN IP4 _REMOTEIP_\n");
+		"a=fmtp:96 packetization-mode=1; sprop-parameter-sets=J00AFpaIBQHtgIgAUWFQCYloBKA=,KO4BryA=; profile-level-id=4D0016\n"
+		"m=audio _AUDIOPORT_ RTP/AVP 97\n"
+		"c=IN IP4 _REMOTEIP_\n"
+		"b=AS:128\n");
 
 	ReplaceAllSubstrings(sdpConfig, "_REMOTEIP_", this->remoteIp);
 	ReplaceAllSubstrings(sdpConfig, "_VIDEOPORT_", std::to_string(this->remoteVideoPort));

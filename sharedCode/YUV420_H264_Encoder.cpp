@@ -53,7 +53,6 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "preset", "4", 0);
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "profile", "77", 0);
 
 	auto error = m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, NULL);
