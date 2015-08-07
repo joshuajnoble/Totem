@@ -1,16 +1,16 @@
 #include "MP3AudioEncoder.h"
+#include <limits.h>
 
 MP3AudioEncoder::MP3AudioEncoder(int channels, int sampeRate, FrameCallback c) : callback(c)
 {
 	sampleCount = 0;
 
 	// Initialize audio
-	pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name("libmp3lame");
+	pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name("libfdk_aac");
 	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
-	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_FLT;
-	pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_FLT;
+	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_S16;
 	pCodecCtx->channel_layout = AV_CH_LAYOUT_MONO;
 	pCodecCtx->sample_rate = sampeRate;
 	pCodecCtx->channels = channels;

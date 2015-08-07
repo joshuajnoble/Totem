@@ -20,7 +20,7 @@ void PCMNetworkSender::Start(const std::string& networkAddress, int channels, in
 		this->out_filename = "rtp://" + this->out_filename;
 	}
 
-	auto pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name("libmp3lame");
+	auto pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name("libfdk_aac");
 	auto pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
