@@ -107,7 +107,8 @@ void ofRemoteApp::update()
 		TransitionTo_UISTATE_INTRO();
 	}
 
-	if (this->state == UISTATE_MAIN && this->totemSource->peerStatus.isConnectedToSession && !this->doneCylinderWelcome)
+	auto totem = this->totemSource();
+	if (this->state == UISTATE_MAIN &&  totem && totem->peerStatus.isConnectedToSession && !this->doneCylinderWelcome)
 	{
 		this->doneCylinderWelcome = true;
 		this->currentCylinderBarnDoorPosition = 0.33;
@@ -117,13 +118,13 @@ void ofRemoteApp::update()
 
 	if (!this->isInCall && this->state == UISTATE_INTRO && !this->isAnimatingConnectIconAlpha)
 	{
-		if (this->totemSource && !this->currentConnectIconAlpha)
+		if (totem && !this->currentConnectIconAlpha)
 		{
 			this->isAnimatingConnectIconAlpha = true;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
 			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
 		}
-		else if (!this->totemSource && this->currentConnectIconAlpha == 1.0)
+		else if (!totem && this->currentConnectIconAlpha == 1.0)
 		{
 			this->isAnimatingConnectIconAlpha = true;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
@@ -131,7 +132,7 @@ void ofRemoteApp::update()
 		}
 	}
 
-	if (this->totemSource && this->cylinderDisplay)
+	if (totem && this->cylinderDisplay)
 	{
 		this->cylinderDisplay->update();
 	}
@@ -277,14 +278,15 @@ int ofRemoteApp::displayHeight() const
 // ********************************************************************************************************************
 void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote)
 {
-	if (remote.peerStatus.isTotem && !this->totemSource)
+	if (remote.peerStatus.isTotem)
 	{
-		auto videoInfo = new RemoteVideoInfo(remote);
-		this->totemSource.reset(videoInfo);
-		this->cylinderDisplay.reset(new CylinderDisplay());
-		this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
-		this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
-		this->cylinderDisplay->setTotemVideoSource(remote.videoDraws, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
+		if (!this->cylinderDisplay)
+		{
+			this->cylinderDisplay.reset(new CylinderDisplay());
+			this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
+			this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
+			this->cylinderDisplay->setTotemVideoSource(remote.videoDraws, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
+		}
 	}
 	else
 	{
@@ -330,12 +332,14 @@ void ofRemoteApp::keyPressed(int key)
 // ********************************************************************************************************************
 void ofRemoteApp::mousePressed(int x, int y, int button)
 {
+	auto totem = this->totemSource();
+
 	if (this->state == UISTATE_INTRO && !this->isInCall)
 	{
 		if (button == 0)
 		{
 			// Did they click on the connect icon?
-			if (this->totemSource && this->connectIconRegion.inside(x, y))
+			if (totem && this->connectIconRegion.inside(x, y))
 			{
 				TransitionTo_UISTATE_MAIN();
 			}
@@ -348,7 +352,7 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 			// Did they click on the hangup icon?
 			ofRectangle hangupIconRegion;
 			hangupIconRegion.setFromCenter((int)this->hangupIconCenterX, (int)this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
-			if (this->totemSource && hangupIconRegion.inside(x, y))
+			if (totem && hangupIconRegion.inside(x, y))
 			{
 				TransitionTo_UISTATE_INTRO();
 			}
@@ -387,7 +391,8 @@ void ofRemoteApp::mouseDragged(int x, int y, int button)
 void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 {
 	this->state = UISTATE_INTRO;
-	
+	this->DisconnectSession();
+
 	this->isInCall = false;
 	this->doneCylinderWelcome = false;
 	this->canShowRemotes = false;
@@ -431,9 +436,9 @@ void ofRemoteApp::TransitionTo_UISTATE_STARTUP()
 {
 	// TODO: Transition with animations
 	// TODO: Mute and hide or reset the remote clients that are still connected ... or maybe just pause our video, so others don't recieve it yet.
-	this->DisconnectSession();
 	this->playlist.clear();
 	this->state = UISTATE_STARTUP;
+	this->DisconnectSession();
 }
 
 void ofRemoteApp::WelcomeSequenceComplete()
@@ -445,6 +450,11 @@ void ofRemoteApp::WelcomeSequenceComplete()
 void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 {
 	NewConnection(remote);
+
+	if (remote.peerStatus.isTotem && this->cylinderDisplay)
+	{
+		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
+	}
 }
 
 // ********************************************************************************************************************
@@ -452,7 +462,6 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
 	if (remote.peerStatus.isTotem)
 	{
-		this->totemSource.reset();
 		this->cylinderDisplay.reset();
 		TransitionTo_UISTATE_STARTUP();
 	}
@@ -460,16 +469,6 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 	{
 		// TODO: This could fail (if it is already animating), so we should queue this up or something.
 		RemoveRemoteVideoSource(remote);
-	}
-}
-
-
-// ********************************************************************************************************************
-void ofRemoteApp::Handle_ClientStreamAvailable(RemoteVideoInfo& remote)
-{
-	if (remote.peerStatus.isTotem && this->cylinderDisplay)
-	{
-		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
 	}
 }
 
@@ -494,4 +493,10 @@ void ofRemoteApp::onKeyframe(ofxPlaylistEventArgs& args)
 		this->cylinderDisplay->SetViewAngle(CylinderDisplay::NormalizeAngle(this->cylinderDisplay->GetViewAngle()), false);
 		this->canShowRemotes = true;
 	}
+}
+
+RemoteVideoInfo* ofRemoteApp::totemSource()
+{
+	auto found = std::find_if(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo& x)->bool { return x.peerStatus.isTotem; });
+	return found == this->peers.end() ? nullptr : &(*found);
 }

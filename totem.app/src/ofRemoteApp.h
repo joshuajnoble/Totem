@@ -38,7 +38,6 @@ private:
 	ofRectangle currentSelfieRegion;
 
 	ofPtr<CylinderDisplay> cylinderDisplay;
-	ofPtr<RemoteVideoInfo> totemSource;
 	ofImage connectIcon;
 	ofImage muteIcon;
 	ofImage hangupIcon;
@@ -58,6 +57,8 @@ private:
 
 	int networkInterfaceId;
 
+	RemoteVideoInfo* totemSource();
+
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
@@ -73,7 +74,7 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
-	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
+	//virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 	void NewConnection(const RemoteVideoInfo& remote);
 
 	virtual int displayWidth() const;

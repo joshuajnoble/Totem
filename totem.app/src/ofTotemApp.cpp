@@ -51,8 +51,8 @@ void ofTotemApp::setup()
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 
-	cortanaPlayIntro();
 	this->ConnectToSession();
+	cortanaPlayIntro();
 }
 
 //--------------------------------------------------------------

@@ -194,7 +194,6 @@ void VideoCaptureAppBase::update()
 		//peer.videoCroppable->update();
 		if (peer.remoteVideoSource->isVideoFrameNew())
 		{
-			this->Handle_ClientConnected(peer);
 		}
 	}
 }
@@ -246,6 +245,11 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	receiver->start(peer.ipAddress, peer.port);
 
 	this->peers.push_back(remote);
+
+	if (peer.isConnectedToSession)
+	{
+		PeerJoinedSession(peer);
+	}
 }
 
 void VideoCaptureAppBase::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer)
@@ -254,7 +258,8 @@ void VideoCaptureAppBase::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer
 	if (remote != this->peers.end())
 	{
 		remote->peerStatus.isConnectedToSession = true;
-		this->Handle_ClientStreamAvailable(*remote);
+		//this->Handle_ClientStreamAvailable(*remote);
+		this->Handle_ClientConnected(*remote);
 	}
 }
 

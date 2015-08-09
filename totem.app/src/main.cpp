@@ -157,7 +157,7 @@ namespace
 			remote.peerStatus.isTotem = true;
 			remote.videoDraws = unwrappedVideo;
 			remoteApp->NewConnection(remote);
-			remoteApp->Handle_ClientStreamAvailable(remote);
+			//remoteApp->Handle_ClientStreamAvailable(remote);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(remoteApp);

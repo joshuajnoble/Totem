@@ -56,7 +56,7 @@ protected:
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote) = 0;
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote) = 0;
-	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote) {};
+	//virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote) {};
 
 	void setupDiscovery();
 
