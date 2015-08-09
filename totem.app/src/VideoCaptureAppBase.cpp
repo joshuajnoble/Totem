@@ -201,7 +201,7 @@ void VideoCaptureAppBase::update()
 
 void VideoCaptureAppBase::ConnectToSession()
 {
-	this->udpDiscovery.SetConnectionStatus(false);
+	this->udpDiscovery.SetConnectionStatus(true);
 }
 
 void VideoCaptureAppBase::DisconnectSession()
