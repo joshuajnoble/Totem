@@ -62,8 +62,7 @@ class RemoteVideoInfo
 {
 public:
 	UdpDiscovery::RemotePeerStatus peerStatus;
-	ofxFFmpegVideoReceiver *netClient;
 	ofPtr<ofBaseVideoDraws> videoDraws;
 	ofPtr<CroppedDrawable> videoCroppable;
-	bool hasLiveFeed;
+	ofPtr<ofxFFmpegVideoReceiver> remoteVideoSource;
 };

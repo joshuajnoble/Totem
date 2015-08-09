@@ -107,7 +107,7 @@ void ofRemoteApp::update()
 		TransitionTo_UISTATE_INTRO();
 	}
 
-	if (this->state == UISTATE_MAIN && this->totemSource->hasLiveFeed && !this->doneCylinderWelcome)
+	if (this->state == UISTATE_MAIN && this->totemSource->peerStatus.isConnectedToSession && !this->doneCylinderWelcome)
 	{
 		this->doneCylinderWelcome = true;
 		this->currentCylinderBarnDoorPosition = 0.33;
@@ -210,9 +210,9 @@ void ofRemoteApp::draw()
 	//for (int i = 0; i < this->peers.size(); ++i)
 	//{
 	//	auto peer = this->peers[i];
-	//	if (peer.netClient && peer.netClient->isConnected())
+	//	if (peer.remoteVideoSource && peer.remoteVideoSource->isConnected())
 	//	{
-	//		auto image = peer.netClient->getVideoImage();
+	//		auto image = peer.remoteVideoSource->getVideoImage();
 	//		image.draw(0, i * 480);
 	//	}
 	//}
@@ -387,7 +387,8 @@ void ofRemoteApp::mouseDragged(int x, int y, int button)
 void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 {
 	this->state = UISTATE_INTRO;
-
+	
+	this->ConnectToSession();
 	this->isInCall = false;
 	this->doneCylinderWelcome = false;
 	this->canShowRemotes = false;
@@ -430,6 +431,7 @@ void ofRemoteApp::TransitionTo_UISTATE_STARTUP()
 {
 	// TODO: Transition with animations
 	// TODO: Mute and hide or reset the remote clients that are still connected ... or maybe just pause our video, so others don't recieve it yet.
+	this->DisconnectSession();
 	this->playlist.clear();
 	this->state = UISTATE_STARTUP;
 }

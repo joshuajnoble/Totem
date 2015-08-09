@@ -25,13 +25,11 @@ public:
 	virtual void exit();
 
 private:
-	//void newClient(string& args);
-	//void clientDisconnected(string& clientId);
-	//void clientStreamAvailable(string& clientId);
-
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
-	void PeerReady(UdpDiscovery::RemotePeerStatus& peer);
+	
+	void PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer);
 
 	static DWORD WINAPI AudioWriteThreadStarter(LPVOID);
 	void AudioWriteThread();
@@ -48,18 +46,19 @@ protected:
 	ofPtr<ofSoundStream> outputStream;
 
 	UdpDiscovery udpDiscovery;
-	//std::vector<ofxFFmpegVideoReceiver *> remoteVideoSourcesConnecting;
-	std::vector<ofxFFmpegVideoReceiver *> remoteVideoSources;
 	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
 
 	std::vector<RemoteVideoInfo> peers;
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 
+	void ConnectToSession();
+	void DisconnectSession();
+
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote) = 0;
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote) = 0;
 	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote) {};
 
-	void setupStreamManager();
+	void setupDiscovery();
 
 	virtual void audioOut(float * output, int bufferSize, int nChannels);
 	virtual void audioIn(float * input, int bufferSize, int nChannels);

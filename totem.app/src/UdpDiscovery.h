@@ -17,6 +17,7 @@ public:
 		int videoWidth;
 		int videoHeight;
 		bool isTotem;
+		bool isConnectedToSession;
 	};
 
 private:
@@ -46,12 +47,12 @@ private:
 	void HandleDisconnect(const string& remoteId, bool isTimeout = false);
 
 	Poco::Net::NetworkInterface interface;
+	bool isConnectedToSession;
 
 public:
 	virtual ~UdpDiscovery();
 
 	ofEvent<RemotePeerStatus> peerArrivedEvent;
-	ofEvent<RemotePeerStatus> peerReadyEvent;
 	ofEvent<RemotePeerStatus> peerLeftEvent;
 
 	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
@@ -62,4 +63,10 @@ public:
 	static Poco::Net::NetworkInterface::List GetAllNetworkInterfaces();
 	static Poco::Net::IPAddress GetBroadcastAddress(Poco::Net::NetworkInterface interface);
 	static std::string MACtoString(const std::vector<unsigned char>& mac, char delimter = ':');
+
+	// Communication channel stuff
+	void SetConnectionStatus(bool isConnected);
+	void HandleConnectionChange(RemotePeerStatus &peer);
+	ofEvent<RemotePeerStatus> peerJoinedSessionEvent;
+	ofEvent<RemotePeerStatus> peerLeftSessionEvent;
 };

@@ -30,7 +30,7 @@ VideoCaptureAppBase::VideoCaptureAppBase() :
 void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 {
 	this->udpDiscovery.setup(this->videoSource->getWidth(), this->videoSource->getHeight(), networkInterfaceId, isTotemSource);
-	this->setupStreamManager();
+	this->setupDiscovery();
 
 	// Initailize the broadcast stream!
 	auto myIp = this->udpDiscovery.GetLocalAddress();
@@ -51,13 +51,12 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	//this->PeerArrived(peer);
 	ofSoundStreamListDevices();
 	ofSoundStreamSetup(0, 1, this, SAMPLE_RATE, 512, 8);
+	this->audioWriteThreadHandle = CreateThread(NULL, 0, &VideoCaptureAppBase::AudioWriteThreadStarter, this, 0, NULL);
 	//ofSoundStreamStart();
 	
 	outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
 	//outputStream->setup(this, 2, 0, 44100, 512, 8);
 	outputStream->setup(this, 1, 0, 22050, 512, 8);
-
-	this->audioWriteThreadHandle = CreateThread(NULL, 0, &VideoCaptureAppBase::AudioWriteThreadStarter, this, 0, NULL);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
@@ -68,38 +67,43 @@ void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels
 	// That way, if we get nothing it will still be the same samples from before
 	if (nChannels == 1)
 	{
-		for (int i = 0; i < this->remoteVideoSources.size(); ++i)
+		int count = 0;
+		std::for_each(this->peers.begin(), this->peers.end(), [this, &count, output, bufferSize](RemoteVideoInfo& peer)->void
 		{
-			if (i == 0)
+			if (peer.peerStatus.isConnectedToSession && peer.remoteVideoSource)
 			{
-				auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
-			}
-			else
-			{
-				auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(mixbuffer, bufferSize);
-				for (int x = 0; x < cbRead / sizeof(float); ++x)
+				if (count == 0)
 				{
-					((float*)lastAudioOutputBuffer)[x] += ((float*)mixbuffer)[x];
-					if (((float*)lastAudioOutputBuffer)[x] > 1) ((float*)lastAudioOutputBuffer)[x] = 1;
-					if (((float*)lastAudioOutputBuffer)[x] > -1) ((float*)lastAudioOutputBuffer)[x] = -1;
+					auto cbRead = peer.remoteVideoSource->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
 				}
-			}
+				else
+				{
+					auto cbRead = peer.remoteVideoSource->audioBuffer.Read(mixbuffer, bufferSize);
+					for (int x = 0; x < cbRead / sizeof(float); ++x)
+					{
+						((float*)lastAudioOutputBuffer)[x] += ((float*)mixbuffer)[x];
+						if (((float*)lastAudioOutputBuffer)[x] > 1) ((float*)lastAudioOutputBuffer)[x] = 1;
+						if (((float*)lastAudioOutputBuffer)[x] > -1) ((float*)lastAudioOutputBuffer)[x] = -1;
+					}
+				}
 
-			memcpy(output, lastAudioOutputBuffer, bufferSize);
-		}
+				memcpy(output, lastAudioOutputBuffer, bufferSize);
+				++count;
+			}
+		});
 	}
-	else
-	{
-		auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize / 2);
-		memcpy(output, lastAudioOutputBuffer, bufferSize / 2);
-		memcpy(output + bufferSize / 2, lastAudioOutputBuffer, bufferSize);
-		// Convert from mono to stereo
-		//for (int i = 0; i < bufferSize / sizeof(float); ++i)
-		//{
-		//	((float*)output)[i*2]   = ((float*)lastAudioOutputBuffer)[i];
-		//	((float*)output)[i*2+1] = ((float*)lastAudioOutputBuffer)[i + 1];
-		//}
-	}
+	//else
+	//{
+	//	auto cbRead = this->remoteVideoSources[0]->audioBuffer.Read(lastAudioOutputBuffer, bufferSize / 2);
+	//	memcpy(output, lastAudioOutputBuffer, bufferSize / 2);
+	//	memcpy(output + bufferSize / 2, lastAudioOutputBuffer, bufferSize);
+	//	// Convert from mono to stereo
+	//	//for (int i = 0; i < bufferSize / sizeof(float); ++i)
+	//	//{
+	//	//	((float*)output)[i*2]   = ((float*)lastAudioOutputBuffer)[i];
+	//	//	((float*)output)[i*2+1] = ((float*)lastAudioOutputBuffer)[i + 1];
+	//	//}
+	//}
 }
 
 void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)
@@ -113,8 +117,9 @@ DWORD VideoCaptureAppBase::AudioWriteThreadStarter(LPVOID context)
 	if (context)
 	{
 		((VideoCaptureAppBase*)context)->AudioWriteThread();
-		return 0;
 	}
+
+	return 0;
 }
 
 void VideoCaptureAppBase::AudioWriteThread()
@@ -184,19 +189,24 @@ void VideoCaptureAppBase::update()
 	for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
 	{
 		auto peer = *iter;
-		peer.netClient->update();
+		peer.remoteVideoSource->update();
 		peer.videoDraws->update();
 		//peer.videoCroppable->update();
-		if (peer.netClient->isFrameNew())
+		if (peer.remoteVideoSource->isVideoFrameNew())
 		{
-			auto found = std::find(this->remoteVideoSources.begin(), this->remoteVideoSources.end(), peer.netClient);
-			if (found == this->remoteVideoSources.end())
-			{
-				this->remoteVideoSources.push_back(peer.netClient);
-				this->Handle_ClientConnected(peer);
-			}
+			this->Handle_ClientConnected(peer);
 		}
 	}
+}
+
+void VideoCaptureAppBase::ConnectToSession()
+{
+	this->udpDiscovery.SetConnectionStatus(false);
+}
+
+void VideoCaptureAppBase::DisconnectSession()
+{
+	this->udpDiscovery.SetConnectionStatus(false);
 }
 
 void VideoCaptureAppBase::exit()
@@ -217,29 +227,18 @@ void VideoCaptureAppBase::exit()
 	//fclose(fp);
 	//fclose(fpraw);
 
-	//for (auto iter = this->remoteVideoSourcesConnecting.begin(); iter != this->remoteVideoSourcesConnecting.end(); ++iter)
-	//{
-	//	auto remoteVideoSource = *iter;
-	//	remoteVideoSource->Close();
-	//	delete remoteVideoSource;
-	//}
-	
-	for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
+	for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
 	{
-		auto remoteVideoSource = *iter;
-		remoteVideoSource->Close();
-		delete remoteVideoSource;
+		iter->remoteVideoSource->Close();
 	}
 }
 
 void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 {
 	auto receiver = new ofxFFmpegVideoReceiver(peer.id);
-	//this->remoteVideoSourcesConnecting.push_back(receiver);
 
 	RemoteVideoInfo remote;
-	remote.hasLiveFeed = false;
-	remote.netClient = receiver;
+	remote.remoteVideoSource = ofPtr<ofxFFmpegVideoReceiver>(receiver);
 	remote.peerStatus = peer;
 	remote.videoDraws = ofPtr<ofBaseVideoDraws>(new ofxFFmpegVideoReceiverAsVideoSource(receiver));
 	remote.videoCroppable = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(remote.videoDraws));
@@ -249,77 +248,48 @@ void VideoCaptureAppBase::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 	this->peers.push_back(remote);
 }
 
-void VideoCaptureAppBase::PeerReady(UdpDiscovery::RemotePeerStatus& peer)
+void VideoCaptureAppBase::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer)
 {
-	//if (!connected)
-	//{
-	//	connected = true;
-	//	StreamManager::clientParameters connection;
-	//	connection.clientID = peer.id;
-	//	auto myIp = this->udpDiscovery.GetLocalAddress();
-	//	auto str = myIp.toString();
-	//	str = "239.0.0." + str.substr(str.length() - 3);
-	//	connection.ipAddress = str;// = peer.ipAddress;
-	//	connection.remoteVideoPort = peer.assignedRemotePort;
-	//	connection.remoteAudioPort = peer.assignedRemotePort + 5;
-	//	this->streamManager.newServer(connection);
-	//}
-	
 	auto remote = GetRemoteFromClientId(peer.id);
 	if (remote != this->peers.end())
 	{
-		remote->hasLiveFeed = false;
+		remote->peerStatus.isConnectedToSession = true;
 		this->Handle_ClientStreamAvailable(*remote);
 	}
 }
 
+void VideoCaptureAppBase::PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer)
+{
+	// Treat it just a like a clean disconnect and then we should get a reconnect
+	// as soon as we get another UDP DNS packet.
+	PeerLeft(peer);
+}
+
 void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 {
-	//this->streamManager.ClientDisconnected(peer.id);
-	for (auto iter = this->remoteVideoSources.begin(); iter != this->remoteVideoSources.end(); ++iter)
-	{
-		auto remoteVideoSource = *iter;
-		if (remoteVideoSource->clientId == peer.id)
-		{
-			remoteVideoSource->Close();
-			delete remoteVideoSource;
-			this->remoteVideoSources.erase(iter);
-			break;
-		}
-	}
-
 	auto remote = GetRemoteFromClientId(peer.id);
 	if (remote != this->peers.end())
 	{
 		auto peer = *remote;
+
+		peer.remoteVideoSource->Close();
+
 		this->peers.erase(remote);
 		this->Handle_ClientDisconnected(peer);
 	}
 }
 
-void VideoCaptureAppBase::setupStreamManager()
+void VideoCaptureAppBase::setupDiscovery()
 {
-	//streamManager.setup(this->videoSource->getWidth(), this->videoSource->getHeight());
-
 	ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
-	ofAddListener(udpDiscovery.peerReadyEvent, this, &VideoCaptureAppBase::PeerReady);
 	ofAddListener(udpDiscovery.peerLeftEvent, this, &VideoCaptureAppBase::PeerLeft);
 
-	//ofAddListener(streamManager.newClientEvent, this, &VideoCaptureAppBase::newClient);
-	//ofAddListener(streamManager.clientDisconnectedEvent, this, &VideoCaptureAppBase::clientDisconnected);
-	//ofAddListener(streamManager.clientStreamAvailableEvent, this, &VideoCaptureAppBase::clientStreamAvailable);
+	ofAddListener(udpDiscovery.peerJoinedSessionEvent, this, &VideoCaptureAppBase::PeerJoinedSession);
+	ofAddListener(udpDiscovery.peerLeftSessionEvent, this, &VideoCaptureAppBase::PeerLeftSession);
 }
 
 std::vector<RemoteVideoInfo>::iterator VideoCaptureAppBase::GetRemoteFromClientId(const string& clientId)
 {
-	for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
-	{
-		auto remote = *iter;
-		if (remote.peerStatus.id == clientId)
-		{
-			return iter;
-		}
-	}
-
-	return this->peers.end();
+	auto found = std::find_if(this->peers.begin(), this->peers.end(), [clientId](RemoteVideoInfo &x)->bool { return x.peerStatus.id == clientId; });
+	return found;
 }

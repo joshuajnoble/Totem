@@ -98,7 +98,7 @@ public:
 	void update()
 	{
 		// We don't call this->client.update() because that should already be called in the main window update loop.
-		if (this->client->isFrameNew())
+		if (this->client->isVideoFrameNew())
 		{
 			this->videoImage = this->client->getVideoImage();
 		}
@@ -113,7 +113,7 @@ public:
 	// ofBaseVideoDraws implementation
 	float getHeight() { return this->videoImage.getHeight(); }
 	float getWidth() { return this->videoImage.getWidth(); }
-	bool isFrameNew() { return this->client->isFrameNew(); }
+	bool isFrameNew() { return this->client->isVideoFrameNew(); }
 	ofTexture & getTextureReference() { return this->videoImage.getTextureReference(); }
 	void setUseTexture(bool bUseTex) { this->videoImage.setUseTexture(bUseTex); }
 };

@@ -57,6 +57,7 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	}
 
 	this->isTotem = isTotemSource;
+	this->isConnectedToSession = false;
 
 	Poco::Net::NetworkInterface interface;
 	for (auto iter = interfaces.begin(); !found && iter != interfaces.end(); ++iter)
@@ -138,7 +139,7 @@ void UdpDiscovery::SendJsonPayload(const ofxJSONElement& jsonPayload)
 
 void UdpDiscovery::update()
 {
-	// This is locking myNextPort, remoteClientMap and incomingMessage.  That is why it is at function scope right now.
+	// This is locking remoteClientMap and incomingMessage.  That is why it is at function scope right now.
 	Poco::Mutex::ScopedLock lock(this->portmutex);
 
 	auto currentTime = ofGetElapsedTimef();
@@ -152,13 +153,8 @@ void UdpDiscovery::update()
 		jsonPayload["videoWidth"] = this->videoWidth;
 		jsonPayload["videoHeight"] = this->videoHeight;
 		jsonPayload["totem"] = this->isTotem;
+		jsonPayload["connected"] = this->isConnectedToSession;
 		
-		// Publish all of our port mappings to the other clients
-		//for (auto iter = this->remoteClientMap.begin(); iter != this->remoteClientMap.end(); ++iter)
-		//{
-		//	jsonPayload[iter->second.id] = iter->second.assignedLocalPort;
-		//}
-
 		SendJsonPayload(jsonPayload);
 
 		// Check for expired remote peers and handle "disconnect" from timeout
@@ -167,7 +163,7 @@ void UdpDiscovery::update()
 		{
 			if (currentTime >= iter->second.disconnectTime)
 			{
-				peersToRemove.push_back(iter->second.id);
+				//peersToRemove.push_back(iter->second.id);
 			}
 		}
 
@@ -203,6 +199,13 @@ void UdpDiscovery::update()
 						peerIter = this->remoteClientMap.find(remoteId);
 					}
 
+					bool isPeerConnectedToSession = jsonPayload["connected"].asBool();
+					if (peerIter->second.isConnectedToSession != isPeerConnectedToSession)
+					{
+						peerIter->second.isConnectedToSession = isPeerConnectedToSession;
+						HandleConnectionChange(peerIter->second);
+					}
+
 					peerIter->second.disconnectTime = currentTime + this->broadcastMissingDuration;
 
 					// The remote port won't be here the first time, so keep watching for it.
@@ -233,6 +236,17 @@ void UdpDiscovery::update()
 	}
 }
 
+void UdpDiscovery::HandleConnectionChange(RemotePeerStatus &peer)
+{
+	if (peer.isConnectedToSession)
+	{
+		ofNotifyEvent(this->peerJoinedSessionEvent, peer, this);
+	}
+	else 
+	{
+		ofNotifyEvent(this->peerLeftSessionEvent, peer, this);
+	}
+}
 
 void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const string& remoteAddress)
 {
@@ -243,12 +257,11 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
 	peer.isTotem = jsonPayload["totem"].asBool();
+	peer.isConnectedToSession = jsonPayload["connected"].asBool();
 
 	this->remoteClientMap[peer.id] = peer;
-	//this->myNextPort += this->portIncrement;
 
 	ofNotifyEvent(this->peerArrivedEvent, peer, this);
-	ofNotifyEvent(this->peerReadyEvent, peer, this);
 
 #ifdef _DEBUG
 	std::stringstream debug;
@@ -335,4 +348,9 @@ Poco::Net::IPAddress UdpDiscovery::GetBroadcastAddress(Poco::Net::NetworkInterfa
 Poco::Net::IPAddress UdpDiscovery::GetLocalAddress()
 {
 	return this->interface.address();
+}
+
+void UdpDiscovery::SetConnectionStatus(bool isConnected)
+{
+	this->isConnectedToSession = isConnected;
 }

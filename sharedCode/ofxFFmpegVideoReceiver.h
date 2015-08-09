@@ -11,16 +11,16 @@ private:
 	ofPixels pixels;
 	ofImage mainThreadImage;
 	ofMutex mutex;
-	bool m_isFrameNew, m_isFrameNewAudio;
+	bool m_isFrameNewVideo, m_isFrameNewAudio;
 	bool hasEverReceivedAFrame;
-	volatile LONG m_hasFrameChanged;
+	volatile LONG m_hasFrameChangedVideo;
 	volatile LONG m_hasFrameChangedAudio;
 
 	void ProcessRgbFrame(const uint8_t*, int);
 	void ProcessPCMFrame(const uint8_t*buffer, int bufferSize);
 
 public:
-	bool isFrameNew();
+	bool isVideoFrameNew();
 	bool isAudioFrameNew();
 	ofxFFmpegVideoReceiver(const std::string &clientId);
 	~ofxFFmpegVideoReceiver();

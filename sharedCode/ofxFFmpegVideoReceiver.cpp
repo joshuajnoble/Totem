@@ -2,9 +2,9 @@
 
 ofxFFmpegVideoReceiver::ofxFFmpegVideoReceiver(const std::string &id) :
 	clientId(id),
-	m_isFrameNew(false),
+	m_isFrameNewVideo(false),
 	hasEverReceivedAFrame(false),
-	m_hasFrameChanged(false),
+	m_hasFrameChangedVideo(false),
 	m_isFrameNewAudio(false),
 	m_hasFrameChangedAudio(false),
 	audioBuffer(512 * sizeof(float) * 15)
@@ -23,9 +23,9 @@ void ofxFFmpegVideoReceiver::start(const std::string& networkAddress, uint16_t p
 	this->receiver->Start(networkAddress, port, videoCallback, audioCallback);
 }
 
-bool ofxFFmpegVideoReceiver::isFrameNew()
+bool ofxFFmpegVideoReceiver::isVideoFrameNew()
 {
-	return this->m_isFrameNew;
+	return this->m_isFrameNewVideo;
 }
 
 bool ofxFFmpegVideoReceiver::isAudioFrameNew()
@@ -37,7 +37,7 @@ void ofxFFmpegVideoReceiver::ProcessRgbFrame(const uint8_t*buffer, int bufferSiz
 {
 	ofScopedLock lock(this->mutex);
 	this->pixels.setFromPixels(buffer, this->receiver->width(), this->receiver->height(), 3);
-	InterlockedExchange(&this->m_hasFrameChanged, 1);
+	InterlockedExchange(&this->m_hasFrameChangedVideo, 1);
 	hasEverReceivedAFrame = true;
 }
 
@@ -50,12 +50,12 @@ void ofxFFmpegVideoReceiver::ProcessPCMFrame(const uint8_t*buffer, int bufferSiz
 
 void ofxFFmpegVideoReceiver::update()
 {
-	this->m_isFrameNew = false;
-	if (InterlockedCompareExchange(&this->m_hasFrameChanged, 0, 1))
+	this->m_isFrameNewVideo = false;
+	if (InterlockedCompareExchange(&this->m_hasFrameChangedVideo, 0, 1))
 	{
 		ofScopedLock lock(this->mutex);
 		this->mainThreadImage.setFromPixels(this->pixels);
-		this->m_isFrameNew = true;
+		this->m_isFrameNewVideo = true;
 	}
 
 	this->m_isFrameNewAudio = false;

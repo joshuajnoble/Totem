@@ -155,7 +155,6 @@ namespace
 			remote.peerStatus.videoWidth = unwrappedVideo->getWidth();
 			remote.peerStatus.videoHeight = unwrappedVideo->getHeight();
 			remote.peerStatus.isTotem = true;
-			remote.hasLiveFeed = true;
 			remote.videoDraws = unwrappedVideo;
 			remoteApp->NewConnection(remote);
 			remoteApp->Handle_ClientStreamAvailable(remote);
