@@ -388,7 +388,6 @@ void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 {
 	this->state = UISTATE_INTRO;
 	
-	this->ConnectToSession();
 	this->isInCall = false;
 	this->doneCylinderWelcome = false;
 	this->canShowRemotes = false;
@@ -405,6 +404,7 @@ void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 	this->isInCall = true;
 	this->doneCylinderWelcome = false;
 	this->canShowRemotes = false;
+	this->ConnectToSession();
 
 	// Transition the selfie view to the "rear view mirror" mode.
 	this->isAnimatingConnectIconAlpha = true;
