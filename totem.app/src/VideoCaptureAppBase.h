@@ -32,7 +32,12 @@ private:
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerReady(UdpDiscovery::RemotePeerStatus& peer);
-	
+
+	static DWORD WINAPI AudioWriteThreadStarter(LPVOID);
+	void AudioWriteThread();
+	HANDLE audioWriteThreadHandle;
+	HANDLE audioWriteThreadCancel;
+
 protected:
 	uint8_t lastAudioOutputBuffer[512*sizeof(float) * 2];
 	uint8_t mixbuffer[512 * sizeof(float) * 2];

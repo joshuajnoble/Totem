@@ -18,7 +18,10 @@ namespace
 	//FILE *fpraw;
 }
 
-VideoCaptureAppBase::VideoCaptureAppBase() : audioBufferInput(1024 * 16), audioBufferOutput(1024 * 1024)
+VideoCaptureAppBase::VideoCaptureAppBase() :
+	audioBufferInput(1024 * 16),
+	audioBufferOutput(1024 * 1024),
+	audioWriteThreadCancel(CreateEventA(NULL, TRUE, FALSE, NULL))
 {
 	//fp = fopen("raw-s16mono22k.pcm", "wb");
 	//fpraw = fopen("raw-f32mono22k.pcm", "wb");
@@ -53,6 +56,8 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
 	//outputStream->setup(this, 2, 0, 44100, 512, 8);
 	outputStream->setup(this, 1, 0, 22050, 512, 8);
+
+	this->audioWriteThreadHandle = CreateThread(NULL, 0, &VideoCaptureAppBase::AudioWriteThreadStarter, this, 0, NULL);
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
@@ -103,38 +108,53 @@ void VideoCaptureAppBase::audioIn(float * input, int bufferSize, int nChannels)
 	audioBufferInput.Write((uint8_t*)input, bufferSize);
 }
 
+DWORD VideoCaptureAppBase::AudioWriteThreadStarter(LPVOID context)
+{
+	if (context)
+	{
+		((VideoCaptureAppBase*)context)->AudioWriteThread();
+		return 0;
+	}
+}
+
+void VideoCaptureAppBase::AudioWriteThread()
+{
+	while (WaitForSingleObject(this->audioWriteThreadCancel, 0) == WAIT_TIMEOUT)
+	{
+		if (this->ffmpegVideoBroadcast.get())
+		{
+			int bytesReceived = audioBufferInput.Read(audioToProcess + audioLeftover, sizeof(audioToProcess) - audioLeftover);
+			if (bytesReceived)
+			{
+				//fwrite(audioToProcess + audioLeftover, 1, bytesReceived, fpraw);
+
+				// Convert to S16 sample depth (IN PLACE)
+				float *src = (float *)(audioToProcess + audioLeftover);
+				int16_t *dst = (int16_t*)src;
+				for (int i = 0; i < bytesReceived / sizeof(float); ++i)
+				{
+					float samplef = src[i];
+					int16_t samplei;
+					if (samplef >= 0)
+						samplei = (int16_t)(samplef * SHRT_MAX);
+					else
+						samplei = (int16_t)(samplef * (SHRT_MAX - 1));
+					dst[i] = samplei;
+				}
+
+				bytesReceived /= 2;
+				int bytesEncoded = this->ffmpegVideoBroadcast->WriteAudioFrame(audioToProcess, bytesReceived + audioLeftover);
+				//fwrite(audioToProcess, 1, bytesEncoded, fp);
+				audioLeftover += bytesReceived - bytesEncoded;
+				memmove(audioToProcess, audioToProcess + bytesEncoded, audioLeftover);
+			}
+		}
+	}
+}
+
 void VideoCaptureAppBase::update()
 {
 	this->udpDiscovery.update();
-
-	if (this->ffmpegVideoBroadcast.get())
-	{
-		int bytesReceived = audioBufferInput.Read(audioToProcess + audioLeftover, sizeof(audioToProcess) - audioLeftover);
-		if (bytesReceived)
-		{
-			//fwrite(audioToProcess + audioLeftover, 1, bytesReceived, fpraw);
-
-			// Convert to S16 sample depth (IN PLACE)
-			float *src = (float *)(audioToProcess + audioLeftover);
-			int16_t *dst = (int16_t*)src;
-			for (int i = 0; i < bytesReceived / sizeof(float); ++i)
-			{
-				float samplef = src[i];
-				int16_t samplei;
-				if (samplef >= 0)
-					samplei = (int16_t)(samplef * SHRT_MAX);
-				else
-					samplei = (int16_t)(samplef * (SHRT_MAX - 1));
-				dst[i] = samplei;
-			}
-
-			bytesReceived /= 2;
-			int bytesEncoded = this->ffmpegVideoBroadcast->WriteAudioFrame(audioToProcess, bytesReceived + audioLeftover);
-			//fwrite(audioToProcess, 1, bytesEncoded, fp);
-			audioLeftover += bytesReceived - bytesEncoded;
-			memmove(audioToProcess, audioToProcess + bytesEncoded, audioLeftover);
-		}
-	}
 
 	this->videoSource->update();
 	if (this->videoSource->isFrameNew())
@@ -187,6 +207,9 @@ void VideoCaptureAppBase::exit()
 		outputStream->close();
 		outputStream.reset();
 	}
+
+	SetEvent(this->audioWriteThreadCancel);
+	WaitForSingleObject(this->audioWriteThreadHandle, INFINITE);
 
 	this->videoSource->close();
 	this->ffmpegVideoBroadcast->Close();
