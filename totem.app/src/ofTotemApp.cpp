@@ -246,6 +246,7 @@ void ofTotemApp::cortanaPlayIntro()
 {
 	cortanaLoadClip(CORTANA_GREET);
 	this->cortanaPlayer.setLoopState(OF_LOOP_NONE);
+	this->cortanaPlayer.setSpeed(0.5);
 	this->cortanaPlayer.play();
 }
 
@@ -253,5 +254,6 @@ void ofTotemApp::cortanaPlayIdle()
 {
 	cortanaLoadClip(CORTANA_IDLE);
 	this->cortanaPlayer.setLoopState(OF_LOOP_NORMAL);
+	this->cortanaPlayer.setSpeed(0.5);
 	this->cortanaPlayer.play();
 }
