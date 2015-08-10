@@ -7,7 +7,8 @@ ofxFFmpegVideoReceiver::ofxFFmpegVideoReceiver(const std::string &id) :
 	m_hasFrameChangedVideo(false),
 	m_isFrameNewAudio(false),
 	m_hasFrameChangedAudio(false),
-	audioBuffer(512 * sizeof(float) * 15)
+	hasFilledAudioBuffer(false),
+	audioBuffer(512 * sizeof(float) * 10)
 {
 }
 
@@ -46,6 +47,10 @@ void ofxFFmpegVideoReceiver::ProcessPCMFrame(const uint8_t*buffer, int bufferSiz
 	this->audioBuffer.Write(buffer, bufferSize);
 	InterlockedExchange(&this->m_hasFrameChangedAudio, 1);
 	hasEverReceivedAFrame = true;
+	if (this->audioBuffer.written >= sizeof(float) * 512 * 6)
+	{
+		InterlockedExchange(&this->hasFilledAudioBuffer, 1);
+	}
 }
 
 void ofxFFmpegVideoReceiver::update()
@@ -61,7 +66,7 @@ void ofxFFmpegVideoReceiver::update()
 	this->m_isFrameNewAudio = false;
 	if (InterlockedCompareExchange(&this->m_hasFrameChangedAudio, 0, 1))
 	{
-		this->m_isFrameNewAudio = true;
+		this->m_isFrameNewAudio = this->hasFilledAudioBuffer;
 	}
 }
 

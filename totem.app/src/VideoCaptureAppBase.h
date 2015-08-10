@@ -42,7 +42,7 @@ protected:
 	RingBuffer audioBufferInput;
 	RingBuffer audioBufferOutput;
 	int audioLeftover = 0;;
-	uint8_t audioToProcess[1024 * 1024];
+	uint8_t audioToProcess[1024 * 200];
 	ofPtr<ofSoundStream> outputStream;
 
 	UdpDiscovery udpDiscovery;

@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
 
-//#define SHOW_FPS
+#define SHOW_FPS
 
 using namespace ofxCv;
 using namespace cv;
@@ -111,15 +111,17 @@ void ofTotemApp::draw()
 		else
 		{
 			auto output = this->totemDisplay.getDisplay(0);
-			output.begin();
 
 			if (this->netImpersonate.get())
 			{	// DEBUG
+				output.begin();
 				this->netImpersonate->update();
 				if (this->netImpersonate->isFrameNew())
 				{
 					Utils::DrawCroppedToFit(*this->netImpersonate.get(), (int)output.getWidth(), (int)output.getHeight());
 				}
+				output.end();
+				this->totemDisplay.drawCloned();
 			}
 			else
 			{
@@ -133,73 +135,82 @@ void ofTotemApp::draw()
 				}
 
 				int remoteSourceCount = sources.size();
-
 				if (remoteSourceCount == 0)
 				{
-					ofBackground(0);
+					if (this->cortanaPlayer.isFrameNew())
+					{
+						output.begin();
+						ofBackground(0);
 
-					auto halfHeight = (int)output.getHeight() / 2;
-					auto halfWidth = (int)output.getWidth() / 2;
-					ofRectangle region(0, 0, this->cortanaPlayer.width, this->cortanaPlayer.height);
+						auto halfHeight = (int)output.getHeight() / 2;
+						auto halfWidth = (int)output.getWidth() / 2;
+						ofRectangle region(0, 0, this->cortanaPlayer.width, this->cortanaPlayer.height);
 
-					auto scale = 1.0;// output.getWidth() / this->cortanaPlayer.getWidth();
-					region.scaleFromCenter(scale, scale);
+						auto scale = 1.0;// output.getWidth() / this->cortanaPlayer.getWidth();
+						region.scaleFromCenter(scale, scale);
 
-					region.translateY(halfHeight - this->cortanaPlayer.height / 2 - 30 * scale);
-					region.translateX(halfWidth - this->cortanaPlayer.width / 2);
+						region.translateY(halfHeight - this->cortanaPlayer.height / 2 - 30 * scale);
+						region.translateX(halfWidth - this->cortanaPlayer.width / 2);
 
-					this->cortanaPlayer.draw(region);
+						this->cortanaPlayer.draw(region);
+						output.end();
+					}
+					this->totemDisplay.drawCloned();
 				}
 				else
 				{
-					auto margin = 10;
-					auto halfMargin = margin / 2;
-					auto halfHeight = (int)output.getHeight() / 2;
-					auto halfWidth = (int)output.getWidth() / 2;
-
-					ofBackground(BACKGROUND_COLOR);
-
-					if (remoteSourceCount == 1)
+					bool anyUpdates = std::any_of(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo &x)->bool { return x.remoteVideoSource->isVideoFrameNew(); });
+					if (anyUpdates)
 					{
-						auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
-						Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+						auto margin = 10;
+						auto halfMargin = margin / 2;
+						auto halfHeight = (int)output.getHeight() / 2;
+						auto halfWidth = (int)output.getWidth() / 2;
+
+						output.begin();
+						ofBackground(BACKGROUND_COLOR);
+
+						if (remoteSourceCount == 1)
+						{
+							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+						}
+						else if (remoteSourceCount == 2)
+						{
+							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+
+							ofPushMatrix();
+
+							videoSource = this->peers[sources[1]].remoteVideoSource->getVideoImage();
+							ofTranslate(0, halfHeight + halfMargin);
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
+
+							ofPopMatrix();
+						}
+						else if (remoteSourceCount == 3)
+						{
+							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
+
+							ofPushMatrix();
+
+							videoSource = this->peers[sources[1]].remoteVideoSource->getVideoImage();
+							ofTranslate(0, halfHeight + halfMargin);
+							Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
+
+							videoSource = this->peers[sources[2]].remoteVideoSource->getVideoImage();
+							ofTranslate(halfWidth + halfMargin, 0);
+							Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
+
+							ofPopMatrix();
+						}
+
+						output.end();
 					}
-					else if (remoteSourceCount == 2)
-					{
-						auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
-						Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
-
-						ofPushMatrix();
-
-						videoSource = this->peers[sources[1]].remoteVideoSource->getVideoImage();
-						ofTranslate(0, halfHeight + halfMargin);
-						Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
-
-						ofPopMatrix();
-					}
-					else if (remoteSourceCount == 3)
-					{
-						auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
-						Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
-
-						ofPushMatrix();
-
-						videoSource = this->peers[sources[1]].remoteVideoSource->getVideoImage();
-						ofTranslate(0, halfHeight + halfMargin);
-						Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
-
-						videoSource = this->peers[sources[2]].remoteVideoSource->getVideoImage();
-						ofTranslate(halfWidth + halfMargin, 0);
-						Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
-
-						ofPopMatrix();
-					}
-
+					this->totemDisplay.drawCloned();
 				}
 			}
-
-			output.end();
-			this->totemDisplay.drawCloned();
 		}
 	}
 

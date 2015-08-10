@@ -12,7 +12,8 @@ private:
 	ofImage mainThreadImage;
 	ofMutex mutex;
 	bool m_isFrameNewVideo, m_isFrameNewAudio;
-	bool hasEverReceivedAFrame;
+	volatile bool hasEverReceivedAFrame;
+	volatile LONG hasFilledAudioBuffer;
 	volatile LONG m_hasFrameChangedVideo;
 	volatile LONG m_hasFrameChangedAudio;
 

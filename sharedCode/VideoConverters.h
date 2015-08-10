@@ -4,6 +4,7 @@
 //#include "YUV420_H264_Encoder.h"
 #include <string>
 #include <vector>
+#include <queue>
 #include <fstream>
 
 typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallback;
@@ -109,12 +110,20 @@ private:
 	void ProcessEncodedFrame(AVPacket&);
 	void ProcessEncodedAudioFrame(AVPacket&);
 
+	HANDLE thread;
+	HANDLE threadExit;
+	CRITICAL_SECTION lock;
+	std::queue<uint8_t *> videoQueue;
+
+	static DWORD WINAPI VideoThreadStarter(LPVOID);
+	void VideoProcessingThread();
+
 public:
 	EncodeRGBToH264Live();
 	~EncodeRGBToH264Live();
 
 	void Start(const std::string& ipAddress, uint16_t port, int width, int height, int fps);
-	void WriteFrame(const uint8_t *srcBytes);
+	void WriteVideoFrame(const uint8_t *videoSource, int cbVideoSource);
 	int WriteAudioFrame(const uint8_t* audioSource, int cbAudioSource);
 	void Close();
 };

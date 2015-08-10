@@ -162,10 +162,11 @@ void VideoCaptureAppBase::update()
 	this->udpDiscovery.update();
 
 	this->videoSource->update();
+
 	if (this->videoSource->isFrameNew())
 	{
-		auto ref = this->videoSource->getPixelsRef();
-		if (this->ffmpegVideoBroadcast.get()) this->ffmpegVideoBroadcast->WriteFrame(ref.getPixels());
+		auto pixels = this->videoSource->getPixelsRef();
+		if (this->ffmpegVideoBroadcast.get()) this->ffmpegVideoBroadcast->WriteVideoFrame(pixels.getPixels(), pixels.size());
 	}
 
 	//std::vector<std::vector<ofxFFmpegVideoReceiver *>::iterator> toMove;

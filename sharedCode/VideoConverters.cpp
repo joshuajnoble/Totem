@@ -184,6 +184,10 @@ EncodeRGBToH264Live::EncodeRGBToH264Live() :
 
 	this->encoder.reset(new EncodeRGBToH264(std::bind(&EncodeRGBToH264Live::ProcessEncodedFrame, this, std::placeholders::_1)));
 	this->audioEncoder.reset(new AACAudioEncoder(1, 22050, std::bind(&EncodeRGBToH264Live::ProcessEncodedAudioFrame, this, std::placeholders::_1)));
+
+	InitializeCriticalSection(&lock);
+	this->thread = CreateThread(NULL, 0, &EncodeRGBToH264Live::VideoThreadStarter, this, 0, 0);
+	this->threadExit = CreateEventA(NULL, TRUE, FALSE, NULL);
 }
 
 EncodeRGBToH264Live::~EncodeRGBToH264Live()
@@ -201,23 +205,70 @@ void EncodeRGBToH264Live::Start(const std::string& ipAddress, uint16_t port, int
 	this->audioStreamer->Start(networkAddressAudio, 1, 22050);
 }
 
-void EncodeRGBToH264Live::WriteFrame(const uint8_t *srcBytes)
+DWORD WINAPI EncodeRGBToH264Live::VideoThreadStarter(LPVOID context)
 {
-	this->encoder->WriteFrame(srcBytes);
+	if (context)
+	{
+		((EncodeRGBToH264Live *)context)->VideoProcessingThread();
+	}
+
+	return 0;
+}
+
+void EncodeRGBToH264Live::VideoProcessingThread()
+{
+	while (WaitForSingleObject(this->threadExit, 10) == WAIT_TIMEOUT)
+	{
+		if (TryEnterCriticalSection(&lock))
+		{
+			if (!this->videoQueue.empty())
+			{
+				uint8_t* pixels = this->videoQueue.front();
+				this->videoQueue.pop();
+				LeaveCriticalSection(&lock);
+				this->encoder->WriteFrame(pixels);
+				delete pixels;
+			}
+			else
+			{
+				LeaveCriticalSection(&lock);
+			}
+		}
+	}
+}
+
+void EncodeRGBToH264Live::WriteVideoFrame(const uint8_t *videoSource, int cbVideoSource)
+{
+	if (this->closed) return;
+
+	EnterCriticalSection(&this->lock);
+	auto newPixels = new uint8_t[cbVideoSource];
+	memcpy(newPixels, videoSource, cbVideoSource);
+	while (this->videoQueue.size() > 3)
+	{
+		auto pixels = this->videoQueue.front();
+		this->videoQueue.pop();
+		delete pixels;
+	}
+	this->videoQueue.push(newPixels);
+	LeaveCriticalSection(&lock);
 }
 
 int EncodeRGBToH264Live::WriteAudioFrame(const uint8_t* audioSource, int cbAudioSource)
 {
+	if (this->closed) return 0;
 	return this->audioEncoder->WriteFrame(audioSource, cbAudioSource);
 }
 
 void EncodeRGBToH264Live::ProcessEncodedFrame(AVPacket& packet)
 {
+	if (this->closed) return;
 	this->streamer->WriteFrame(packet);
 }
 
 void EncodeRGBToH264Live::ProcessEncodedAudioFrame(AVPacket& packet)
 {
+	if (this->closed) return;
 	//fwrite(packet.data, 1, packet.size, fp);
 	this->audioStreamer->WriteFrame(packet);
 }
@@ -226,9 +277,23 @@ void EncodeRGBToH264Live::Close()
 {
 	if (!this->closed)
 	{
+		this->closed = true;
+
+		SetEvent(this->threadExit);
+		WaitForSingleObject(this->thread, INFINITE);
+		CloseHandle(this->thread);
+		CloseHandle(this->threadExit);
+		DeleteCriticalSection(&this->lock);
+
+		while (this->videoQueue.size())
+		{
+			auto pixels = this->videoQueue.front();
+			this->videoQueue.pop();
+			delete pixels;
+		}
+
 		this->encoder->Close();
 		this->streamer->Close();
-		this->closed = true;
 	}
 }
 
