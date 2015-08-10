@@ -273,10 +273,24 @@ void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 	}
 }
 
+
+void VideoCaptureAppBase::PeerAngleChanged(UdpDiscovery::RemotePeerStatus& peer)
+{
+	auto remote = GetRemoteFromClientId(peer.id);
+	if (remote != this->peers.end())
+	{
+		remote->peerStatus.isConnectedToSession = false;
+		this->Handle_ClientAngleChanged(*remote);
+	}
+}
+
+
+
 void VideoCaptureAppBase::setupDiscovery()
 {
 	ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
 	ofAddListener(udpDiscovery.peerLeftEvent, this, &VideoCaptureAppBase::PeerLeft);
+	ofAddListener(udpDiscovery.AngleChangedEvent, this, &VideoCaptureAppBase::PeerAngleChanged);
 
 	ofAddListener(udpDiscovery.peerJoinedSessionEvent, this, &VideoCaptureAppBase::PeerJoinedSession);
 	ofAddListener(udpDiscovery.peerLeftSessionEvent, this, &VideoCaptureAppBase::PeerLeftSession);

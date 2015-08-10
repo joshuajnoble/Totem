@@ -55,6 +55,7 @@ public:
 
 	ofEvent<RemotePeerStatus> peerArrivedEvent;
 	ofEvent<RemotePeerStatus> peerLeftEvent;
+	ofEvent<RemotePeerStatus> AngleChangedEvent;
 
 	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
 	void update();

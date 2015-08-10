@@ -134,10 +134,7 @@ void ofRemoteApp::update()
 		}
 	}
 
-	if (this->doneCylinderWelcome)
-	{
-		this->currentTotemAngle = totem->peerStatus.totemSourceAngle;
-	}
+	UpdateTotemViewAngle();
 
 	this->networkDisplay.update();
 }
@@ -490,6 +487,13 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 		// TODO: This could fail (if it is already animating), so we should queue this up or something.
 		RemoveRemoteVideoSource(remote);
 	}
+}
+
+// ********************************************************************************************************************
+void ofRemoteApp::Handle_ClientAngleChanged(RemoteVideoInfo& remote)
+{
+	this->currentTotemAngle = remote.peerStatus.totemSourceAngle;
+	UpdateTotemViewAngle();
 }
 
 // ********************************************************************************************************************

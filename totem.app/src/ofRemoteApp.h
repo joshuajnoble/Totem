@@ -56,7 +56,8 @@ private:
 	void WelcomeSequenceComplete();
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
-
+	virtual void Handle_ClientAngleChanged(RemoteVideoInfo& remote);
+	
 	int networkInterfaceId;
 
 	RemoteVideoInfo* totemSource();
@@ -82,7 +83,7 @@ public:
 
 	//virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
 	void NewConnection(const RemoteVideoInfo& remote);
-
+	
 	virtual int displayWidth() const;
 	virtual int displayHeight() const;
 };

@@ -207,6 +207,16 @@ void UdpDiscovery::update()
 					}
 
 					peerIter->second.disconnectTime = currentTime + this->broadcastMissingDuration;
+					if (jsonPayload.isMember("angle"))
+					{
+						UdpDiscovery::RemotePeerStatus& peer = peerIter->second;
+						auto angle = jsonPayload["angle"].asInt();
+						if (angle != peer.totemSourceAngle)
+						{
+							peer.totemSourceAngle = angle;
+							ofNotifyEvent(this->AngleChangedEvent, peer);
+						}
+					}
 
 					// The remote port won't be here the first time, so keep watching for it.
 					// Once the remote peer gets one of our dns packets, it will update it's dns packet with a port for us.

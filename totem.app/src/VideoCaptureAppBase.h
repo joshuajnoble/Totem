@@ -27,6 +27,7 @@ public:
 private:
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerAngleChanged(UdpDiscovery::RemotePeerStatus& peer);
 	
 	void PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer);
@@ -56,6 +57,7 @@ protected:
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote) = 0;
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote) = 0;
+	virtual void Handle_ClientAngleChanged(RemoteVideoInfo& remote) {};
 	//virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote) {};
 
 	void setupDiscovery();
