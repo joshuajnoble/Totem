@@ -54,6 +54,10 @@ void ofTotemApp::setup()
 	this->ConnectToSession();
 	cortanaPlayIntro();
 	serial.setup(1, 9600);
+	if (!serial.isInitialized())
+	{
+		serial.setup(0, 9600);;
+	}
 }
 
 //--------------------------------------------------------------
@@ -73,7 +77,7 @@ void ofTotemApp::update()
 	}
 
 	unsigned char serialBuffer[3];
-	while (serial.available() > 0)
+	while (serial.isInitialized() && serial.available() > 0)
 	{
 		auto directionId = serial.readByte();
 		if (directionId >= '1' && directionId <= '9')
