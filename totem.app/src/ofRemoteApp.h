@@ -31,6 +31,7 @@ private:
 	bool canShowRemotes;
 	bool doneCylinderWelcome;
 	bool isInCall;
+	bool cyliderSourceIsDirty = false;
 
 	ofRectangle introSelfieRegion;
 	ofRectangle miniSelfieRegion;
@@ -41,6 +42,7 @@ private:
 	ofImage connectIcon;
 	ofImage muteIcon;
 	ofImage hangupIcon;
+	ofFbo cylinderCache;
 
 	RemoteNetworkDisplay networkDisplay;
 	UISTATE state;

@@ -85,6 +85,8 @@ void ofRemoteApp::setup()
 	hangupIcon.loadImage("hangup.png");
 	muteIcon.loadImage("mute.png");
 
+	cylinderCache.allocate(this->width, this->height);
+
 #ifdef SHOW_FPS
 	ofSetVerticalSync(false);
 #else
@@ -132,11 +134,6 @@ void ofRemoteApp::update()
 		}
 	}
 
-	if (totem && this->cylinderDisplay)
-	{
-		this->cylinderDisplay->update();
-	}
-
 	this->networkDisplay.update();
 }
 
@@ -166,8 +163,21 @@ void ofRemoteApp::draw()
 
 	if (this->cylinderDisplay && this->state == UISTATE_MAIN)
 	{
-		this->cylinderDisplay->draw();
+		auto totem = this->totemSource();
+		if (totem && this->cylinderDisplay)
+		{
+			this->cylinderDisplay->update();
+			if (totem->remoteVideoSource->isVideoFrameNew() || this->cylinderDisplay->IsDirty())
+			{
+				this->cylinderCache.begin();
+				ofClear(0, 0, 0, 0);
+				this->cylinderDisplay->draw();
+				this->cylinderCache.end();
+			}
+		}
 
+		cylinderCache.draw(0, 0);
+	
 		// Only draw the doors if they are on-screen.
 		if (this->currentCylinderBarnDoorPosition != 0)
 		{

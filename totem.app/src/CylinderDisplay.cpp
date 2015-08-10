@@ -163,10 +163,10 @@ ofPtr<ofBaseVideoDraws> CylinderDisplay::getTotemVideoSource()
 // ********************************************************************************************************************
 void CylinderDisplay::DoWelcome(const string& eventName)
 {
-	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
+	playlist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
 	if (eventName.length())
 	{
-		introPlaylist.addKeyFrame(Playlist::Action::event(this, eventName));
+		playlist.addKeyFrame(Playlist::Action::event(this, eventName));
 	}
 }
 
@@ -203,7 +203,7 @@ void CylinderDisplay::SetViewAngle(float angle, bool animate)
 	{
 		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
 		float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
-		introPlaylist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
+		playlist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
 	}
 	else
 	{
@@ -215,15 +215,7 @@ void CylinderDisplay::SetViewAngle(float angle, bool animate)
 // ********************************************************************************************************************
 void CylinderDisplay::update()
 {
-	introPlaylist.update();
-
-	if (this->totemVideoSource)
-	{
-		this->totemVideoSource->update();
-		if (this->totemVideoSource->isFrameNew())
-		{
-		}
-	}
+	playlist.update();
 }
 
 
@@ -543,6 +535,9 @@ void CylinderDisplay::DragStart(ofPoint screenPosition)
 		return;
 	}
 
+	this->isAnimating - false;
+	this->playlist.clear();
+
 	this->isDragging = true;
 	this->dragStart = screenPosition;
 	this->startDragAngle = this->viewRotationAngle;
@@ -578,4 +573,10 @@ void CylinderDisplay::DragEnd(ofPoint screenPosition)
 
 	this->viewRotationAngle = NormalizeAngle(this->viewRotationAngle);
 	this->isDragging = false;
+}
+
+bool CylinderDisplay::IsDirty()
+{
+	this->isAnimating = !this->playlist.playlist.empty();
+	return this->isDragging || this->isAnimating;
 }

@@ -5,7 +5,13 @@
 #include "ofxCv.h"
 #include "ofxOsc.h"
 #include "ofxGui\src\ofxGui.h"
+
+#define private public
+// WOAH! HACKHACK!
+// ofxPlaylist seems to be improperly implemented. anim_idle should be false, but it sticks to true when it shouldn't.
+// There is a member that we can look at that appears to be more accurate, but it is private, so we do this hack.
 #include "ofxPlaylist\src\ofxPlaylist.h"
+#undef private
 
 class CylinderDisplay
 {
@@ -38,6 +44,7 @@ private:
 	float startDragAngle;
 	float startDragAngleOffset;
 	bool isDragging = false;
+	bool isAnimating = false;
 
 	ofMesh leftCylinderPiece, rightCylinderPiece;
 	ofVec4f prevTcoordLCP, prevTcoordRCP;
@@ -45,7 +52,7 @@ private:
 
 	ofxCv::ObjectFinder finder;
 	ofCylinderPrimitive cylinder;
-	ofxPlaylist introPlaylist;
+	ofxPlaylist playlist;
 
 public:
 	virtual ~CylinderDisplay() {}
@@ -67,4 +74,5 @@ public:
 	void DragMove(ofPoint screenPosition);
 	void DragEnd(ofPoint screenPosition);
 	bool IsDragging() const { return this->isDragging; }
+	bool IsDirty();
 };
