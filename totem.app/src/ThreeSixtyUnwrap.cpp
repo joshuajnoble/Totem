@@ -130,11 +130,16 @@ void ThreeSixtyUnwrap::threadedFunction()
 	}
 }
 
+bool ThreeSixtyUnwrap::isFrameNew()
+{
+	return this->newFrame;
+}
 
 void ThreeSixtyUnwrap::update()
 {
 	this->lock();
-	if (this->newSourceFrame)
+	this->newFrame = this->newSourceFrame;
+	if (this->newFrame)
 	{
 		unwrappedImage.setFromPixels(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, OF_IMAGE_COLOR, true);
 		this->newSourceFrame = false;

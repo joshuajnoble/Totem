@@ -172,30 +172,12 @@ void VideoCaptureAppBase::update()
 		if (this->ffmpegVideoBroadcast.get()) this->ffmpegVideoBroadcast->WriteVideoFrame(pixels.getPixels(), pixels.size());
 	}
 
-	//std::vector<std::vector<ofxFFmpegVideoReceiver *>::iterator> toMove;
-	//for (auto iter = this->remoteVideoSourcesConnecting.begin(); iter != this->remoteVideoSourcesConnecting.end(); ++iter)
-	//{
-	//	auto remoteVideoSource = *iter;
-	//	if (remoteVideoSource->isConnected)
-	//	{
-	//		toMove.push_back(iter);
-	//	}
-	//}
-
-	//for (auto iter = toMove.begin(); iter != toMove.end(); ++iter)
-	//{
-	//	this->remoteVideoSources.push_back(**iter);
-	//	this->remoteVideoSourcesConnecting.erase(*iter);
-	//	this->Handle_ClientConnected(*iter);
-	//}
-
-
 	for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
 	{
 		auto peer = *iter;
 		peer.remoteVideoSource->update();
 		peer.videoDraws->update();
-		//peer.videoCroppable->update();
+		peer.videoCroppable->update();
 		if (peer.remoteVideoSource->isVideoFrameNew())
 		{
 		}
