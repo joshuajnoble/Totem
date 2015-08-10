@@ -68,6 +68,7 @@ void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels
 	if (nChannels == 1)
 	{
 		int count = 0;
+		memset(lastAudioOutputBuffer, 0, sizeof(lastAudioOutputBuffer));
 		std::for_each(this->peers.begin(), this->peers.end(), [this, &count, output, bufferSize](RemoteVideoInfo& peer)->void
 		{
 			if (peer.peerStatus.isConnectedToSession && peer.remoteVideoSource)
