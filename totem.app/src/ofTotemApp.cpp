@@ -2,7 +2,7 @@
 #include "Utils.h"
 #include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
 
-#define SHOW_FPS
+//#define SHOW_FPS
 
 using namespace ofxCv;
 using namespace cv;
