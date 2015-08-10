@@ -15,7 +15,7 @@ using namespace Playlist;
 
 namespace
 {
-	const float WAITING_ROTATION = 270.0f; // TODO: Why is the "centered" spin icon at 270 deg and not 180 deg?
+	const float WAITING_ROTATION = 0.0;
 	const float DEFAULT_ROTATION = 0.0f;
 	const float SHIFTED_OFFSET = 25.0f;
 
@@ -166,6 +166,7 @@ void ofRemoteApp::draw()
 		auto totem = this->totemSource();
 		if (totem && this->cylinderDisplay)
 		{
+			UpdateTotemViewAngle();
 			this->cylinderDisplay->update();
 			if (totem->remoteVideoSource->isVideoFrameNew() || this->cylinderDisplay->IsDirty())
 			{
@@ -213,7 +214,7 @@ void ofRemoteApp::draw()
 	}
 #endif
 
-	if (this->canShowRemotes)
+	if (this->canShowRemotes && this->networkDisplay.VideoCount())
 	{
 		this->networkDisplay.draw();
 	}
@@ -295,6 +296,7 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote)
 			this->cylinderDisplay.reset(new CylinderDisplay());
 			this->cylinderDisplay->initCylinderDisplay(this->width, this->height);
 			this->cylinderDisplay->SetViewAngle(WAITING_ROTATION);
+			this->currentTotemAngle = WAITING_ROTATION;
 			this->cylinderDisplay->setTotemVideoSource(remote.videoDraws, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
 		}
 	}
@@ -385,6 +387,8 @@ void ofRemoteApp::mouseDragged(int x, int y, int button)
 {
 	if (button == 0 && this->cylinderDisplay)
 	{
+		this->manualTotemAngle = true;
+
 		if (!this->cylinderDisplay->IsDragging())
 		{
 			this->cylinderDisplay->DragStart(ofPoint(x, y));
@@ -417,28 +421,28 @@ void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 {
 	this->isInCall = true;
-	this->doneCylinderWelcome = false;
-	this->canShowRemotes = false;
-	this->ConnectToSession();
+this->doneCylinderWelcome = false;
+this->canShowRemotes = false;
+this->ConnectToSession();
 
-	// Transition the selfie view to the "rear view mirror" mode.
-	this->isAnimatingConnectIconAlpha = true;
-	this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->curentSelfieMarginAlpha, 1));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
+// Transition the selfie view to the "rear view mirror" mode.
+this->isAnimatingConnectIconAlpha = true;
+this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->curentSelfieMarginAlpha, 1));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
 
-	// Reveal the in-conversation icons
-	auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
-	auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
-	this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
-	this->muteIconCenterX = this->width / 2 + iconOffsetStart;
-	this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
-	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
-	this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
+// Reveal the in-conversation icons
+auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
+auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
+this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
+this->muteIconCenterX = this->width / 2 + iconOffsetStart;
+this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
+this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
+this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
 }
 
 // ********************************************************************************************************************
@@ -463,6 +467,7 @@ void ofRemoteApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 
 	if (remote.peerStatus.isTotem && this->cylinderDisplay)
 	{
+		this->currentTotemAngle = DEFAULT_ROTATION;
 		this->cylinderDisplay->SetViewAngle(DEFAULT_ROTATION, false);
 	}
 }
@@ -500,7 +505,8 @@ void ofRemoteApp::onKeyframe(ofxPlaylistEventArgs& args)
 	}
 	else if (args.message == CylinderDisplay_WELCOME_COMPLETE_EVENT)
 	{
-		this->cylinderDisplay->SetViewAngle(CylinderDisplay::NormalizeAngle(this->cylinderDisplay->GetViewAngle()), false);
+		this->currentTotemAngle = CylinderDisplay::NormalizeAngle(this->cylinderDisplay->GetViewAngle());
+		this->cylinderDisplay->SetViewAngle(this->currentTotemAngle, false);
 		this->canShowRemotes = true;
 	}
 }
@@ -509,4 +515,19 @@ RemoteVideoInfo* ofRemoteApp::totemSource()
 {
 	auto found = std::find_if(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo& x)->bool { return x.peerStatus.isTotem; });
 	return found == this->peers.end() ? nullptr : &(*found);
+}
+
+void ofRemoteApp::UpdateTotemViewAngle()
+{
+	if (this->canShowRemotes && this->cylinderDisplay && this->totemSource() && !this->manualTotemAngle)
+	{
+		auto angle = this->currentTotemAngle;
+		if (this->networkDisplay.VideoCount())
+		{
+			angle += SHIFTED_OFFSET;
+		}
+
+		angle = CylinderDisplay::NormalizeAngle(angle);
+		this->cylinderDisplay->SetViewAngle(angle, true);
+	}
 }

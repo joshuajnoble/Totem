@@ -22,6 +22,7 @@ private:
 	int windowHeight;
 
 	float viewRotationAngle = 0;
+	float viewRotationAngleTarget = 0;
 
 	void drawTexturedCylinder();
 	void drawLeftCylinder();

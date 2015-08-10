@@ -197,17 +197,22 @@ float CylinderDisplay::GetViewAngle() const
 // ********************************************************************************************************************
 void CylinderDisplay::SetViewAngle(float angle, bool animate)
 {
-	this->isDragging = false;
-
-	if (this->totemVideoSource && animate)
+	if (this->viewRotationAngleTarget != angle)
 	{
-		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
-		float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
-		playlist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
-	}
-	else
-	{
-		this->viewRotationAngle = NormalizeAngle(angle);
+		this->isDragging = false;
+		this->viewRotationAngleTarget = angle;
+		this->viewRotationAngle = this->NormalizeAngle(this->viewRotationAngle);
+		playlist.clear();
+		if (this->totemVideoSource && animate)
+		{
+			// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
+			float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
+			playlist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
+		}
+		else
+		{
+			this->viewRotationAngle = NormalizeAngle(angle);
+		}
 	}
 }
 
@@ -535,7 +540,7 @@ void CylinderDisplay::DragStart(ofPoint screenPosition)
 		return;
 	}
 
-	this->isAnimating - false;
+	this->isAnimating = false;
 	this->playlist.clear();
 
 	this->isDragging = true;

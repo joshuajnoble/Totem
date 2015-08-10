@@ -61,6 +61,10 @@ private:
 
 	RemoteVideoInfo* totemSource();
 
+	bool manualTotemAngle = false;
+	float currentTotemAngle;
+	void UpdateTotemViewAngle();
+
 public:
 	//----------------------------------------
 	/* standard openFrameworks app stuff */
