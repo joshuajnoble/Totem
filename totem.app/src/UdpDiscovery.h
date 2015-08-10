@@ -47,7 +47,6 @@ private:
 	void HandleDisconnect(const string& remoteId, bool isTimeout = false);
 
 	Poco::Net::NetworkInterface interface;
-	bool isConnectedToSession;
 
 public:
 	virtual ~UdpDiscovery();
@@ -69,4 +68,5 @@ public:
 	void HandleConnectionChange(RemotePeerStatus &peer);
 	ofEvent<RemotePeerStatus> peerJoinedSessionEvent;
 	ofEvent<RemotePeerStatus> peerLeftSessionEvent;
+	bool isConnectedToSession;
 };

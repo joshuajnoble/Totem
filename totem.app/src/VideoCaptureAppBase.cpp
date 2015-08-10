@@ -62,19 +62,21 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
 {
 	bufferSize *= sizeof(float);
+	if (!this->udpDiscovery.isConnectedToSession) return;
 
 	// Fill whatever we can into the last read buffer
 	// That way, if we get nothing it will still be the same samples from before
 	if (nChannels == 1)
 	{
 		int count = 0;
-		memset(lastAudioOutputBuffer, 0, sizeof(lastAudioOutputBuffer));
-		std::for_each(this->peers.begin(), this->peers.end(), [this, &count, output, bufferSize](RemoteVideoInfo& peer)->void
+		for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
 		{
+			auto peer = *iter;
 			if (peer.peerStatus.isConnectedToSession && peer.remoteVideoSource)
 			{
 				if (count == 0)
 				{
+					memset(lastAudioOutputBuffer, 0, sizeof(lastAudioOutputBuffer));
 					auto cbRead = peer.remoteVideoSource->audioBuffer.Read(lastAudioOutputBuffer, bufferSize);
 				}
 				else
@@ -91,7 +93,7 @@ void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels
 				memcpy(output, lastAudioOutputBuffer, bufferSize);
 				++count;
 			}
-		});
+		}
 	}
 	//else
 	//{
