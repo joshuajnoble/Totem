@@ -277,9 +277,9 @@ void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 void VideoCaptureAppBase::PeerAngleChanged(UdpDiscovery::RemotePeerStatus& peer)
 {
 	auto remote = GetRemoteFromClientId(peer.id);
-	if (remote != this->peers.end())
+	if (remote != this->peers.end() && remote->peerStatus.totemSourceAngle != peer.totemSourceAngle)
 	{
-		remote->peerStatus.isConnectedToSession = false;
+		remote->peerStatus.totemSourceAngle = peer.totemSourceAngle;
 		this->Handle_ClientAngleChanged(*remote);
 	}
 }

@@ -201,7 +201,6 @@ void CylinderDisplay::SetViewAngle(float angle, bool animate)
 	{
 		this->isDragging = false;
 		this->viewRotationAngleTarget = angle;
-		this->viewRotationAngle = this->NormalizeAngle(this->viewRotationAngle);
 		playlist.clear();
 		if (this->totemVideoSource && animate)
 		{

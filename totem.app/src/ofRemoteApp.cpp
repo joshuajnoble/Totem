@@ -492,8 +492,22 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 // ********************************************************************************************************************
 void ofRemoteApp::Handle_ClientAngleChanged(RemoteVideoInfo& remote)
 {
-	this->currentTotemAngle = remote.peerStatus.totemSourceAngle;
-	UpdateTotemViewAngle();
+	auto totem = totemSource();
+	if (totem)
+	{
+		if (int(this->currentTotemAngle) % 360 == remote.peerStatus.totemSourceAngle % 360) return;
+
+		if (std::abs(this->currentTotemAngle - remote.peerStatus.totemSourceAngle) > 180)
+		{
+			this->currentTotemAngle = remote.peerStatus.totemSourceAngle + 360;
+		}
+		else
+		{
+			this->currentTotemAngle = remote.peerStatus.totemSourceAngle;
+		}
+
+		UpdateTotemViewAngle();
+	}
 }
 
 // ********************************************************************************************************************
@@ -536,7 +550,6 @@ void ofRemoteApp::UpdateTotemViewAngle()
 			angle += SHIFTED_OFFSET;
 		}
 
-		angle = CylinderDisplay::NormalizeAngle(angle);
 		this->cylinderDisplay->SetViewAngle(angle, true);
 	}
 }
