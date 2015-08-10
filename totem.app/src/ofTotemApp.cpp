@@ -141,7 +141,7 @@ void ofTotemApp::draw()
 				std::vector<int> sources;
 				for (int i = 0; i < this->peers.size(); ++i)
 				{
-					if (this->peers[i].peerStatus.isConnectedToSession)
+					if (this->peers[i].peerStatus.isConnectedToSession && !this->peers[i].peerStatus.isTotem)
 					{
 						sources.push_back(i);
 					}
