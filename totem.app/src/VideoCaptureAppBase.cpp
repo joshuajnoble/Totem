@@ -265,9 +265,12 @@ void VideoCaptureAppBase::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer
 
 void VideoCaptureAppBase::PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer)
 {
-	// Treat it just a like a clean disconnect and then we should get a reconnect
-	// as soon as we get another UDP DNS packet.
-	PeerLeft(peer);
+	auto remote = GetRemoteFromClientId(peer.id);
+	if (remote != this->peers.end())
+	{
+		remote->peerStatus.isConnectedToSession = false;
+		this->Handle_ClientDisconnected(*remote);
+	}
 }
 
 void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
