@@ -21,6 +21,7 @@ private:
 	TotemDisplay totemDisplay;
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 	bool cortanaLoadErrorDisplayed = false;
+	ofSerial serial;
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);

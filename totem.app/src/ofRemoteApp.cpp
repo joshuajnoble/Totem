@@ -110,7 +110,7 @@ void ofRemoteApp::update()
 	}
 
 	auto totem = this->totemSource();
-	if (this->state == UISTATE_MAIN &&  totem && totem->peerStatus.isConnectedToSession && !this->doneCylinderWelcome)
+	if (this->state == UISTATE_MAIN && totem && totem->peerStatus.isConnectedToSession && !this->doneCylinderWelcome)
 	{
 		this->doneCylinderWelcome = true;
 		this->currentCylinderBarnDoorPosition = 0.33;
@@ -132,6 +132,11 @@ void ofRemoteApp::update()
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
 			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
 		}
+	}
+
+	if (this->doneCylinderWelcome)
+	{
+		this->currentTotemAngle = totem->peerStatus.totemSourceAngle;
 	}
 
 	this->networkDisplay.update();

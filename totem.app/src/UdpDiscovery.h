@@ -16,6 +16,7 @@ public:
 		int port;
 		int videoWidth;
 		int videoHeight;
+		int totemSourceAngle;
 		bool isTotem;
 		bool isConnectedToSession;
 	};
@@ -34,6 +35,7 @@ private:
 	char incomingMessage[1024];
 	int videoWidth, videoHeight;
 	bool isTotem;
+	int totemSourceAngle;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
 	int discoveryBroadcastPort = 11000;
@@ -69,4 +71,6 @@ public:
 	ofEvent<RemotePeerStatus> peerJoinedSessionEvent;
 	ofEvent<RemotePeerStatus> peerLeftSessionEvent;
 	bool isConnectedToSession;
+
+	void SetSourceRotation(int angle);
 };

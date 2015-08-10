@@ -88,6 +88,7 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	this->sender.Connect(this->broadcastAddress.c_str(), this->discoveryBroadcastPort);
 	this->sender.SetNonBlocking(true);
 	this->sender.SetEnableBroadcast(true);
+	this->totemSourceAngle = 0;
 
 	this->receiver.Create();
 	this->receiver.Bind(this->discoveryBroadcastPort);
@@ -149,7 +150,11 @@ void UdpDiscovery::update()
 		jsonPayload["videoHeight"] = this->videoHeight;
 		jsonPayload["totem"] = this->isTotem;
 		jsonPayload["connected"] = this->isConnectedToSession;
-		
+		if (this->isTotem)
+		{
+			jsonPayload["angle"] = this->totemSourceAngle;
+		}
+
 		SendJsonPayload(jsonPayload);
 
 		// Check for expired remote peers and handle "disconnect" from timeout
@@ -253,6 +258,11 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
 	peer.isTotem = jsonPayload["totem"].asBool();
 	peer.isConnectedToSession = jsonPayload["connected"].asBool();
+	peer.totemSourceAngle = 0;
+	if (jsonPayload.isMember("angle"))
+	{
+		peer.totemSourceAngle = jsonPayload["angle"].asInt();
+	}
 
 	this->remoteClientMap[peer.id] = peer;
 
@@ -348,4 +358,9 @@ Poco::Net::IPAddress UdpDiscovery::GetLocalAddress()
 void UdpDiscovery::SetConnectionStatus(bool isConnected)
 {
 	this->isConnectedToSession = isConnected;
+}
+
+void UdpDiscovery::SetSourceRotation(int angle)
+{
+	this->totemSourceAngle = angle;
 }
