@@ -8,7 +8,7 @@ ThreeSixtyUnwrap::~ThreeSixtyUnwrap()
 ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
 {
 	float div = displayRatio.x * displayRatio.y;
-	float area = inputSize.x * inputSize.y * 0.4; // Reduce the output size assuming that we crop/lose some of the image.
+	float area = inputSize.x * inputSize.y * 0.20; // Reduce the output size assuming that we crop/lose some of the image.
 
 	auto height = std::sqrtf(area / div);
 	auto width = height * (displayRatio.x / displayRatio.y);
