@@ -65,7 +65,7 @@ void H264NetworkReceiver::OtherThread()
 		"c=IN IP4 _REMOTEIP_\n"
 		"b=AS:1000\n"
 		"a=rtpmap:96 H264/90000\n"
-		"a=fmtp:96 packetization-mode=1; sprop-parameter-sets=J00AFpaIBQHtgIgAUWFQCYloBKA=,KO4BryA=; profile-level-id=4D0016\n"
+		"a=fmtp:96 packetization-mode=1; sprop-parameter-sets=J0IAFpWgKA9sBEACiwqATEtAJQ==,KM4BryA=; profile-level-id=420016\n"
 		"m=audio _AUDIOPORT_ RTP/AVP 97\n"
 		"c=IN IP4 _REMOTEIP_\n"
 		"b=AS:128\n"
