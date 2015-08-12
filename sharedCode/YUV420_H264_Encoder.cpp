@@ -53,6 +53,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 	// Low-latency mode settings for h264_qsv
 	pCodecCtx->max_b_frames = 0;
 	pCodecCtx->refs = 1;
+	pCodecCtx->level = 10;
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "preset", "4", 0);
 	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);

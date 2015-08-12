@@ -23,6 +23,9 @@ YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 		throw std::runtime_error("Could not allocate video parser context");
 	}
 	
+	pCodecCtx->level = 10;
+	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+
 	if (m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
 		throw std::runtime_error("Could not open codec");
 	}
