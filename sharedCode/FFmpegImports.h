@@ -20,3 +20,5 @@ extern "C"
 
 typedef std::function<void(AVPacket&)> FrameCallback;
 typedef std::function<void(const AVFrame&)> DecodedFrameCallback;
+
+void InitFFmpeg();

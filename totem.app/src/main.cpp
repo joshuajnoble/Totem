@@ -353,6 +353,8 @@ int main(int argc, const char** argv)
 		return 0;
 	}
 
+	InitFFmpeg();
+
 	TotemMode totemMode;
 	if (ofxArgParser::hasKey("totem")) totemMode = TotemMode_Totem;
 	else if (ofxArgParser::hasKey("remote")) totemMode = TotemMode_Remote;
