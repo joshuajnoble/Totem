@@ -227,7 +227,7 @@ void ofRemoteApp::draw()
 	//	if (peer.remoteVideoSource && peer.remoteVideoSource->isConnected())
 	//	{
 	//		auto image = peer.remoteVideoSource->getVideoImage();
-	//		image.draw(0, i * 480);
+	//		image.draw(0, i * (image.getWidth() + 10));
 	//	}
 	//}
 

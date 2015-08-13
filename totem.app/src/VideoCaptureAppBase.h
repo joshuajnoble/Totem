@@ -52,7 +52,7 @@ protected:
 	uint8_t mixbuffer[512 * sizeof(float) * 2];
 	RingBuffer audioBufferInput;
 	RingBuffer audioBufferOutput;
-	int audioLeftover = 0;;
+	int audioLeftover = 0;
 	uint8_t audioToProcess[1024 * 200];
 	ofPtr<ofSoundStream> outputStream;
 
