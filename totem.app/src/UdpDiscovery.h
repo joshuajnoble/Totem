@@ -12,33 +12,35 @@ public:
 	{
 		std::string id;
 		std::string ipAddress;
-		int assignedLocalPort;
-		int assignedRemotePort;
 		float disconnectTime;
+		int port;
 		int videoWidth;
 		int videoHeight;
+		int totemSourceAngle;
 		bool isTotem;
+		bool isConnectedToSession;
 	};
 
 private:
-	const string version = string("1.0");
+	const string version = string("2.0");
 	Poco::Mutex portmutex;
 	std::string myid;
 	std::string broadcastAddress;
 
 	ofxUDPManager sender;
 	ofxUDPManager receiver;
-	int broadcastPort = 10527;
 	float nextSendTime;
-	float broadcastDelay = 0.5f;
-	float broadcastMissingDuration = 10.0f;
+	float broadcastDelay = 0.25f;
+	float broadcastMissingDuration = 20.0f;
 	char incomingMessage[1024];
 	int videoWidth, videoHeight;
 	bool isTotem;
+	int totemSourceAngle;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
-	int myNextPort = 12000;
-	const int portIncrement = 20;
+	int discoveryBroadcastPort = 11000;
+	int videoBroadcastPort = 11005;
+	int AudioBroadcastPort = 11010;
 
 	ofxJSONElement GetNetworkPayload(const std::string& action);
 	void SendJsonPayload(const ofxJSONElement& jsonPayload);
@@ -46,18 +48,30 @@ private:
 	void HandleDiscovery(const ofxJSONElement& jsonPayload, const string& remoteAddress);
 	void HandleDisconnect(const string& remoteId, bool isTimeout = false);
 
+	Poco::Net::NetworkInterface interface;
+
 public:
 	virtual ~UdpDiscovery();
 
 	ofEvent<RemotePeerStatus> peerArrivedEvent;
-	ofEvent<RemotePeerStatus> peerReadyEvent;
 	ofEvent<RemotePeerStatus> peerLeftEvent;
+	ofEvent<RemotePeerStatus> AngleChangedEvent;
 
 	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
 	void update();
 	RemotePeerStatus GetPeerStatus(const std::string& peerId);
+	Poco::Net::IPAddress GetLocalAddress();
 
 	static Poco::Net::NetworkInterface::List GetAllNetworkInterfaces();
 	static Poco::Net::IPAddress GetBroadcastAddress(Poco::Net::NetworkInterface interface);
 	static std::string MACtoString(const std::vector<unsigned char>& mac, char delimter = ':');
+
+	// Communication channel stuff
+	void SetConnectionStatus(bool isConnected);
+	void HandleConnectionChange(RemotePeerStatus &peer);
+	ofEvent<RemotePeerStatus> peerJoinedSessionEvent;
+	ofEvent<RemotePeerStatus> peerLeftSessionEvent;
+	bool isConnectedToSession;
+
+	void SetSourceRotation(int angle);
 };

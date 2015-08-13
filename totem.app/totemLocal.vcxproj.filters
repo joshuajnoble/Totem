@@ -7,9 +7,6 @@
     <ClCompile Include="src\ThreeSixtyUnwrap.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\sharedCode\StreamManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxOpenCv\src\ofxCvColorImage.cpp">
       <Filter>addons\ofxOpenCv</Filter>
     </ClCompile>
@@ -313,6 +310,39 @@
     <ClCompile Include="src\UdpDiscovery.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\FFmpegImports.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\YUV420_H264_Encoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\VideoConverters.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\YUV420_H264_Decoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\H264NetworkSender.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\ofxFFmpegVideoReceiver.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\PCMAudioEncoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\AACAudioEncoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\AACAudioDecoder.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sharedCode\AACNetworkSender.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -399,12 +429,12 @@
     <Filter Include="data\cortana">
       <UniqueIdentifier>{6b4effaa-253e-4a1c-8cf6-1d4e2f666320}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ffmpeg">
+      <UniqueIdentifier>{18be1eef-3c0e-49d1-9d65-2d32a5618b3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThreeSixtyUnwrap.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\sharedCode\StreamManager.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="$(OFDIR)\addons\ofxArgParser\src\ofxArgParser.h">
@@ -622,6 +652,45 @@
     </ClInclude>
     <ClInclude Include="src\UdpDiscovery.h">
       <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegImports.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\LegacyGuards.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\FFmpegSamples.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\YUV420_H264_Encoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\VideoConverters.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\H264NetworkReceiver.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\YUV420_H264_Decoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\H264NetworkSender.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\ofxFFmpegVideoReceiver.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\PCMAudioEncoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\AACAudioEncoder.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\AACNetworkSender.h">
+      <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\sharedCode\AACAudioDecoder.h">
+      <Filter>ffmpeg</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

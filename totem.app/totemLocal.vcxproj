@@ -55,11 +55,11 @@
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>true</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__STDC_CONSTANT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>src;$(GSTREAMER_1_0_ROOT_X86)\include\gstreamer-1.0;$(GSTREAMER_1_0_ROOT_X86)\include\glib-2.0;$(GSTREAMER_1_0_ROOT_X86)\lib\glib-2.0\include;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxDepthStreamCompression\src;$(OFDIR)\addons\ofxJSON\libs\jsoncpp\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOscSync\src\Client;$(OFDIR)\addons\ofxOscSync\src\CommonTime;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxPGR\src;$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\ofxSnappy\libs\snappy\src;$(OFDIR)\addons\ofxSync\src\Client;$(OFDIR)\addons\ofxXmlSettings\src;$(OFDIR)\addons\openCv\libs\opencv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\ffmpeg\include;$(GSTREAMER_1_0_ROOT_X86)\include\gstreamer-1.0;$(GSTREAMER_1_0_ROOT_X86)\include\glib-2.0;$(GSTREAMER_1_0_ROOT_X86)\lib\glib-2.0\include;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxDepthStreamCompression\src;$(OFDIR)\addons\ofxJSON\libs\jsoncpp\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOscSync\src\Client;$(OFDIR)\addons\ofxOscSync\src\CommonTime;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxPGR\src;$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\ofxSnappy\libs\snappy\src;$(OFDIR)\addons\ofxSync\src\Client;$(OFDIR)\addons\ofxXmlSettings\src;$(OFDIR)\addons\openCv\libs\opencv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -74,6 +74,7 @@
 xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"
+xcopy /s /d /y "$(ProjectDir)..\ffmpeg\bin-x86\*.dll"  "$(ProjectDir)bin"
 md "$(ProjectDir)bin\data"
 xcopy /s /d /y "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
     </PostBuildEvent>
@@ -104,10 +105,10 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WholeProgramOptimization>false</WholeProgramOptimization>
-      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__STDC_CONSTANT_MACROS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>src;$(GSTREAMER_1_0_ROOT_X86)\include\gstreamer-1.0;$(GSTREAMER_1_0_ROOT_X86)\include\glib-2.0;$(GSTREAMER_1_0_ROOT_X86)\lib\glib-2.0\include;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxDepthStreamCompression\src;$(OFDIR)\addons\ofxJSON\libs\jsoncpp\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOscSync\src\Client;$(OFDIR)\addons\ofxOscSync\src\CommonTime;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxPGR\src;$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\ofxSnappy\libs\snappy\src;$(OFDIR)\addons\ofxSync\src\Client;$(OFDIR)\addons\ofxXmlSettings\src;$(OFDIR)\addons\openCv\libs\opencv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src;..\ffmpeg\include;$(GSTREAMER_1_0_ROOT_X86)\include\gstreamer-1.0;$(GSTREAMER_1_0_ROOT_X86)\include\glib-2.0;$(GSTREAMER_1_0_ROOT_X86)\lib\glib-2.0\include;$(OFDIR)\libs\openFrameworks;$(OFDIR)\libs\openFrameworks\graphics;$(OFDIR)\libs\openFrameworks\app;$(OFDIR)\libs\openFrameworks\sound;$(OFDIR)\libs\openFrameworks\utils;$(OFDIR)\libs\openFrameworks\video;$(OFDIR)\libs\openFrameworks\types;$(OFDIR)\libs\openFrameworks\math;$(OFDIR)\libs\openFrameworks\3d;$(OFDIR)\libs\openFrameworks\gl;$(OFDIR)\libs\openFrameworks\events;$(OFDIR)\libs\openFrameworks\communication;$(OFDIR)\libs\glew\include;$(OFDIR)\libs\glu\include;$(OFDIR)\libs\glut\include;$(OFDIR)\libs\glfw\include;$(OFDIR)\libs\assimp\include;$(OFDIR)\libs\cairo\include\cairo;$(OFDIR)\libs\cairo\include;$(OFDIR)\libs\fmodex\include;$(OFDIR)\libs\freeglut\include;$(OFDIR)\libs\FreeImage\include;$(OFDIR)\libs\freetype\include;$(OFDIR)\libs\openssl\include;$(OFDIR)\libs\poco\include;$(OFDIR)\libs\quicktime\include;$(OFDIR)\libs\rtAudio\include;$(OFDIR)\libs\tess2\include;$(OFDIR)\libs\videoInput\include;$(OFDIR)\addons;$(OFDIR)\addons\ofxCv\libs\CLD\include\CLD;$(OFDIR)\addons\ofxCv\libs\ofxCv\include;$(OFDIR)\addons\ofxCv\libs\ofxCv\include\ofxCv;$(OFDIR)\addons\ofxCv\src;$(OFDIR)\addons\ofxDepthStreamCompression\src;$(OFDIR)\addons\ofxJSON\libs\jsoncpp\include;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\;$(OFDIR)\addons\ofxOsc\libs\oscpack\src;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\ip;$(OFDIR)\addons\ofxOsc\libs\oscpack\src\osc;$(OFDIR)\addons\ofxOsc\src;$(OFDIR)\addons\ofxOscSync\src\Client;$(OFDIR)\addons\ofxOscSync\src\CommonTime;$(OFDIR)\addons\ofxOpenCv\libs\opencv\include\opencv;$(OFDIR)\addons\ofxPGR\src;$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\include;$(OFDIR)\addons\ofxPlaylist\src\Easings;$(OFDIR)\addons\ofxSnappy\libs\snappy\src;$(OFDIR)\addons\ofxSync\src\Client;$(OFDIR)\addons\ofxXmlSettings\src;$(OFDIR)\addons\openCv\libs\opencv\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -125,6 +126,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
 xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\FlyCapture2.dll" "$(ProjectDir)bin"
 xcopy /e /i /y "$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\bin\libiomp5m*.dll" "$(ProjectDir)bin"
+xcopy /s /d /y "$(ProjectDir)..\ffmpeg\bin-x86\*.dll"  "$(ProjectDir)bin"
 md "$(ProjectDir)bin\data"
 xcopy /s /d /y "$(ProjectDir)data\*.*"  "$(ProjectDir)bin\data"</Command>
     </PostBuildEvent>
@@ -279,7 +281,17 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp" />
-    <ClCompile Include="..\sharedCode\StreamManager.cpp" />
+    <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp" />
+    <ClCompile Include="..\sharedCode\H264NetworkSender.cpp" />
+    <ClCompile Include="..\sharedCode\AACAudioDecoder.cpp" />
+    <ClCompile Include="..\sharedCode\AACAudioEncoder.cpp" />
+    <ClCompile Include="..\sharedCode\ofxFFmpegVideoReceiver.cpp" />
+    <ClCompile Include="..\sharedCode\PCMAudioEncoder.cpp" />
+    <ClCompile Include="..\sharedCode\AACNetworkSender.cpp" />
+    <ClCompile Include="..\sharedCode\VideoConverters.cpp" />
+    <ClCompile Include="..\sharedCode\FFmpegImports.cpp" />
+    <ClCompile Include="..\sharedCode\YUV420_H264_Decoder.cpp" />
+    <ClCompile Include="..\sharedCode\YUV420_H264_Encoder.cpp" />
     <ClCompile Include="src\CylinderDisplay.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofRemoteApp.cpp" />
@@ -390,7 +402,19 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.h" />
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.h" />
     <ClInclude Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.h" />
-    <ClInclude Include="..\sharedCode\StreamManager.h" />
+    <ClInclude Include="..\sharedCode\H264NetworkReceiver.h" />
+    <ClInclude Include="..\sharedCode\H264NetworkSender.h" />
+    <ClInclude Include="..\sharedCode\AACAudioDecoder.h" />
+    <ClInclude Include="..\sharedCode\AACAudioEncoder.h" />
+    <ClInclude Include="..\sharedCode\ofxFFmpegVideoReceiver.h" />
+    <ClInclude Include="..\sharedCode\PCMAudioEncoder.h" />
+    <ClInclude Include="..\sharedCode\AACNetworkSender.h" />
+    <ClInclude Include="..\sharedCode\VideoConverters.h" />
+    <ClInclude Include="..\sharedCode\FFmpegImports.h" />
+    <ClInclude Include="..\sharedCode\FFmpegSamples.h" />
+    <ClInclude Include="..\sharedCode\LegacyGuards.h" />
+    <ClInclude Include="..\sharedCode\YUV420_H264_Decoder.h" />
+    <ClInclude Include="..\sharedCode\YUV420_H264_Encoder.h" />
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
     <ClInclude Include="src\ofTotemApp.h" />

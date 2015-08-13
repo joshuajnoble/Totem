@@ -257,15 +257,17 @@ void StreamManager::newServer(clientParameters params){
     servers[params.clientID] = ofPtr<ofxGstRTPServer>(new ofxGstRTPServer());
     servers[params.clientID]->setup(params.ipAddress);
     servers[params.clientID]->addVideoChannel(params.remoteVideoPort,width,height,30);
-    servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
+	servers[params.clientID]->setup(params.ipAddress);
+	servers[params.clientID]->addVideoChannel(params.remoteVideoPort, width, height, 30);
+	servers[params.clientID]->addAudioChannel(params.remoteAudioPort);
     servers[params.clientID]->play();
 }
 
 void StreamManager::newClient(clientParameters params){
     
     clients[params.clientID] = ofPtr<ofxGstRTPClient>(new ofxGstRTPClient());
-    clients[params.clientID]->setup(params.ipAddress, 0);
-    clients[params.clientID]->addVideoChannel(params.videoPort);
+	clients[params.clientID]->setup(params.ipAddress, 0);
+	clients[params.clientID]->addVideoChannel(params.videoPort);
     clients[params.clientID]->addAudioChannel(params.audioPort);
 	clients[params.clientID]->drop = true;    
     

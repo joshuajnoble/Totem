@@ -111,3 +111,63 @@ private:
 	float startTime = -1;
 	float nextTime = -1;
 };
+
+class RingBuffer
+{
+public:
+
+	uint8_t *pWriter;
+	uint8_t *pReader;
+	uint8_t *pEnd;
+	volatile LONG written;
+	std::vector<uint8_t> buffer;
+
+	RingBuffer(int size) : buffer(size), written(0)
+	{
+		pWriter = pReader = buffer.data();
+		pEnd = pWriter + size;
+		memset(pWriter, 0, size);
+	}
+
+	void Write(const uint8_t* source, int cbSource)
+	{
+		while (cbSource)
+		{
+			auto remaining = pEnd - pWriter;
+			auto toWrite = cbSource > remaining ? remaining : cbSource;
+			memcpy(pWriter, source, toWrite);
+			InterlockedExchangeAdd(&written, toWrite);
+			cbSource -= toWrite;
+			pWriter += toWrite;
+			if (pWriter == pEnd)
+			{
+				pWriter = buffer.data();
+			}
+		}
+	}
+
+	int Read(uint8_t* output, int cbOutput)
+	{
+		int outputWritten = 0;
+		int requested = written < cbOutput ? written : cbOutput;
+		while (outputWritten < requested)
+		{
+			auto srcRequested = requested - outputWritten;
+			auto remaining = pEnd - pReader;
+			auto toWrite = srcRequested < remaining ? srcRequested : remaining;
+			memcpy(output + outputWritten, pReader, toWrite);
+			InterlockedExchangeAdd(&written, -toWrite);
+			outputWritten += toWrite;
+			pReader += toWrite;
+			if (pReader == pEnd)
+			{
+				pReader = buffer.data();
+			}
+		}
+
+		return outputWritten;
+	}
+};
+
+
+long long milliseconds_now();

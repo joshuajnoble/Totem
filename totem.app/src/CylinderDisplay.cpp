@@ -119,10 +119,10 @@ void CylinderDisplay::initCylinderDisplay(int width, int height)
 
 
 // ********************************************************************************************************************
-void CylinderDisplay::allocateBuffers()
+void CylinderDisplay::allocateBuffers(int srcWidth, int srcHeight)
 {
-	this->warpedW = this->totemVideoSource->getWidth();
-	this->warpedH = this->totemVideoSource->getHeight();
+	this->warpedW = srcWidth;
+	this->warpedH = srcHeight;
 
 	/// set up the cylinder
 	float scale = this->windowHeight / (float)warpedH / 4;
@@ -146,10 +146,10 @@ void CylinderDisplay::allocateBuffers()
 
 
 // ********************************************************************************************************************
-void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource)
+void CylinderDisplay::setTotemVideoSource(ofPtr<ofBaseVideoDraws> videoSource, int width, int height)
 {
 	this->totemVideoSource = videoSource;
-	this->allocateBuffers();
+	this->allocateBuffers(width, height);
 }
 
 
@@ -163,10 +163,10 @@ ofPtr<ofBaseVideoDraws> CylinderDisplay::getTotemVideoSource()
 // ********************************************************************************************************************
 void CylinderDisplay::DoWelcome(const string& eventName)
 {
-	introPlaylist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
+	playlist.addKeyFrame(Playlist::Action::tween(6000.0f, &this->viewRotationAngle, this->viewRotationAngle + 360.0f));
 	if (eventName.length())
 	{
-		introPlaylist.addKeyFrame(Playlist::Action::event(this, eventName));
+		playlist.addKeyFrame(Playlist::Action::event(this, eventName));
 	}
 }
 
@@ -197,17 +197,21 @@ float CylinderDisplay::GetViewAngle() const
 // ********************************************************************************************************************
 void CylinderDisplay::SetViewAngle(float angle, bool animate)
 {
-	this->isDragging = false;
-
-	if (this->totemVideoSource && animate)
+	if (this->viewRotationAngleTarget != angle)
 	{
-		// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
-		float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
-		introPlaylist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
-	}
-	else
-	{
-		this->viewRotationAngle = NormalizeAngle(angle);
+		this->isDragging = false;
+		this->viewRotationAngleTarget = angle;
+		playlist.clear();
+		if (this->totemVideoSource && animate)
+		{
+			// Fix the rotation speed instead of having a fixed duration no matter how far we rotate.
+			float duration = 6000.0f / 360.0 * std::abs(this->viewRotationAngle - angle);
+			playlist.addKeyFrame(Playlist::Action::tween(duration, &this->viewRotationAngle, angle));
+		}
+		else
+		{
+			this->viewRotationAngle = NormalizeAngle(angle);
+		}
 	}
 }
 
@@ -215,15 +219,7 @@ void CylinderDisplay::SetViewAngle(float angle, bool animate)
 // ********************************************************************************************************************
 void CylinderDisplay::update()
 {
-	introPlaylist.update();
-
-	if (this->totemVideoSource)
-	{
-		this->totemVideoSource->update();
-		if (this->totemVideoSource->isFrameNew())
-		{
-		}
-	}
+	playlist.update();
 }
 
 
@@ -543,6 +539,9 @@ void CylinderDisplay::DragStart(ofPoint screenPosition)
 		return;
 	}
 
+	this->isAnimating = false;
+	this->playlist.clear();
+
 	this->isDragging = true;
 	this->dragStart = screenPosition;
 	this->startDragAngle = this->viewRotationAngle;
@@ -578,4 +577,10 @@ void CylinderDisplay::DragEnd(ofPoint screenPosition)
 
 	this->viewRotationAngle = NormalizeAngle(this->viewRotationAngle);
 	this->isDragging = false;
+}
+
+bool CylinderDisplay::IsDirty()
+{
+	this->isAnimating = !this->playlist.playlist.empty();
+	return this->isDragging || this->isAnimating;
 }

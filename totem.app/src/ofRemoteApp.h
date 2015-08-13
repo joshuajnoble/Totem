@@ -31,6 +31,7 @@ private:
 	bool canShowRemotes;
 	bool doneCylinderWelcome;
 	bool isInCall;
+	bool cyliderSourceIsDirty = false;
 
 	ofRectangle introSelfieRegion;
 	ofRectangle miniSelfieRegion;
@@ -38,10 +39,10 @@ private:
 	ofRectangle currentSelfieRegion;
 
 	ofPtr<CylinderDisplay> cylinderDisplay;
-	ofPtr<RemoteVideoInfo> totemSource;
 	ofImage connectIcon;
 	ofImage muteIcon;
 	ofImage hangupIcon;
+	ofFbo cylinderCache;
 
 	RemoteNetworkDisplay networkDisplay;
 	UISTATE state;
@@ -55,8 +56,15 @@ private:
 	void WelcomeSequenceComplete();
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
-
+	virtual void Handle_ClientAngleChanged(RemoteVideoInfo& remote);
+	
 	int networkInterfaceId;
+
+	RemoteVideoInfo* totemSource();
+
+	bool manualTotemAngle = false;
+	float currentTotemAngle;
+	void UpdateTotemViewAngle();
 
 public:
 	//----------------------------------------
@@ -73,9 +81,9 @@ public:
 	void mouseReleased(int x, int y, int button);
 	void onKeyframe(ofxPlaylistEventArgs& args);
 
-	virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
-	void NewConnection(const RemoteVideoInfo& remote, ofPtr<ofBaseVideoDraws> video);
-
+	//virtual void Handle_ClientStreamAvailable(RemoteVideoInfo& remote);
+	void NewConnection(const RemoteVideoInfo& remote);
+	
 	virtual int displayWidth() const;
 	virtual int displayHeight() const;
 };

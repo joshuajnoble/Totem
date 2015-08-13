@@ -1,0 +1,14 @@
+prefix=/home/james/source/sandbox/win32/ffmpeg_git_shared.installed
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libpostproc
+Description: FFmpeg postprocessing library
+Version: 53.3.100
+Requires: 
+Requires.private: libavutil >= 54.30.100
+Conflicts:
+Libs: -L${libdir}  -lpostproc 
+Libs.private: 
+Cflags: -I${includedir}

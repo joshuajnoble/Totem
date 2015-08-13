@@ -8,13 +8,14 @@ ThreeSixtyUnwrap::~ThreeSixtyUnwrap()
 ofVec2f ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f inputSize, ofVec2f displayRatio)
 {
 	float div = displayRatio.x * displayRatio.y;
-	float area = inputSize.x * inputSize.y * 0.4; // Reduce the output size assuming that we crop/lose some of the image.
+	float area = inputSize.x * inputSize.y * 0.20; // Reduce the output size assuming that we crop/lose some of the image.
 
 	auto height = std::sqrtf(area / div);
 	auto width = height * (displayRatio.x / displayRatio.y);
 
-	int w = (int)(width / 4) * 4; // Round to even mutiple of 4 for display
-	int h = w / (displayRatio.x / displayRatio.y);
+	// (+15) &~ 15 rounds up to an even mutiple of 16
+	int w = int(width + 15) & ~15;
+	int h = int((w / (displayRatio.x / displayRatio.y))+ 15) & ~15;
 
 	return ofVec2f(w, h);
 }
@@ -129,11 +130,16 @@ void ThreeSixtyUnwrap::threadedFunction()
 	}
 }
 
+bool ThreeSixtyUnwrap::isFrameNew()
+{
+	return this->newFrame;
+}
 
 void ThreeSixtyUnwrap::update()
 {
 	this->lock();
-	if (this->newSourceFrame)
+	this->newFrame = this->newSourceFrame;
+	if (this->newFrame)
 	{
 		unwrappedImage.setFromPixels(unwarpedPixels.getPixels(), unwarpedW, unwarpedH, OF_IMAGE_COLOR, true);
 		this->newSourceFrame = false;

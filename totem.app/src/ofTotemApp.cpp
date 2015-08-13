@@ -1,5 +1,6 @@
 #include "ofTotemApp.h"
 #include "Utils.h"
+#include "..\..\SharedCode\ofxFFmpegVideoReceiver.h"
 
 //#define SHOW_FPS
 
@@ -50,16 +51,21 @@ void ofTotemApp::setup()
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 
-	this->streamManager.broadcastVideoBitrate = 8000;
-
+	this->ConnectToSession();
 	cortanaPlayIntro();
+	serial.setup(1, 9600);
+	if (!serial.isInitialized())
+	{
+		serial.setup(0, 9600);;
+	}
 }
 
 //--------------------------------------------------------------
 void ofTotemApp::exit()
 {
-	this->videoSource->close();
-	streamManager.exit();
+	this->serial.close();
+	this->DisconnectSession();
+	VideoCaptureAppBase::exit();
 }
 
 //--------------------------------------------------------------
@@ -68,6 +74,17 @@ void ofTotemApp::update()
 	if (!this->isInitialized)
 	{
 		return;
+	}
+
+	unsigned char serialBuffer[3];
+	while (serial.isInitialized() && serial.available() > 0)
+	{
+		auto directionId = serial.readByte();
+		if (directionId >= '1' && directionId <= '9')
+		{
+			auto angle = int(std::roundf((directionId - '1') / 8.0 * 360));
+			this->udpDiscovery.SetSourceRotation(angle);
+		}
 	}
 
 	if (this->cortanaPlayer.getIsMovieDone())
@@ -111,80 +128,106 @@ void ofTotemApp::draw()
 		else
 		{
 			auto output = this->totemDisplay.getDisplay(0);
-			output.begin();
 
 			if (this->netImpersonate.get())
 			{	// DEBUG
+				output.begin();
 				this->netImpersonate->update();
 				if (this->netImpersonate->isFrameNew())
 				{
 					Utils::DrawCroppedToFit(*this->netImpersonate.get(), (int)output.getWidth(), (int)output.getHeight());
 				}
-			}
-			else if (this->remoteVideoSources.size())
-			{
-				auto margin = 10;
-				auto halfMargin = margin / 2;
-				auto halfHeight = (int)output.getHeight() / 2;
-				auto halfWidth = (int)output.getWidth() / 2;
-
-				ofBackground(BACKGROUND_COLOR);
-				auto remoteSourceCount = this->remoteVideoSources.size();
-				if (remoteSourceCount == 1)
-				{
-					auto videoSource = this->remoteVideoSources[0].source;
-					videoSource->DrawCropped((int)output.getWidth(), (int)output.getHeight());
-				}
-				else if (remoteSourceCount == 2)
-				{
-					auto videoSource = this->remoteVideoSources[0].source;
-					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
-
-					ofPushMatrix();
-
-					videoSource = this->remoteVideoSources[1].source;
-					ofTranslate(0, halfHeight + halfMargin);
-					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
-
-					ofPopMatrix();
-				}
-				else if (remoteSourceCount == 3)
-				{
-					auto videoSource = this->remoteVideoSources[0].source;
-					videoSource->DrawCropped((int)output.getWidth(), halfHeight - halfMargin);
-
-					ofPushMatrix();
-
-					videoSource = this->remoteVideoSources[1].source;
-					ofTranslate(0, halfHeight + halfMargin);
-					videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
-
-					videoSource = this->remoteVideoSources[2].source;
-					ofTranslate(halfWidth + halfMargin, 0);
-					videoSource->DrawCropped(halfWidth - halfMargin, halfHeight - halfMargin);
-
-					ofPopMatrix();
-				}
+				output.end();
+				this->totemDisplay.drawCloned();
 			}
 			else
 			{
-				ofBackground(0);
+				std::vector<int> sources;
+				for (int i = 0; i < this->peers.size(); ++i)
+				{
+					if (this->peers[i].peerStatus.isConnectedToSession && !this->peers[i].peerStatus.isTotem)
+					{
+						sources.push_back(i);
+					}
+				}
 
-				auto halfHeight = (int)output.getHeight() / 2;
-				auto halfWidth = (int)output.getWidth() / 2;
-				ofRectangle region(0, 0, this->cortanaPlayer.width, this->cortanaPlayer.height);
+				int remoteSourceCount = sources.size();
+				if (remoteSourceCount == 0)
+				{
+					if (this->cortanaPlayer.isFrameNew())
+					{
+						output.begin();
+						ofBackground(0);
 
-				auto scale = 1.0;// output.getWidth() / this->cortanaPlayer.getWidth();
-				region.scaleFromCenter(scale, scale);
+						auto halfHeight = (int)output.getHeight() / 2;
+						auto halfWidth = (int)output.getWidth() / 2;
+						ofRectangle region(0, 0, this->cortanaPlayer.width, this->cortanaPlayer.height);
 
-				region.translateY(halfHeight - this->cortanaPlayer.height / 2 - 30 * scale);
-				region.translateX(halfWidth - this->cortanaPlayer.width / 2);
+						auto scale = 1.0;// output.getWidth() / this->cortanaPlayer.getWidth();
+						region.scaleFromCenter(scale, scale);
 
-				this->cortanaPlayer.draw(region);
+						region.translateY(halfHeight - this->cortanaPlayer.height / 2 - 30 * scale);
+						region.translateX(halfWidth - this->cortanaPlayer.width / 2);
+
+						this->cortanaPlayer.draw(region);
+						output.end();
+					}
+					this->totemDisplay.drawCloned();
+				}
+				else
+				{
+					bool anyUpdates = std::any_of(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo &x)->bool { return x.remoteVideoSource->isVideoFrameNew(); });
+					if (anyUpdates)
+					{
+						auto margin = 10;
+						auto halfMargin = margin / 2;
+						auto halfHeight = (int)output.getHeight() / 2;
+						auto halfWidth = (int)output.getWidth() / 2;
+
+						output.begin();
+						ofBackground(BACKGROUND_COLOR);
+
+						if (remoteSourceCount == 1)
+						{
+							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+						}
+						else if (remoteSourceCount == 2)
+						{
+							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+
+							ofPushMatrix();
+
+							videoSource = this->peers[sources[1]].remoteVideoSource->getVideoImage();
+							ofTranslate(0, halfHeight + halfMargin);
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
+
+							ofPopMatrix();
+						}
+						else if (remoteSourceCount == 3)
+						{
+							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
+
+							ofPushMatrix();
+
+							videoSource = this->peers[sources[1]].remoteVideoSource->getVideoImage();
+							ofTranslate(0, halfHeight + halfMargin);
+							Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
+
+							videoSource = this->peers[sources[2]].remoteVideoSource->getVideoImage();
+							ofTranslate(halfWidth + halfMargin, 0);
+							Utils::DrawCroppedToFit(videoSource, halfWidth - halfMargin, halfHeight - halfMargin);
+
+							ofPopMatrix();
+						}
+
+						output.end();
+					}
+					this->totemDisplay.drawCloned();
+				}
 			}
-
-			output.end();
-			this->totemDisplay.drawCloned();
 		}
 	}
 
@@ -218,7 +261,8 @@ void ofTotemApp::Handle_ClientConnected(RemoteVideoInfo& remote)
 
 void ofTotemApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 {
-	if (!this->remoteVideoSources.size())
+	auto anyConenctedPeers = std::any_of(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo &x)->bool { return x.peerStatus.isConnectedToSession; });
+	if (!anyConenctedPeers)
 	{
 		cortanaPlayIntro();
 	}
@@ -248,6 +292,7 @@ void ofTotemApp::cortanaPlayIntro()
 {
 	cortanaLoadClip(CORTANA_GREET);
 	this->cortanaPlayer.setLoopState(OF_LOOP_NONE);
+	this->cortanaPlayer.setSpeed(0.5);
 	this->cortanaPlayer.play();
 }
 
@@ -255,5 +300,6 @@ void ofTotemApp::cortanaPlayIdle()
 {
 	cortanaLoadClip(CORTANA_IDLE);
 	this->cortanaPlayer.setLoopState(OF_LOOP_NORMAL);
+	this->cortanaPlayer.setSpeed(0.5);
 	this->cortanaPlayer.play();
 }

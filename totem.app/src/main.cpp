@@ -1,9 +1,10 @@
 #include "ofMain.h"
+#include "ofxPGR\src\PGRCamera.h"
 #include "ofxArgParser\src\ofxArgParser.h"
 #include "ofTotemApp.h"
 #include "ofRemoteApp.h"
 #include "Utils.h"
-#include "ofxPGR\src\PGRCamera.h"
+#include "..\..\sharedCode\VideoConverters.h"
 
 namespace
 {
@@ -97,8 +98,8 @@ namespace
 		auto remoteApp = new ofRemoteApp();
 
 		ofSetupOpenGL(1, 1, OF_WINDOW);
-		auto screenWidth = min(2160, ofGetScreenWidth());
-		auto screenHeight = min(1440, ofGetScreenHeight());
+		auto screenWidth = min(1920, ofGetScreenWidth());
+		auto screenHeight = min(1080, ofGetScreenHeight());
 
 		int windowWidth = screenWidth;
 		int windowHeight = screenHeight;
@@ -147,15 +148,16 @@ namespace
 			unwrapper->initUnwrapper(videoSource, outputSize);
 
 			auto unwrappedVideo = ofPtr<ofBaseVideoDraws>(unwrapper);
+			auto drawableVideoSource = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(unwrappedVideo));
 			RemoteVideoInfo remote;
-			remote.clientId = "remoteTotemImpersonator";
-			remote.source = ofPtr<CroppedDrawable>(new CroppedDrawableVideoDraws(unwrappedVideo));
-			remote.width = unwrappedVideo->getWidth();
-			remote.height = unwrappedVideo->getHeight();
-			remote.isTotem = true;
-			remote.hasLiveFeed = true;
-			remoteApp->NewConnection(remote, unwrappedVideo);
-			remoteApp->Handle_ClientStreamAvailable(remote);
+			remote.peerStatus.id = "remoteTotemImpersonator";
+			//remote.videoSource = drawableVideoSource;
+			remote.peerStatus.videoWidth = unwrappedVideo->getWidth();
+			remote.peerStatus.videoHeight = unwrappedVideo->getHeight();
+			remote.peerStatus.isTotem = true;
+			remote.videoDraws = unwrappedVideo;
+			remoteApp->NewConnection(remote);
+			//remoteApp->Handle_ClientStreamAvailable(remote);
 		}
 
 		return ofPtr<VideoCaptureAppBase>(remoteApp);
@@ -166,7 +168,7 @@ namespace
 int main(int argc, const char** argv)
 {
 	ofSetWorkingDirectoryToDefault();
-
+	
 	//ofSetLogLevel(OF_LOG_VERBOSE);
 	//ofLogToFile("logfile-mempool.txt", true);
 

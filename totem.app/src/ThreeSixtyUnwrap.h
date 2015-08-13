@@ -26,7 +26,7 @@ public:
 	// ofBaseVideoDraws implementation
 	float getHeight() { return this->unwrappedImage.getHeight(); }
 	float getWidth() { return this->unwrappedImage.getWidth(); }
-	bool isFrameNew() { return this->videoSource->isFrameNew(); }
+	bool isFrameNew();
 	ofTexture & getTextureReference() { return this->unwrappedImage.getTextureReference(); }
 	void setUseTexture(bool bUseTex) { this->unwrappedImage.setUseTexture(bUseTex); }
 
@@ -39,6 +39,7 @@ private:
 	void threadedFunction();
 
 	bool newSourceFrame = false;
+	bool newFrame = false;
 	int   warpedW;
 	int   warpedH;
 	float unwarpedW;

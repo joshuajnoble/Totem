@@ -57,6 +57,7 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	}
 
 	this->isTotem = isTotemSource;
+	this->isConnectedToSession = false;
 
 	Poco::Net::NetworkInterface interface;
 	for (auto iter = interfaces.begin(); !found && iter != interfaces.end(); ++iter)
@@ -74,20 +75,23 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 		ofExit();
 	}
 
+	this->interface = interface;
+
 	this->broadcastAddress = GetBroadcastAddress(interface).toString();
-	this->myid = MACtoString(interface.macAddress());
+	this->myid = MACtoString(this->interface.macAddress());
 	this->myid += "/";
 	this->myid += ofToString((int)roundf(ofRandomf() * 0xFFFFFF));
 
 	this->videoWidth = w;
 	this->videoHeight = h;
 	this->sender.Create();
-	this->sender.Connect(this->broadcastAddress.c_str(), this->broadcastPort);
+	this->sender.Connect(this->broadcastAddress.c_str(), this->discoveryBroadcastPort);
 	this->sender.SetNonBlocking(true);
 	this->sender.SetEnableBroadcast(true);
+	this->totemSourceAngle = 0;
 
 	this->receiver.Create();
-	this->receiver.Bind(this->broadcastPort);
+	this->receiver.Bind(this->discoveryBroadcastPort);
 	this->receiver.SetNonBlocking(true);
 
 	this->nextSendTime = 0;
@@ -131,7 +135,7 @@ void UdpDiscovery::SendJsonPayload(const ofxJSONElement& jsonPayload)
 
 void UdpDiscovery::update()
 {
-	// This is locking myNextPort, remoteClientMap and incomingMessage.  That is why it is at function scope right now.
+	// This is locking remoteClientMap and incomingMessage.  That is why it is at function scope right now.
 	Poco::Mutex::ScopedLock lock(this->portmutex);
 
 	auto currentTime = ofGetElapsedTimef();
@@ -145,11 +149,10 @@ void UdpDiscovery::update()
 		jsonPayload["videoWidth"] = this->videoWidth;
 		jsonPayload["videoHeight"] = this->videoHeight;
 		jsonPayload["totem"] = this->isTotem;
-		
-		// Publish all of our port mappings to the other clients
-		for (auto iter = this->remoteClientMap.begin(); iter != this->remoteClientMap.end(); ++iter)
+		jsonPayload["connected"] = this->isConnectedToSession;
+		if (this->isTotem)
 		{
-			jsonPayload[iter->second.id] = iter->second.assignedLocalPort;
+			jsonPayload["angle"] = this->totemSourceAngle;
 		}
 
 		SendJsonPayload(jsonPayload);
@@ -160,7 +163,7 @@ void UdpDiscovery::update()
 		{
 			if (currentTime >= iter->second.disconnectTime)
 			{
-				peersToRemove.push_back(iter->second.id);
+				//peersToRemove.push_back(iter->second.id);
 			}
 		}
 
@@ -196,17 +199,34 @@ void UdpDiscovery::update()
 						peerIter = this->remoteClientMap.find(remoteId);
 					}
 
+					bool isPeerConnectedToSession = jsonPayload["connected"].asBool();
+					if (peerIter->second.isConnectedToSession != isPeerConnectedToSession)
+					{
+						peerIter->second.isConnectedToSession = isPeerConnectedToSession;
+						HandleConnectionChange(peerIter->second);
+					}
+
 					peerIter->second.disconnectTime = currentTime + this->broadcastMissingDuration;
+					if (jsonPayload.isMember("angle"))
+					{
+						UdpDiscovery::RemotePeerStatus& peer = peerIter->second;
+						auto angle = jsonPayload["angle"].asInt();
+						if (angle != peer.totemSourceAngle)
+						{
+							peer.totemSourceAngle = angle;
+							ofNotifyEvent(this->AngleChangedEvent, peer);
+						}
+					}
 
 					// The remote port won't be here the first time, so keep watching for it.
 					// Once the remote peer gets one of our dns packets, it will update it's dns packet with a port for us.
-					auto currentRemotePort = peerIter->second.assignedRemotePort;
-					if (currentRemotePort == 0 && jsonPayload.isMember(this->myid)) 
-					{
-						auto newRemotePort = jsonPayload[this->myid].asString();
-						peerIter->second.assignedRemotePort = jsonPayload[this->myid].asInt();
-						ofNotifyEvent(this->peerReadyEvent, peerIter->second, this);
-					}
+					//auto currentRemotePort = peerIter->second.assignedRemotePort;
+					//if (currentRemotePort == 0 && jsonPayload.isMember(this->myid)) 
+					//{
+					//	auto newRemotePort = jsonPayload[this->myid].asString();
+					//	peerIter->second.assignedRemotePort = jsonPayload[this->myid].asInt();
+					//	ofNotifyEvent(this->peerReadyEvent, peerIter->second, this);
+					//}
 				}
 				else if (jsonPayload["action"] == "disconnect")
 				{
@@ -226,20 +246,35 @@ void UdpDiscovery::update()
 	}
 }
 
+void UdpDiscovery::HandleConnectionChange(RemotePeerStatus &peer)
+{
+	if (peer.isConnectedToSession)
+	{
+		ofNotifyEvent(this->peerJoinedSessionEvent, peer, this);
+	}
+	else 
+	{
+		ofNotifyEvent(this->peerLeftSessionEvent, peer, this);
+	}
+}
 
 void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const string& remoteAddress)
 {
 	RemotePeerStatus peer;
 	peer.id = jsonPayload["id"].asString();
-	peer.assignedLocalPort = this->myNextPort;
-	peer.ipAddress = remoteAddress;
+	peer.port = this->videoBroadcastPort;
+	peer.ipAddress = "239.0.0." + remoteAddress.substr(remoteAddress.length() - 3);
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
-	peer.assignedRemotePort = 0;
 	peer.isTotem = jsonPayload["totem"].asBool();
+	peer.isConnectedToSession = jsonPayload["connected"].asBool();
+	peer.totemSourceAngle = 0;
+	if (jsonPayload.isMember("angle"))
+	{
+		peer.totemSourceAngle = jsonPayload["angle"].asInt();
+	}
 
 	this->remoteClientMap[peer.id] = peer;
-	this->myNextPort += this->portIncrement;
 
 	ofNotifyEvent(this->peerArrivedEvent, peer, this);
 
@@ -323,4 +358,19 @@ Poco::Net::IPAddress UdpDiscovery::GetBroadcastAddress(Poco::Net::NetworkInterfa
 	long broadcastBytes = (*bytes | *mask);
 	auto broadcastAddress = Poco::Net::IPAddress(&broadcastBytes, 4);
 	return broadcastAddress;
+}
+
+Poco::Net::IPAddress UdpDiscovery::GetLocalAddress()
+{
+	return this->interface.address();
+}
+
+void UdpDiscovery::SetConnectionStatus(bool isConnected)
+{
+	this->isConnectedToSession = isConnected;
+}
+
+void UdpDiscovery::SetSourceRotation(int angle)
+{
+	this->totemSourceAngle = angle;
 }

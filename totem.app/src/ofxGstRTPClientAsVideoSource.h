@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "..\..\SharedCode\StreamManager.h"
+#include "..\..\sharedCode\ofxFFmpegVideoReceiver.h"
 
 //class WrapFboAsVideo : public ofBaseVideoDraws
 //{
@@ -30,45 +30,91 @@
 //	void setUseTexture(bool bUseTex) { this->rtpClient->setUseTexture(bUseTex); }
 //};
 
-class ofxGstRTPClientAsVideoSource : public ofBaseVideoDraws
+//class ofxGstRTPClientAsVideoSource : public ofBaseVideoDraws
+//{
+//private:
+//	ofFbo fbo;
+//	ofPtr<ofxGstRTPClient> client;
+//
+//public:
+//
+//	ofxGstRTPClientAsVideoSource(ofPtr<ofxGstRTPClient> client, int width, int height) : client(client)
+//	{
+//
+//		this->fbo.allocate(width, height, GL_RGB);
+//	}
+//
+//	void close()
+//	{
+//		client.reset();
+//	}
+//
+//	void update()
+//	{
+//		// We don't call this->client.update() because that should already be called in the main window update loop.
+//		if (this->client->isFrameNewVideo())
+//		{
+//			this->fbo.getTextureReference().loadData(this->client->getPixelsVideo());
+//		}
+//	}
+//
+//	// ofBaseHasPixles implementation
+//	unsigned char* getPixels() { return this->client->getPixelsVideo().getPixels(); }
+//	ofPixelsRef getPixelsRef() { return this->client->getPixelsVideo(); }
+//	void draw(float x, float y, float w, float h) { this->fbo.draw(x, y, w, h); }
+//	void draw(float x, float y) { this->fbo.draw(x, y); }
+//
+//	// ofBaseVideoDraws implementation
+//	float getHeight() { return this->fbo.getHeight(); }
+//	float getWidth() { return this->fbo.getWidth(); }
+//	bool isFrameNew() { return this->client->isFrameNewVideo(); }
+//	ofTexture & getTextureReference() { return this->fbo.getTextureReference(); }
+//	void setUseTexture(bool bUseTex) { this->fbo.setUseTexture(bUseTex); }
+//};
+//
+
+
+class ofxFFmpegVideoReceiverAsVideoSource : public ofBaseVideoDraws
 {
 private:
-	ofFbo fbo;
-	ofPtr<ofxGstRTPClient> client;
+	ofImage videoImage;
+	ofxFFmpegVideoReceiver* client;
 
 public:
 
-	ofxGstRTPClientAsVideoSource(ofPtr<ofxGstRTPClient> client, int width, int height) : client(client)
+	ofxFFmpegVideoReceiverAsVideoSource(ofxFFmpegVideoReceiver* client) : client(client)
 	{
-
-		this->fbo.allocate(width, height, GL_RGB);
 	}
 
 	void close()
 	{
-		client.reset();
+		if (client)
+		{
+			client->Close();
+			client = 0;
+		}
 	}
 
 	void update()
 	{
 		// We don't call this->client.update() because that should already be called in the main window update loop.
-		if (this->client->isFrameNewVideo())
+		if (this->client->isVideoFrameNew())
 		{
-			this->fbo.getTextureReference().loadData(this->client->getPixelsVideo());
+			this->videoImage = this->client->getVideoImage();
 		}
 	}
 
 	// ofBaseHasPixles implementation
-	unsigned char* getPixels() { return this->client->getPixelsVideo().getPixels(); }
-	ofPixelsRef getPixelsRef() { return this->client->getPixelsVideo(); }
-	void draw(float x, float y, float w, float h) { this->fbo.draw(x, y, w, h); }
-	void draw(float x, float y) { this->fbo.draw(x, y); }
+	unsigned char* getPixels() { return this->client->getVideoImage().getPixels(); }
+	ofPixelsRef getPixelsRef() { return this->client->getVideoImage(); }
+	void draw(float x, float y, float w, float h) { this->videoImage.draw(x, y, w, h); }
+	void draw(float x, float y) { this->videoImage.draw(x, y); }
 
 	// ofBaseVideoDraws implementation
-	float getHeight() { return this->fbo.getHeight(); }
-	float getWidth() { return this->fbo.getWidth(); }
-	bool isFrameNew() { return this->client->isFrameNewVideo(); }
-	ofTexture & getTextureReference() { return this->fbo.getTextureReference(); }
-	void setUseTexture(bool bUseTex) { this->fbo.setUseTexture(bUseTex); }
+	float getHeight() { return this->videoImage.getHeight(); }
+	float getWidth() { return this->videoImage.getWidth(); }
+	bool isFrameNew() { return this->client->isVideoFrameNew(); }
+	ofTexture & getTextureReference() { return this->videoImage.getTextureReference(); }
+	void setUseTexture(bool bUseTex) { this->videoImage.setUseTexture(bUseTex); }
 };
 

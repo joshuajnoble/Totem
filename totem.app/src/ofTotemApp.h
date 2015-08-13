@@ -5,7 +5,6 @@
 #include "ofxPlaylist\src\ofxPlaylist.h"
 #include "ofxCv\src\ofxCv.h"
 #include "ThreeSixtyUnwrap.h"
-#include "..\..\sharedCode\StreamManager.h"
 #include "TotemDisplay.h"
 
 class ofTotemApp : public VideoCaptureAppBase
@@ -22,6 +21,7 @@ private:
 	TotemDisplay totemDisplay;
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 	bool cortanaLoadErrorDisplayed = false;
+	ofSerial serial;
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
