@@ -8,7 +8,19 @@
 class EncodeRGBToH264Live;
 class ofxFFmpegVideoReceiver;
 
-class VideoCaptureAppBase : public ofBaseApp
+class IVideoCaptureAppBase : public ofBaseApp
+{
+public:
+	virtual int displayWidth() const = 0;
+	virtual int displayHeight() const = 0;
+	//virtual void setup(int networkInterfaceId, bool isTotem = false) = 0;
+	virtual void update() = 0;
+	virtual void exit() = 0;
+
+	ofPtr<ofBaseVideoDraws> videoSource;
+};
+
+class VideoCaptureAppBase : public IVideoCaptureAppBase
 {
 public:
 	VideoCaptureAppBase();
@@ -17,8 +29,6 @@ public:
 	virtual int displayWidth() const = 0;
 	virtual int displayHeight() const = 0;
 	ofPtr<ofBaseVideoDraws> videoSource;
-	ofMutex videoLock;
-	volatile bool hasNewVideo = false;
 
 	virtual void setup(int networkInterfaceId, bool isTotem = false);
 	virtual void update();

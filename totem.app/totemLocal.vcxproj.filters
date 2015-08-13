@@ -343,6 +343,9 @@
     <ClCompile Include="..\sharedCode\AACNetworkSender.cpp">
       <Filter>ffmpeg</Filter>
     </ClCompile>
+    <ClCompile Include="src\ofSurfaceHubApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -691,6 +694,9 @@
     </ClInclude>
     <ClInclude Include="..\sharedCode\AACAudioDecoder.h">
       <Filter>ffmpeg</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofSurfaceHubApp.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

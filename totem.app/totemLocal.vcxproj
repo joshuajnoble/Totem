@@ -295,6 +295,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="src\CylinderDisplay.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofRemoteApp.cpp" />
+    <ClCompile Include="src\ofSurfaceHubApp.cpp" />
     <ClCompile Include="src\ofTotemApp.cpp" />
     <ClCompile Include="src\RemoteNetworkDisplay.cpp" />
     <ClCompile Include="src\StickyTimer.cpp" />
@@ -417,6 +418,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClInclude Include="..\sharedCode\YUV420_H264_Encoder.h" />
     <ClInclude Include="src\CylinderDisplay.h" />
     <ClInclude Include="src\ofRemoteApp.h" />
+    <ClInclude Include="src\ofSurfaceHubApp.h" />
     <ClInclude Include="src\ofTotemApp.h" />
     <ClInclude Include="src\RemoteNetworkDisplay.h" />
     <ClInclude Include="src\RemoteVideoInfo.h" />

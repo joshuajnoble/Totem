@@ -57,6 +57,7 @@ public:
 	ofEvent<RemotePeerStatus> peerLeftEvent;
 	ofEvent<RemotePeerStatus> AngleChangedEvent;
 
+	void setupSurfaceHub();
 	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
 	void update();
 	RemotePeerStatus GetPeerStatus(const std::string& peerId);

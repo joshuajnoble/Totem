@@ -38,6 +38,9 @@
  * to the active session.  If the totem peer is lost, then everyone should disconnect.  So we have to adjust
  * exactly when we broadcast each of the port records in the "DNS" packet to get the behaviour we want.
  */
+void UdpDiscovery::setupSurfaceHub()
+{
+}
 
 void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSource)
 {
