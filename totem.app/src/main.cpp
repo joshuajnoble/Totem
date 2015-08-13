@@ -18,7 +18,7 @@ namespace
 
 	const ofVec2f UNWRAPPED_DISPLAYRATIO(4.85, 1.0);
 
-	ofPtr<ofBaseVideoDraws> CreateVideoSource(int webCamDeviceId, int captureWidth, int captureHeight)
+	ofPtr<ofBaseVideoDraws> CreateVideoSource()
 	{
 		if (ofxArgParser::hasKey("capSource"))
 		{
@@ -34,6 +34,24 @@ namespace
 		}
 		else
 		{
+			auto webCamDeviceId = 0;
+			if (ofxArgParser::hasKey("capDevice"))
+			{
+				webCamDeviceId = ofToInt(ofxArgParser::getValue("capDevice"));
+			}
+
+			auto captureWidth = 640;
+			if (ofxArgParser::hasKey("capWidth"))
+			{
+				captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
+			}
+
+			auto captureHeight = 480;
+			if (ofxArgParser::hasKey("capHeight"))
+			{
+				captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
+			}
+
 			return Utils::CreateVideoSourceFromCamera(webCamDeviceId, captureWidth, captureHeight);
 		}
 	}
@@ -70,8 +88,11 @@ namespace
 #endif
 	}
 
-	ofPtr<IVideoCaptureAppBase> CreateTotemAppInstance(int captureWidth, int captureHeight, int networkInterfaceId)
+	ofPtr<IVideoCaptureAppBase> CreateTotemAppInstance(int networkInterfaceId)
 	{
+		int captureWidth = 2160;
+		int captureHeight = captureWidth;
+
 		auto totemApp = new ofTotemApp();
 		totemApp->earlyinit(networkInterfaceId);
 
@@ -96,6 +117,52 @@ namespace
 		{
 			ofSetupOpenGL((int)totemApp->displayWidth(), (int)totemApp->displayHeight(), OF_WINDOW);
 			RemoveWindowChrome((int)totemApp->displayWidth(), (int)totemApp->displayHeight());
+		}
+
+		ofPtr<ofBaseVideoDraws> videoSource;
+		if (ofxArgParser::hasKey("capSource"))
+		{
+			videoSource = CreateVideoSource();
+		}
+		else
+		{
+			auto camera = new PGRCamera();
+			if (!camera->setup())
+			{
+				cout << "There was an error initializing the PointGrey camera.";
+				return ofPtr<IVideoCaptureAppBase>();
+			}
+
+			videoSource = ofPtr<ofBaseVideoDraws>(camera);
+		}
+
+		if (ofxArgParser::hasKey("showInput") || ofxArgParser::hasKey("dontUnwrap"))
+		{
+			totemApp->rawSource = videoSource;
+		}
+		else
+		{
+			auto unwrapper = new ThreeSixtyUnwrap();
+			auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getPixelsRef().getWidth(), videoSource->getPixelsRef().getHeight()), UNWRAPPED_DISPLAYRATIO);
+			unwrapper->initUnwrapper(videoSource, outputSize);
+			videoSource = ofPtr<ofBaseVideoDraws>(unwrapper);
+		}
+
+		totemApp->videoSource = videoSource;
+
+		if (ofxArgParser::hasKey("netSource"))
+		{
+			// Use a file as a network video source
+			auto filename = ofxArgParser::getValue("netSource");
+			auto fullPath = ofToDataPath(filename);
+			if (!ofFile::doesFileExist(fullPath))
+			{
+				cout << "The specified file, \"" << fullPath << "\" does not exist.";
+				return ofPtr<IVideoCaptureAppBase>();
+			}
+
+			auto videoSource = Utils::CreateVideoSourceFromFile(fullPath);
+			totemApp->ImporsonateRemoteClient(videoSource);
 		}
 
 		return ofPtr<IVideoCaptureAppBase>(totemApp);
@@ -168,6 +235,9 @@ namespace
 			//remoteApp->Handle_ClientStreamAvailable(remote);
 		}
 
+		ofPtr<ofBaseVideoDraws> videoSource = CreateVideoSource();
+		remoteApp->videoSource = videoSource;
+
 		return ofPtr<IVideoCaptureAppBase>(remoteApp);
 	}
 
@@ -208,7 +278,7 @@ int main(int argc, const char** argv)
 			"                      (supported modes: 16x10, 10x9, 3x2, 768, 1080)" << endl <<
 
 			endl <<
-			"-hub       (Run as a emulated Surface Hub)" << endl <<
+			"-hub       (Run as an emulated Surface Hub)" << endl <<
 
 			endl << "NETWORK SETTINGS" << endl <<
 			"-netList                     (Show all network interfaces)" << endl <<
@@ -218,8 +288,8 @@ int main(int argc, const char** argv)
 			"-capSource=<path>           (Use a test file instead of the camera for input)" << endl <<
 			"-capDevice=<device number>  (Only needed when there are multiple capture devices)" << endl <<
 			"-capDeviceList              (Show all available capture devices)" << endl <<
-			"-capWidth=<capture width>   (default=2160(totem)/640(remote) pixels)" << endl <<
-			"-capHeight=<capture height> (default=2160(totem)/480(remote) pixels)" << endl;
+			"-capWidth=<capture width>   (default=640 pixels)" << endl <<
+			"-capHeight=<capture height> (default=480 pixels)" << endl;
 		return 0;
 	}
 	else if (ofxArgParser::hasKey("capDeviceList"))
@@ -288,92 +358,23 @@ int main(int argc, const char** argv)
 	else if (ofxArgParser::hasKey("remote")) totemMode = TotemMode_Remote;
 	else if (ofxArgParser::hasKey("hub")) totemMode = TotemMode_SurfaceHub;
 
-	auto webCamDeviceId = 0;
-	if (ofxArgParser::hasKey("capDevice"))
-	{
-		webCamDeviceId = ofToInt(ofxArgParser::getValue("capDevice"));
-	}
-
-	auto captureWidth = (totemMode == TotemMode_Totem ? 2160 : 640);
-	if (ofxArgParser::hasKey("capWidth"))
-	{
-		captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
-	}
-
-	auto captureHeight = (totemMode == TotemMode_Totem ? 2160 : 480);
-	if (ofxArgParser::hasKey("capHeight"))
-	{
-		captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
-	}
-
 	auto networkId = -1;
 	if (ofxArgParser::hasKey("netInterface"))
 	{
 		networkId = ofToInt(ofxArgParser::getValue("netInterface"));
 	}
 
-
 	ofPtr<IVideoCaptureAppBase> app;
 	switch (totemMode)
 	{
-	case TotemMode_Totem: app = CreateTotemAppInstance(captureWidth, captureHeight, networkId); break;
+	case TotemMode_Totem: app = CreateTotemAppInstance(networkId); break;
 	case TotemMode_Remote: app = CreateRemoteAppInstance(networkId); break;
 	case TotemMode_SurfaceHub: app = CreateHubAppInstance(networkId); break;
 	}
 
-	if (totemMode != TotemMode_SurfaceHub)
+	if (!app)
 	{
-		ofPtr<ofBaseVideoDraws> videoSource;
-		if (!totemMode || ofxArgParser::hasKey("capDevice") || ofxArgParser::hasKey("capSource") || ofxArgParser::hasKey("capWidth") || ofxArgParser::hasKey("capHeight"))
-		{
-			videoSource = CreateVideoSource(webCamDeviceId, captureWidth, captureHeight);
-		}
-		else
-		{
-			auto camera = new PGRCamera();
-			if (!camera->setup())
-			{
-				cout << "There was an error initializing the PointGrey camera.";
-				return -1;
-			}
-
-			videoSource = ofPtr<ofBaseVideoDraws>(camera);
-		}
-
-		if (totemMode == TotemMode_Totem)
-		{
-			auto totemApp = (ofTotemApp*)app.get();
-			if (ofxArgParser::hasKey("showInput"))
-			{
-				totemApp->rawSource = videoSource;
-			}
-			else if (ofxArgParser::hasKey("netSource"))
-			{
-				// Use a file as a network video source
-				auto filename = ofxArgParser::getValue("netSource");
-				auto fullPath = ofToDataPath(filename);
-				if (!ofFile::doesFileExist(fullPath))
-				{
-					cout << "The specified file, \"" << fullPath << "\" does not exist.";
-					return -1;
-				}
-
-				auto videoSource = Utils::CreateVideoSourceFromFile(fullPath);
-				totemApp->ImporsonateRemoteClient(videoSource);
-			}
-		}
-
-		if (totemMode == TotemMode_Remote || (totemMode == TotemMode_Totem && (ofxArgParser::hasKey("dontUnwrap") || ofxArgParser::hasKey("showInput"))))
-		{
-			app->videoSource = videoSource;
-		}
-		else
-		{
-			auto unwrapper = new ThreeSixtyUnwrap();
-			auto outputSize = ThreeSixtyUnwrap::CalculateUnwrappedSize(ofVec2f(videoSource->getPixelsRef().getWidth(), videoSource->getPixelsRef().getHeight()), UNWRAPPED_DISPLAYRATIO);
-			unwrapper->initUnwrapper(videoSource, outputSize);
-			app->videoSource = ofPtr<ofBaseVideoDraws>(unwrapper);
-		}
+		return -1;
 	}
 
 	ofRunApp(app);
