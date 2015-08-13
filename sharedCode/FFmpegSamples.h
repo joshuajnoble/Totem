@@ -11,9 +11,8 @@
 class encodeToVideoFile
 {
 private:
-	FFmpegFactory *m_ffmpeg;
-
-	int flush_encoder(AVFormatContext *fmt_ctx, unsigned int stream_index){
+	int flush_encoder(AVFormatContext *fmt_ctx, unsigned int stream_index)
+	{
 		int ret;
 		int got_frame;
 		AVPacket enc_pkt;
@@ -23,9 +22,9 @@ private:
 		while (1) {
 			enc_pkt.data = NULL;
 			enc_pkt.size = 0;
-			m_ffmpeg->codec.av_init_packet(&enc_pkt);
-			ret = m_ffmpeg->codec.avcodec_encode_video2(fmt_ctx->streams[stream_index]->codec, &enc_pkt, NULL, &got_frame);
-			m_ffmpeg->utils.av_frame_free(NULL);
+			av_init_packet(&enc_pkt);
+			ret = avcodec_encode_video2(fmt_ctx->streams[stream_index]->codec, &enc_pkt, NULL, &got_frame);
+			av_frame_free(NULL);
 			if (ret < 0)
 				break;
 			if (!got_frame){
@@ -34,7 +33,7 @@ private:
 			}
 			printf("Flush Encoder: Succeed to encode 1 frame!\tsize:%5d\n", enc_pkt.size);
 			/* mux encoded frame */
-			ret = m_ffmpeg->format.av_write_frame(fmt_ctx, &enc_pkt);
+			ret = av_write_frame(fmt_ctx, &enc_pkt);
 			if (ret < 0)
 				break;
 		}
@@ -42,7 +41,7 @@ private:
 	}
 
 public:
-	encodeToVideoFile(FFmpegFactory *ffmpeg, char *inputFileName, char* outputFilename, int width, int height, int fps) : m_ffmpeg(ffmpeg)
+	encodeToVideoFile(char *inputFileName, char* outputFilename, int width, int height, int fps)
 	{
 		AVFormatContext* pFormatCtx;
 		AVStream* video_st;
@@ -67,31 +66,31 @@ public:
 		const char* out_file = outputFilename;
 
 		//Method1.
-		pFormatCtx = m_ffmpeg->format.avformat_alloc_context();
+		pFormatCtx = avformat_alloc_context();
 		//Guess Format
 		{
-			auto fmt = m_ffmpeg->format.av_guess_format(NULL, out_file, NULL);
+			auto fmt = av_guess_format(NULL, out_file, NULL);
 			pFormatCtx->oformat = fmt;
 
 			//Method 2.
-			//m_ffmpeg->format.avformat_alloc_output_context2(&pFormatCtx, NULL, NULL, out_file);
+			//avformat_alloc_output_context2(&pFormatCtx, NULL, NULL, out_file);
 			//fmt = pFormatCtx->oformat;
 		}
 
 		//Open output URL
-		if (m_ffmpeg->format.avio_open(&pFormatCtx->pb, out_file, AVIO_FLAG_READ_WRITE) < 0){
+		if (avio_open(&pFormatCtx->pb, out_file, AVIO_FLAG_READ_WRITE) < 0){
 			printf("Failed to open output file! \n");
 			return;
 		}
 
-		pCodec = m_ffmpeg->codec.avcodec_find_encoder_by_name("libx264");
-		//pCodec = m_ffmpeg->codec.avcodec_find_encoder_by_name("h264_qsv"); // TODO: Why doesn't this work?
+		pCodec = avcodec_find_encoder_by_name("libx264");
+		//pCodec = avcodec_find_encoder_by_name("h264_qsv"); // TODO: Why doesn't this work?
 		if (!pCodec){
 			printf("Can not find encoder! \n");
 			return;
 		}
 
-		video_st = m_ffmpeg->format.avformat_new_stream(pFormatCtx, pCodec);
+		video_st = avformat_new_stream(pFormatCtx, pCodec);
 		video_st->time_base.num = 1;
 		video_st->time_base.den = fps;
 
@@ -124,33 +123,33 @@ public:
 		AVDictionary *param = 0;
 		//H.264
 		if (pCodecCtx->codec_id == AV_CODEC_ID_H264) {
-			m_ffmpeg->utils.av_dict_set(&param, "preset", "slow", 0);
-			m_ffmpeg->utils.av_dict_set(&param, "tune", "zerolatency", 0);
+			av_dict_set(&param, "preset", "slow", 0);
+			av_dict_set(&param, "tune", "zerolatency", 0);
 			//av_dict_set(&param, "profile", "main", 0);
 		}
 		//H.265
 		if (pCodecCtx->codec_id == AV_CODEC_ID_H265){
-			m_ffmpeg->utils.av_dict_set(&param, "preset", "ultrafast", 0);
-			m_ffmpeg->utils.av_dict_set(&param, "tune", "zero-latency", 0);
+			av_dict_set(&param, "preset", "ultrafast", 0);
+			av_dict_set(&param, "tune", "zero-latency", 0);
 		}
 
 		//Show some Information
-		m_ffmpeg->format.av_dump_format(pFormatCtx, 0, out_file, 1);
+		av_dump_format(pFormatCtx, 0, out_file, 1);
 
-		if (m_ffmpeg->codec.avcodec_open2(pCodecCtx, pCodec, &param) < 0){
+		if (avcodec_open2(pCodecCtx, pCodec, &param) < 0){
 			printf("Failed to open encoder! \n");
 			return;
 		}
 
-		pFrame = m_ffmpeg->utils.av_frame_alloc();
-		picture_size = m_ffmpeg->codec.avpicture_get_size(pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
-		picture_buf = (uint8_t *)m_ffmpeg->utils.av_malloc(picture_size);
-		m_ffmpeg->codec.avpicture_fill((AVPicture *)pFrame, picture_buf, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
+		pFrame = av_frame_alloc();
+		picture_size = avpicture_get_size(pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
+		picture_buf = (uint8_t *)av_malloc(picture_size);
+		avpicture_fill((AVPicture *)pFrame, picture_buf, pCodecCtx->pix_fmt, pCodecCtx->width, pCodecCtx->height);
 
 		//Write File Header
-		m_ffmpeg->format.avformat_write_header(pFormatCtx, NULL);
+		avformat_write_header(pFormatCtx, NULL);
 
-		m_ffmpeg->codec.av_new_packet(&pkt, picture_size);
+		av_new_packet(&pkt, picture_size);
 
 		y_size = pCodecCtx->width * pCodecCtx->height;
 
@@ -166,7 +165,7 @@ public:
 				pFrame->pts = i;
 				int got_picture = 0;
 				//Encode
-				int ret = m_ffmpeg->codec.avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_picture);
+				int ret = avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_picture);
 				if (ret < 0){
 					printf("Failed to encode! \n");
 					return;
@@ -175,8 +174,8 @@ public:
 					printf("Succeed to encode frame: %5d\tsize:%5d\n", framecnt, pkt.size);
 					framecnt++;
 					pkt.stream_index = video_st->index;
-					ret = m_ffmpeg->format.av_write_frame(pFormatCtx, &pkt);
-					m_ffmpeg->codec.av_free_packet(&pkt);
+					ret = av_write_frame(pFormatCtx, &pkt);
+					av_free_packet(&pkt);
 				}
 			}
 			else if (cbRead != 0 || (i == cbRead == 0))
@@ -196,16 +195,16 @@ public:
 		}
 
 		//Write file trailer
-		m_ffmpeg->format.av_write_trailer(pFormatCtx);
+		av_write_trailer(pFormatCtx);
 
 		//Clean
 		if (video_st){
-			m_ffmpeg->codec.avcodec_close(video_st->codec);
-			m_ffmpeg->utils.av_free(pFrame);
-			m_ffmpeg->utils.av_free(picture_buf);
+			avcodec_close(video_st->codec);
+			av_free(pFrame);
+			av_free(picture_buf);
 		}
-		m_ffmpeg->format.avio_close(pFormatCtx->pb);
-		m_ffmpeg->format.avformat_free_context(pFormatCtx);
+		avio_close(pFormatCtx->pb);
+		avformat_free_context(pFormatCtx);
 
 		fclose(in_file);
 	}
@@ -214,11 +213,8 @@ public:
 // http://sourceforge.net/p/simplestffmpegvideoencoder/code/ci/master/tree/simplest_ffmpeg_video_encoder_pure/simplest_ffmpeg_video_encoder_pure.cpp
 class encodeRawFile
 {
-private:
-	FFmpegFactory *m_ffmpeg;
-
 public:
-	encodeRawFile(FFmpegFactory *ffmpeg, char *filename_in, char* filename_out, int in_w, int in_h, int fps) : m_ffmpeg(ffmpeg)
+	encodeRawFile(char *filename_in, char* filename_out, int in_w, int in_h, int fps)
 	{
 		AVCodec *pCodec;
 		AVCodecContext *pCodecCtx = NULL;
@@ -230,8 +226,8 @@ public:
 		int y_size;
 		int framecnt = 0;
 
-		//auto intelCodec = m_ffmpeg->codec.avcodec_find_encoder_by_name("h264_qsv"); // TODO: why doesn't this work?
-		auto x264Codec = m_ffmpeg->codec.avcodec_find_encoder_by_name("libx264");
+		//auto intelCodec = avcodec_find_encoder_by_name("h264_qsv"); // TODO: why doesn't this work?
+		auto x264Codec = avcodec_find_encoder_by_name("libx264");
 
 		pCodec = x264Codec;
 		if (!pCodec) {
@@ -241,7 +237,7 @@ public:
 
 		AVCodecID codec_id = pCodec->id;
 
-		pCodecCtx = m_ffmpeg->codec.avcodec_alloc_context3(pCodec);
+		pCodecCtx = avcodec_alloc_context3(pCodec);
 		if (!pCodecCtx) {
 			printf("Could not allocate video codec context\n");
 			return;
@@ -258,20 +254,20 @@ public:
 
 		if (codec_id == AV_CODEC_ID_H264)
 		{
-			//m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "preset", "slow", 0);
-			//m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "preset", "ultrafast", 0);
-			//m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "tune", "zerolatency", 0);
-			m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "preset", "7", 0);
-			m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
-			m_ffmpeg->utils.av_opt_set(pCodecCtx->priv_data, "bf", "0", 0);
+			//av_opt_set(pCodecCtx->priv_data, "preset", "slow", 0);
+			//av_opt_set(pCodecCtx->priv_data, "preset", "ultrafast", 0);
+			//av_opt_set(pCodecCtx->priv_data, "tune", "zerolatency", 0);
+			av_opt_set(pCodecCtx->priv_data, "preset", "7", 0);
+			av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+			av_opt_set(pCodecCtx->priv_data, "bf", "0", 0);
 		}
 
-		if (m_ffmpeg->codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
+		if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
 			printf("Could not open codec\n");
 			return;
 		}
 
-		pFrame = m_ffmpeg->utils.av_frame_alloc();
+		pFrame = av_frame_alloc();
 		if (!pFrame) {
 			printf("Could not allocate video frame\n");
 			return;
@@ -280,7 +276,7 @@ public:
 		pFrame->width = pCodecCtx->width;
 		pFrame->height = pCodecCtx->height;
 
-		ret = m_ffmpeg->utils.av_image_alloc(pFrame->data, pFrame->linesize, pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 16);
+		ret = av_image_alloc(pFrame->data, pFrame->linesize, pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 16);
 		if (ret < 0) {
 			printf("Could not allocate raw picture buffer\n");
 			return;
@@ -304,7 +300,7 @@ public:
 		y_size = pCodecCtx->width * pCodecCtx->height;
 		//Encode
 		for (i = 0; !feof(fp_in); i++) {
-			m_ffmpeg->codec.av_init_packet(&pkt);
+			av_init_packet(&pkt);
 			pkt.data = NULL;    // packet data will be allocated by the encoder
 			pkt.size = 0;
 			//Read raw YUV data
@@ -322,7 +318,7 @@ public:
 
 			pFrame->pts = i;
 			/* encode the image */
-			ret = m_ffmpeg->codec.avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_output);
+			ret = avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_output);
 			if (ret < 0) {
 				printf("Error encoding frame\n");
 				return;
@@ -331,13 +327,13 @@ public:
 				printf("Succeed to encode frame: %5d\tsize:%5d\n", framecnt, pkt.size);
 				framecnt++;
 				fwrite(pkt.data, 1, pkt.size, fp_out);
-				m_ffmpeg->codec.av_free_packet(&pkt);
+				av_free_packet(&pkt);
 			}
 		}
 
 		//Flush Encoder
 		for (got_output = 1; got_output; i++) {
-			ret = m_ffmpeg->codec.avcodec_encode_video2(pCodecCtx, &pkt, NULL, &got_output);
+			ret = avcodec_encode_video2(pCodecCtx, &pkt, NULL, &got_output);
 			if (ret < 0) {
 				printf("Error encoding frame\n");
 				return;
@@ -345,14 +341,14 @@ public:
 			if (got_output) {
 				printf("Flush Encoder: Succeed to encode 1 frame!\tsize:%5d\n", pkt.size);
 				fwrite(pkt.data, 1, pkt.size, fp_out);
-				m_ffmpeg->codec.av_free_packet(&pkt);
+				av_free_packet(&pkt);
 			}
 		}
 
-		m_ffmpeg->codec.avcodec_close(pCodecCtx);
-		m_ffmpeg->utils.av_free(pCodecCtx);
-		m_ffmpeg->utils.av_freep(&pFrame->data[0]);
-		m_ffmpeg->utils.av_frame_free(&pFrame);
+		avcodec_close(pCodecCtx);
+		av_free(pCodecCtx);
+		av_freep(&pFrame->data[0]);
+		av_frame_free(&pFrame);
 	}
 };
 
@@ -360,31 +356,30 @@ public:
 class VideoCaptureTest
 {
 private:
-	FFmpegFactory* m_ffmpeg;
 	AVFormatContext	*pFormatCtx;
 	int				videoindex;
 	AVCodecContext	*pCodecCtx;
 	AVCodec			*pCodec;
 
 public:
-	VideoCaptureTest(FFmpegFactory* ffmpeg, const char *filename, int width, int height, int fps, int duration) : m_ffmpeg(ffmpeg)
+	VideoCaptureTest(const char *filename, int width, int height, int fps, int duration)
 	{
-		AVInputFormat *ifmt = m_ffmpeg->format.av_find_input_format("dshow");
+		AVInputFormat *ifmt = av_find_input_format("dshow");
 		//Set own video device's name
-		pFormatCtx = m_ffmpeg->format.avformat_alloc_context();
+		pFormatCtx = avformat_alloc_context();
 
 		std::string captureSourceName("Logitech HD Pro Webcam C920");
 		//std::string captureSourceName("HP Truevision HD");
 
 		AVDictionary* options = NULL;
-		m_ffmpeg->utils.av_dict_set(&options, "video_size", (std::to_string(width) + "x" + std::to_string(height)).c_str(), 0);
-		m_ffmpeg->utils.av_dict_set(&options, "framerate", std::to_string(fps).c_str(), 0);
-		m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_YUV420P), 0);
-		if (m_ffmpeg->format.avformat_open_input(&pFormatCtx, (std::string("video=") + captureSourceName).c_str(), ifmt, &options) != 0)
+		av_dict_set(&options, "video_size", (std::to_string(width) + "x" + std::to_string(height)).c_str(), 0);
+		av_dict_set(&options, "framerate", std::to_string(fps).c_str(), 0);
+		av_dict_set(&options, "pixel_format", av_get_pix_fmt_name(PIX_FMT_YUV420P), 0);
+		if (avformat_open_input(&pFormatCtx, (std::string("video=") + captureSourceName).c_str(), ifmt, &options) != 0)
 		{
-			if (!m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_YUYV422), 0))
+			if (!av_dict_set(&options, "pixel_format", av_get_pix_fmt_name(PIX_FMT_YUYV422), 0))
 			{
-				if (!m_ffmpeg->utils.av_dict_set(&options, "pixel_format", m_ffmpeg->utils.av_get_pix_fmt_name(PIX_FMT_RGB24), 0))
+				if (!av_dict_set(&options, "pixel_format", av_get_pix_fmt_name(PIX_FMT_RGB24), 0))
 				{
 					printf("Couldn't open input stream.\n");
 					return;
@@ -392,7 +387,7 @@ public:
 			}
 		}
 
-		if (m_ffmpeg->format.avformat_find_stream_info(pFormatCtx, NULL) < 0)
+		if (avformat_find_stream_info(pFormatCtx, NULL) < 0)
 		{
 			printf("Couldn't find stream information.\n");
 			return;
@@ -418,7 +413,7 @@ public:
 			return;
 		}
 		pCodecCtx = pFormatCtx->streams[videoindex]->codec;
-		pCodec = m_ffmpeg->codec.avcodec_find_decoder(pCodecCtx->codec_id);
+		pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
 		if (pCodec == NULL)
 		{
 			printf("Codec not found.\n");
@@ -430,17 +425,17 @@ public:
 		pCodecCtx->framerate.num = 1;
 		pCodecCtx->framerate.den = fps;
 
-		if (m_ffmpeg->codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0)
+		if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0)
 		{
 			printf("Could not open codec.\n");
 			return;
 		}
 
-		AVFrame* pFrameYUV = m_ffmpeg->utils.av_frame_alloc();
+		AVFrame* pFrameYUV = av_frame_alloc();
 		//uint8_t *out_buffer=(uint8_t *)av_malloc(avpicture_get_size(PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height));
 		//avpicture_fill((AVPicture *)pFrameYUV, out_buffer, PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height);
 
-		AVPacket *packet = (AVPacket *)m_ffmpeg->utils.av_malloc(sizeof(AVPacket));
+		AVPacket *packet = (AVPacket *)av_malloc(sizeof(AVPacket));
 		FILE *fp_yuv;
 		auto error = fopen_s(&fp_yuv, filename, "wb+");
 		assert(!error);
@@ -472,11 +467,11 @@ public:
 				nextTime.QuadPart += frameInterval;
 			} while (nextTime.QuadPart < time.QuadPart);
 
-			if (m_ffmpeg->format.av_read_frame(pFormatCtx, packet) >= 0)
+			if (av_read_frame(pFormatCtx, packet) >= 0)
 			{
 				if (packet->stream_index == videoindex)
 				{
-					ret = m_ffmpeg->codec.avcodec_decode_video2(pCodecCtx, pFrameYUV, &got_picture, packet);
+					ret = avcodec_decode_video2(pCodecCtx, pFrameYUV, &got_picture, packet);
 					if (ret < 0)
 					{
 						printf("Decode Error.\n");
@@ -490,7 +485,7 @@ public:
 						fwrite(pFrameYUV->data[2], 1, y_size / 4, fp_yuv);  //V  
 					}
 				}
-				m_ffmpeg->codec.av_free_packet(packet);
+				av_free_packet(packet);
 			}
 		}
 
@@ -499,17 +494,14 @@ public:
 		safeFile.Cleanup();
 
 		//av_free(out_buffer);
-		m_ffmpeg->utils.av_free(pFrameYUV);
-		m_ffmpeg->codec.avcodec_close(pCodecCtx);
-		m_ffmpeg->format.avformat_close_input(&pFormatCtx);
+		av_free(pFrameYUV);
+		avcodec_close(pCodecCtx);
+		avformat_close_input(&pFormatCtx);
 	}
 };
 
 class JustForTesting
 {
-private:
-	FFmpegFactory m_ffmpeg;
-
 public:
 	JustForTesting()
 	{
@@ -530,33 +522,33 @@ public:
 
 		streamingEncoder.Close();
 
-		//auto fileTest = new encodeToVideoFile(m_ffmpeg, "test.yuv", "test.h264", width, height, fps);
+		//auto fileTest = new encodeToVideoFile("test.yuv", "test.h264", width, height, fps);
 		//delete fileTest;
 
-		//auto streamTest = new encodeRawFile(m_ffmpeg, "test.yuv", "test-raw.h264", width, height, fps);
+		//auto streamTest = new encodeRawFile("test.yuv", "test-raw.h264", width, height, fps);
 		//delete streamTest;
 
 		//{
-		//	AVFormatContext *pFormatCtx = m_ffmpeg->format.avformat_alloc_context();
+		//	AVFormatContext *pFormatCtx = avformat_alloc_context();
 		//	AVDictionary* options = NULL;
-		//	m_ffmpeg->utils.av_dict_set(&options, "list_devices", "true", 0);
-		//	AVInputFormat *iformat = m_ffmpeg->format.av_find_input_format("dshow");
+		//	av_dict_set(&options, "list_devices", "true", 0);
+		//	AVInputFormat *iformat = av_find_input_format("dshow");
 		//	printf("========Device Info=============\n");
-		//	m_ffmpeg->format.avformat_open_input(&pFormatCtx, "video=dummy", iformat, &options);
-		//	m_ffmpeg->format.avformat_close_input(&pFormatCtx);
+		//	avformat_open_input(&pFormatCtx, "video=dummy", iformat, &options);
+		//	avformat_close_input(&pFormatCtx);
 		//	printf("================================\n");
 		//}
 
 		//{
-		//	AVFormatContext *pFormatCtx = m_ffmpeg->format.avformat_alloc_context();
+		//	AVFormatContext *pFormatCtx = avformat_alloc_context();
 		//	AVDictionary* options = NULL;
-		//	m_ffmpeg->utils.av_dict_set(&options, "list_options", "true", 0);
-		//	AVInputFormat *iformat = m_ffmpeg->format.av_find_input_format("dshow");
+		//	av_dict_set(&options, "list_options", "true", 0);
+		//	AVInputFormat *iformat = av_find_input_format("dshow");
 		//	printf("========Device Option Info======\n");
 		//	std::string deviceName("Logitech HD Pro Webcam C920");
 		//	//std::string deviceName("HP Truevision HD");
-		//	m_ffmpeg->format.avformat_open_input(&pFormatCtx, (std::string("video=") + deviceName).c_str(), iformat, &options);
-		//	m_ffmpeg->format.avformat_close_input(&pFormatCtx);
+		//	avformat_open_input(&pFormatCtx, (std::string("video=") + deviceName).c_str(), iformat, &options);
+		//	avformat_close_input(&pFormatCtx);
 		//	printf("================================\n");
 		//}
 	}

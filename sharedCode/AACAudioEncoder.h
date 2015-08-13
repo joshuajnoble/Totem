@@ -7,7 +7,6 @@
 class AACAudioEncoder
 {
 private:
-	FFmpegFactory m_ffmpeg;
 	FrameCallback callback;
 
 	AVPacket pkt;

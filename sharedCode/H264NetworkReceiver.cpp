@@ -1,4 +1,5 @@
 #include "H264NetworkReceiver.h"
+#include <stdexcept>
 
 namespace
 {
@@ -115,8 +116,8 @@ void H264NetworkReceiver::OtherThread()
 	//out_filename = "receive.h264";
 
 	//Input
-	//if ((ret = m_ffmpeg.format.avformat_open_input(&ifmt_ctx, "test.sdp", 0, 0)) < 0) {
-	if ((ret = m_ffmpeg.format.avformat_open_input(&ifmt_ctx, tempFile, 0, 0)) < 0) {
+	//if ((ret = avformat_open_input(&ifmt_ctx, "test.sdp", 0, 0)) < 0) {
+	if ((ret = avformat_open_input(&ifmt_ctx, tempFile, 0, 0)) < 0) {
 		DeleteFileA(tempFile);
 		throw std::runtime_error("Could not open input file.");
 	}
@@ -126,7 +127,7 @@ void H264NetworkReceiver::OtherThread()
 	//int retriesLeft = 3;
 	//while (retriesLeft--)
 	//{
-	//	if ((ret = m_ffmpeg.format.avformat_find_stream_info(ifmt_ctx, 0)) < 0)
+	//	if ((ret = avformat_find_stream_info(ifmt_ctx, 0)) < 0)
 	//	{
 	//		if (!retriesLeft)
 	//		{
@@ -162,10 +163,10 @@ void H264NetworkReceiver::OtherThread()
 	{
 		throw std::runtime_error("Could not find video stream index.");
 	}
-	//m_ffmpeg.format.av_dump_format(ifmt_ctx, 0, in_filename, 0);
+	//av_dump_format(ifmt_ctx, 0, in_filename, 0);
 
 	//Output
-	//m_ffmpeg.format.avformat_alloc_output_context2(&ofmt_ctx, NULL, NULL, out_filename); //RTMP
+	//avformat_alloc_output_context2(&ofmt_ctx, NULL, NULL, out_filename); //RTMP
 
 	//if (!ofmt_ctx) {
 	//	printf("Could not create output context\n");
@@ -176,14 +177,14 @@ void H264NetworkReceiver::OtherThread()
 	//for (unsigned int i = 0; i < ifmt_ctx->nb_streams; i++) {
 	//	//Create output AVStream according to input AVStream
 	//	AVStream *in_stream = ifmt_ctx->streams[i];
-	//	AVStream *out_stream = m_ffmpeg.format.avformat_new_stream(ofmt_ctx, in_stream->codec->codec);
+	//	AVStream *out_stream = avformat_new_stream(ofmt_ctx, in_stream->codec->codec);
 	//	if (!out_stream) {
 	//		printf("Failed allocating output stream\n");
 	//		ret = AVERROR_UNKNOWN;
 	//		goto end;
 	//	}
 	//	//Copy the settings of AVCodecContext
-	//	ret = m_ffmpeg.codec.avcodec_copy_context(out_stream->codec, in_stream->codec);
+	//	ret = avcodec_copy_context(out_stream->codec, in_stream->codec);
 	//	if (ret < 0) {
 	//		printf("Failed to copy context from input to output stream codec context\n");
 	//		goto end;
@@ -194,17 +195,17 @@ void H264NetworkReceiver::OtherThread()
 	//}
 
 	//Dump Format------------------
-	//m_ffmpeg.format.av_dump_format(ofmt_ctx, 0, out_filename, 1);
+	//av_dump_format(ofmt_ctx, 0, out_filename, 1);
 	////Open output URL
 	//if (!(ofmt->flags & AVFMT_NOFILE)) {
-	//	ret = m_ffmpeg.format.avio_open(&ofmt_ctx->pb, out_filename, AVIO_FLAG_WRITE);
+	//	ret = avio_open(&ofmt_ctx->pb, out_filename, AVIO_FLAG_WRITE);
 	//	if (ret < 0) {
 	//		printf("Could not open output URL '%s'", out_filename);
 	//		goto end;
 	//	}
 	//}
 	////Write file header
-	//ret = m_ffmpeg.format.avformat_write_header(ofmt_ctx, NULL);
+	//ret = avformat_write_header(ofmt_ctx, NULL);
 	//if (ret < 0) {
 	//	printf("Error occurred when opening output URL\n");
 	//	goto end;
@@ -213,7 +214,7 @@ void H264NetworkReceiver::OtherThread()
 	{
 		ifmt_ctx->interrupt_callback.callback = &H264NetworkReceiver::Interrupt;
 		ifmt_ctx->interrupt_callback.opaque = (void*)this;
-		auto ret = m_ffmpeg.format.av_read_frame(ifmt_ctx, &pkt);
+		auto ret = av_read_frame(ifmt_ctx, &pkt);
 		if (ret < 0 && WaitForSingleObject(this->closeHandle, 0) != WAIT_TIMEOUT)
 		{
 			return;
@@ -224,9 +225,9 @@ void H264NetworkReceiver::OtherThread()
 		//out_stream = ofmt_ctx->streams[pkt.stream_index];
 		///* copy packet */
 		////Convert PTS/DTS
-		//pkt.pts = m_ffmpeg.utils.av_rescale_q_rnd(pkt.pts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
-		//pkt.dts = m_ffmpeg.utils.av_rescale_q_rnd(pkt.dts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
-		//pkt.duration = m_ffmpeg.utils.av_rescale_q(pkt.duration, in_stream->time_base, out_stream->time_base);
+		//pkt.pts = av_rescale_q_rnd(pkt.pts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
+		//pkt.dts = av_rescale_q_rnd(pkt.dts, in_stream->time_base, out_stream->time_base, (AVRounding)(AV_ROUND_NEAR_INF | AV_ROUND_PASS_MINMAX));
+		//pkt.duration = av_rescale_q(pkt.duration, in_stream->time_base, out_stream->time_base);
 		pkt.pos = -1;
 		//Print to Screen
 		if (pkt.stream_index == videoindex)
@@ -246,7 +247,7 @@ void H264NetworkReceiver::OtherThread()
 			}
 		}
 
-		m_ffmpeg.codec.av_free_packet(&pkt);
+		av_free_packet(&pkt);
 	}
 }
 
@@ -269,7 +270,7 @@ void H264NetworkReceiver::Close()
 		CloseHandle(this->closeHandle);
 		this->closeHandle = 0;
 
-		m_ffmpeg.format.avformat_close_input(&ifmt_ctx);
+		avformat_close_input(&ifmt_ctx);
 	}
 }
 

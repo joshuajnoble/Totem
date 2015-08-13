@@ -3,6 +3,7 @@
 #include "FFmpegImports.h"
 
 #include <string>
+#include <windows.h>
 
 class H264NetworkReceiver
 {
@@ -10,7 +11,6 @@ private:
 	static DWORD WINAPI ThreadMarshaller(LPVOID);
 	static int Interrupt(void*);
 
-	FFmpegFactory m_ffmpeg;
 	bool initialized, closed;
 	FrameCallback callback;
 	FrameCallback callbackAudio;

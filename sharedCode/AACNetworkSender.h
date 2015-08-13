@@ -7,7 +7,6 @@
 class AACNetworkSender
 {
 private:
-	FFmpegFactory m_ffmpeg;
 	AVOutputFormat *avOutputFormat = NULL;
 	AVFormatContext *avOutputFormatContext = NULL;
 	std::string out_filename;

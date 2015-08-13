@@ -1,5 +1,6 @@
 ﻿#include "H264NetworkSender.h"
 #include "LegacyGuards.h"
+#include <windows.h>
 
 H264NetworkSender::H264NetworkSender() : initialized(false), closed(false)
 {
@@ -18,15 +19,15 @@ void H264NetworkSender::Start(const std::string& networkAddress, int width, int 
 		this->out_filename = "rtp://" + this->out_filename;
 	}
 
-	auto inputFormatContext = m_ffmpeg.format.avformat_alloc_context();
+	auto inputFormatContext = avformat_alloc_context();
 	if (!inputFormatContext) {
 		throw std::runtime_error("Could not create input context");
 	}
 
-	GuardAVFormatContext inputGuard(inputFormatContext, &m_ffmpeg);
+	GuardAVFormatContext inputGuard(inputFormatContext);
 
-	inputFormatContext->iformat = m_ffmpeg.format.av_find_input_format("h264");
-	auto in_stream = m_ffmpeg.format.avformat_new_stream(inputFormatContext, inputFormatContext->video_codec);
+	inputFormatContext->iformat = av_find_input_format("h264");
+	auto in_stream = avformat_new_stream(inputFormatContext, inputFormatContext->video_codec);
 	in_stream->codec->codec_type = AVMEDIA_TYPE_VIDEO;
 	in_stream->codec->codec_id = AV_CODEC_ID_H264;
 	in_stream->codec->framerate.num = 1;
@@ -63,7 +64,7 @@ void H264NetworkSender::Start(const std::string& networkAddress, int width, int 
 	//in_stream->codec->pkt_timebase.den = 1200000;
 
 	//Output
-	m_ffmpeg.format.avformat_alloc_output_context2(&avOutputFormatContext, NULL, "rtp", out_filename.c_str());
+	avformat_alloc_output_context2(&avOutputFormatContext, NULL, "rtp", out_filename.c_str());
 	if (!avOutputFormatContext) {
 		throw std::runtime_error("Could not create output context");
 	}
@@ -71,13 +72,13 @@ void H264NetworkSender::Start(const std::string& networkAddress, int width, int 
 	avOutputFormat = avOutputFormatContext->oformat;
 
 	//Create output AVStream according to input AVStream
-	AVStream *out_stream = m_ffmpeg.format.avformat_new_stream(avOutputFormatContext, in_stream->codec->codec);
+	AVStream *out_stream = avformat_new_stream(avOutputFormatContext, in_stream->codec->codec);
 	if (!out_stream) {
 		throw std::runtime_error("Failed allocating output stream");
 	}
 
 	//Copy the settings of AVCodecContext
-	auto ret = m_ffmpeg.codec.avcodec_copy_context(out_stream->codec, in_stream->codec);
+	auto ret = avcodec_copy_context(out_stream->codec, in_stream->codec);
 	if (ret < 0) {
 		throw std::runtime_error("Failed to copy context from input to output stream codec context");
 	}
@@ -87,24 +88,24 @@ void H264NetworkSender::Start(const std::string& networkAddress, int width, int 
 		out_stream->codec->flags |= CODEC_FLAG_GLOBAL_HEADER;
 	}
 
-	m_ffmpeg.format.av_dump_format(avOutputFormatContext, 0, out_filename.c_str(), 1);
+	av_dump_format(avOutputFormatContext, 0, out_filename.c_str(), 1);
 
 	//Open output URL
 	if (!(avOutputFormat->flags & AVFMT_NOFILE)) {
-		ret = m_ffmpeg.format.avio_open(&avOutputFormatContext->pb, out_filename.c_str(), AVIO_FLAG_WRITE);
+		ret = avio_open(&avOutputFormatContext->pb, out_filename.c_str(), AVIO_FLAG_WRITE);
 		if (ret < 0) {
 			throw std::runtime_error((std::string("Could not open output URL ") + out_filename).c_str());
 		}
 	}
 
 	//Write file header
-	ret = m_ffmpeg.format.avformat_write_header(avOutputFormatContext, NULL);
+	ret = avformat_write_header(avOutputFormatContext, NULL);
 	if (ret < 0) {
 		throw std::runtime_error("Error occurred when opening output URL");
 	}
 
-	//m_ffmpeg.codec.avcodec_close(in_stream->codec);
-	//m_ffmpeg.codec.avcodec_free_context(&in_stream->codec);
+	//avcodec_close(in_stream->codec);
+	//avcodec_free_context(&in_stream->codec);
 
 	this->initialized = true;
 }
@@ -117,7 +118,7 @@ void H264NetworkSender::WriteFrame(AVPacket& pkt)
 	}
 
 	//ret = av_write_frame(avOutputFormatContext, &pkt);
-	if (m_ffmpeg.format.av_interleaved_write_frame(avOutputFormatContext, &pkt) < 0)
+	if (av_interleaved_write_frame(avOutputFormatContext, &pkt) < 0)
 	{
 		throw std::runtime_error("Error muxing packet");
 	}
@@ -130,7 +131,7 @@ void H264NetworkSender::Close()
 		this->closed = true;
 
 		if (avOutputFormatContext && !(avOutputFormat->flags & AVFMT_NOFILE))
-			m_ffmpeg.format.avio_close(avOutputFormatContext->pb);
-		m_ffmpeg.format.avformat_free_context(avOutputFormatContext);
+			avio_close(avOutputFormatContext->pb);
+		avformat_free_context(avOutputFormatContext);
 	}
 }

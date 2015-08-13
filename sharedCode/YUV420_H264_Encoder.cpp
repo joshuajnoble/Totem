@@ -1,6 +1,7 @@
 #include "..\..\totem.app\src\Utils.h"
 #include "YUV420_H264_Encoder.h"
 #include "LegacyGuards.h"
+#include <windows.h>
 
 //#define QSV_CHEAT
 
@@ -25,12 +26,12 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 {
 	auto codecName = "h264_qsv";
 	//auto codecName = "libx264";
-	pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name(codecName);
+	pCodec = avcodec_find_encoder_by_name(codecName);
 	if (!pCodec) {
 		throw std::runtime_error((std::string("Codec not found: ") + codecName).c_str());
 	}
 
-	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
+	pCodecCtx = avcodec_alloc_context3(pCodec);
 	if (!pCodecCtx) {
 		throw std::runtime_error("Could not allocate video codec context.");
 	}
@@ -40,7 +41,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 	auto qsvContext = (myQSVH264EncContext *)pCodecCtx->priv_data;
 #endif
 
-	GuardAVCondexContext codecGuard(pCodecCtx, &m_ffmpeg);
+	GuardAVCondexContext codecGuard(pCodecCtx);
 	
 	pCodecCtx->bit_rate = 400000;
 	pCodecCtx->width = width;
@@ -54,18 +55,18 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 	pCodecCtx->max_b_frames = 0;
 	pCodecCtx->refs = 1;
 	pCodecCtx->level = 10;
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "preset", "4", 0);
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "profile", "66", 0);
+	av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+	av_opt_set(pCodecCtx->priv_data, "preset", "4", 0);
+	av_opt_set(pCodecCtx->priv_data, "idr_interval", "1", 0);
+	av_opt_set(pCodecCtx->priv_data, "profile", "66", 0);
 
-	auto error = m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, NULL);
+	auto error = avcodec_open2(pCodecCtx, pCodec, NULL);
 	if (error < 0)
 	{
 		printf("Could not open codec.");
 	}
 
-	pFrame = m_ffmpeg.utils.av_frame_alloc();
+	pFrame = av_frame_alloc();
 	if (!pFrame) {
 		throw std::runtime_error("Could not allocate video frame.");
 	}
@@ -74,7 +75,7 @@ YUV420_H264_Encoder::YUV420_H264_Encoder(int width, int height, int fps, FrameCa
 	pFrame->width = pCodecCtx->width;
 	pFrame->height = pCodecCtx->height;
 
-	auto ret = m_ffmpeg.utils.av_image_alloc(pFrame->data, pFrame->linesize, pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 16);
+	auto ret = av_image_alloc(pFrame->data, pFrame->linesize, pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt, 16);
 	if (ret < 0) {
 		throw std::runtime_error("Could not allocate raw picture buffer.");
 	}
@@ -94,13 +95,13 @@ YUV420_H264_Encoder::~YUV420_H264_Encoder()
 
 	if (this->pCodecCtx)
 	{
-		m_ffmpeg.codec.avcodec_close(this->pCodecCtx);
+		avcodec_close(this->pCodecCtx);
 		this->pCodecCtx = NULL;
 	}
 
 	if (this->pCodecCtx)
 	{
-		m_ffmpeg.utils.av_free(pCodecCtx);
+		av_free(pCodecCtx);
 		this->pCodecCtx = NULL;
 	}
 
@@ -113,10 +114,10 @@ YUV420_H264_Encoder::~YUV420_H264_Encoder()
 	{
 		if (pFrame->data)
 		{
-			m_ffmpeg.utils.av_freep(&this->pFrame->data[0]);
+			av_freep(&this->pFrame->data[0]);
 		}
 
-		m_ffmpeg.utils.av_frame_free(&this->pFrame);
+		av_frame_free(&this->pFrame);
 		this->pFrame = NULL;
 	}
 }
@@ -128,7 +129,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 		throw std::invalid_argument("framebuffer");
 	}
 
-	m_ffmpeg.codec.av_init_packet(&pkt);
+	av_init_packet(&pkt);
 	pkt.data = NULL; // packet data will be allocated by the encoder
 	pkt.size = 0;
 
@@ -140,7 +141,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 	int got_output;
 
 	/* encode the image */
-	auto ret = m_ffmpeg.codec.avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_output);
+	auto ret = avcodec_encode_video2(pCodecCtx, &pkt, pFrame, &got_output);
 	if (ret < 0)
 	{
 		throw std::runtime_error("Error encoding frame.");
@@ -152,7 +153,7 @@ void YUV420_H264_Encoder::WriteFrame(const uint8_t* framebuffer)
 		{
 			this->callback(pkt);
 		}
-		m_ffmpeg.codec.av_free_packet(&pkt);
+		av_free_packet(&pkt);
 	}
 }
 
@@ -162,7 +163,7 @@ void YUV420_H264_Encoder::Close()
 	int got_output = this->cInputFrames ? 1 : 0;
 	while (got_output)
 	{
-		auto ret = m_ffmpeg.codec.avcodec_encode_video2(pCodecCtx, &pkt, NULL, &got_output);
+		auto ret = avcodec_encode_video2(pCodecCtx, &pkt, NULL, &got_output);
 		if (ret < 0) {
 			printf("Error encoding frame\n");
 			return;
@@ -172,12 +173,12 @@ void YUV420_H264_Encoder::Close()
 			{
 				this->callback(pkt);
 			}
-			m_ffmpeg.codec.av_free_packet(&pkt);
+			av_free_packet(&pkt);
 		}
 	}
 
-	m_ffmpeg.codec.avcodec_close(pCodecCtx);
-	m_ffmpeg.utils.av_free(pCodecCtx);
+	avcodec_close(pCodecCtx);
+	av_free(pCodecCtx);
 	pCodecCtx = NULL;
 	this->pCodec = NULL;
 
@@ -185,10 +186,10 @@ void YUV420_H264_Encoder::Close()
 	{
 		if (pFrame->data)
 		{
-			//m_ffmpeg.utils.av_freep(&pFrame->data[0]);
+			//av_freep(&pFrame->data[0]);
 		}
 
-		m_ffmpeg.utils.av_frame_free(&pFrame);
+		av_frame_free(&pFrame);
 		pFrame = NULL;
 	}
 }

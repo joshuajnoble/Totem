@@ -6,7 +6,6 @@
 class AACAudioDecoder
 {
 private:
-	FFmpegFactory m_ffmpeg;
 	DecodedFrameCallback callback;
 
 	int cInputFrames = 0;

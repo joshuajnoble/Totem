@@ -36,7 +36,6 @@ public:
 class GuardAVCondexContext
 {
 private:
-	FFmpegFactory *m_ffmpeg;
 	AVCodecContext *handle;
 
 	// Not copyable
@@ -44,7 +43,7 @@ private:
 	GuardAVCondexContext& operator = (const GuardAVCondexContext& other);
 
 public:
-	GuardAVCondexContext(AVCodecContext *fp, FFmpegFactory *ffmpeg) : handle(fp), m_ffmpeg(ffmpeg) {}
+	GuardAVCondexContext(AVCodecContext *fp) : handle(fp) {}
 	~GuardAVCondexContext() { Cleanup(); }
 
 	// Abondon the resource (presumably so the calling code can handle cleanup).
@@ -58,8 +57,8 @@ public:
 	{
 		if (this->handle)
 		{
-			m_ffmpeg->codec.avcodec_close(this->handle);
-			m_ffmpeg->utils.av_free(this->handle);
+			avcodec_close(this->handle);
+			av_free(this->handle);
 			this->handle = NULL;
 		}
 	}
@@ -68,7 +67,6 @@ public:
 class GuardAVFormatContext
 {
 private:
-	FFmpegFactory *m_ffmpeg;
 	AVFormatContext *handle;
 
 	// Not copyable
@@ -76,7 +74,7 @@ private:
 	GuardAVFormatContext& operator = (const GuardAVFormatContext& other);
 
 public:
-	GuardAVFormatContext(AVFormatContext *fp, FFmpegFactory *ffmpeg) : handle(fp), m_ffmpeg(ffmpeg) {}
+	GuardAVFormatContext(AVFormatContext *fp) : handle(fp) {}
 	~GuardAVFormatContext() { Cleanup(); }
 
 	// Abondon the resource (presumably so the calling code can handle cleanup).
@@ -90,7 +88,7 @@ public:
 	{
 		if (this->handle)
 		{
-			m_ffmpeg->format.avformat_close_input(&this->handle);
+			avformat_close_input(&this->handle);
 			this->handle = NULL;
 		}
 	}

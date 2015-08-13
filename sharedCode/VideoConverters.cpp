@@ -8,6 +8,8 @@
 #include "AACAudioEncoder.h"
 #include "AACAudioDecoder.h"
 
+#include <windows.h>
+
 //
 // ConvertToNV12
 //
@@ -16,7 +18,7 @@ ConvertToNV12::ConvertToNV12(int width, int height) :
 	height(height)
 {
 	// Asume we are converting from RGB24
-	this->sws_context = m_ffmpeg.scale.sws_getContext(
+	this->sws_context = sws_getContext(
 		this->width, this->height, AV_PIX_FMT_RGB24,
 		this->width, this->height, AV_PIX_FMT_NV12,
 		SWS_FAST_BILINEAR, NULL, NULL, NULL);
@@ -31,7 +33,7 @@ ConvertToNV12::~ConvertToNV12()
 {
 	if (this->sws_context)
 	{
-		m_ffmpeg.scale.sws_freeContext(this->sws_context);
+		sws_freeContext(this->sws_context);
 		this->sws_context = NULL;
 	}
 }
@@ -52,7 +54,7 @@ void ConvertToNV12::WriteFrame(const uint8_t *rgbSource, uint8_t* yuvDestination
 
 	this->dstData[0] = yuvDestination;
 	this->dstData[1] = yuvDestination + height * dstLineSize[0];
-	m_ffmpeg.scale.sws_scale(this->sws_context, this->srcData, this->srcLineSize, 0, this->height, this->dstData, this->dstLineSize);
+	sws_scale(this->sws_context, this->srcData, this->srcLineSize, 0, this->height, this->dstData, this->dstLineSize);
 }
 
 //
@@ -63,7 +65,7 @@ ConvertToRGB::ConvertToRGB(int width, int height) :
 	height(height)
 {
 	// Asume we are converting from NV12
-	this->sws_context = m_ffmpeg.scale.sws_getContext(
+	this->sws_context = sws_getContext(
 		this->width, this->height, AV_PIX_FMT_NV12,
 		this->width, this->height, AV_PIX_FMT_RGB24,
 		SWS_FAST_BILINEAR, NULL, NULL, NULL);
@@ -76,7 +78,7 @@ ConvertToRGB::~ConvertToRGB()
 {
 	if (this->sws_context)
 	{
-		m_ffmpeg.scale.sws_freeContext(this->sws_context);
+		sws_freeContext(this->sws_context);
 		this->sws_context = NULL;
 	}
 }
@@ -94,7 +96,7 @@ int ConvertToRGB::GetOutputFrameSize()
 void ConvertToRGB::WriteFrame(const AVFrame& frameSource, uint8_t *rgbDestination)
 {
 	this->dstData[0] = const_cast<uint8_t*>(rgbDestination);
-	m_ffmpeg.scale.sws_scale(this->sws_context, frameSource.data, frameSource.linesize, 0, this->height, this->dstData, this->dstLineSize);
+	sws_scale(this->sws_context, frameSource.data, frameSource.linesize, 0, this->height, this->dstData, this->dstLineSize);
 }
 
 //
@@ -304,9 +306,9 @@ DecodeH264LiveToRGB::DecodeH264LiveToRGB() :
 	closed(false)
 {
 	//pcmFile = fopen("received.pcm", "wb");
-	//m_ffmpeg.utils.av_log_set_level(AV_LOG_QUIET);
-	m_ffmpeg.utils.av_log_set_level(AV_LOG_VERBOSE);
-	//m_ffmpeg.utils.av_log_set_level(AV_LOG_DEBUG);
+	//av_log_set_level(AV_LOG_QUIET);
+	av_log_set_level(AV_LOG_VERBOSE);
+	//av_log_set_level(AV_LOG_DEBUG);
 	this->receiver.reset(new H264NetworkReceiver());
 	this->decoder.reset(new YUV420_H264_Decoder(std::bind(&DecodeH264LiveToRGB::ProcessYUVFrame, this, std::placeholders::_1)));
 	auto pcmFinalCallback = std::bind(&DecodeH264LiveToRGB::ProcessDecodedAudioFrame, this, std::placeholders::_1);

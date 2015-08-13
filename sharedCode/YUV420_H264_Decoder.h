@@ -6,7 +6,6 @@
 class YUV420_H264_Decoder
 {
 private:
-	FFmpegFactory m_ffmpeg;
 	DecodedFrameCallback callback;
 
 	int cInputFrames = 0;

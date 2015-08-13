@@ -1,4 +1,5 @@
 #include "AACAudioDecoder.h"
+#include <stdexcept>
 
 namespace
 {
@@ -9,13 +10,13 @@ namespace
 AACAudioDecoder::AACAudioDecoder(int channels, int sampeRate, DecodedFrameCallback c) : callback(c), closed(false)
 {
 	// Initialize audio
-	//pCodec = m_ffmpeg.codec.avcodec_find_decoder_by_name("libfdk_aac");
+	//pCodec = avcodec_find_decoder_by_name("libfdk_aac");
 	if (!pCodec)
 	{
-		pCodec = m_ffmpeg.codec.avcodec_find_decoder(CODEC_ID_AAC);
+		pCodec = avcodec_find_decoder(CODEC_ID_AAC);
 	}
 
-	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
+	pCodecCtx = avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
 	pCodecCtx->sample_fmt = pCodecCtx->request_sample_fmt = AV_SAMPLE_FMT_S16;
@@ -24,11 +25,11 @@ AACAudioDecoder::AACAudioDecoder(int channels, int sampeRate, DecodedFrameCallba
 	pCodecCtx->channels = pCodecCtx->request_channels = channels;
 	pCodecCtx->bit_rate = 128000;
 
-	auto error = m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, nullptr);
+	auto error = avcodec_open2(pCodecCtx, pCodec, nullptr);
 
 	if (error < 0) throw std::runtime_error("Can't open audio codec.");
 
-	pFrame = m_ffmpeg.utils.av_frame_alloc();
+	pFrame = av_frame_alloc();
 	pFrame->format = pCodecCtx->sample_fmt;
 }
 
@@ -55,7 +56,7 @@ void AACAudioDecoder::DecodeFrame(AVPacket& pkt)
 
 		pkt.data = inbuf;
 		int got_frame = 0;
-		auto length = m_ffmpeg.codec.avcodec_decode_audio4(pCodecCtx, pFrame, &got_frame, &pkt);
+		auto length = avcodec_decode_audio4(pCodecCtx, pFrame, &got_frame, &pkt);
 		cbProcessed += length;
 		if (got_frame)
 		{
@@ -73,14 +74,14 @@ void AACAudioDecoder::Close()
 	{
 		this->closed = true;
 
-		m_ffmpeg.codec.avcodec_close(pCodecCtx);
-		m_ffmpeg.utils.av_free(pCodecCtx);
+		avcodec_close(pCodecCtx);
+		av_free(pCodecCtx);
 		pCodecCtx = NULL;
 		this->pCodec = NULL;
 
 		if (pFrame)
 		{
-			m_ffmpeg.utils.av_frame_free(&pFrame);
+			av_frame_free(&pFrame);
 			pFrame = NULL;
 		}
 	}

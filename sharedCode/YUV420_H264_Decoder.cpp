@@ -1,5 +1,7 @@
 #include "YUV420_H264_Decoder.h"
 #include "LegacyGuards.h"
+#include <windows.h>
+#include <stdexcept>
 
 YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 	callback(frameCallback)
@@ -8,25 +10,25 @@ YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 
 	auto codecName = "h264_qsv";
 	//auto codecName = "libx264";
-	pCodec = m_ffmpeg.codec.avcodec_find_decoder_by_name(codecName);
+	pCodec = avcodec_find_decoder_by_name(codecName);
 	if (!pCodec) {
 		throw std::runtime_error((std::string("Codec not found: ") + codecName).c_str());
 	}
 
-	pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
+	pCodecCtx = avcodec_alloc_context3(pCodec);
 	if (!pCodecCtx) {
 		throw std::runtime_error("Could not allocate video codec context.");
 	}
 	
-	pCodecParserCtx = m_ffmpeg.codec.av_parser_init(pCodec->id);
+	pCodecParserCtx = av_parser_init(pCodec->id);
 	if (!pCodecParserCtx){
 		throw std::runtime_error("Could not allocate video parser context");
 	}
 	
 	pCodecCtx->level = 10;
-	m_ffmpeg.utils.av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
+	av_opt_set(pCodecCtx->priv_data, "async_depth", "1", 0);
 
-	if (m_ffmpeg.codec.avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
+	if (avcodec_open2(pCodecCtx, pCodec, NULL) < 0) {
 		throw std::runtime_error("Could not open codec");
 	}
 
@@ -38,8 +40,8 @@ YUV420_H264_Decoder::YUV420_H264_Decoder(DecodedFrameCallback frameCallback) :
 
 #endif
 	
-	pFrame = m_ffmpeg.utils.av_frame_alloc();
-	m_ffmpeg.codec.av_init_packet(&packet);
+	pFrame = av_frame_alloc();
+	av_init_packet(&packet);
 
 }
 
@@ -65,7 +67,7 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 
 	while (cur_size > 0)
 	{
-		int len = m_ffmpeg.codec.av_parser_parse2(
+		int len = av_parser_parse2(
 			pCodecParserCtx, pCodecCtx,
 			&packet.data, &packet.size,
 			cur_ptr, cur_size,
@@ -89,7 +91,7 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 		//}
 		//printf("Number:%4d\n", pCodecParserCtx->output_picture_number);
 
-		ret = m_ffmpeg.codec.avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, &packet);
+		ret = avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, &packet);
 		if (ret < 0) {
 			printf("Decode Error.\n");
 			return;
@@ -100,7 +102,7 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 				printf("\nCodec Full Name:%s\n", pCodecCtx->codec->long_name);
 				printf("width:%d\nheight:%d\n\n", pCodecCtx->width, pCodecCtx->height);
 				//SwsContext
-				img_convert_ctx = m_ffmpeg.scale.sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt,
+				img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height, pCodecCtx->pix_fmt,
 					pCodecCtx->width, pCodecCtx->height, PIX_FMT_YUV420P, SWS_BICUBIC, NULL, NULL, NULL);
 
 				pFrameYUV = av_frame_alloc();
@@ -111,7 +113,7 @@ void YUV420_H264_Decoder::DecodeFrame(const AVPacket& inPacket)
 
 				first_time = 0;
 			}
-			m_ffmpeg.scale.sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height,
+			sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height,
 				pFrameYUV->data, pFrameYUV->linesize);
 
 			fwrite(pFrameYUV->data[0], 1, y_size, fp_out);     //Y 
@@ -133,7 +135,7 @@ void YUV420_H264_Decoder::Close()
 	packet.data = NULL;
 	packet.size = 0;
 	while (1){
-		ret = m_ffmpeg.codec.avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, &packet);
+		ret = avcodec_decode_video2(pCodecCtx, pFrame, &got_picture, &packet);
 		if (ret < 0) {
 			printf("Decode Error.\n");
 			return;
@@ -143,7 +145,7 @@ void YUV420_H264_Decoder::Close()
 		if (got_picture) {
 
 #if USE_SWSCALE
-			m_ffmpeg.scale.sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height, pFrameYUV->data, pFrameYUV->linesize);
+			sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height, pFrameYUV->data, pFrameYUV->linesize);
 
 			fwrite(pFrameYUV->data[0], 1, y_size, fp_out);     //Y
 			fwrite(pFrameYUV->data[1], 1, y_size / 4, fp_out);   //U
@@ -175,13 +177,13 @@ void YUV420_H264_Decoder::Close()
 	fclose(fp_out);
 
 #if USE_SWSCALE
-	m_ffmpeg.scale.sws_freeContext(img_convert_ctx);
-	m_ffmpeg.utils.av_frame_free(&pFrameYUV);
+	sws_freeContext(img_convert_ctx);
+	av_frame_free(&pFrameYUV);
 #endif
 
-	m_ffmpeg.codec.av_parser_close(pCodecParserCtx);
+	av_parser_close(pCodecParserCtx);
 
-	m_ffmpeg.utils.av_frame_free(&pFrame);
-	m_ffmpeg.codec.avcodec_close(pCodecCtx);
-	m_ffmpeg.utils.av_free(pCodecCtx);
+	av_frame_free(&pFrame);
+	avcodec_close(pCodecCtx);
+	av_free(pCodecCtx);
 }

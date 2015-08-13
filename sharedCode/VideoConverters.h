@@ -6,6 +6,7 @@
 #include <vector>
 #include <queue>
 #include <fstream>
+#include <windows.h>
 
 typedef std::function<void(const uint8_t* buffer, int bufferSize)> RGBFrameCallback;
 typedef std::function<void(const uint8_t* buffer, int bufferSize)> PCMFrameCallback;
@@ -28,7 +29,6 @@ private:
 	int dstLineSize[2];
 
 	int width, height;
-	FFmpegFactory m_ffmpeg;
 	SwsContext* sws_context;
 
 public:
@@ -48,7 +48,6 @@ private:
 	int dstLineSize[2];
 
 	int width, height;
-	FFmpegFactory m_ffmpeg;
 	SwsContext* sws_context;
 
 public:
@@ -64,7 +63,6 @@ public:
 class EncodeRGBToH264
 {
 protected:
-	FFmpegFactory m_ffmpeg;
 	std::auto_ptr<ConvertToNV12> converter;
 	std::auto_ptr<YUV420_H264_Encoder> encoder;
 	std::vector<uint8_t> yuvBuffer;
@@ -132,8 +130,6 @@ public:
 class DecodeH264LiveToRGB
 {
 private:
-	FFmpegFactory m_ffmpeg;
-
 	std::auto_ptr<AACAudioDecoder> audioDecoder;
 	std::auto_ptr<YUV420_H264_Decoder> decoder;
 	std::auto_ptr<H264NetworkReceiver> receiver;

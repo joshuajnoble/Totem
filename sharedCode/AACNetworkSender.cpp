@@ -20,8 +20,8 @@ void AACNetworkSender::Start(const std::string& networkAddress, int channels, in
 		this->out_filename = "rtp://" + this->out_filename;
 	}
 
-	auto pCodec = m_ffmpeg.codec.avcodec_find_encoder_by_name("libfdk_aac");
-	auto pCodecCtx = m_ffmpeg.codec.avcodec_alloc_context3(pCodec);
+	auto pCodec = avcodec_find_encoder_by_name("libfdk_aac");
+	auto pCodecCtx = avcodec_alloc_context3(pCodec);
 	pCodecCtx->codec_id = pCodec->id;
 	pCodecCtx->codec_type = AVMEDIA_TYPE_AUDIO;
 	pCodecCtx->sample_fmt = AV_SAMPLE_FMT_S16;
@@ -29,15 +29,15 @@ void AACNetworkSender::Start(const std::string& networkAddress, int channels, in
 	pCodecCtx->sample_rate = sample_rate;
 	pCodecCtx->channels = channels;
 	
-	m_ffmpeg.format.avformat_alloc_output_context2(&avOutputFormatContext, NULL, "rtp", out_filename.c_str());
-	m_ffmpeg.codec.avcodec_free_context(&pCodecCtx);
+	avformat_alloc_output_context2(&avOutputFormatContext, NULL, "rtp", out_filename.c_str());
+	avcodec_free_context(&pCodecCtx);
 	if (!avOutputFormatContext) {
 		throw std::runtime_error("Could not create output context");
 	}
 
 	avOutputFormat = avOutputFormatContext->oformat;
 
-	AVStream *out_stream = m_ffmpeg.format.avformat_new_stream(avOutputFormatContext, pCodec);
+	AVStream *out_stream = avformat_new_stream(avOutputFormatContext, pCodec);
 	if (!out_stream) {
 		throw std::runtime_error("Failed allocating output stream");
 	}
@@ -48,33 +48,33 @@ void AACNetworkSender::Start(const std::string& networkAddress, int channels, in
 	out_stream->codec->sample_rate = 22050;
 	out_stream->codec->channels = 1;
 
-	m_ffmpeg.format.av_dump_format(avOutputFormatContext, 0, out_filename.c_str(), 1);
+	av_dump_format(avOutputFormatContext, 0, out_filename.c_str(), 1);
 
 	int ret;
 
 	//Open output URL
 	if (!(avOutputFormat->flags & AVFMT_NOFILE)) {
-		ret = m_ffmpeg.format.avio_open(&avOutputFormatContext->pb, out_filename.c_str(), AVIO_FLAG_WRITE);
+		ret = avio_open(&avOutputFormatContext->pb, out_filename.c_str(), AVIO_FLAG_WRITE);
 		if (ret < 0) {
 			throw std::runtime_error((std::string("Could not open output URL ") + out_filename).c_str());
 		}
 	}
 
 	//Write file header
-	ret = m_ffmpeg.format.avformat_write_header(avOutputFormatContext, NULL);
+	ret = avformat_write_header(avOutputFormatContext, NULL);
 	if (ret < 0) {
 		throw std::runtime_error("Error occurred when opening output URL");
 	}
 
-	//m_ffmpeg.codec.avcodec_close(in_stream->codec);
-	//m_ffmpeg.codec.avcodec_free_context(&in_stream->codec);
+	//avcodec_close(in_stream->codec);
+	//avcodec_free_context(&in_stream->codec);
 
 	this->initialized = true;
 }
 
 void AACNetworkSender::WriteFrame(AVPacket& pkt)
 {
-	if (m_ffmpeg.format.av_interleaved_write_frame(avOutputFormatContext, &pkt) < 0)
+	if (av_interleaved_write_frame(avOutputFormatContext, &pkt) < 0)
 	{
 		printf("Error streaming audio packet.");
 		return;
@@ -88,7 +88,7 @@ void AACNetworkSender::Close()
 		this->closed = true;
 
 		if (avOutputFormatContext && !(avOutputFormat->flags & AVFMT_NOFILE))
-			m_ffmpeg.format.avio_close(avOutputFormatContext->pb);
-		m_ffmpeg.format.avformat_free_context(avOutputFormatContext);
+			avio_close(avOutputFormatContext->pb);
+		avformat_free_context(avOutputFormatContext);
 	}
 }
