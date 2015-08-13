@@ -145,7 +145,7 @@ void ofTotemApp::draw()
 				std::vector<int> sources;
 				for (int i = 0; i < this->peers.size(); ++i)
 				{
-					if (this->peers[i].peerStatus.isConnectedToSession && !this->peers[i].peerStatus.isTotem)
+					if (this->peers[i].peerStatus.isConnectedToSession && !(this->peers[i].peerStatus.isTotem || this->peers[i].peerStatus.isSurfaceHub))
 					{
 						sources.push_back(i);
 					}
@@ -176,7 +176,12 @@ void ofTotemApp::draw()
 				}
 				else
 				{
-					bool anyUpdates = std::any_of(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo &x)->bool { return x.remoteVideoSource->isVideoFrameNew(); });
+					bool anyUpdates = std::any_of(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo &x)->bool
+					{
+						return !x.peerStatus.isTotem &&
+							!x.peerStatus.isSurfaceHub &&
+							x.remoteVideoSource->isVideoFrameNew();
+					});
 					if (anyUpdates)
 					{
 						auto margin = 10;

@@ -343,6 +343,9 @@
     <ClCompile Include="src\ofSurfaceHubApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\sharedCode\FFmpegImports.cpp">
+      <Filter>ffmpeg</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -431,6 +434,9 @@
     </Filter>
     <Filter Include="ffmpeg">
       <UniqueIdentifier>{18be1eef-3c0e-49d1-9d65-2d32a5618b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data\profiles">
+      <UniqueIdentifier>{21c3b5e2-3b68-4f9a-9ce0-85cb48053960}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -746,6 +752,15 @@
     </Image>
     <Image Include="data\cortana\personaassets720x1280_circle_greeting3_10_Reverse.gif">
       <Filter>data\cortana</Filter>
+    </Image>
+    <Image Include="data\profiles\profile_03.png">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\profile_01.png">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\profile_02.png">
+      <Filter>data\profiles</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -18,6 +18,7 @@ public:
 		int videoHeight;
 		int totemSourceAngle;
 		bool isTotem;
+		bool isSurfaceHub;
 		bool isConnectedToSession;
 	};
 
@@ -35,6 +36,7 @@ private:
 	char incomingMessage[1024];
 	int videoWidth, videoHeight;
 	bool isTotem;
+	bool isSurfaceHub;
 	int totemSourceAngle;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
@@ -42,6 +44,7 @@ private:
 	int videoBroadcastPort = 11005;
 	int AudioBroadcastPort = 11010;
 
+	void InitializeNetworkInterface(int networkInterfaceId);
 	ofxJSONElement GetNetworkPayload(const std::string& action);
 	void SendJsonPayload(const ofxJSONElement& jsonPayload);
 
@@ -57,7 +60,7 @@ public:
 	ofEvent<RemotePeerStatus> peerLeftEvent;
 	ofEvent<RemotePeerStatus> AngleChangedEvent;
 
-	void setupSurfaceHub();
+	void setupSurfaceHub(int networkInterfaceId = -1);
 	void setup(int videoWidth, int videoHeight, int networkInterfaceId = -1, bool isTotem = false);
 	void update();
 	RemotePeerStatus GetPeerStatus(const std::string& peerId);

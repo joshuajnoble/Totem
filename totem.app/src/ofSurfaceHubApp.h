@@ -7,12 +7,28 @@
 class ofSurfaceHubApp : public IVideoCaptureAppBase
 {
 private:
+	class PeerInfo
+	{
+	public:
+		std::string id;
+		bool isTotem;
+		ofImage profilePicture;
+	};
+
 	int networkInterfaceId;
+	bool hasTotemConnected;
 	UdpDiscovery udpDiscovery;
+	ofImage presentation;
+	ofImage connectButton;
+	ofRectangle buttonPosition;
+	std::vector<ofImage> profilePictures;
+	std::vector<PeerInfo> peers;
 
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
 	void SetupDiscovery();
+
+	void mousePressed(int x, int y, int button);
 
 public:
 	void earlyinit(int networkInterfaceId);

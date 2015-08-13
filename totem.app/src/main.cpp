@@ -247,7 +247,6 @@ namespace
 		app->earlyinit(networkInterfaceId);
 		ofSetupOpenGL((int)app->displayWidth(), (int)app->displayHeight(), OF_WINDOW);
 		RemoveWindowChrome((int)app->displayWidth(), (int)app->displayHeight());
-		app->setup();
 		return ofPtr<IVideoCaptureAppBase>(app);
 	}
 }

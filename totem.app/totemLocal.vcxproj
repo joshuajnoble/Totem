@@ -282,6 +282,7 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxUDPManager.cpp" />
+    <ClCompile Include="..\sharedCode\FFmpegImports.cpp" />
     <ClCompile Include="..\sharedCode\H264NetworkReceiver.cpp" />
     <ClCompile Include="..\sharedCode\H264NetworkSender.cpp" />
     <ClCompile Include="..\sharedCode\AACAudioDecoder.cpp" />
@@ -457,6 +458,9 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <Image Include="data\hangup.png" />
     <Image Include="data\hub.png" />
     <Image Include="data\mute.png" />
+    <Image Include="data\profiles\profile_01.png" />
+    <Image Include="data\profiles\profile_02.png" />
+    <Image Include="data\profiles\profile_03.png" />
     <Image Include="data\unmute.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

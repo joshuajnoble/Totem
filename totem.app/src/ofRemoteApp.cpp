@@ -302,7 +302,7 @@ void ofRemoteApp::NewConnection(const RemoteVideoInfo& remote)
 			this->cylinderDisplay->setTotemVideoSource(remote.videoDraws, remote.peerStatus.videoWidth, remote.peerStatus.videoHeight);
 		}
 	}
-	else
+	else if (!remote.peerStatus.isSurfaceHub)
 	{
 		this->networkDisplay.AddVideoSource(remote.videoCroppable);
 	}
@@ -423,28 +423,28 @@ void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 {
 	this->isInCall = true;
-this->doneCylinderWelcome = false;
-this->canShowRemotes = false;
-this->ConnectToSession();
+	this->doneCylinderWelcome = false;
+	this->canShowRemotes = false;
+	this->ConnectToSession();
 
-// Transition the selfie view to the "rear view mirror" mode.
-this->isAnimatingConnectIconAlpha = true;
-this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->curentSelfieMarginAlpha, 1));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
+	// Transition the selfie view to the "rear view mirror" mode.
+	this->isAnimatingConnectIconAlpha = true;
+	this->playlist.addKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentConnectIconAlpha, 0));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->curentSelfieMarginAlpha, 1));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.x, this->miniSelfieRegion.x));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.y, this->miniSelfieRegion.y));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.width, this->miniSelfieRegion.width));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_TRANSITION, &this->currentSelfieRegion.height, this->miniSelfieRegion.height));
 
-// Reveal the in-conversation icons
-auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
-auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
-this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
-this->muteIconCenterX = this->width / 2 + iconOffsetStart;
-this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
-this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
-this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
+	// Reveal the in-conversation icons
+	auto iconOffsetStart = this->miniSelfieRegion.width / 2 - ICON_SIZE / 2;
+	auto iconOffsetEnd = this->miniSelfieRegion.width / 2 + ICON_MARGIN + ICON_SIZE / 2;
+	this->hangupIconCenterX = this->width / 2 - iconOffsetStart;
+	this->muteIconCenterX = this->width / 2 + iconOffsetStart;
+	this->playlist.addKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR / 2, &this->currentHangupMuteIconAlpha, 1.0));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->hangupIconCenterX, this->width / 2 - iconOffsetEnd));
+	this->playlist.addToKeyFrame(Action::tween(TIME_INTRO_ICONS_APPEAR, &this->muteIconCenterX, this->width / 2 + iconOffsetEnd));
+	this->playlist.addKeyFrame(Action::event(this, INTRO_TRANSITION_COMPLETE_EVENT));
 }
 
 // ********************************************************************************************************************
@@ -482,7 +482,7 @@ void ofRemoteApp::Handle_ClientDisconnected(RemoteVideoInfo& remote)
 		this->cylinderDisplay.reset();
 		TransitionTo_UISTATE_STARTUP();
 	}
-	else
+	else if (!remote.peerStatus.isSurfaceHub)
 	{
 		// TODO: This could fail (if it is already animating), so we should queue this up or something.
 		RemoveRemoteVideoSource(remote);

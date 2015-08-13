@@ -38,11 +38,38 @@
  * to the active session.  If the totem peer is lost, then everyone should disconnect.  So we have to adjust
  * exactly when we broadcast each of the port records in the "DNS" packet to get the behaviour we want.
  */
-void UdpDiscovery::setupSurfaceHub()
+void UdpDiscovery::setupSurfaceHub(int networkInterfaceId)
 {
+	InitializeNetworkInterface(networkInterfaceId);
+
+	this->isTotem = false;
+	this->isSurfaceHub = true;
+	this->isConnectedToSession = false;
+	this->videoWidth = 0;
+	this->videoHeight = 0;
+	this->totemSourceAngle = 0;
 }
 
 void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSource)
+{
+	InitializeNetworkInterface(networkInterfaceId);
+
+	this->isTotem = isTotemSource;
+	this->isSurfaceHub = false;
+	this->isConnectedToSession = false;
+	this->videoWidth = w;
+	this->videoHeight = h;
+	this->totemSourceAngle = 0;
+}
+
+UdpDiscovery::~UdpDiscovery()
+{
+	this->receiver.Close();
+	auto jsonPayload = GetNetworkPayload("disconnect");
+	SendJsonPayload(jsonPayload);
+}
+
+void UdpDiscovery::InitializeNetworkInterface(int networkInterfaceId)
 {
 	bool found = false;
 	auto interfaces = GetAllNetworkInterfaces();
@@ -58,9 +85,6 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 			networkInterfaceId = interfaces[0].index();
 		}
 	}
-
-	this->isTotem = isTotemSource;
-	this->isConnectedToSession = false;
 
 	Poco::Net::NetworkInterface interface;
 	for (auto iter = interfaces.begin(); !found && iter != interfaces.end(); ++iter)
@@ -80,22 +104,17 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 
 	this->interface = interface;
 
-	this->broadcastAddress = GetBroadcastAddress(interface).toString();
-	this->myid = MACtoString(this->interface.macAddress());
-	this->myid += "/";
-	this->myid += ofToString((int)roundf(ofRandomf() * 0xFFFFFF));
-
-	this->videoWidth = w;
-	this->videoHeight = h;
-	this->sender.Create();
-	this->sender.Connect(this->broadcastAddress.c_str(), this->discoveryBroadcastPort);
-	this->sender.SetNonBlocking(true);
-	this->sender.SetEnableBroadcast(true);
-	this->totemSourceAngle = 0;
+	this->broadcastAddress = GetBroadcastAddress(this->interface).toString();
+	this->myid = MACtoString(this->interface.macAddress()) + "/" + ofToString(ofGetSystemTime());
 
 	this->receiver.Create();
 	this->receiver.Bind(this->discoveryBroadcastPort);
 	this->receiver.SetNonBlocking(true);
+
+	this->sender.Create();
+	this->sender.Connect(this->broadcastAddress.c_str(), this->discoveryBroadcastPort);
+	this->sender.SetNonBlocking(true);
+	this->sender.SetEnableBroadcast(true);
 
 	this->nextSendTime = 0;
 	memset(this->incomingMessage, 0, sizeof(this->incomingMessage));
@@ -106,13 +125,6 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 		this->broadcastMissingDuration = 90.0f; // When debugging don't auto disconnect as aggressively
 	}
 #endif
-}
-
-UdpDiscovery::~UdpDiscovery()
-{
-	this->receiver.Close();
-	auto jsonPayload = GetNetworkPayload("disconnect");
-	SendJsonPayload(jsonPayload);
 }
 
 UdpDiscovery::RemotePeerStatus UdpDiscovery::GetPeerStatus(const std::string& peerId)
@@ -153,6 +165,7 @@ void UdpDiscovery::update()
 		jsonPayload["videoHeight"] = this->videoHeight;
 		jsonPayload["totem"] = this->isTotem;
 		jsonPayload["connected"] = this->isConnectedToSession;
+		jsonPayload["hub"] = this->isSurfaceHub;
 		if (this->isTotem)
 		{
 			jsonPayload["angle"] = this->totemSourceAngle;
@@ -270,6 +283,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.videoWidth = jsonPayload["videoWidth"].asInt();
 	peer.videoHeight = jsonPayload["videoHeight"].asInt();
 	peer.isTotem = jsonPayload["totem"].asBool();
+	peer.isSurfaceHub = jsonPayload["hub"].asBool();
 	peer.isConnectedToSession = jsonPayload["connected"].asBool();
 	peer.totemSourceAngle = 0;
 	if (jsonPayload.isMember("angle"))
