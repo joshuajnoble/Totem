@@ -66,7 +66,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>opencv_calib3d248d.lib;opencv_contrib248d.lib;opencv_core248d.lib;opencv_features2d248d.lib;opencv_flann248d.lib;opencv_gpu248d.lib;opencv_haartraining_engined.lib;opencv_highgui248d.lib;opencv_imgproc248d.lib;opencv_legacy248d.lib;opencv_ml248d.lib;opencv_nonfree248d.lib;opencv_objdetect248d.lib;opencv_photo248d.lib;opencv_stitching248d.lib;opencv_superres248d.lib;opencv_ts248d.lib;opencv_video248d.lib;opencv_videostab248d.lib;zlibd.lib;gstreamer-1.0.lib;gstapp-1.0.lib;gstvideo-1.0.lib;gstbase-1.0.lib;gstnet-1.0.lib;gstaudio-1.0.lib;gio-2.0.lib;pangowin32-1.0.lib;gdi32.lib;pangocairo-1.0.lib;gdk_pixbuf-2.0.lib;pango-1.0.lib;cairo.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;ffi.lib;ws2_32.lib;ole32.lib;winmm.lib;shlwapi.lib;intl.lib;glib-2.0.lib;FlyCapture2.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opencv_calib3d248d.lib;opencv_contrib248d.lib;opencv_core248d.lib;opencv_features2d248d.lib;opencv_flann248d.lib;opencv_gpu248d.lib;opencv_haartraining_engined.lib;opencv_highgui248d.lib;opencv_imgproc248d.lib;opencv_legacy248d.lib;opencv_ml248d.lib;opencv_nonfree248d.lib;opencv_objdetect248d.lib;opencv_photo248d.lib;opencv_stitching248d.lib;opencv_superres248d.lib;opencv_ts248d.lib;opencv_video248d.lib;opencv_videostab248d.lib;zlibd.lib;gdi32.lib;ws2_32.lib;ole32.lib;winmm.lib;shlwapi.lib;FlyCapture2.lib;avcodec.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\ffmpeg\bin-x86;$(OFDIR)\libs\freeglut\lib\vs;$(OFDIR)\libs\rtAudio\lib\vs;$(OFDIR)\libs\FreeImage\lib\vs;$(OFDIR)\libs\freeType\lib\vs;$(OFDIR)\libs\quicktime\lib\vs;$(OFDIR)\libs\fmodex\lib\vs;$(OFDIR)\libs\videoInput\lib\vs;$(OFDIR)\libs\cairo\lib\vs;$(OFDIR)\libs\glew\lib\vs;$(OFDIR)\libs\glu\lib\vs;$(OFDIR)\libs\openssl\lib\vs;$(OFDIR)\libs\Poco\lib\vs;$(OFDIR)\libs\glfw\lib\vs;$(OFDIR)\libs\tess2\lib\vs;$(OFDIR)\addons\ofxPGR\libs\FlyCapture2\lib;$(OFDIR)\addons\ofxOpenCv\libs\opencv\lib\vs;$(GSTREAMER_1_0_ROOT_X86)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
     </Link>
@@ -245,13 +245,6 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthCompressedFrame.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthOctree.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthStreamCompression.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstOscDoubleBuffer.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPClient.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPServer.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPUtils.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstXMPPRTP.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxOscPacketPool.cpp" />
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxWebRTCAudioPool.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxBaseGui.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxButton.cpp" />
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.cpp" />
@@ -277,7 +270,6 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofURLFileLoader.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofUtils.cpp" />
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofXml.cpp" />
-    <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPClient.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPManager.cpp" />
     <ClCompile Include="..\..\openFrameworks\addons\ofxNetwork\src\ofxTCPServer.cpp" />

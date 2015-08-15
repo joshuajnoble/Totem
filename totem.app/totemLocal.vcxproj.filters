@@ -178,9 +178,6 @@
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofFileUtils.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
-    <ClCompile Include="$(OFDIR)\libs\openFrameworks\video\ofGstUtils.cpp">
-      <Filter>openFrameworks</Filter>
-    </ClCompile>
     <ClCompile Include="$(OFDIR)\libs\openFrameworks\utils\ofLog.cpp">
       <Filter>openFrameworks</Filter>
     </ClCompile>
@@ -223,21 +220,6 @@
     <ClCompile Include="$(OFDIR)\addons\ofxDepthStreamCompression\src\ofxDepthCompressedFrame.cpp">
       <Filter>addons\ofxDepthStreamCompression</Filter>
     </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstXMPPRTP.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
-    </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPUtils.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
-    </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPServer.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
-    </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstRTPClient.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
-    </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxGstOscDoubleBuffer.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
-    </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxGuiGroup.cpp">
       <Filter>addons\ofxGui</Filter>
     </ClCompile>
@@ -253,9 +235,6 @@
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxLabel.cpp">
       <Filter>addons\ofxGui</Filter>
     </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxOscPacketPool.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
-    </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxToggle.cpp">
       <Filter>addons\ofxGui</Filter>
     </ClCompile>
@@ -264,9 +243,6 @@
     </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxGui\src\ofxSlider.cpp">
       <Filter>addons\ofxGui</Filter>
-    </ClCompile>
-    <ClCompile Include="$(OFDIR)\addons\ofxGstRTP\src\ofxWebRTCAudioPool.cpp">
-      <Filter>addons\ofxGstRTP</Filter>
     </ClCompile>
     <ClCompile Include="$(OFDIR)\addons\ofxOSCSync\src\Server\ofxServerOscManager.cpp">
       <Filter>addons\ofxOSCSync\Server</Filter>
@@ -371,9 +347,6 @@
     </Filter>
     <Filter Include="addons\ofxJSON">
       <UniqueIdentifier>{8945de9e-d1d6-4b9a-8526-4f4423f372c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxGstRTP">
-      <UniqueIdentifier>{478d4b8e-ed78-4896-aed6-3ddae9bcb56c}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSnappy">
       <UniqueIdentifier>{c542e8ab-d96a-4fae-b6ed-1c4c3d5ab614}</UniqueIdentifier>
