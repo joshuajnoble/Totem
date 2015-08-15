@@ -304,13 +304,13 @@ int main(int argc, const char** argv)
 		modeCount += ofxArgParser::hasKey("hub") ? 1 : 0;
 		if (modeCount == 0)
 		{
-			std::cout << "You must specify which mode to run in, one of: -totem, -remote, -hub";
+			std::cout << "You must specify which mode to run in, one of: -totem, -remote, -hub (-help for more details).";
 			return -1;
 		}
 
 		if (modeCount > 1)
 		{
-			std::cout << "You must specify only one of: -totem, -remote, -hub.  See -help for details.";
+			std::cout << "You must specify only one of: -totem, -remote, -hub.  (-help for more details).";
 			return -1;
 		}
 
@@ -319,7 +319,7 @@ int main(int argc, const char** argv)
 		{
 			if (ofxArgParser::hasKey(*i) && ofxArgParser::getValue(*i) == "")
 			{
-				std::cout << "The \"" << *i << "\" param requires a value to be provided.  See -help for details.";
+				std::cout << "The \"" << *i << "\" param requires a value to be provided.  (-help for more details).";
 				return -1;
 			}
 		}
