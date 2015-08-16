@@ -5,4 +5,5 @@ void InitFFmpeg()
 	av_register_all();
 	avcodec_register_all();
 	avdevice_register_all();
+	avformat_network_init();
 }
