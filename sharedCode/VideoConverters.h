@@ -45,7 +45,7 @@ class ConvertToRGB
 {
 private:
 	uint8_t* dstData[1];
-	int dstLineSize[2];
+	int dstLineSize[1];
 
 	int width, height;
 	SwsContext* sws_context;
