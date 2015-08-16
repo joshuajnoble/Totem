@@ -173,8 +173,8 @@ namespace
 		auto remoteApp = new ofRemoteApp();
 
 		ofSetupOpenGL(1, 1, OF_WINDOW);
-		auto screenWidth = min(1920, ofGetScreenWidth());
-		auto screenHeight = min(1080, ofGetScreenHeight());
+		auto screenWidth = min(2160, ofGetScreenWidth());
+		auto screenHeight = min(1440, ofGetScreenHeight());
 
 		int windowWidth = screenWidth;
 		int windowHeight = screenHeight;
