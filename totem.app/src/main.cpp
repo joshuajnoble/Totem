@@ -35,18 +35,31 @@ namespace
 		else
 		{
 			auto webCamDeviceId = 0;
+			auto captureWidth = 640;
+			auto captureHeight = 480;
 			if (ofxArgParser::hasKey("capDevice"))
 			{
 				webCamDeviceId = ofToInt(ofxArgParser::getValue("capDevice"));
 			}
+			else
+			{
+				// If no capture device was specified, try to be smart about which camera we pick
+				ofVideoGrabber grabber = ofVideoGrabber();
+				auto captureDevices = grabber.listDevices();
+				auto found = std::find_if(captureDevices.begin(), captureDevices.end(), [](ofVideoDevice x)->bool { return x.deviceName == "Microsoft LifeCam Front"; });
+				if (found != captureDevices.end())
+				{
+					webCamDeviceId = found->id;
+					captureWidth = 848;
+					captureHeight = 480;
+				}
+			}
 
-			auto captureWidth = 640;
 			if (ofxArgParser::hasKey("capWidth"))
 			{
 				captureWidth = ofToInt(ofxArgParser::getValue("capWidth"));
 			}
 
-			auto captureHeight = 480;
 			if (ofxArgParser::hasKey("capHeight"))
 			{
 				captureHeight = ofToInt(ofxArgParser::getValue("capHeight"));
