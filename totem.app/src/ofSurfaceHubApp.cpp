@@ -1,10 +1,11 @@
 #include "ofSurfaceHubApp.h"
 #include "..\..\SharedCode\VideoConverters.h"
 
-namespace
+ofSurfaceHubApp::ofSurfaceHubApp() :
+	PeopleRegion(61, 137, 332, 869),
+	PeopleMargin(24, 26)
 {
-	const int PROFILE_PADDING = 10;
-	const int PROFILE_SIZE = 128;
+
 }
 
 void ofSurfaceHubApp::earlyinit(int netid)
@@ -14,14 +15,14 @@ void ofSurfaceHubApp::earlyinit(int netid)
 
 int ofSurfaceHubApp::displayWidth() const
 {
-	int maxWidth = 2160;
+	int maxWidth = 1920;
 	auto width = GetSystemMetrics(SM_CXSCREEN);
 	return width > maxWidth ? maxWidth : width;
 }
 
 int ofSurfaceHubApp::displayHeight() const
 {
-	int maxHeight = 1440;
+	int maxHeight = 1080;
 	auto height = GetSystemMetrics(SM_CYSCREEN);
 	return height > maxHeight ? maxHeight : height;
 }
@@ -30,14 +31,79 @@ void ofSurfaceHubApp::setup()
 {
 	ofSetFrameRate(30);
 	ofSetVerticalSync(true);
+
+	StatusFont.loadFont("surfacehub/segoeui.ttf", 11);
+	StatusFont.setSpaceSize(StatusFont.getSpaceSize() / 2);
+	NameFont.loadFont("surfacehub/segoeui.ttf", 15);
+	auto xx = NameFont.getSpaceSize();
+	NameFont.setSpaceSize(NameFont.getSpaceSize() / 2);
+	TitleFont = StatusFont;
+
+	avatarMask.loadImage("surfacehub/avatar_mask.png");
+	presentation.loadImage("surfacehub/background.png");
+	connectButton.loadImage("hub_connect.png");
+
+	Person p;
+	p.name = "Albert Russell";
+	p.title = "???";
+	p.avatar = ofImage("profiles/AlbertRussell.jpg");
+	people.push_back(p);
+
+	p.name = "Brandon Gray";
+	p.title = "Project Manager";
+	p.avatar = ofImage("profiles/BrandonGray.jpg");
+	people.push_back(p);
+
+	p.name = "Brenda Bryant";
+	p.title = "Senior Product Designer";
+	p.avatar = ofImage("profiles/BrendaBryant.jpg");
+	people.push_back(p);
+
+	p.name = "Carolyn Hill";
+	p.title = "Textile Designer";
+	p.avatar = ofImage("profiles/CarolynHill.jpg");
+	people.push_back(p);
+
+	p.name = "Christine Spencer";
+	p.title = "Administrative Assistant";
+	p.avatar = ofImage("profiles/ChristineSpencer.jpg");
+	people.push_back(p);
+
+	p.name = "Donald Lewis";
+	p.title = "Retail Planning Manager";
+	p.avatar = ofImage("profiles/DonaldLewis.jpg");
+	people.push_back(p);
+
+	p.name = "Edward James";
+	p.title = "???";
+	p.avatar = ofImage("profiles/EdwardJames.jpg");
+	people.push_back(p);
+
+	p.name = "Kathryn Hill";
+	p.title = "???";
+	p.avatar = ofImage("profiles/KathrynHill.jpg");
+	people.push_back(p);
+
+	p.name = "Patrick Arnold";
+	p.title = "???";
+	p.avatar = ofImage("profiles/PatrickArnold.jpg");
+	people.push_back(p);
+
+	p.name = "Thomas Kelly";
+	p.title = "Senior CAD Designer";
+	p.avatar = ofImage("profiles/ThomasKelly.jpg");
+	people.push_back(p);
+
+	std::random_shuffle(people.begin(), people.end());
 	
 	SetupDiscovery();
 
-	profilePictures.push_back(ofImage("profiles/profile_01.png"));
-	profilePictures.push_back(ofImage("profiles/profile_02.png"));
-	profilePictures.push_back(ofImage("profiles/profile_03.png"));
-	presentation.loadImage("presentation_slide.png");
-	connectButton.loadImage("hub_connect.png");
+#if _DEBUGX
+	UdpDiscovery::RemotePeerStatus s;
+	s.isTotem = false;
+	s.id = "01"; PeerArrived(s); s.id = "02"; PeerArrived(s); s.id = "03"; PeerArrived(s); s.id = "04"; PeerArrived(s); s.id = "05"; PeerArrived(s);
+	s.id = "06"; PeerArrived(s); s.id = "07"; PeerArrived(s); s.id = "08"; PeerArrived(s); s.id = "09"; PeerArrived(s); s.id = "10"; PeerArrived(s);
+#endif
 }
 
 void ofSurfaceHubApp::update()
@@ -47,28 +113,80 @@ void ofSurfaceHubApp::update()
 
 void ofSurfaceHubApp::draw()
 {
-	ofBackground(0);
+	// Draw the slide
+	ofRectangle fill(0, 0, presentation.width, presentation.height);
+	fill.scaleTo(ofRectangle(0, 0, this->displayWidth(), this->displayHeight()), OF_SCALEMODE_FILL);
+	presentation.draw(fill);
 
 	// Draw the profile images
-	int y = PROFILE_PADDING;
-	for (int i = 0; i < peers.size(); ++i)
+	ofPushMatrix();
+	auto topLeft = PeopleRegion.getTopLeft() + PeopleMargin;
+	ofTranslate(topLeft);
+
+	int y = -13;
+
+	std::vector<PeerInfo> peersOnline(peers.size());
+	auto it = std::copy_if(peers.begin(), peers.end(), peersOnline.begin(), [](const PeerInfo& p) { return !p.isConnectedToSession; });
+	peersOnline.resize(std::distance(peersOnline.begin(), it));
+	if (peersOnline.size())
 	{
-		peers[i].profilePicture.draw(10, y, PROFILE_SIZE, PROFILE_SIZE);
-		y += PROFILE_SIZE + PROFILE_PADDING;
+		y += 28;
+		StatusFont.drawString("Online", 0, y);
+		y += 15;
+		for (int i = 0; i < peersOnline.size(); ++i)
+		{
+			Person &p = peers[i].person;
+			DrawPerson(p, 0, y);
+			y += PROFILE_SIZE + PROFILE_PADDING;
+		}
 	}
 
-	hasTotemConnected = true; // TODO: Remove this when we are ready to really test with a totem source
-	if (peers.size() && hasTotemConnected)
+	std::vector<PeerInfo> peersConnected(peers.size());
+	it = std::copy_if(peers.begin(), peers.end(), peersConnected.begin(), [](const PeerInfo& p) { return p.isConnectedToSession; });
+	peersConnected.resize(std::distance(peersConnected.begin(), it));
+	if (peersConnected.size())
 	{
-		buttonPosition.set(PROFILE_PADDING, y, PROFILE_SIZE, PROFILE_SIZE);
-		connectButton.draw(buttonPosition);
+		y += 28;
+		StatusFont.drawString("Alpine Vista - 56/2300", 0, y);
+		y += 15;
+		for (int i = 0; i < peersConnected.size(); ++i)
+		{
+			Person &p = peers[i].person;
+			DrawPerson(p, 0, y);
+			y += PROFILE_SIZE + PROFILE_PADDING;
+		}
 	}
 
-	// Draw the slide
-	auto leftMargin = PROFILE_SIZE + PROFILE_PADDING * 2;
-	ofRectangle fill(0, 0, presentation.width, presentation.height);
-	fill.scaleTo(ofRectangle(leftMargin, 0, this->displayWidth() - leftMargin, this->displayHeight()), OF_SCALEMODE_FILL);
-	presentation.draw(fill);
+	//y += 28;
+	//StatusFont.drawString("Not yet joined", 0, y);
+	//y += 15;
+	//for (int i = 5; i < peers.size(); ++i)
+	//{
+	//	Person &p = peers[i].person;
+	//	DrawPerson(p, 0, y);
+	//	y += PROFILE_SIZE + PROFILE_PADDING;
+	//}
+
+	//hasTotemConnected = true; // TODO: Remove this when we are ready to really test with a totem source
+	//if (peers.size() && hasTotemConnected)
+	//{
+	//	buttonPosition.set(PROFILE_PADDING, y, PROFILE_SIZE, PROFILE_SIZE);
+	//	connectButton.draw(buttonPosition);
+	//}
+
+	ofPopMatrix();
+}
+
+void ofSurfaceHubApp::DrawPerson(Person& p, float x, float y)
+{
+	p.avatar.draw(x + 1, y, PROFILE_SIZE, PROFILE_SIZE);
+	avatarMask.draw(x + 1, y);
+
+	auto nameY = y + NameFont.getLineHeight();
+	NameFont.drawString(p.name, x + PROFILE_SIZE + 13, nameY);
+	ofSetColor(0x62, 0x7D, 0x85);
+	TitleFont.drawString(p.title, x + PROFILE_SIZE + 13, nameY + TitleFont.getLineHeight() + 4);
+	ofSetColor(0xFF);
 }
 
 void ofSurfaceHubApp::exit()
@@ -83,8 +201,9 @@ void ofSurfaceHubApp::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 		auto entry = PeerInfo();
 		entry.id = peer.id;
 		entry.isTotem = peer.isTotem;
-		entry.profilePicture = profilePictures.front();
-		profilePictures.erase(profilePictures.begin());
+		entry.isConnectedToSession = peer.isConnectedToSession;
+		entry.person = people.front();
+		people.erase(people.begin());
 		peers.push_back(entry);
 
 		if (peer.isTotem)
@@ -99,7 +218,7 @@ void ofSurfaceHubApp::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 	auto found = std::find_if(peers.begin(), peers.end(), [peer](PeerInfo x)->bool { return x.id == peer.id; });
 	if (found != peers.end())
 	{
-		profilePictures.push_back(found->profilePicture);
+		people.push_back(found->person);
 		peers.erase(found);
 
 		if (peer.isTotem)
@@ -109,11 +228,32 @@ void ofSurfaceHubApp::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 	}
 }
 
+void ofSurfaceHubApp::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer)
+{
+	auto found = GetPeerFromClientId(peer.id);
+	if (found != this->peers.end())
+	{
+		found->isConnectedToSession = true;
+	}
+}
+
+void ofSurfaceHubApp::PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer)
+{
+	auto found = GetPeerFromClientId(peer.id);
+	if (found != this->peers.end())
+	{
+		found->isConnectedToSession = false;
+	}
+}
+
 void ofSurfaceHubApp::SetupDiscovery()
 {
 	this->udpDiscovery.setupSurfaceHub();
 	ofAddListener(udpDiscovery.peerArrivedEvent, this, &ofSurfaceHubApp::PeerArrived);
 	ofAddListener(udpDiscovery.peerLeftEvent, this, &ofSurfaceHubApp::PeerLeft);
+
+	ofAddListener(udpDiscovery.peerJoinedSessionEvent, this, &ofSurfaceHubApp::PeerJoinedSession);
+	ofAddListener(udpDiscovery.peerLeftSessionEvent, this, &ofSurfaceHubApp::PeerLeftSession);
 }
 
 void ofSurfaceHubApp::mousePressed(int x, int y, int button)
@@ -122,4 +262,10 @@ void ofSurfaceHubApp::mousePressed(int x, int y, int button)
 	{
 		// The connect button has been pressed
 	}
+}
+
+std::vector<ofSurfaceHubApp::PeerInfo>::iterator ofSurfaceHubApp::GetPeerFromClientId(const string& clientId)
+{
+	auto found = std::find_if(this->peers.begin(), this->peers.end(), [clientId](PeerInfo &x)->bool { return x.id == clientId; });
+	return found;
 }

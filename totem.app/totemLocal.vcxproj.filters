@@ -411,6 +411,9 @@
     <Filter Include="data\profiles">
       <UniqueIdentifier>{21c3b5e2-3b68-4f9a-9ce0-85cb48053960}</UniqueIdentifier>
     </Filter>
+    <Filter Include="data\surfacehub">
+      <UniqueIdentifier>{74d9d971-98d8-42ea-a83a-b9e839a16779}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ThreeSixtyUnwrap.h">
@@ -726,14 +729,49 @@
     <Image Include="data\cortana\personaassets720x1280_circle_greeting3_10_Reverse.gif">
       <Filter>data\cortana</Filter>
     </Image>
-    <Image Include="data\profiles\profile_03.png">
+    <Image Include="data\surfacehub\background.png">
+      <Filter>data\surfacehub</Filter>
+    </Image>
+    <Image Include="data\profiles\AlbertRussell.jpg">
       <Filter>data\profiles</Filter>
     </Image>
-    <Image Include="data\profiles\profile_01.png">
+    <Image Include="data\profiles\BrandonGray.jpg">
       <Filter>data\profiles</Filter>
     </Image>
-    <Image Include="data\profiles\profile_02.png">
+    <Image Include="data\profiles\BrendaBryant.jpg">
       <Filter>data\profiles</Filter>
     </Image>
+    <Image Include="data\profiles\CarolynHill.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\ChristineSpencer.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\DonaldLewis.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\EdwardJames.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\KathrynHill.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\PatrickArnold.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\profiles\ThomasKelly.jpg">
+      <Filter>data\profiles</Filter>
+    </Image>
+    <Image Include="data\surfacehub\avatar_mask.png">
+      <Filter>data\surfacehub</Filter>
+    </Image>
+    <Image Include="data\surfacehub\hub_connect.png">
+      <Filter>data\surfacehub</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\surfacehub\segoeui.ttf">
+      <Filter>data\surfacehub</Filter>
+    </Font>
   </ItemGroup>
 </Project>

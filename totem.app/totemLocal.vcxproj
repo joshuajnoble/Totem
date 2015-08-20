@@ -450,10 +450,23 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <Image Include="data\hangup.png" />
     <Image Include="data\hub.png" />
     <Image Include="data\mute.png" />
-    <Image Include="data\profiles\profile_01.png" />
-    <Image Include="data\profiles\profile_02.png" />
-    <Image Include="data\profiles\profile_03.png" />
+    <Image Include="data\profiles\AlbertRussell.jpg" />
+    <Image Include="data\profiles\BrandonGray.jpg" />
+    <Image Include="data\profiles\BrendaBryant.jpg" />
+    <Image Include="data\profiles\CarolynHill.jpg" />
+    <Image Include="data\profiles\ChristineSpencer.jpg" />
+    <Image Include="data\profiles\DonaldLewis.jpg" />
+    <Image Include="data\profiles\EdwardJames.jpg" />
+    <Image Include="data\profiles\KathrynHill.jpg" />
+    <Image Include="data\profiles\PatrickArnold.jpg" />
+    <Image Include="data\profiles\ThomasKelly.jpg" />
+    <Image Include="data\surfacehub\avatar_mask.png" />
+    <Image Include="data\surfacehub\background.png" />
+    <Image Include="data\surfacehub\hub_connect.png" />
     <Image Include="data\unmute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="data\surfacehub\segoeui.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
