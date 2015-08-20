@@ -50,7 +50,7 @@ void ofSurfaceHubApp::setup()
 
 	Person p;
 	p.name = "Albert Russell";
-	p.title = "???";
+	p.title = "QA Engineer";
 	p.avatar = ofImage("profiles/AlbertRussell.jpg");
 	people.push_back(p);
 
