@@ -35,11 +35,16 @@ private:
 
 	int networkInterfaceId;
 	bool hasTotemConnected;
+	bool hasSessionStarted;
 	UdpDiscovery udpDiscovery;
-	ofImage presentation;
+	ofImage backgroundOpen;
+	ofImage backgroundClosed;
+	ofImage slide;
 	ofImage connectButton;
 	ofImage avatarMask;
 	ofRectangle buttonPosition;
+	ofRectangle slidePositionOpen;
+	ofRectangle slidePositionClosed;
 	std::vector<Person> people;
 	std::vector<PeerInfo> peers;
 

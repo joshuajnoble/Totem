@@ -3,7 +3,10 @@
 
 ofSurfaceHubApp::ofSurfaceHubApp() :
 	PeopleRegion(61, 137, 332, 869),
-	PeopleMargin(24, 26)
+	PeopleMargin(24, 26),
+	slidePositionOpen(410, 92, 1448, 915),
+	slidePositionClosed(62, 0, 1858, 1006),
+	hasSessionStarted(false)
 {
 
 }
@@ -40,7 +43,9 @@ void ofSurfaceHubApp::setup()
 	TitleFont = StatusFont;
 
 	avatarMask.loadImage("surfacehub/avatar_mask.png");
-	presentation.loadImage("surfacehub/background.png");
+	backgroundOpen.loadImage("surfacehub/background_open.png");
+	backgroundClosed.loadImage("surfacehub/background_closed.png");
+	slide.loadImage("surfacehub/slide.png");
 	connectButton.loadImage("hub_connect.png");
 
 	Person p;
@@ -75,17 +80,17 @@ void ofSurfaceHubApp::setup()
 	people.push_back(p);
 
 	p.name = "Edward James";
-	p.title = "???";
+	p.title = "Product Manager";
 	p.avatar = ofImage("profiles/EdwardJames.jpg");
 	people.push_back(p);
 
 	p.name = "Kathryn Hill";
-	p.title = "???";
+	p.title = "Strategic Analyst";
 	p.avatar = ofImage("profiles/KathrynHill.jpg");
 	people.push_back(p);
 
 	p.name = "Patrick Arnold";
-	p.title = "???";
+	p.title = "Brand Manager";
 	p.avatar = ofImage("profiles/PatrickArnold.jpg");
 	people.push_back(p);
 
@@ -113,47 +118,79 @@ void ofSurfaceHubApp::update()
 
 void ofSurfaceHubApp::draw()
 {
-	// Draw the slide
-	ofRectangle fill(0, 0, presentation.width, presentation.height);
-	fill.scaleTo(ofRectangle(0, 0, this->displayWidth(), this->displayHeight()), OF_SCALEMODE_FILL);
-	presentation.draw(fill);
-
-	// Draw the profile images
-	ofPushMatrix();
-	auto topLeft = PeopleRegion.getTopLeft() + PeopleMargin;
-	ofTranslate(topLeft);
-
-	int y = -13;
-
-	std::vector<PeerInfo> peersOnline(peers.size());
-	auto it = std::copy_if(peers.begin(), peers.end(), peersOnline.begin(), [](const PeerInfo& p) { return !p.isConnectedToSession; });
-	peersOnline.resize(std::distance(peersOnline.begin(), it));
-	if (peersOnline.size())
+	if (hasSessionStarted)
 	{
-		y += 28;
-		StatusFont.drawString("Online", 0, y);
-		y += 15;
-		for (int i = 0; i < peersOnline.size(); ++i)
-		{
-			Person &p = peers[i].person;
-			DrawPerson(p, 0, y);
-			y += PROFILE_SIZE + PROFILE_PADDING;
-		}
+		// Draw the background
+		ofRectangle fill(0, 0, backgroundClosed.width, backgroundClosed.height);
+		fill.scaleTo(ofRectangle(0, 0, this->displayWidth(), this->displayHeight()), OF_SCALEMODE_FILL);
+		backgroundClosed.draw(fill);
+
+		// Draw the the slide
+		ofRect(slidePositionClosed); // Only need this if the background isn't already white
+		fill = ofRectangle(slidePositionClosed.x, slidePositionClosed.y, slide.width, slide.height);
+		fill.scaleTo(slidePositionClosed);
+		fill.scaleTo(slidePositionClosed, OF_SCALEMODE_CENTER);
+		slide.draw(fill);
 	}
-
-	std::vector<PeerInfo> peersConnected(peers.size());
-	it = std::copy_if(peers.begin(), peers.end(), peersConnected.begin(), [](const PeerInfo& p) { return p.isConnectedToSession; });
-	peersConnected.resize(std::distance(peersConnected.begin(), it));
-	if (peersConnected.size())
+	else
 	{
-		y += 28;
-		StatusFont.drawString("Alpine Vista - 56/2300", 0, y);
-		y += 15;
-		for (int i = 0; i < peersConnected.size(); ++i)
+		// Draw the background
+		ofRectangle fill(0, 0, backgroundOpen.width, backgroundOpen.height);
+		fill.scaleTo(ofRectangle(0, 0, this->displayWidth(), this->displayHeight()), OF_SCALEMODE_FILL);
+		backgroundOpen.draw(fill);
+
+		// Draw the the slide
+		//ofRect(slidePositionOpen); // Only need this if the background isn't already white
+		fill = ofRectangle(slidePositionOpen.x, slidePositionOpen.y, slide.width, slide.height);
+		fill.scaleTo(slidePositionOpen);
+		slide.draw(fill);
+
+		// Draw the profile images
+		ofPushMatrix();
+		auto topLeft = PeopleRegion.getTopLeft() + PeopleMargin;
+		ofTranslate(topLeft);
+
+		int y = -13;
+
+		std::vector<int> peersOnline;
+		std::vector<int> peersConnected;
+		for (auto i = 0; i < peers.size(); ++i)
 		{
-			Person &p = peers[i].person;
-			DrawPerson(p, 0, y);
-			y += PROFILE_SIZE + PROFILE_PADDING;
+			auto p = peers[i];
+			if (p.isConnectedToSession)
+			{
+				peersConnected.push_back(i);
+			}
+			else
+			{
+				peersOnline.push_back(i);
+			}
+		}
+
+		if (peersOnline.size())
+		{
+			y += 28;
+			StatusFont.drawString("Online", 0, y);
+			y += 15;
+			for (int i = 0; i < peersOnline.size(); ++i)
+			{
+				Person &p = peers[peersOnline[i]].person;
+				DrawPerson(p, 0, y);
+				y += PROFILE_SIZE + PROFILE_PADDING;
+			}
+		}
+
+		if (peersConnected.size())
+		{
+			y += 28;
+			StatusFont.drawString("Alpine Vista - 56/2300", 0, y);
+			y += 15;
+			for (int i = 0; i < peersConnected.size(); ++i)
+			{
+				Person &p = peers[peersConnected[i]].person;
+				DrawPerson(p, 0, y);
+				y += PROFILE_SIZE + PROFILE_PADDING;
+			}
 		}
 	}
 

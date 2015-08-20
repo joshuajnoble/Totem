@@ -461,8 +461,10 @@ xcopy /e /i /y "$(OFDIR)\addons\ofxSpout\dll\*.dll" "$(ProjectDir)bin"</Command>
     <Image Include="data\profiles\PatrickArnold.jpg" />
     <Image Include="data\profiles\ThomasKelly.jpg" />
     <Image Include="data\surfacehub\avatar_mask.png" />
-    <Image Include="data\surfacehub\background.png" />
+    <Image Include="data\surfacehub\background_closed.png" />
+    <Image Include="data\surfacehub\background_open.png" />
     <Image Include="data\surfacehub\hub_connect.png" />
+    <Image Include="data\surfacehub\slide.png" />
     <Image Include="data\unmute.png" />
   </ItemGroup>
   <ItemGroup>
