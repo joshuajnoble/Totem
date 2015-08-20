@@ -61,6 +61,7 @@ private:
 	int networkInterfaceId;
 
 	RemoteVideoInfo* totemSource();
+	RemoteVideoInfo* hubSource();
 
 	bool manualTotemAngle = false;
 	float currentTotemAngle;

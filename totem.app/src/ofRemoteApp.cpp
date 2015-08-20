@@ -110,29 +110,41 @@ void ofRemoteApp::update()
 	}
 
 	auto totem = this->totemSource();
+	if (!this->isInCall && this->state == UISTATE_INTRO && !this->isAnimatingConnectIconAlpha)
+	{
+		bool totemIsConnected = totem && totem->peerStatus.isConnectedToSession;
+		bool surfaceHub = this->hubSource();
+
+		if (surfaceHub)
+		{
+			if (totemIsConnected)
+			{
+				TransitionTo_UISTATE_MAIN();
+			}
+		}
+		else
+		{
+			if (totemIsConnected && !this->currentConnectIconAlpha)
+			{
+				this->isAnimatingConnectIconAlpha = true;
+				this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
+				this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+			}
+			else if (!totemIsConnected && this->currentConnectIconAlpha == 1.0)
+			{
+				this->isAnimatingConnectIconAlpha = true;
+				this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
+				this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+			}
+		}
+	}
+
 	if (this->state == UISTATE_MAIN && totem && totem->peerStatus.isConnectedToSession && !this->doneCylinderWelcome)
 	{
 		this->doneCylinderWelcome = true;
 		this->currentCylinderBarnDoorPosition = 0.33;
 		this->playlist.addKeyFrame(Action::tween(TIME_WELCOME_BARNDOORS_OPEN, &this->currentCylinderBarnDoorPosition, 1));
 		this->playlist.addKeyFrame(Action::event(this, OpenBarndoors_COMPLETE_EVENT));
-	}
-
-	if (!this->isInCall && this->state == UISTATE_INTRO && !this->isAnimatingConnectIconAlpha)
-	{
-		bool totemIsConnected = totem && totem->peerStatus.isConnectedToSession;
-		if (totemIsConnected && !this->currentConnectIconAlpha)
-		{
-			this->isAnimatingConnectIconAlpha = true;
-			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
-			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
-		}
-		else if (!totemIsConnected && this->currentConnectIconAlpha == 1.0)
-		{
-			this->isAnimatingConnectIconAlpha = true;
-			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
-			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
-		}
 	}
 
 	UpdateTotemViewAngle();
@@ -538,6 +550,12 @@ void ofRemoteApp::onKeyframe(ofxPlaylistEventArgs& args)
 RemoteVideoInfo* ofRemoteApp::totemSource()
 {
 	auto found = std::find_if(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo& x)->bool { return x.peerStatus.isTotem; });
+	return found == this->peers.end() ? nullptr : &(*found);
+}
+
+RemoteVideoInfo* ofRemoteApp::hubSource()
+{
+	auto found = std::find_if(this->peers.begin(), this->peers.end(), [](RemoteVideoInfo& x)->bool { return x.peerStatus.isSurfaceHub; });
 	return found == this->peers.end() ? nullptr : &(*found);
 }
 
