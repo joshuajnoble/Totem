@@ -23,6 +23,10 @@ private:
 	bool cortanaLoadErrorDisplayed = false;
 	ofSerial serial;
 
+	float surfaceHubDetectionTimeout;
+	bool foundSurfaceHub;
+	bool waitingForSurfaceHub;
+
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote);
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote);
 

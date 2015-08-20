@@ -51,13 +51,17 @@ void ofTotemApp::setup()
 	this->isRemoteSource1Initialized = false;
 	this->isInitialized = true;
 
-	this->ConnectToSession();
 	cortanaPlayIntro();
 	serial.setup(1, 9600);
 	if (!serial.isInitialized())
 	{
 		serial.setup(0, 9600);;
 	}
+
+	this->waitingForSurfaceHub = true;
+	this->foundSurfaceHub = false;
+	this->surfaceHubDetectionTimeout = ofGetElapsedTimef();
+	this->surfaceHubDetectionTimeout += 2.0f;
 }
 
 //--------------------------------------------------------------
@@ -100,6 +104,23 @@ void ofTotemApp::update()
 	VideoCaptureAppBase::update();
 
 	this->totemDisplay.update();
+
+	// See if we can find a surfaceHub instance
+	if (this->waitingForSurfaceHub && !this->foundSurfaceHub)
+	{
+		this->foundSurfaceHub = std::any_of(this->peers.begin(), this->peers.end(), [](const RemoteVideoInfo& p) { return p.peerStatus.isSurfaceHub; });
+		this->waitingForSurfaceHub = !this->foundSurfaceHub;
+	}
+
+	// Stop searching for the surfaceHub id it has been long enough
+	if (this->waitingForSurfaceHub)
+	{
+		if (ofGetElapsedTimef() >= this->surfaceHubDetectionTimeout)
+		{
+			this->waitingForSurfaceHub = false;
+			this->ConnectToSession();
+		}
+	}
 }
 
 
@@ -248,6 +269,11 @@ void ofTotemApp::keyPressed(int key)
 	if (!this->isInitialized)
 	{
 		return;
+	}
+
+	if (this->foundSurfaceHub && key == '\x20')
+	{
+		this->ConnectToSession();
 	}
 }
 

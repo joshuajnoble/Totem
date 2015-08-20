@@ -120,13 +120,14 @@ void ofRemoteApp::update()
 
 	if (!this->isInCall && this->state == UISTATE_INTRO && !this->isAnimatingConnectIconAlpha)
 	{
-		if (totem && !this->currentConnectIconAlpha)
+		bool totemIsConnected = totem && totem->peerStatus.isConnectedToSession;
+		if (totemIsConnected && !this->currentConnectIconAlpha)
 		{
 			this->isAnimatingConnectIconAlpha = true;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
 			this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
 		}
-		else if (!totem && this->currentConnectIconAlpha == 1.0)
+		else if (!totemIsConnected && this->currentConnectIconAlpha == 1.0)
 		{
 			this->isAnimatingConnectIconAlpha = true;
 			this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));

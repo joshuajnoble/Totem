@@ -114,6 +114,15 @@ void ofSurfaceHubApp::setup()
 void ofSurfaceHubApp::update()
 {
 	udpDiscovery.update();
+
+	auto totem = std::find_if(peers.begin(), peers.end(), [](const PeerInfo& p) { return p.isTotem; });
+	if (totem != peers.end())
+	{
+		if (totem->isConnectedToSession)
+		{
+			hasSessionStarted = true;
+		}
+	}
 }
 
 void ofSurfaceHubApp::draw()
