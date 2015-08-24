@@ -22,6 +22,8 @@ private:
 	ofPtr<ofBaseVideoDraws> netImpersonate;
 	bool cortanaLoadErrorDisplayed = false;
 	ofSerial serial;
+	ofTrueTypeFont cortanaPrompt;
+	ofTrueTypeFont cortanaTip;
 
 	float surfaceHubDetectionTimeout;
 	bool foundSurfaceHub;

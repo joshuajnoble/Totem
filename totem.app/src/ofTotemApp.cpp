@@ -62,6 +62,12 @@ void ofTotemApp::setup()
 	this->foundSurfaceHub = false;
 	this->surfaceHubDetectionTimeout = ofGetElapsedTimef();
 	this->surfaceHubDetectionTimeout += 2.0f;
+
+	cortanaPrompt.loadFont("surfacehub/segoeui.ttf", 32);
+	cortanaPrompt.setSpaceSize(cortanaPrompt.getSpaceSize() / 2);
+
+	cortanaTip.loadFont("surfacehub/segoeui.ttf", 14);
+	cortanaTip.setSpaceSize(cortanaTip.getSpaceSize() / 2);
 }
 
 //--------------------------------------------------------------
@@ -192,8 +198,52 @@ void ofTotemApp::draw()
 						region.translateX(halfWidth - this->cortanaPlayer.width / 2);
 
 						this->cortanaPlayer.draw(region);
+
+						ofSetColor(28, 137, 175);
+
+						if (this->foundSurfaceHub)
+						{
+							auto size = cortanaPrompt.getStringBoundingBox("Ready to start", 0, 0);
+							size.alignToHorz(region);
+							size.setPosition(size.x, region.getBottom() + 50);
+							cortanaPrompt.drawString("Ready to start", size.x, size.y);
+
+							size = cortanaPrompt.getStringBoundingBox("the meeting.", 0, 0);
+							size.alignToHorz(region);
+							size.setPosition(size.x, region.getBottom() + 50 + size.height * 1.3);
+							cortanaPrompt.drawString("the meeting.", size.x, size.y);
+						}
+						else
+						{
+							auto size = cortanaPrompt.getStringBoundingBox("Who would", 0, 0);
+							size.alignToHorz(region);
+							size.setPosition(size.x, region.getBottom() + 75);
+							cortanaPrompt.drawString("Who would", size.x, size.y);
+							auto bottom = size.getBottom();
+
+							size = cortanaPrompt.getStringBoundingBox("you like to", 0, 0);
+							size.alignToHorz(region);
+							size.setPosition(size.x, bottom + size.height * 0.3);
+							cortanaPrompt.drawString("you like to", size.x, size.y);
+							bottom = size.getBottom();
+
+							size = cortanaPrompt.getStringBoundingBox("meet with?", 0, 0);
+							size.alignToHorz(region);
+							size.setPosition(size.x, bottom + size.height * 0.3);
+							cortanaPrompt.drawString("meet with?", size.x, size.y);
+							bottom = size.getBottom();
+
+							ofSetColor(128);
+							size = cortanaTip.getStringBoundingBox("try call Mark in Studio B.", 0, 0);
+							size.alignToHorz(region);
+							size.setPosition(size.x, bottom + size.height * 2.3);
+							cortanaTip.drawString("try call Mark in Studio B.", size.x, size.y);
+						}
+
+						ofSetColor(255);
 						output.end();
 					}
+
 					this->totemDisplay.drawCloned();
 				}
 				else
