@@ -110,9 +110,10 @@ void ofTotemApp::update()
 	{
 		this->foundSurfaceHub = std::any_of(this->peers.begin(), this->peers.end(), [](const RemoteVideoInfo& p) { return p.peerStatus.isSurfaceHub; });
 		this->waitingForSurfaceHub = !this->foundSurfaceHub;
+		this->ReadyUp();
 	}
 
-	// Stop searching for the surfaceHub id it has been long enough
+	// Stop searching for the surfaceHub if it has been long enough
 	if (this->waitingForSurfaceHub)
 	{
 		if (ofGetElapsedTimef() >= this->surfaceHubDetectionTimeout)

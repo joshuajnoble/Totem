@@ -162,8 +162,9 @@ void ofSurfaceHubApp::draw()
 
 		int y = -13;
 
-		std::vector<int> peersOnline;
 		std::vector<int> peersConnected;
+		std::vector<int> peersOnline;
+		std::vector<int> peersNotJoined;
 		for (auto i = 0; i < peers.size(); ++i)
 		{
 			auto p = peers[i];
@@ -171,9 +172,13 @@ void ofSurfaceHubApp::draw()
 			{
 				peersConnected.push_back(i);
 			}
-			else
+			else if (p.isReady)
 			{
 				peersOnline.push_back(i);
+			}
+			else
+			{
+				peersNotJoined.push_back(i);
 			}
 		}
 
@@ -202,17 +207,20 @@ void ofSurfaceHubApp::draw()
 				y += PROFILE_SIZE + PROFILE_PADDING;
 			}
 		}
-	}
 
-	//y += 28;
-	//StatusFont.drawString("Not yet joined", 0, y);
-	//y += 15;
-	//for (int i = 5; i < peers.size(); ++i)
-	//{
-	//	Person &p = peers[i].person;
-	//	DrawPerson(p, 0, y);
-	//	y += PROFILE_SIZE + PROFILE_PADDING;
-	//}
+		if (peersNotJoined.size())
+		{
+			y += 28;
+			StatusFont.drawString("Not yet joined", 0, y);
+			y += 15;
+			for (int i = 0; i < peersNotJoined.size(); ++i)
+			{
+				Person &p = peers[peersNotJoined[i]].person;
+				DrawPerson(p, 0, y);
+				y += PROFILE_SIZE + PROFILE_PADDING;
+			}
+		}
+	}
 
 	//hasTotemConnected = true; // TODO: Remove this when we are ready to really test with a totem source
 	//if (peers.size() && hasTotemConnected)
@@ -249,6 +257,7 @@ void ofSurfaceHubApp::PeerArrived(UdpDiscovery::RemotePeerStatus& peer)
 		entry.id = peer.id;
 		entry.isTotem = peer.isTotem;
 		entry.isConnectedToSession = peer.isConnectedToSession;
+		entry.isReady = peer.isReady;
 		entry.person = people.front();
 		people.erase(people.begin());
 		peers.push_back(entry);
@@ -281,6 +290,7 @@ void ofSurfaceHubApp::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer)
 	if (found != this->peers.end())
 	{
 		found->isConnectedToSession = true;
+		found->isReady = peer.isReady;
 	}
 }
 
@@ -290,6 +300,7 @@ void ofSurfaceHubApp::PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer)
 	if (found != this->peers.end())
 	{
 		found->isConnectedToSession = false;
+		found->isReady = peer.isReady;
 	}
 }
 

@@ -184,14 +184,19 @@ void VideoCaptureAppBase::update()
 	}
 }
 
+void VideoCaptureAppBase::ReadyUp()
+{
+	this->udpDiscovery.SetConnectionStatus(false, true);
+}
+
 void VideoCaptureAppBase::ConnectToSession()
 {
-	this->udpDiscovery.SetConnectionStatus(true);
+	this->udpDiscovery.SetConnectionStatus(true, true);
 }
 
 void VideoCaptureAppBase::DisconnectSession()
 {
-	this->udpDiscovery.SetConnectionStatus(false);
+	this->udpDiscovery.SetConnectionStatus(false, false);
 }
 
 void VideoCaptureAppBase::exit()

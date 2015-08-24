@@ -93,6 +93,9 @@ void ofRemoteApp::setup()
 	ofSetFrameRate(30);
 	ofSetVerticalSync(true);
 #endif
+
+	waitingFont.loadFont("surfacehub/segoeui.ttf", 23);
+	waitingFont.setSpaceSize(waitingFont.getSpaceSize() / 2);
 }
 
 
@@ -113,13 +116,28 @@ void ofRemoteApp::update()
 	if (!this->isInCall && this->state == UISTATE_INTRO && !this->isAnimatingConnectIconAlpha)
 	{
 		bool totemIsConnected = totem && totem->peerStatus.isConnectedToSession;
-		bool surfaceHub = this->hubSource();
+		auto surfaceHub = this->hubSource();
 
 		if (surfaceHub)
 		{
-			if (totemIsConnected)
+			if (this->isWaitingOnHubSession)
 			{
-				TransitionTo_UISTATE_MAIN();
+				if (this->currentConnectIconAlpha == 1.0)
+				{
+					this->isAnimatingConnectIconAlpha = true;
+					this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 0));
+					this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
+				}
+				else if (totemIsConnected)
+				{
+					TransitionTo_UISTATE_MAIN();
+				}
+			}
+			else if (!this->currentConnectIconAlpha)
+			{
+				this->isAnimatingConnectIconAlpha = true;
+				this->playlist.addKeyFrame(Action::tween(TIME_INTRO_CONNECT_ICON_APPEARS, &this->currentConnectIconAlpha, 1));
+				this->playlist.addKeyFrame(Action::event(this, CurrentConnectIconAlpha_COMPLETE_EVENT));
 			}
 		}
 		else
@@ -175,6 +193,15 @@ void ofRemoteApp::draw()
 	}
 
 	ofPopStyle();
+
+	if (this->isWaitingOnHubSession)
+	{
+		std::string waitingMessage("Please wait for your meeting to start.");
+		auto messageRegion = waitingFont.getStringBoundingBox(waitingMessage, 0, this->connectIconRegion.y);
+		ofRectangle region(0, this->introSelfieRegion.getBottom(), this->width, this->height - this->introSelfieRegion.getBottom());
+		region.setFromCenter(region.getCenter(), messageRegion.width, messageRegion.height);
+		waitingFont.drawString(waitingMessage, region.x, region.y);
+	}
 
 	if (this->cylinderDisplay && this->state == UISTATE_MAIN)
 	{
@@ -366,9 +393,17 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 		if (button == 0)
 		{
 			// Did they click on the connect icon?
-			if (totem && this->connectIconRegion.inside(x, y))
+			if (this->connectIconRegion.inside(x, y))
 			{
-				TransitionTo_UISTATE_MAIN();
+				if (this->hubSource())
+				{
+					this->ReadyUp();
+					this->isWaitingOnHubSession = true;
+				}
+				else if (totem)
+				{
+					TransitionTo_UISTATE_MAIN();
+				}
 			}
 		}
 	}
@@ -421,6 +456,7 @@ void ofRemoteApp::TransitionTo_UISTATE_INTRO()
 {
 	this->state = UISTATE_INTRO;
 	this->DisconnectSession();
+	this->isWaitingOnHubSession = false;
 
 	this->isInCall = false;
 	this->doneCylinderWelcome = false;
@@ -439,6 +475,7 @@ void ofRemoteApp::TransitionTo_UISTATE_MAIN()
 	this->doneCylinderWelcome = false;
 	this->canShowRemotes = false;
 	this->ConnectToSession();
+	this->isWaitingOnHubSession = false;
 
 	// Transition the selfie view to the "rear view mirror" mode.
 	this->isAnimatingConnectIconAlpha = true;

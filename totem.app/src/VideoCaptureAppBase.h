@@ -62,6 +62,7 @@ protected:
 	std::vector<RemoteVideoInfo> peers;
 	std::vector<RemoteVideoInfo>::iterator GetRemoteFromClientId(const string& clientId);
 
+	void ReadyUp();
 	void ConnectToSession();
 	void DisconnectSession();
 

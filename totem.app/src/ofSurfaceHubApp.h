@@ -20,6 +20,7 @@ private:
 	public:
 		std::string id;
 		bool isTotem;
+		bool isReady;
 		bool isConnectedToSession;
 		Person person;
 	};

@@ -45,6 +45,7 @@ void UdpDiscovery::setupSurfaceHub(int networkInterfaceId)
 	this->isTotem = false;
 	this->isSurfaceHub = true;
 	this->isConnectedToSession = false;
+	this->isReady = false;
 	this->videoWidth = 0;
 	this->videoHeight = 0;
 	this->totemSourceAngle = 0;
@@ -57,6 +58,7 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	this->isTotem = isTotemSource;
 	this->isSurfaceHub = false;
 	this->isConnectedToSession = false;
+	this->isReady = false;
 	this->videoWidth = w;
 	this->videoHeight = h;
 	this->totemSourceAngle = 0;
@@ -165,6 +167,7 @@ void UdpDiscovery::update()
 		jsonPayload["videoHeight"] = this->videoHeight;
 		jsonPayload["totem"] = this->isTotem;
 		jsonPayload["connected"] = this->isConnectedToSession;
+		jsonPayload["ready"] = this->isReady;
 		jsonPayload["hub"] = this->isSurfaceHub;
 		if (this->isTotem)
 		{
@@ -216,9 +219,11 @@ void UdpDiscovery::update()
 					}
 
 					bool isPeerConnectedToSession = jsonPayload["connected"].asBool();
-					if (peerIter->second.isConnectedToSession != isPeerConnectedToSession)
+					bool isPeerReady = jsonPayload["ready"].asBool();
+					if (peerIter->second.isConnectedToSession != isPeerConnectedToSession || peerIter->second.isReady != isPeerReady)
 					{
 						peerIter->second.isConnectedToSession = isPeerConnectedToSession;
+						peerIter->second.isReady = isPeerReady;
 						HandleConnectionChange(peerIter->second);
 					}
 
@@ -285,6 +290,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.isTotem = jsonPayload["totem"].asBool();
 	peer.isSurfaceHub = jsonPayload["hub"].asBool();
 	peer.isConnectedToSession = jsonPayload["connected"].asBool();
+	peer.isReady = jsonPayload["ready"].asBool();
 	peer.totemSourceAngle = 0;
 	if (jsonPayload.isMember("angle"))
 	{
@@ -382,9 +388,10 @@ Poco::Net::IPAddress UdpDiscovery::GetLocalAddress()
 	return this->interface.address();
 }
 
-void UdpDiscovery::SetConnectionStatus(bool isConnected)
+void UdpDiscovery::SetConnectionStatus(bool isConnected, bool isReady)
 {
 	this->isConnectedToSession = isConnected;
+	this->isReady = isReady;
 }
 
 void UdpDiscovery::SetSourceRotation(int angle)

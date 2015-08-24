@@ -32,6 +32,7 @@ private:
 	bool doneCylinderWelcome;
 	bool isInCall;
 	bool cyliderSourceIsDirty = false;
+	bool isWaitingOnHubSession;
 
 	ofRectangle introSelfieRegion;
 	ofRectangle miniSelfieRegion;
@@ -43,6 +44,7 @@ private:
 	ofImage muteIcon;
 	ofImage hangupIcon;
 	ofFbo cylinderCache;
+	ofTrueTypeFont waitingFont;
 
 	RemoteNetworkDisplay networkDisplay;
 	UISTATE state;

@@ -19,11 +19,12 @@ public:
 		int totemSourceAngle;
 		bool isTotem;
 		bool isSurfaceHub;
+		bool isReady;
 		bool isConnectedToSession;
 	};
 
 private:
-	const string version = string("2.0");
+	const string version = string("2.1");
 	Poco::Mutex portmutex;
 	std::string myid;
 	std::string broadcastAddress;
@@ -37,6 +38,7 @@ private:
 	int videoWidth, videoHeight;
 	bool isTotem;
 	bool isSurfaceHub;
+	bool isReady;
 	int totemSourceAngle;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
@@ -71,7 +73,7 @@ public:
 	static std::string MACtoString(const std::vector<unsigned char>& mac, char delimter = ':');
 
 	// Communication channel stuff
-	void SetConnectionStatus(bool isConnected);
+	void SetConnectionStatus(bool isConnected, bool isReady);
 	void HandleConnectionChange(RemotePeerStatus &peer);
 	ofEvent<RemotePeerStatus> peerJoinedSessionEvent;
 	ofEvent<RemotePeerStatus> peerLeftSessionEvent;
