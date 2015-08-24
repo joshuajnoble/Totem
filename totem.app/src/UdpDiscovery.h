@@ -21,6 +21,7 @@ public:
 		bool isSurfaceHub;
 		bool isReady;
 		bool isConnectedToSession;
+		bool isMuted;
 	};
 
 private:
@@ -39,6 +40,7 @@ private:
 	bool isTotem;
 	bool isSurfaceHub;
 	bool isReady;
+	bool isMuted;
 	int totemSourceAngle;
 
 	std::map<string, RemotePeerStatus> remoteClientMap;
@@ -75,9 +77,14 @@ public:
 	// Communication channel stuff
 	void SetConnectionStatus(bool isConnected, bool isReady);
 	void HandleConnectionChange(RemotePeerStatus &peer);
+	void HandleMutedChange(RemotePeerStatus &peer);
+	void HandleReadyChange(RemotePeerStatus &peer);
 	ofEvent<RemotePeerStatus> peerJoinedSessionEvent;
 	ofEvent<RemotePeerStatus> peerLeftSessionEvent;
+	ofEvent<RemotePeerStatus> peerMuteChangedEvent;
+	ofEvent<RemotePeerStatus> peerReadyChangedEvent;
 	bool isConnectedToSession;
 
 	void SetSourceRotation(int angle);
+	void SetMuted(bool muted);
 };

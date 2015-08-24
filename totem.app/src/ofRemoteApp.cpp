@@ -84,6 +84,7 @@ void ofRemoteApp::setup()
 	connectIcon.loadImage("call.png");
 	hangupIcon.loadImage("hangup.png");
 	muteIcon.loadImage("mute.png");
+	mutedIcon.loadImage("unmute.png");
 
 	cylinderCache.allocate(this->width, this->height);
 
@@ -182,7 +183,14 @@ void ofRemoteApp::draw()
 	// Draw icons first so they animate out from behind the selfie
 	ofSetRectMode(OF_RECTMODE_CENTER);
 	ofSetColor(255, 255, 255, (int)(255 * this->currentHangupMuteIconAlpha));
-	this->muteIcon.draw(this->muteIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+	if (this->isMuted)
+	{
+		this->mutedIcon.draw(this->muteIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+	}
+	else
+	{
+		this->muteIcon.draw(this->muteIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+	}
 	this->hangupIcon.draw(this->hangupIconCenterX, this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
 
 	if (this->currentConnectIconAlpha)
@@ -417,6 +425,14 @@ void ofRemoteApp::mousePressed(int x, int y, int button)
 			if (totem && hangupIconRegion.inside(x, y))
 			{
 				TransitionTo_UISTATE_INTRO();
+			}
+
+			// Did they click on the mute icon?
+			ofRectangle muteIconRegion;
+			muteIconRegion.setFromCenter((int)this->muteIconCenterX, (int)this->miniSelfieRegion.y + ICON_SIZE / 2, ICON_SIZE, ICON_SIZE);
+			if (totem && muteIconRegion.inside(x, y))
+			{
+				this->SetMuted(!this->isMuted);
 			}
 		}
 	}

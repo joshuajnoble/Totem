@@ -46,6 +46,7 @@ void UdpDiscovery::setupSurfaceHub(int networkInterfaceId)
 	this->isSurfaceHub = true;
 	this->isConnectedToSession = false;
 	this->isReady = false;
+	this->isMuted = false;
 	this->videoWidth = 0;
 	this->videoHeight = 0;
 	this->totemSourceAngle = 0;
@@ -59,6 +60,7 @@ void UdpDiscovery::setup(int w, int h, int networkInterfaceId, bool isTotemSourc
 	this->isSurfaceHub = false;
 	this->isConnectedToSession = false;
 	this->isReady = false;
+	this->isMuted = false;
 	this->videoWidth = w;
 	this->videoHeight = h;
 	this->totemSourceAngle = 0;
@@ -168,6 +170,7 @@ void UdpDiscovery::update()
 		jsonPayload["totem"] = this->isTotem;
 		jsonPayload["connected"] = this->isConnectedToSession;
 		jsonPayload["ready"] = this->isReady;
+		jsonPayload["muted"] = this->isMuted;
 		jsonPayload["hub"] = this->isSurfaceHub;
 		if (this->isTotem)
 		{
@@ -220,11 +223,23 @@ void UdpDiscovery::update()
 
 					bool isPeerConnectedToSession = jsonPayload["connected"].asBool();
 					bool isPeerReady = jsonPayload["ready"].asBool();
-					if (peerIter->second.isConnectedToSession != isPeerConnectedToSession || peerIter->second.isReady != isPeerReady)
+					bool isPeerMuted = jsonPayload["muted"].asBool();
+					if (peerIter->second.isConnectedToSession != isPeerConnectedToSession)
 					{
 						peerIter->second.isConnectedToSession = isPeerConnectedToSession;
-						peerIter->second.isReady = isPeerReady;
 						HandleConnectionChange(peerIter->second);
+					}
+
+					if (peerIter->second.isReady != isPeerReady)
+					{
+						peerIter->second.isReady = isPeerReady;
+						HandleReadyChange(peerIter->second);
+					}
+
+					if (peerIter->second.isMuted != isPeerMuted)
+					{
+						peerIter->second.isMuted = isPeerMuted;
+						HandleMutedChange(peerIter->second);
 					}
 
 					peerIter->second.disconnectTime = currentTime + this->broadcastMissingDuration;
@@ -279,6 +294,16 @@ void UdpDiscovery::HandleConnectionChange(RemotePeerStatus &peer)
 	}
 }
 
+void UdpDiscovery::HandleMutedChange(RemotePeerStatus &peer)
+{
+	ofNotifyEvent(this->peerMuteChangedEvent, peer, this);
+}
+
+void UdpDiscovery::HandleReadyChange(RemotePeerStatus &peer)
+{
+	ofNotifyEvent(this->peerReadyChangedEvent, peer, this);
+}
+
 void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const string& remoteAddress)
 {
 	RemotePeerStatus peer;
@@ -291,6 +316,7 @@ void UdpDiscovery::HandleDiscovery(const ofxJSONElement& jsonPayload, const stri
 	peer.isSurfaceHub = jsonPayload["hub"].asBool();
 	peer.isConnectedToSession = jsonPayload["connected"].asBool();
 	peer.isReady = jsonPayload["ready"].asBool();
+	peer.isMuted = jsonPayload["muted"].asBool();
 	peer.totemSourceAngle = 0;
 	if (jsonPayload.isMember("angle"))
 	{
@@ -392,6 +418,11 @@ void UdpDiscovery::SetConnectionStatus(bool isConnected, bool isReady)
 {
 	this->isConnectedToSession = isConnected;
 	this->isReady = isReady;
+}
+
+void UdpDiscovery::SetMuted(bool muted)
+{
+	this->isMuted = muted;
 }
 
 void UdpDiscovery::SetSourceRotation(int angle)

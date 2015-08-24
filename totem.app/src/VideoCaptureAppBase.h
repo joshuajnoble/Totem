@@ -38,7 +38,9 @@ private:
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerAngleChanged(UdpDiscovery::RemotePeerStatus& peer);
-	
+	void PeerMutedChanged(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerReadyChanged(UdpDiscovery::RemotePeerStatus& peer);
+
 	void PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer);
 
@@ -55,6 +57,7 @@ protected:
 	int audioLeftover = 0;
 	uint8_t audioToProcess[1024 * 200];
 	ofPtr<ofSoundStream> outputStream;
+	bool isMuted;
 
 	UdpDiscovery udpDiscovery;
 	std::auto_ptr<EncodeRGBToH264Live> ffmpegVideoBroadcast;
@@ -65,6 +68,7 @@ protected:
 	void ReadyUp();
 	void ConnectToSession();
 	void DisconnectSession();
+	void SetMuted(bool muted);
 
 	virtual void Handle_ClientConnected(RemoteVideoInfo& remote) = 0;
 	virtual void Handle_ClientDisconnected(RemoteVideoInfo& remote) = 0;

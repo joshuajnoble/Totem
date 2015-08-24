@@ -57,6 +57,8 @@ void VideoCaptureAppBase::setup(int networkInterfaceId, bool isTotemSource)
 	outputStream = ofPtr<ofSoundStream>(new ofSoundStream());
 	//outputStream->setup(this, 2, 0, 44100, 512, 8);
 	outputStream->setup(this, 1, 0, 22050, 512, 8);
+
+	this->isMuted = false;
 }
 
 void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels)
@@ -72,7 +74,7 @@ void VideoCaptureAppBase::audioOut(float * output, int bufferSize, int nChannels
 		for (auto iter = this->peers.begin(); iter != this->peers.end(); ++iter)
 		{
 			auto peer = *iter;
-			if (peer.peerStatus.isConnectedToSession && peer.remoteVideoSource)
+			if (peer.peerStatus.isConnectedToSession && peer.remoteVideoSource && !peer.peerStatus.isMuted)
 			{
 				if (count == 0)
 				{
@@ -199,6 +201,15 @@ void VideoCaptureAppBase::DisconnectSession()
 	this->udpDiscovery.SetConnectionStatus(false, false);
 }
 
+void VideoCaptureAppBase::SetMuted(bool muted)
+{
+	if (this->isMuted != muted)
+	{
+		this->isMuted = muted;
+		this->udpDiscovery.SetMuted(this->isMuted);
+	}
+}
+
 void VideoCaptureAppBase::exit()
 {
 	//ofSoundStreamClose();
@@ -278,7 +289,6 @@ void VideoCaptureAppBase::PeerLeft(UdpDiscovery::RemotePeerStatus& peer)
 	}
 }
 
-
 void VideoCaptureAppBase::PeerAngleChanged(UdpDiscovery::RemotePeerStatus& peer)
 {
 	auto remote = GetRemoteFromClientId(peer.id);
@@ -289,13 +299,31 @@ void VideoCaptureAppBase::PeerAngleChanged(UdpDiscovery::RemotePeerStatus& peer)
 	}
 }
 
+void VideoCaptureAppBase::PeerMutedChanged(UdpDiscovery::RemotePeerStatus& peer)
+{
+	auto remote = GetRemoteFromClientId(peer.id);
+	if (remote != this->peers.end() && remote->peerStatus.totemSourceAngle != peer.totemSourceAngle)
+	{
+		remote->peerStatus.isMuted = peer.isMuted;
+	}
+}
 
+void VideoCaptureAppBase::PeerReadyChanged(UdpDiscovery::RemotePeerStatus& peer)
+{
+	auto remote = GetRemoteFromClientId(peer.id);
+	if (remote != this->peers.end() && remote->peerStatus.totemSourceAngle != peer.totemSourceAngle)
+	{
+		remote->peerStatus.isReady = peer.isReady;
+	}
+}
 
 void VideoCaptureAppBase::setupDiscovery()
 {
 	ofAddListener(udpDiscovery.peerArrivedEvent, this, &VideoCaptureAppBase::PeerArrived);
 	ofAddListener(udpDiscovery.peerLeftEvent, this, &VideoCaptureAppBase::PeerLeft);
 	ofAddListener(udpDiscovery.AngleChangedEvent, this, &VideoCaptureAppBase::PeerAngleChanged);
+	ofAddListener(udpDiscovery.peerMuteChangedEvent, this, &VideoCaptureAppBase::PeerMutedChanged);
+	ofAddListener(udpDiscovery.peerReadyChangedEvent, this, &VideoCaptureAppBase::PeerReadyChanged);
 
 	ofAddListener(udpDiscovery.peerJoinedSessionEvent, this, &VideoCaptureAppBase::PeerJoinedSession);
 	ofAddListener(udpDiscovery.peerLeftSessionEvent, this, &VideoCaptureAppBase::PeerLeftSession);

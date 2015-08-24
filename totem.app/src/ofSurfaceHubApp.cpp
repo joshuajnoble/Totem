@@ -290,7 +290,6 @@ void ofSurfaceHubApp::PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer)
 	if (found != this->peers.end())
 	{
 		found->isConnectedToSession = true;
-		found->isReady = peer.isReady;
 	}
 }
 
@@ -300,6 +299,14 @@ void ofSurfaceHubApp::PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer)
 	if (found != this->peers.end())
 	{
 		found->isConnectedToSession = false;
+	}
+}
+
+void ofSurfaceHubApp::PeerReadyChanged(UdpDiscovery::RemotePeerStatus& peer)
+{
+	auto found = GetPeerFromClientId(peer.id);
+	if (found != this->peers.end())
+	{
 		found->isReady = peer.isReady;
 	}
 }
@@ -312,6 +319,7 @@ void ofSurfaceHubApp::SetupDiscovery()
 
 	ofAddListener(udpDiscovery.peerJoinedSessionEvent, this, &ofSurfaceHubApp::PeerJoinedSession);
 	ofAddListener(udpDiscovery.peerLeftSessionEvent, this, &ofSurfaceHubApp::PeerLeftSession);
+	ofAddListener(udpDiscovery.peerReadyChangedEvent, this, &ofSurfaceHubApp::PeerReadyChanged);
 }
 
 void ofSurfaceHubApp::mousePressed(int x, int y, int button)

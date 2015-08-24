@@ -54,8 +54,9 @@ private:
 
 	void PeerArrived(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeft(UdpDiscovery::RemotePeerStatus& peer);
-	void PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer);
 	void PeerLeftSession(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerJoinedSession(UdpDiscovery::RemotePeerStatus& peer);
+	void PeerReadyChanged(UdpDiscovery::RemotePeerStatus& peer);	
 
 	void SetupDiscovery();
 

@@ -42,6 +42,7 @@ private:
 	ofPtr<CylinderDisplay> cylinderDisplay;
 	ofImage connectIcon;
 	ofImage muteIcon;
+	ofImage mutedIcon;
 	ofImage hangupIcon;
 	ofFbo cylinderCache;
 	ofTrueTypeFont waitingFont;
