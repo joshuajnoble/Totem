@@ -1,0 +1,11 @@
+ofxDepthStreamCompression
+ofxEchoCancel
+ofxGStreamer
+ofxGstRTP
+ofxGui
+ofxNetwork
+ofxNice
+ofxOsc
+ofxSnappy
+ofxXmlSettings
+ofxXMPP

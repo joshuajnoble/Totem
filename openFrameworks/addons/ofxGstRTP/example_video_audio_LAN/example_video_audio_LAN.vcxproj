@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{7FD42DF7-442E-479A-BA76-D0022F99702A}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>example_video_audio_LAN</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+    <GenerateManifest>true</GenerateManifest>
+    <ExecutablePath>C:\gstreamer\1.0\x86\bin\;$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>C:\gstreamer\1.0\x86\bin;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxDepthStreamCompression\libs;..\..\..\addons\ofxDepthStreamCompression\src;..\..\..\addons\ofxEchoCancel\libs;..\..\..\addons\ofxEchoCancel\src;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\source;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\test\unit_test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\source;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\test\unit_test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aec;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aec\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aecm;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aecm\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\agc;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\agc\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\ns;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\ns\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\test\android\apmtest\jni;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\utility;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\system_wrappers;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\system_wrappers\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\system_wrappers\source;C:\gstreamer\1.0\x86\include;C:\gstreamer\1.0\x86\include\gstreamer-1.0;C:\gstreamer\1.0\x86\include\glib-2.0;C:\gstreamer\1.0\x86\lib\glib-2.0\include;..\..\..\addons\ofxGstRTP\libs;..\..\..\addons\ofxGstRTP\src;..\..\..\addons\ofxGui\libs;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\libs;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNice\libs;..\..\..\addons\ofxNice\src;..\..\..\addons\ofxNice\libs\libnice;..\..\..\addons\ofxNice\libs\libnice\include;..\..\..\addons\ofxNice\libs\libnice\include\nice;..\..\..\addons\ofxNice\libs\libnice\lib;..\..\..\addons\ofxNice\libs\libnice\lib\vs;..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxSnappy\libs;..\..\..\addons\ofxSnappy\src;..\..\..\addons\ofxSnappy\libs\snappy;..\..\..\addons\ofxSnappy\libs\snappy\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxXMPP\libs;..\..\..\addons\ofxXMPP\src;..\..\..\addons\ofxXMPP\libs\strophe;..\..\..\addons\ofxXMPP\libs\strophe\include;..\..\..\addons\ofxXMPP\libs\strophe\lib;..\..\..\addons\ofxXMPP\libs\strophe\lib\vs</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>-DWEBRTC_NS_FLOAT</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);gstreamer-1.0.lib;gstapp-1.0.lib;gstvideo-1.0.lib;gstbase-1.0.lib;gstnet-1.0.lib;gstaudio-1.0.lib;gio-2.0.lib;pangowin32-1.0.lib;gdi32.lib;pangocairo-1.0.lib;gdk_pixbuf-2.0.lib;pango-1.0.lib;cairo.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;ffi.lib;ws2_32.lib;ole32.lib;winmm.lib;shlwapi.lib;intl.lib;glib-2.0.lib;libnice.lib;gstnice.lib;Iphlpapi.lib;libstrophe.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\gstreamer\1.0\x86\bin;%(AdditionalLibraryDirectories);C:\gstreamer\1.0\x86\lib\;..\..\..\addons\ofxNice\libs\libnice\lib\vs;..\..\..\addons\ofxNice;..\..\..\addons\ofxXMPP\libs\strophe\lib\vs;..\..\..\addons\ofxXMPP</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>..\..\..\addons\ofxOSCSync\src\Server;..\..\..\addons\ofxOSCSync\src\CommonTime;..\..\..\addons\ofxOSCSync\src\Client;..\..\..\addons\ofxOSCSync\src;%(AdditionalIncludeDirectories);src;..\..\..\addons\ofxDepthStreamCompression\libs;..\..\..\addons\ofxDepthStreamCompression\src;..\..\..\addons\ofxEchoCancel\libs;..\..\..\addons\ofxEchoCancel\src;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\source;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\signal_processing_library\main\test\unit_test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\source;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\common_audio\vad\main\test\unit_test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aec;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aec\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aecm;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\aecm\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\agc;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\agc\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\ns;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\ns\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\test;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\test\android\apmtest\jni;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\audio_processing\utility;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\modules\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\system_wrappers;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\system_wrappers\interface;..\..\..\addons\ofxEchoCancel\libs\webrtc-audio-processing\src\system_wrappers\source;C:\gstreamer\1.0\x86\include;C:\gstreamer\1.0\x86\include\gstreamer-1.0;C:\gstreamer\1.0\x86\include\glib-2.0;C:\gstreamer\1.0\x86\lib\glib-2.0\include;..\..\..\addons\ofxGstRTP\libs;..\..\..\addons\ofxGstRTP\src;..\..\..\addons\ofxGui\libs;..\..\..\addons\ofxGui\src;..\..\..\addons\ofxNetwork\libs;..\..\..\addons\ofxNetwork\src;..\..\..\addons\ofxNice\libs;..\..\..\addons\ofxNice\src;..\..\..\addons\ofxNice\libs\libnice;..\..\..\addons\ofxNice\libs\libnice\include;..\..\..\addons\ofxNice\libs\libnice\include\nice;..\..\..\addons\ofxNice\libs\libnice\lib;..\..\..\addons\ofxNice\libs\libnice\lib\vs;..\..\..\addons\ofxOsc\libs;..\..\..\addons\ofxOsc\src;..\..\..\addons\ofxOsc\libs\oscpack;..\..\..\addons\ofxOsc\libs\oscpack\src;..\..\..\addons\ofxOsc\libs\oscpack\src\ip;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix;..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32;..\..\..\addons\ofxOsc\libs\oscpack\src\osc;..\..\..\addons\ofxSnappy\libs;..\..\..\addons\ofxSnappy\src;..\..\..\addons\ofxSnappy\libs\snappy;..\..\..\addons\ofxSnappy\libs\snappy\src;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src;..\..\..\addons\ofxXMPP\libs;..\..\..\addons\ofxXMPP\src;..\..\..\addons\ofxXMPP\libs\strophe;..\..\..\addons\ofxXMPP\libs\strophe\include;..\..\..\addons\ofxXMPP\libs\strophe\lib;..\..\..\addons\ofxXMPP\libs\strophe\lib\vs</AdditionalIncludeDirectories>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <AdditionalOptions>-DWEBRTC_NS_FLOAT</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <AdditionalDependencies>%(AdditionalDependencies);gstreamer-1.0.lib;gstapp-1.0.lib;gstvideo-1.0.lib;gstbase-1.0.lib;gstnet-1.0.lib;gstaudio-1.0.lib;gio-2.0.lib;pangowin32-1.0.lib;gdi32.lib;pangocairo-1.0.lib;gdk_pixbuf-2.0.lib;pango-1.0.lib;cairo.lib;gobject-2.0.lib;gmodule-2.0.lib;gthread-2.0.lib;ffi.lib;ws2_32.lib;ole32.lib;winmm.lib;shlwapi.lib;intl.lib;glib-2.0.lib;libnice.lib;gstnice.lib;Iphlpapi.lib;libstrophe.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);C:\gstreamer\1.0\x86\lib;..\..\..\addons\ofxNice\libs\libnice\lib\vs;..\..\..\addons\ofxNice;..\..\..\addons\ofxXMPP\libs\strophe\lib\vs;..\..\..\addons\ofxXMPP</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\ofxOSCSync\src\Client\ofxClientOSCManager.cpp" />
+    <ClCompile Include="..\..\ofxOSCSync\src\CommonTime\ofxCommonTimeBase.cpp" />
+    <ClCompile Include="..\..\ofxOSCSync\src\CommonTime\ofxCommonTimeOsc.cpp" />
+    <ClCompile Include="..\..\ofxOSCSync\src\Server\ofxServerOscManager.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxDepthCompressedFrame.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxDepthOctree.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxDepthStreamCompression.cpp" />
+    <ClCompile Include="..\..\..\libs\openFrameworks\video\ofGstUtils.cpp" />
+    <ClCompile Include="..\..\..\libs\openFrameworks\video\ofGstVideoPlayer.cpp" />
+    <ClCompile Include="..\..\..\libs\openFrameworks\video\ofGstVideoGrabber.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxGstOscDoubleBuffer.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPClient.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPServer.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPUtils.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxGstXMPPRTP.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxOscPacketPool.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGstRTP\src\ofxWebRTCAudioPool.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxBaseGui.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxButton.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxLabel.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxPanel.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSlider.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\src\ofxOscSender.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix\NetworkingUtils.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\posix\UdpSocket.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\NetworkingUtilsWin.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\win32\UdpSocketWin.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy-sinksource.cc" />
+    <ClCompile Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy-stubs-internal.cc" />
+    <ClCompile Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy.cc" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXMPP\src\ofxXMPP.cpp" />
+    <ClCompile Include="src\StreamManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\ofxOSCSync\src\Client\DataPacket.h" />
+    <ClInclude Include="..\..\ofxOSCSync\src\Client\ofxClientOSCManager.h" />
+    <ClInclude Include="..\..\ofxOSCSync\src\CommonTime\ofxCommonTimeBase.h" />
+    <ClInclude Include="..\..\ofxOSCSync\src\CommonTime\ofxCommonTimeOsc.h" />
+    <ClInclude Include="..\..\ofxOSCSync\src\ofxOSCSync.h" />
+    <ClInclude Include="..\..\ofxOSCSync\src\Server\ofxServerOscManager.h" />
+    <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxCompress.h" />
+    <ClInclude Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxDepthCompressedFrame.h" />
+    <ClInclude Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxDepthOctree.h" />
+    <ClInclude Include="..\..\..\addons\ofxDepthStreamCompression\src\ofxDepthStreamCompression.h" />
+    <ClInclude Include="..\..\..\libs\openFrameworks\video\ofGstUtils.h" />
+    <ClInclude Include="..\..\..\libs\openFrameworks\video\ofGstVideoPlayer.h" />
+    <ClInclude Include="..\..\..\libs\openFrameworks\video\ofGstVideoGrabber.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstOscDoubleBuffer.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstPixelsPool.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPClient.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPConstants.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPServer.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstRTPUtils.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstVideoDoubleBuffer.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxGstXMPPRTP.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxOscPacketPool.h" />
+    <ClInclude Include="..\..\..\addons\ofxGstRTP\src\ofxWebRTCAudioPool.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxBaseGui.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGui.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxGuiGroup.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxLabel.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxPanel.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxSliderGroup.h" />
+    <ClInclude Include="..\..\..\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetwork.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxNetworkUtils.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPClient.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPManager.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxTCPServer.h" />
+    <ClInclude Include="..\..\..\addons\ofxNetwork\src\ofxUDPManager.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOsc.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscArg.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscBundle.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscMessage.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscParameterSync.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscReceiver.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\src\ofxOscSender.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\IpEndpointName.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\NetworkingUtils.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\PacketListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\TimerListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\ip\UdpSocket.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\MessageMappingOscPacketListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscException.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscHostEndianness.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscOutboundPacketStream.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPacketListener.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscPrintReceivedElements.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscReceivedElements.h" />
+    <ClInclude Include="..\..\..\addons\ofxOsc\libs\oscpack\src\osc\OscTypes.h" />
+    <ClInclude Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy-internal.h" />
+    <ClInclude Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy-sinksource.h" />
+    <ClInclude Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy-stubs-internal.h" />
+    <ClInclude Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy-stubs-public.h" />
+    <ClInclude Include="..\..\..\addons\ofxSnappy\libs\snappy\src\snappy.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
+    <ClInclude Include="..\..\..\addons\ofxXMPP\src\ofxXMPP.h" />
+    <ClInclude Include="..\..\..\addons\ofxXMPP\libs\strophe\include\strophe.h" />
+    <ClInclude Include="..\..\..\addons\ofxXMPP\libs\strophe\include\strophepp.h" />
+    <ClInclude Include="src\StreamManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+      <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/D_DEBUG %(AdditionalOptions)</AdditionalOptions>
+    </ResourceCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

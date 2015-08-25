@@ -197,3 +197,6 @@ FakesAssemblies/
 
 face_training/
 face_training_small/
+openFrameworks/libs/openFrameworksCompiled/lib/vs/openframeworksLib.lib
+openFrameworks/libs/openFrameworksCompiled/lib/vs/openframeworksLibDebug.bsc
+openFrameworks/libs/openFrameworksCompiled/lib/vs/openframeworksLibDebug.lib
