@@ -168,6 +168,7 @@ void ofSurfaceHubApp::draw()
 		for (auto i = 0; i < peers.size(); ++i)
 		{
 			auto p = peers[i];
+			if (p.isTotem) continue;
 			if (p.isConnectedToSession)
 			{
 				peersConnected.push_back(i);
