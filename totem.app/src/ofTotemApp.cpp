@@ -66,7 +66,7 @@ void ofTotemApp::setup()
 	cortanaPrompt.loadFont("surfacehub/segoeui.ttf", 32);
 	cortanaPrompt.setSpaceSize(cortanaPrompt.getSpaceSize() / 2);
 
-	cortanaTip.loadFont("surfacehub/segoeui.ttf", 14);
+	cortanaTip.loadFont("surfacehub/segoeui.ttf", 24);
 	cortanaTip.setSpaceSize(cortanaTip.getSpaceSize() / 2);
 }
 
@@ -92,8 +92,10 @@ void ofTotemApp::update()
 		auto directionId = serial.readByte();
 		if (directionId >= '1' && directionId <= '9')
 		{
-			auto angle = int(std::roundf((directionId - '1') / 8.0 * 360));
+			auto angle = int(std::roundf((directionId - '1') / 8.0 * 360));// -22.5);
+			if (angle < 0) angle += 360;
 			this->udpDiscovery.SetSourceRotation(angle);
+			cout << (char)directionId << " - " << angle << std::endl;
 		}
 	}
 
@@ -187,7 +189,7 @@ void ofTotemApp::draw()
 						output.begin();
 						ofBackground(0);
 
-						auto halfHeight = (int)output.getHeight() / 2;
+						auto halfHeight = (int)output.getHeight() * 0.4;
 						auto halfWidth = (int)output.getWidth() / 2;
 						ofRectangle region(0, 0, this->cortanaPlayer.width, this->cortanaPlayer.height);
 
@@ -197,41 +199,41 @@ void ofTotemApp::draw()
 						region.translateY(halfHeight - this->cortanaPlayer.height / 2 - 30 * scale);
 						region.translateX(halfWidth - this->cortanaPlayer.width / 2);
 
-						this->cortanaPlayer.draw(region);
-
 						ofSetColor(28, 137, 175);
+						this->cortanaPlayer.draw(region);
 
 						if (this->foundSurfaceHub)
 						{
-							auto size = cortanaPrompt.getStringBoundingBox("Ready to start", 0, 0);
+							std::string prompt("I'm waiting for guests to join.");
+							auto size = cortanaPrompt.getStringBoundingBox(prompt, 0, 0);
 							size.alignToHorz(region);
 							size.setPosition(size.x, region.getBottom() + 50);
-							cortanaPrompt.drawString("Ready to start", size.x, size.y);
+							cortanaPrompt.drawString(prompt, size.x, size.y);
 
-							size = cortanaPrompt.getStringBoundingBox("the meeting.", 0, 0);
-							size.alignToHorz(region);
-							size.setPosition(size.x, region.getBottom() + 50 + size.height * 1.3);
-							cortanaPrompt.drawString("the meeting.", size.x, size.y);
+							//size = cortanaPrompt.getStringBoundingBox("the meeting.", 0, 0);
+							//size.alignToHorz(region);
+							//size.setPosition(size.x, region.getBottom() + 50 + size.height * 1.3);
+							//cortanaPrompt.drawString("the meeting.", size.x, size.y);
 						}
 						else
 						{
-							auto size = cortanaPrompt.getStringBoundingBox("Who would", 0, 0);
+							auto size = cortanaPrompt.getStringBoundingBox("Who would you like to meet with?", 0, 0);
 							size.alignToHorz(region);
 							size.setPosition(size.x, region.getBottom() + 75);
-							cortanaPrompt.drawString("Who would", size.x, size.y);
+							cortanaPrompt.drawString("Who would you like to meet with?", size.x, size.y);
 							auto bottom = size.getBottom();
 
-							size = cortanaPrompt.getStringBoundingBox("you like to", 0, 0);
-							size.alignToHorz(region);
-							size.setPosition(size.x, bottom + size.height * 0.3);
-							cortanaPrompt.drawString("you like to", size.x, size.y);
-							bottom = size.getBottom();
+							//size = cortanaPrompt.getStringBoundingBox("you like to", 0, 0);
+							//size.alignToHorz(region);
+							//size.setPosition(size.x, bottom + size.height * 0.3);
+							//cortanaPrompt.drawString("you like to", size.x, size.y);
+							//bottom = size.getBottom();
 
-							size = cortanaPrompt.getStringBoundingBox("meet with?", 0, 0);
-							size.alignToHorz(region);
-							size.setPosition(size.x, bottom + size.height * 0.3);
-							cortanaPrompt.drawString("meet with?", size.x, size.y);
-							bottom = size.getBottom();
+							//size = cortanaPrompt.getStringBoundingBox("meet with?", 0, 0);
+							//size.alignToHorz(region);
+							//size.setPosition(size.x, bottom + size.height * 0.3);
+							//cortanaPrompt.drawString("meet with?", size.x, size.y);
+							//bottom = size.getBottom();
 
 							ofSetColor(128);
 							size = cortanaTip.getStringBoundingBox("try call Mark in Studio B.", 0, 0);
