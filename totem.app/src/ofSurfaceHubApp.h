@@ -41,8 +41,8 @@ private:
 	ofImage backgroundOpen;
 	ofImage backgroundClosed;
 	ofImage slide;
-	ofImage connectButton;
 	ofImage avatarMask;
+	ofImage iconPeople, iconTotem;
 	ofRectangle buttonPosition;
 	ofRectangle slidePositionOpen;
 	ofRectangle slidePositionClosed;

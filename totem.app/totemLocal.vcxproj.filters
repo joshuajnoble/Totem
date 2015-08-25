@@ -762,9 +762,6 @@
     <Image Include="data\surfacehub\avatar_mask.png">
       <Filter>data\surfacehub</Filter>
     </Image>
-    <Image Include="data\surfacehub\hub_connect.png">
-      <Filter>data\surfacehub</Filter>
-    </Image>
     <Image Include="data\surfacehub\slide.png">
       <Filter>data\surfacehub</Filter>
     </Image>
@@ -772,6 +769,12 @@
       <Filter>data\surfacehub</Filter>
     </Image>
     <Image Include="data\surfacehub\background_closed.png">
+      <Filter>data\surfacehub</Filter>
+    </Image>
+    <Image Include="data\surfacehub\icon_people.png">
+      <Filter>data\surfacehub</Filter>
+    </Image>
+    <Image Include="data\surfacehub\icon_totem.png">
       <Filter>data\surfacehub</Filter>
     </Image>
   </ItemGroup>

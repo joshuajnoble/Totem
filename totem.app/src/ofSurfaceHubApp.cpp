@@ -45,8 +45,9 @@ void ofSurfaceHubApp::setup()
 	avatarMask.loadImage("surfacehub/avatar_mask.png");
 	backgroundOpen.loadImage("surfacehub/background_open.png");
 	backgroundClosed.loadImage("surfacehub/background_closed.png");
+	iconPeople.loadImage("surfacehub/icon_people.png");
+	iconTotem.loadImage("surfacehub/icon_totem.png");
 	slide.loadImage("surfacehub/slide.png");
-	connectButton.loadImage("hub_connect.png");
 
 	Person p;
 	p.name = "Albert Russell";
@@ -135,6 +136,8 @@ void ofSurfaceHubApp::draw()
 		fill.scaleTo(ofRectangle(0, 0, this->displayWidth(), this->displayHeight()), OF_SCALEMODE_FILL);
 		backgroundClosed.draw(fill);
 
+		iconTotem.draw(0, 0);
+
 		// Draw the the slide
 		ofRect(slidePositionClosed); // Only need this if the background isn't already white
 		fill = ofRectangle(slidePositionClosed.x, slidePositionClosed.y, slide.width, slide.height);
@@ -148,6 +151,8 @@ void ofSurfaceHubApp::draw()
 		ofRectangle fill(0, 0, backgroundOpen.width, backgroundOpen.height);
 		fill.scaleTo(ofRectangle(0, 0, this->displayWidth(), this->displayHeight()), OF_SCALEMODE_FILL);
 		backgroundOpen.draw(fill);
+
+		iconPeople.draw(0, 0);
 
 		// Draw the the slide
 		//ofRect(slidePositionOpen); // Only need this if the background isn't already white
@@ -222,13 +227,6 @@ void ofSurfaceHubApp::draw()
 			}
 		}
 	}
-
-	//hasTotemConnected = true; // TODO: Remove this when we are ready to really test with a totem source
-	//if (peers.size() && hasTotemConnected)
-	//{
-	//	buttonPosition.set(PROFILE_PADDING, y, PROFILE_SIZE, PROFILE_SIZE);
-	//	connectButton.draw(buttonPosition);
-	//}
 
 	ofPopMatrix();
 }
