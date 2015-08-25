@@ -561,15 +561,19 @@ void ofRemoteApp::Handle_ClientAngleChanged(RemoteVideoInfo& remote)
 	auto totem = totemSource();
 	if (totem)
 	{
-		if (int(this->currentTotemAngle) % 360 == remote.peerStatus.totemSourceAngle % 360) return;
+		int angle = remote.peerStatus.totemSourceAngle;
+		angle = 360 - angle;
+		if (angle < 0) angle += 360;
+		if (angle >= 360) angle -= 360;
+		if (int(this->currentTotemAngle) % 360 == angle % 360) return;
 
-		if (std::abs(this->currentTotemAngle - remote.peerStatus.totemSourceAngle) > 180)
+		if (std::abs(this->currentTotemAngle - angle) > 180)
 		{
-			this->currentTotemAngle = remote.peerStatus.totemSourceAngle + 360;
+			this->currentTotemAngle = angle + 360;
 		}
 		else
 		{
-			this->currentTotemAngle = remote.peerStatus.totemSourceAngle;
+			this->currentTotemAngle = angle;
 		}
 
 		UpdateTotemViewAngle();
