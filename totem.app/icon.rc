@@ -2,7 +2,7 @@
 #define MAIN_ICON                       102
 
 #if defined(_DEBUG)
-MAIN_ICON               ICON                    "..\\remoteUser\\resources\\icon-debug.ico"
+MAIN_ICON               ICON                    "resources\\icon.ico"
 #else
-MAIN_ICON               ICON                    "..\\remoteUser\\resources\\icon.ico"
+MAIN_ICON               ICON                    "resources\\icon.ico"
 #endif
