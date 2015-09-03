@@ -274,7 +274,7 @@ void ofTotemApp::draw()
 						else if (remoteSourceCount == 2)
 						{
 							auto videoSource = this->peers[sources[0]].remoteVideoSource->getVideoImage();
-							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), (int)output.getHeight());
+							Utils::DrawCroppedToFit(videoSource, (int)output.getWidth(), halfHeight - halfMargin);
 
 							ofPushMatrix();
 
