@@ -130,6 +130,16 @@ void ofTotemApp::update()
 			this->ConnectToSession();
 		}
 	}
+
+	// If we are connected to a hub-based session and all of the remotes are gone, then disconnect from the session
+	if (this->foundSurfaceHub & this->udpDiscovery.isConnectedToSession)
+	{
+		auto hasRemotes = std::any_of(this->peers.begin(), this->peers.end(), [](const RemoteVideoInfo& p) { return !p.peerStatus.isSurfaceHub && !p.peerStatus.isTotem; });
+		if (!hasRemotes)
+		{
+			this->DisconnectSession();
+		}
+	}
 }
 
 

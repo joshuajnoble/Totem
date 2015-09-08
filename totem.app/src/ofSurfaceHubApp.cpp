@@ -119,7 +119,8 @@ void ofSurfaceHubApp::update()
 	auto totem = std::find_if(peers.begin(), peers.end(), [](const PeerInfo& p) { return p.isTotem; });
 	if (totem != peers.end())
 	{
-		hasSessionStarted = totem->isConnectedToSession;
+		auto hasRemotes = std::any_of(peers.begin(), peers.end(), [](const PeerInfo& p) { return !p.isTotem; });
+		hasSessionStarted = totem->isConnectedToSession && hasRemotes;
 	}
 	else
 	{
